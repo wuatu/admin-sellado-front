@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { LectoresComponent } from './components/lectores/lectores.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ToastrModule } from 'ngx-toastr';
     MenubarComponent,
     DashboardComponent,
     LineasComponent,
+    LectoresComponent,
   ],
   imports: [
     BrowserModule,
