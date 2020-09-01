@@ -1,0 +1,29 @@
+<!-- menu vertical -->
+<nav id="menu" class="left show" style="height: 100%">
+  <ul style="height: 90%">
+    <li><a routerLink="/dashboard" class="active"><i class="fa fa-line-chart"></i>Productividad</a></li>
+    <li><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
+    <li><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
+    <li><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
+    <li><a routerLink="/usuario"><i class="fa fa-users"></i>Usuarios</a></li>
+    <li><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
+    <li><a routerLink="/usuarioenlinea"><i class="fa fa-list-ul"></i>Usuarios en línea</a></li>
+    <!--
+    <li><a routerLink="/turnos"><i class="fa fa-list-ul"></i>Registro de turnos</a></li>
+    <li>
+      <a><i class="fa fa-bars"></i>Registro <i class="fa fa-caret-down"></i></a>
+      <ul>
+        <li><a routerLink="/sellado"><i class="fa fa-list-ul"></i>Sellado</a></li>            
+      </ul>
+    </li>
+    -->
+  </ul>
+  <ul style="height: 10%">            
+    <li><a routerlink="/auth/login" (click)="logout()"><i class="fa fa-sign-out"></i>Cerrar sesión</a></li>       
+  </ul> 
+  <a id="showmenu" (click)="showMenu()">
+    <i class="fa fa-align-justify"></i>
+  </a>
+</nav>
+<!-- /menu vertical -->
+
