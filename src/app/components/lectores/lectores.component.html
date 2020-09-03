@@ -9,26 +9,26 @@
         <br>
         <div class="row justify-content-center">
 
-            <div class="col-3 align-self-end text-left btn-block">
+            <div class="col-md-4  align-self-end text-left ">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="margin: 10px">Seleccionar selladora</button>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="margin: 10px">{{selectedSelladoraText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item">selladora 1</button>
+                        <button class="dropdown-item" *ngFor="let selladora of selladoras" (click)="changeSelectedSelladora(selladora)">{{selladora.nombre}}</button>
                     </div>
                 </div>
 
             </div>
-            <div class="col-3 align-self-end text-left btn-block">
+            <div class="col-md-4  align-self-end text-left ">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="margin: 10px">Seleccionar linea</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item">linea 1</button>
+                    <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle style="margin: 10px">{{selectedLineaText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
                     </div>
                 </div>
 
             </div>
-            <div class="col-6 align-self-end ">
-                <div class="text-right">
+            <div class="col-md-4  align-self-end ">
+                <div class="text-right" *ngIf="selectedSelladoraObject && selectedLineaObject">
                     <button class="btn btn-primary  text-right" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
                       Agregar lector
                     </button>
@@ -36,56 +36,39 @@
             </div>
         </div>
         <br>
-        <div class="row">
+        <div class="row" *ngIf="selectedSelladoraObject && selectedLineaObject">
             <div class="col-12">
                 <h5>Lista de lectores</h5>
             </div>
         </div>
         <!--Tabla de contenido-->
-        <table class="table table-hover">
+        <table class="table table-hover" *ngIf="selectedSelladoraObject && selectedLineaObject">
             <thead>
                 <tr>
                     <th scope="col">id</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">ip</th>
-                    <th scope="col">fk_linea</th>
                     <th scope="col">Editar</th>
                     <th scope="col">Eliminar</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>lector1</td>
-                    <td>192.168.0.1</td>
-                    <td>1</td>
+                <tr *ngFor="let lector of lectores; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{lector.nombre}}</td>
+                    <td>{{lector.puerto}}</td>
                     <td>
-                        <button class="btn btn-primary text-white mr-1" (click)="open(modal_editar_lector)">
+                        <button class="btn btn-primary text-white mr-1" (click)="onEditar(lector);open(modal_editar_lector)">
                           <i class="fa fa-edit" ></i>
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-danger text-white mr-1" (click)="open(modal_confirmar_eliminacion)">
+                        <button class="btn btn-danger text-white mr-1" (click)="onEliminar(lector);open(modal_confirmar_eliminacion)">
                           <i class="fa fa-trash-alt" ></i>
                         </button>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>lector2</td>
-                    <td>192.168.0.2</td>
-                    <td>1</td>
-                    <td>
-                        <button class="btn btn-primary text-white mr-1" (click)="open(modal_editar_lector)">
-                        <i class="fa fa-edit"></i>
-                      </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger text-white mr-1" (click)="open(modal_confirmar_eliminacion)">
-                        <i class="fa fa-trash-alt" ></i>
-                      </button>
-                    </td>
-                </tr>
+
             </tbody>
         </table>
     </div>
@@ -105,28 +88,29 @@
 
                 <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                </div>
+
+                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre.errors.required">
+                        Nombre de lector es obligatorio
+                    </div>
                 </div>
                 <br>
                 <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" name="direccionIP" id="direccionIP" class="form-control" placeholder="DireccionIP">
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="ipLector" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
                 </div>
 
-
-            </div>
-            <div class="form-group">
-                <label for="lineaLabel"><b>Selladora:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Seleccionar selladora</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item"> selladora 1</button>
+                <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre2.errors.required">
+                        Dirección ip es obligatoria
                     </div>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Agregar</button>
+            <button type="submit" class="btn btn-primary" (click)="agregarLector(myform);modal.close('Save click')">Agregar</button>
         </div>
     </div>
 </ng-template>
@@ -135,65 +119,54 @@
 <!--modal editar-->
 <ng-template #modal_editar_lector let-modal>
     <div class="modal-header">
-        <h2 class="modal-title" id="modal-basic-title">Editar lector</h2>
+        <h4 class="modal-title" id="modal-basic-title">Editar lector</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-    <span aria-hidden="true">×</span>
-  </button>
+          <span aria-hidden="true">×</span>
+        </button>
     </div>
     <div class="modal-body">
         <form #myform="ngForm">
             <!--Id de linea clickeada se almacena en un input hidden-->
             <div class="form-group">
-                <input type="hidden" name="id" id="id">
+                <input type="hidden" ngModel [(ngModel)]="currentLectorSelected.id" name="id" id="id">
             </div>
             <div class="form-group">
-                <label for="patentelabel"><b>Nombre línea:</b></label>
+
+                <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required>
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentLectorSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                </div>
+
+                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre.errors.required">
+                        Nombre de lector es obligatorio
+                    </div>
                 </div>
                 <br>
-                <label for="patentelabel"><b>Dirección IP:</b></label>
+                <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" name="direccionIP" id="direccionIP" class="form-control" placeholder="Nombre" required>
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.puerto" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
                 </div>
-                <!--Valida formulario nombre
-                <div class="alert alert-danger">
-                    <div>
-                        Nombre de línea es obligatorio
-                    </div>
-                </div>-->
-            </div>
-            <div class="form-group">
-                <label for="lineaLabel"><b>Selladora:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Seleccione selladora</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item">selladora 1</button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="lineaLabel"><b>Linea:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Seleccione linea</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item">Linea 1</button>
+
+                <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre2.errors.required">
+                        Dirección ip es obligatoria
                     </div>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="editarLector(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
 <!--fin modal editar-->
 
-<!--Modal confirmación deeliminación-->
+<!--Modal confirmación de eliminación-->
 <ng-template #modal_confirmar_eliminacion let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-title">Eliminar lector</h4>
-        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+        <button type="button" class="btn btn-outline-danger" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
     <span aria-hidden="true">&times;</span>
   </button>
     </div>
@@ -205,4 +178,4 @@
         <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>
-<!--fin modal confirmacion-->
+<!--fin modal confirmacion eliminación-->

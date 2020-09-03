@@ -11,7 +11,7 @@ export class SelladoraService {
   constructor(private httpClient: HttpClient) { }
 
   getSelladoras(){
-    return this.httpClient.get(`${this.API_URL}/selladora`);
+    return this.httpClient.get(`${this.API_URL}/selladoras`);
   }
 
   getSelladora(id:string){

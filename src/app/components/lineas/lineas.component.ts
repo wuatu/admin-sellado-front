@@ -15,10 +15,10 @@ import { Selladora } from 'src/app/models/selladora';
 export class LineasComponent implements OnInit {
   closeResult = '';
   lineas: any;
-  currentLineaSelected: Linea
+  currentLineaSelected: Linea;
   selladoras: any = [];
-  selectedSelladoraText: string="Selecciona una selladora";  
-  selectedSelladoraTextModificar: string="Selecciona una selladora";  
+  selectedSelladoraText: string="Seleccionar selladora";  
+  selectedSelladoraTextModificar: string="Seleccionar selladora";  
   selectedSelladoraObject:any;
   selectedSelladoraObjectModificar:any;
 
@@ -55,7 +55,7 @@ export class LineasComponent implements OnInit {
   //metodo que trae todos los registros de lineas desde la base de datos
   listarLineas() {  
     console.log(this.selectedSelladoraObject.id);
-    this.lineaService.getLineas(this.selectedSelladoraObject.id).subscribe(
+    this.lineaService.getLineasId(this.selectedSelladoraObject.id).subscribe(
       res => {
         //los registros se almacena en array lineas que sirve para llenar la tabla de vista lineas
         this.lineas = res;
