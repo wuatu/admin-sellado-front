@@ -37,11 +37,10 @@ export class AuthService {
             //guardar token
             localStorage.setItem('USER', JSON.stringify(res.dataUser));
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-          } else {
-            this.logout();
           }
         }
-      ));
+      )
+    );    
   }
 
   logout() {

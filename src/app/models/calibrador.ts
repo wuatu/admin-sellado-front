@@ -1,4 +1,4 @@
-export class Selladora {
+export class Calibrador {
     id?:string;
     nombre:string;    
     constructor(id:string,nombre:string){

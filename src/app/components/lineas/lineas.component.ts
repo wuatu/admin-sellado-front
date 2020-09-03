@@ -4,8 +4,8 @@ import { NgForm } from '@angular/forms';
 import { LineaService } from 'src/app/services/linea.service';
 import { Linea } from 'src/app/models/linea';
 import { ToastrService } from 'ngx-toastr';
-import { SelladoraService } from 'src/app/services/selladora.service';
-import { Selladora } from 'src/app/models/selladora';
+import { CalibradorService } from 'src/app/services/calibrador.service';
+import { Calibrador } from 'src/app/models/calibrador';
 
 @Component({
   selector: 'app-lineas',
@@ -16,11 +16,12 @@ export class LineasComponent implements OnInit {
   closeResult = '';
   lineas: any;
   currentLineaSelected: Linea
-  selladoras: any = [];
-  selectedSelladoraText: string="Selecciona una selladora";  
-  selectedSelladoraTextModificar: string="Selecciona una selladora";  
-  selectedSelladoraObject:any;
-  selectedSelladoraObjectModificar:any;
+  nombreLineaAdded: string;
+  calibradores: any = [];
+  selectedCalibradorText: string="Selecciona una calibrador";  
+  selectedCalibradorTextModificar: string="Selecciona una calibrador";  
+  selectedCalibradorObject:any;
+  selectedCalibradorObjectModificar:any;
 
   constructor(
     //servicio del modal
@@ -29,33 +30,33 @@ export class LineasComponent implements OnInit {
     private lineaService: LineaService,
     //servicio toast ventana emergente que sirve para mostrar información al usuario
     private toastr: ToastrService,
-    //servicio de selladora
-    private selladoraService:SelladoraService
+    //servicio de calibrador
+    private calibradorService:CalibradorService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {      
-    this.listarSelladoras();    
+    this.listarCalibradores();    
   }
 
-  //metodo que lista las selladoras
-  listarSelladoras(){
-    this.selladoraService.getSelladoras().subscribe(
+  //metodo que lista las calibradores
+  listarCalibradores(){
+    this.calibradorService.getCalibradores().subscribe(
       res=>{
         console.log(res);
-        this.selladoras=res;
+        this.calibradores=res;
       },
       err=>{
         console.log(err);
-        this.toastr.error('No se pudo obtener selladoras', 'Oops');
+        this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
   }
 
   //metodo que trae todos los registros de lineas desde la base de datos
   listarLineas() {  
-    console.log(this.selectedSelladoraObject.id);
-    this.lineaService.getLineas(this.selectedSelladoraObject.id).subscribe(
+    console.log(this.selectedCalibradorObject.id);
+    this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res => {
         //los registros se almacena en array lineas que sirve para llenar la tabla de vista lineas
         this.lineas = res;
@@ -73,16 +74,18 @@ export class LineasComponent implements OnInit {
 
   //metodo que crea una nueva linea
   agregarLinea(form: NgForm) {  
-    if (!form.value.nombre || !this.selectedSelladoraObject) {
+    this.nombreLineaAdded=form.value.nombre;
+    if (!this.nombreLineaAdded || !this.selectedCalibradorObject) {
       this.toastr.error('No se pudo guardar línea', 'Oops');
       return;
     }
-    let linea = new Linea(null, form.value.nombre,this.selectedSelladoraObject.id);
-    linea.nombre_selladora=this.selectedSelladoraObject.nombre;
+    let linea = new Linea(null, this.nombreLineaAdded,this.selectedCalibradorObject.id);
+    linea.nombre_calibrador=this.selectedCalibradorObject.nombre;
     this.lineaService.saveLinea(linea).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
         this.listarLineas();
+        this.nombreLineaAdded=null;
       },
       err => {
         console.log(err);
@@ -95,14 +98,14 @@ export class LineasComponent implements OnInit {
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto linea clickeado a variable global currentLineaSelected
   onEditar(linea: Linea) {
     this.currentLineaSelected = linea;
-    this.selladoraService.getSelladora(linea.fk_selladora).subscribe(
+    this.calibradorService.getCalibrador(linea.fk_calibrador).subscribe(
       res=>{
-        this.selectedSelladoraObject=res;
-        this.selectedSelladoraText=this.selectedSelladoraObject.nombre;
+        this.selectedCalibradorObject=res;
+        this.selectedCalibradorText=this.selectedCalibradorObject.nombre;
       },
       err=>{
         console.log(err);
-        this.toastr.error('No se pudo obtener selladora id', 'Oops',);
+        this.toastr.error('No se pudo obtener calibrador id', 'Oops',);
       }
     )
   }
@@ -110,15 +113,15 @@ export class LineasComponent implements OnInit {
   //metodo que sirve para editar una linea
   editarLinea(form: NgForm) {
     console.log(form.value.nombre);
-    console.log(this.selectedSelladoraObject);
+    console.log(this.selectedCalibradorObject);
     if (!form.value.nombre) {
       this.toastr.error('No se pudo editar línea', 'Oops',);
       return;
     }
     let linea: Linea;
-    if(this.selectedSelladoraObject){
-      linea = new Linea(form.value.id, form.value.nombre, this.selectedSelladoraObject.id);
-      linea.nombre_selladora=this.selectedSelladoraObject.nombre;
+    if(this.selectedCalibradorObject){
+      linea = new Linea(form.value.id, form.value.nombre, this.selectedCalibradorObject.id);
+      linea.nombre_calibrador=this.selectedCalibradorObject.nombre;
     }    
     this.lineaService.updateLinea(linea.id, linea).subscribe(
       res => {
@@ -182,14 +185,14 @@ export class LineasComponent implements OnInit {
     }
   }
 
-  changeSelectedSelladora(newSelected: any) { 
-    this.selectedSelladoraText = newSelected.nombre;
-    this.selectedSelladoraObject=newSelected;
+  changeSelectedCalibrador(newSelected: any) { 
+    this.selectedCalibradorText = newSelected.nombre;
+    this.selectedCalibradorObject=newSelected;
     this.listarLineas();  
   }
 
-  changeSelectedSelladoraModificar(newSelected: any) { 
-    this.selectedSelladoraText = newSelected.nombre;
-    this.selectedSelladoraObject=newSelected;
+  changeSelectedCalibradorModificar(newSelected: any) { 
+    this.selectedCalibradorText = newSelected.nombre;
+    this.selectedCalibradorObject=newSelected;
   }
 }

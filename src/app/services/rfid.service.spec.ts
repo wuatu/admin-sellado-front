@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SelladoraService } from './selladora.service';
+import { RfidService } from './rfid.service';
 
-describe('SelladoraService', () => {
+describe('RfidService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SelladoraService = TestBed.get(SelladoraService);
+    const service: RfidService = TestBed.get(RfidService);
     expect(service).toBeTruthy();
   });
 });

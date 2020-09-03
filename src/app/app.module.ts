@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { RfidComponent } from './components/rfid/rfid.component';
+import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { ToastrModule } from 'ngx-toastr';
     MenubarComponent,
     DashboardComponent,
     LineasComponent,
+    RfidComponent,
+    MonitoreoComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,71 @@
+<div class="row justify-content-center">
+  <div class="col-4"></div>
+  <div class="col-4 text-center" style="padding-top: 30px;">
+    <h3><b>Monitoreo</b></h3>
+  </div>
+  <div class="col-4 text-right">
+    <div class="row">
+      <div class="col-12" style="padding-top: 10px;">
+        <button class="btn {{botonIniciarTurnoClass}}" (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h4>{{ time | date: 'hh:mm:ss a' }}</h4>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--modal agregar-->
+<ng-template #myModalAutenticar let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Autenticación</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #myform="ngForm">
+      <div class="form-group">
+
+        <label for="lineaLabel"><b>Rut:</b></label>
+        <div class="input-group">
+          <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut"
+            class="form-control" placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+        </div>
+
+        <!--Valida formulario nombre-->
+        <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
+          <div *ngIf="rut.errors.required">
+            Rut es obligatorio
+          </div>
+        </div>
+
+        <label for="lineaLabel"><b>Contraseña:</b></label>
+        <div class="input-group">
+          <input type="text" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password"
+            class="form-control" placeholder="Contraseña" required [ngClass]="{ 'is-invalid': submitted && password.errors }">
+        </div>
+
+        <!--Valida formulario nombre-->
+        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+          <div *ngIf="password.errors.required">
+            Contraseña es obligatorio
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer" *ngIf="!turnoIniciado else turnoIniciadoElse">
+      <button type="submit" class="btn btn-primary"
+        (click)="autenticarIniciarTurno(myform);modal.close('Save click')">Autenticar</button>
+    </div>
+    <ng-template #turnoIniciadoElse>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"
+          (click)="autenticarCerrarTurno(myform);modal.close('Save click')">Autenticar</button>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+<!--fin modal agregar-->

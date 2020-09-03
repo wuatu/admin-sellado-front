@@ -10,8 +10,12 @@ export class LineaService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getLineas(id:string){
+  getLineasId(id:string){
     return this.httpClient.get(`${this.API_URL}/lineas/${id}`);
+  }
+
+  getLineas(){
+    return this.httpClient.get(`${this.API_URL}/lineas/`);
   }
 
   getLinea(id:string){
