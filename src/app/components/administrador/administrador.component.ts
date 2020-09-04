@@ -62,7 +62,7 @@ export class AdministradorComponent implements OnInit {
       return;
     }
     let administrador = new Administrador(null, this.addRut, this.addNombre, this.addApellido, this.addPassword);
-    this.authService.register(administrador).subscribe(
+    this.administradorService.saveAdministrador(administrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
         this.listarAdministradores();
