@@ -106,6 +106,7 @@ export class LectoresComponent implements OnInit {
       err=>{
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
+        this.lectores=null;
       }
     );
   }

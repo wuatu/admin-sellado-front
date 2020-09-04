@@ -90,6 +90,7 @@ export class LineasComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo guardar línea', 'Oops');
+        this.lineas=null;
       }
     );
 
