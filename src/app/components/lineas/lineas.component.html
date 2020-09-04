@@ -99,6 +99,10 @@
           </div>
         </div>
       </form>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"
+          (click)="agregarLinea(myform);modal.close('Save click')">Guardar</button>
+      </div>
     </div>
   </ng-template>
   <!--fin modal agregar-->
@@ -142,6 +146,10 @@
           </div>
         </div>
       </form>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary"
+          (click)="editarLinea(myform);modal.close('Save click')">Guardar</button>
+      </div>
     </div>
   </ng-template>
   <!--fin modal editar-->

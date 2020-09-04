@@ -16,6 +16,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { RfidComponent } from './components/rfid/rfid.component';
 import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
+import { AdministradorComponent } from './components/administrador/administrador.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { LectoresComponent } from './components/lectores/lectores.component';
     LineasComponent,
     RfidComponent,
     MonitoreoComponent,
-    LectoresComponent
+    LectoresComponent,
+    AdministradorComponent
   ],
   imports: [
     BrowserModule,
