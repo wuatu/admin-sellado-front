@@ -69,7 +69,7 @@ export class AdministradorComponent implements OnInit {
         this.addRut = null;
         this.addNombre=null;
         this.addApellido=null;
-        this.addPassword=null;
+        this.addPassword=null;      
       },
       err => {
         console.log(err);
