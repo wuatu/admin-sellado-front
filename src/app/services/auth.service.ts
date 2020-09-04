@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { JwtResponse } from '../models/jwt-response';
 import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Administrador } from '../models/administrador';
 
 @Injectable({
   providedIn: 'root'  // <- ADD THIS
@@ -16,7 +17,7 @@ export class AuthService {
   isLoggedIn = false;
   constructor(private httpClient: HttpClient) { }
 
-  register(user: User): Observable<JwtResponse> {
+  register(user: Administrador): Observable<JwtResponse> {
     return this.httpClient.post<JwtResponse>(`${this.AUTH_SERVER}/register`,
       user).pipe(tap(
         (res: JwtResponse) => {
@@ -37,11 +38,10 @@ export class AuthService {
             //guardar token
             localStorage.setItem('USER', JSON.stringify(res.dataUser));
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-          } else {
-            this.logout();
           }
         }
-      ));
+      )
+    );    
   }
 
   logout() {

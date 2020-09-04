@@ -4,10 +4,10 @@ import { NgForm } from '@angular/forms';
 import { LectorService } from 'src/app/services/lector.service';
 import { Lector } from 'src/app/models/lector';
 import { ToastrService } from 'ngx-toastr';
-import { SelladoraService } from 'src/app/services/selladora.service';
+import { CalibradorService } from 'src/app/services/calibrador.service';
 import { LineaService } from 'src/app/services/linea.service';
 import { Linea } from 'src/app/models/Linea';
-import { Selladora } from 'src/app/models/selladora';
+import { Calibrador } from 'src/app/models/calibrador';
 
 @Component({
   selector: 'app-lectores',
@@ -21,18 +21,18 @@ export class LectoresComponent implements OnInit {
   nombreLector:string;
   ipLector:string;
     
-  currentSelladoraSelected: Selladora;
+  currentCalibradorSelected: Calibrador;
   currentLineaSelected: Linea;
   currentLectorSelected: Lector;
 
-  selladoras: any = [];
+  calibradores: any = [];
   lineas: any = [];
   lectores: any = [];
 
-  selectedSelladoraText: string="Seleccionar selladora";  
-  selectedSelladoraTextModificar: string="Seleccionar selladora";  
-  selectedSelladoraObject:any;
-  selectedSelladoraObjectModificar:any;
+  selectedCalibradorText: string="Seleccionar calibrador";  
+  selectedCalibradorTextModificar: string="Seleccionar calibrador";  
+  selectedCalibradorObject:any;
+  selectedCalibradorObjectModificar:any;
 
   selectedLineaText: string="Seleccionar linea";  
   selectedLineaTextModificar: string="Seleccionar linea";  
@@ -45,42 +45,42 @@ export class LectoresComponent implements OnInit {
     private modalService: NgbModal,
     private lineaService: LineaService,
     private toastr: ToastrService,
-    private selladoraService:SelladoraService,
+    private calibradorService:CalibradorService,
     private lectorService:LectorService
     ) {}
 
   ngOnInit() {
-    this.listarSelladoras(); 
+    this.listarCalibradores(); 
     //this.listarLineas();
   }
 
-  //metodo que lista las selladoras
-  listarSelladoras(){
+  //metodo que lista las calibradores
+  listarCalibradores(){
     console.log("LISTARSELLADORES");
-    this.selladoraService.getSelladoras().subscribe(
+    this.calibradorService.getCalibradores().subscribe(
       res=>{
         console.log(res);
-        this.selladoras=res;
+        this.calibradores=res;
       },
       err=>{
         console.log(err);
-        this.toastr.error('No se pudo obtener selladoras', 'Oops');
+        this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
   }
 
-  changeSelectedSelladora(newSelected: any) { 
+  changeSelectedCalibrador(newSelected: any) { 
     console.log("CHANGESELECTEDSELLADORA");
-    this.selectedSelladoraText = newSelected.nombre;
-    this.selectedSelladoraObject = newSelected;
-    this.listarLineas(this.selectedSelladoraObject.id);
+    this.selectedCalibradorText = newSelected.nombre;
+    this.selectedCalibradorObject = newSelected;
+    this.listarLineas(this.selectedCalibradorObject.id);
       
   }
   //metodo que lista las lineas
   listarLineas(id:string){
     console.log("LISTARLINEAS");
     this.lineaService.getLineasId(id).subscribe(
-    //this.selladoraService.getSelladoras().subscribe(
+    //this.calibradorService.getCalibradores().subscribe(
       res2=>{
         console.log(res2);
         this.lineas=res2;
@@ -95,9 +95,9 @@ export class LectoresComponent implements OnInit {
 
   listarLectores(){
     console.log("LISTARLECTORES");
-    console.log(this.selectedSelladoraObject.id,"  ", this.selectedLineaObject.id);
-    this.lectorService.getLectoresId(this.selectedSelladoraObject.id, this.selectedLineaObject.id).subscribe(
-    //this.selladoraService.getSelladoras().subscribe(
+    console.log(this.selectedCalibradorObject.id,"  ", this.selectedLineaObject.id);
+    this.lectorService.getLectoresId(this.selectedCalibradorObject.id, this.selectedLineaObject.id).subscribe(
+    //this.calibradorService.getCalibradores().subscribe(
       res3=>{
         console.log(res3);
         this.lectores=res3;
@@ -106,6 +106,7 @@ export class LectoresComponent implements OnInit {
       err=>{
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
+        this.lectores=null;
       }
     );
   }
@@ -148,7 +149,7 @@ export class LectoresComponent implements OnInit {
 
   //metodo que crea un nuevo lector
   agregarLector(form: NgForm) {  
-    if (!form.value.nombre || !this.selectedSelladoraObject || !this.selectedLineaObject) {
+    if (!form.value.nombre || !this.selectedCalibradorObject || !this.selectedLineaObject) {
       this.toastr.error('No se pudo guardar lector', 'Oops');
       this.nombreLector = null;
       this.ipLector = null;
@@ -162,6 +163,7 @@ export class LectoresComponent implements OnInit {
         this.toastr.success('Operación satisfactoria', 'Lector agregado');
         this.nombreLector = null;
         this.ipLector = null;
+        this.listarLectores();
         
       },
       err => {
@@ -223,7 +225,7 @@ export class LectoresComponent implements OnInit {
     }
     let lector: Lector;
     if(this.selectedLineaObject){
-      lector = new Lector(this.currentLectorSelected.id, this.currentLectorSelected.nombre, this.currentLectorSelected.puerto, this.selectedLineaObject.id);
+      lector = new Lector(this.currentLectorSelected.id, this.currentLectorSelected.nombre, this.currentLectorSelected.ip, this.selectedLineaObject.id);
       
     }    
     this.lectorService.updateLector(lector.id, lector).subscribe(

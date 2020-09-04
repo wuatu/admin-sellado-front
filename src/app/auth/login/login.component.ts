@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   onLogin(form):void{
     this.authService.login(form.value).subscribe(
       res=>{
-        this.router.navigateByUrl('/dashboard')
+        this.router.navigateByUrl('/monitoreo')
       err=>{
         this.toastr.error('Credenciales inválidas', 'Error');
       }

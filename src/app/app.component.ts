@@ -26,13 +26,13 @@ export class AppComponent {
     this.showMenu$.subscribe(showMenu => this.showMenu = showMenu);
     this.isLoggedIn$=this.authService.isLoggedIn$();
     this.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
-    this.showMenu=this.menubar.visibleToggleAction();
+    this.showMenu=this.menubar.visible;
     this.isLoggedIn=this.authService.isLogin();
   }
 
   ngOnInit() {
     if(this.authService.isLogin()){
-      this.router.navigate(['/lineas']);
+      this.router.navigate(['/monitoreo']);
     }
   }
 
