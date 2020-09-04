@@ -7,6 +7,8 @@ import { RfidComponent } from './components/rfid/rfid.component';
 import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
+import { UsuarioComponent } from './components/usuario/usuario.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -21,6 +23,7 @@ const routes: Routes = [
   { path: 'registroturnos', component: LineasComponent, canActivate: [AuthGuard] },
   { path: 'lineas', component: LineasComponent, canActivate: [AuthGuard] },
   { path: 'lector', component: LectoresComponent, canActivate: [AuthGuard] },
+  { path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard] },
   { path: 'rfid', component: RfidComponent, canActivate: [AuthGuard] },
 ];
 

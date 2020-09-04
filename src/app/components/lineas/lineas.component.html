@@ -1,173 +1,162 @@
 <div class="row justify-content-start">
-  <div class="col-12">
-    <br>
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <h1 class="text-center"><b>Líneas de sellado</b></h1>
-      </div>
-    </div>
-    <br>
-    <div class="row justify-content-center">
+    <div class="col-12">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Líneas de sellado</b></h1>
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-center">
 
-      <div class="col-6 align-self-end text-left">
-        <div ngbDropdown>
-          <button class="btn btn-outline-primary" id="dropdownBasic1"
-            ngbDropdownToggle>{{selectedCalibradorText}}</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button class="dropdown-item" *ngFor="let calibrador of calibradores"
-              (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-6 align-self-end">
-        <div class="text-right" *ngIf="selectedCalibradorObject">
-          <button class="btn btn-primary  text-right" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+            <div class="col-6 align-self-end text-left">
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 align-self-end">
+                <div class="text-right" *ngIf="selectedCalibradorObject">
+                    <button class="btn btn-primary  text-right" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
             Agregar línea</button>
-        </div>
-      </div>
-      <br>
-      <div class="row" *ngIf="lineas">
-        <div class="col-12">
-          <h5>Lista de líneas de sellado</h5>
-        </div>
-      </div>
-      <!--Tabla de contenido-->
-      <table class="table table-hover" *ngIf="lineas">
-        <thead>
-          <tr>
-            <th scope="col">N°</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Calibrador</th>
-            <th scope="col">Editar</th>
-            <th scope="col">Eliminar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let linea of lineas; let i = index">
-            <th scope="row">{{i+1}}</th>
-            <td>{{linea.nombre}}</td>
-            <td>{{linea.nombre_calibrador}}</td>
-            <td>
-              <button class="btn btn-primary text-white mr-1" (click)="onEditar(linea);open(mymodaleditar)">
+                </div>
+            </div>
+            <br>
+            <div class="row" *ngIf="lineas">
+                <div class="col-12">
+                    <h3>Lista de líneas de sellado</h3>
+                </div>
+            </div>
+            <!--Tabla de contenido-->
+            <table class="table table-hover" *ngIf="lineas">
+                <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Calibrador</th>
+                        <th scope="col">Editar</th>
+                        <th scope="col">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let linea of lineas; let i = index">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{linea.nombre}}</td>
+                        <td>{{linea.nombre_calibrador}}</td>
+                        <td>
+                            <button class="btn btn-primary text-white mr-1" (click)="onEditar(linea);open(mymodaleditar)">
                 <i class="fa fa-edit"></i>
               </button>
-            </td>
-            <td>
-              <button class="btn btn-danger text-white mr-1" (click)="onEliminar(linea,mymodalconfirmar)">
+                        </td>
+                        <td>
+                            <button class="btn btn-danger text-white mr-1" (click)="onEliminar(linea,mymodalconfirmar)">
                 <i class="fa fa-trash-alt"></i>
               </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 
-  <!--modal agregar-->
-  <ng-template #mymodalagregar let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Agregar línea</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <!--modal agregar-->
+    <ng-template #mymodalagregar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Agregar línea</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">×</span>
       </button>
-    </div>
-    <div class="modal-body">
-      <form #myform="ngForm">
-        <div class="form-group">
-          <label for="lineaLabel"><b>Nombre línea:</b></label>
-          <div class="input-group">
-            <input type="text" #nombre='ngModel' [(ngModel)]="nombreLineaAdded" name="nombre" id="nombre"
-              class="form-control" placeholder="Nombre" required
-              [ngClass]="{ 'is-invalid': submitted && linea.errors }">
-          </div>
-          <!--Valida formulario nombre-->
-          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-            <div *ngIf="nombre.errors.required">
-              Nombre de línea es obligatorio
-            </div>
-          </div>
         </div>
-        <div class="form-group">
-          <label for="lineaLabel"><b>Calibrador:</b></label>
-          <div ngbDropdown>
-            <button class="btn btn-outline-primary" id="dropdownBasic1"
-              ngbDropdownToggle>{{selectedCalibradorText}}</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button class="dropdown-item" *ngFor="let calibrador of calibradores"
-                (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+        <div class="modal-body">
+            <form #myform="ngForm">
+                <div class="form-group">
+                    <label for="lineaLabel"><b>Nombre línea:</b></label>
+                    <div class="input-group">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="nombreLineaAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                    </div>
+                    <!--Valida formulario nombre-->
+                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                        <div *ngIf="nombre.errors.required">
+                            Nombre de línea es obligatorio
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lineaLabel"><b>Calibrador:</b></label>
+                    <div ngbDropdown>
+                        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="agregarLinea(myform);modal.close('Save click')">Guardar</button>
             </div>
-          </div>
         </div>
-      </form>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary"
-          (click)="agregarLinea(myform);modal.close('Save click')">Guardar</button>
-      </div>
-    </div>
-  </ng-template>
-  <!--fin modal agregar-->
+    </ng-template>
+    <!--fin modal agregar-->
 
-  <!--modal editar-->
-  <ng-template #mymodaleditar let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Editar línea</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <!--modal editar-->
+    <ng-template #mymodaleditar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar línea</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">×</span>
       </button>
-    </div>
-    <div class="modal-body">
-      <form #myform="ngForm">
-        <!--Id de linea clickeada se almacena en un input hidden-->
-        <div class="form-group">
-          <input type="hidden" ngModel [(ngModel)]="currentLineaSelected.id" name="id" id="id">
         </div>
-        <div class="form-group">
-          <label for="patentelabel"><b>Nombre línea:</b></label>
-          <div class="input-group">
-            <input type="text" #nombre='ngModel' [(ngModel)]="currentLineaSelected.nombre" name="nombre" id="nombre"
-              class="form-control" placeholder="Nombre" required>
-          </div>
-          <!--Valida formulario nombre-->
-          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-            <div *ngIf="nombre.errors.required">
-              Nombre de línea es obligatorio
+        <div class="modal-body">
+            <form #myform="ngForm">
+                <!--Id de linea clickeada se almacena en un input hidden-->
+                <div class="form-group">
+                    <input type="hidden" ngModel [(ngModel)]="currentLineaSelected.id" name="id" id="id">
+                </div>
+                <div class="form-group">
+                    <label for="patentelabel"><b>Nombre línea:</b></label>
+                    <div class="input-group">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="currentLineaSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required>
+                    </div>
+                    <!--Valida formulario nombre-->
+                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                        <div *ngIf="nombre.errors.required">
+                            Nombre de línea es obligatorio
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lineaLabel"><b>Calibrador:</b></label>
+                    <div ngbDropdown>
+                        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibradorModificar(calibrador)">{{calibrador.nombre}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="editarLinea(myform);modal.close('Save click')">Guardar</button>
             </div>
-          </div>
         </div>
-        <div class="form-group">
-          <label for="lineaLabel"><b>Calibrador:</b></label>
-          <div ngbDropdown>
-            <button class="btn btn-outline-primary" id="dropdownBasic1"
-              ngbDropdownToggle>{{selectedCalibradorText}}</button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button class="dropdown-item" *ngFor="let calibrador of calibradores"
-                (click)="changeSelectedCalibradorModificar(calibrador)">{{calibrador.nombre}}</button>
-            </div>
-          </div>
-        </div>
-      </form>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary"
-          (click)="editarLinea(myform);modal.close('Save click')">Guardar</button>
-      </div>
-    </div>
-  </ng-template>
-  <!--fin modal editar-->
+    </ng-template>
+    <!--fin modal editar-->
 
-  <!--Modal confirmación-->
-  <ng-template #mymodalconfirmar let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-title">Eliminar línea</h4>
-      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+    <!--Modal confirmación-->
+    <ng-template #mymodalconfirmar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Eliminar línea</h4>
+            <button type="button" class="btn btn-outline-danger" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
-    </div>
-    <div class="modal-body">
-      <p>¿Seguro que quieres eliminar una línea?</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-      <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
-    </div>
-  </ng-template>
-  <!--fin modal confirmacion-->
+        </div>
+        <div class="modal-body">
+            <p>¿Seguro que quieres eliminar una línea?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
+        </div>
+    </ng-template>
+    <!--fin modal confirmacion-->

@@ -56,7 +56,7 @@ export class LectoresComponent implements OnInit {
 
   //metodo que lista las calibradores
   listarCalibradores(){
-    console.log("LISTARSELLADORES");
+    
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         console.log(res);
@@ -139,8 +139,6 @@ export class LectoresComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       if (reason == 'ok') {
-        console.log("hola");
-        console.log(this.currentLectorSelected);
         this.eliminarLector(this.currentLectorSelected);
       }
       return `with: ${reason}`;
@@ -155,7 +153,7 @@ export class LectoresComponent implements OnInit {
       this.ipLector = null;
       return;
     }
-    console.log("LA DIRECCION IP DEL FORM ES ", form.value.nombre);
+    
     let lector = new Lector(null, this.nombreLector, this.ipLector,this.selectedLineaObject.id);
     
     this.lectorService.saveLector(lector).subscribe(
@@ -208,7 +206,7 @@ export class LectoresComponent implements OnInit {
       err=>{
         console.log(err);
         console.log("HOLA...");
-        this.toastr.error('No se pudo obtener la linea id', 'Oops',);
+        this.toastr.error('No se pudo obtener el lector id', 'Oops',);
       }
     )
   }

@@ -179,7 +179,6 @@ export class LineasComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       if (reason == 'ok') {
-        console.log("hola");
         this.eliminarLinea(this.currentLineaSelected);
       }
       return `with: ${reason}`;
