@@ -37,15 +37,15 @@
         </div>
         <br>
         <div class="row" *ngIf="selectedCalibradorObject && selectedLineaObject">
-            <div class="col-12">
-                <h5>Lista de lectores</h5>
+            <div class="col-12 ">
+                <h3>Lista de lectores</h3>
             </div>
         </div>
         <!--Tabla de contenido-->
         <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject">
             <thead>
                 <tr>
-                    <th scope="col">id</th>
+                    <th scope="col">N°</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">ip</th>
                     <th scope="col">Editar</th>
@@ -56,7 +56,7 @@
                 <tr *ngFor="let lector of lectores; let i = index">
                     <th scope="row">{{i+1}}</th>
                     <td>{{lector.nombre}}</td>
-                    <td>{{lector.puerto}}</td>
+                    <td>{{lector.ip}}</td>
                     <td>
                         <button class="btn btn-primary text-white mr-1" (click)="onEditar(lector);open(modal_editar_lector)">
                           <i class="fa fa-edit" ></i>
@@ -145,7 +145,7 @@
                 <br>
                 <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.puerto" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.ip" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
                 </div>
 
                 <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">

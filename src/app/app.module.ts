@@ -17,6 +17,7 @@ import { RfidComponent } from './components/rfid/rfid.component';
 import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
+import { UsuarioComponent } from './components/usuario/usuario.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AdministradorComponent } from './components/administrador/administrador
     RfidComponent,
     MonitoreoComponent,
     LectoresComponent,
-    AdministradorComponent
+    AdministradorComponent,
+    UsuarioComponent
   ],
   imports: [
     BrowserModule,
