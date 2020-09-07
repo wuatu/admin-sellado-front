@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { NgbModule, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenubarComponent } from './components/menubar/menubar.component';
@@ -18,6 +18,7 @@ import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
+import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 
 @NgModule({
   declarations: [
@@ -29,14 +30,15 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
     MonitoreoComponent,
     LectoresComponent,
     AdministradorComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    UsuarioEnLineaComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,  
     HttpClientModule,
     NgbAlertModule,
-    NgbDropdownModule,
+    NgbModule,
     FormsModule,    
     CommonModule,
     BrowserAnimationsModule, // required animations module

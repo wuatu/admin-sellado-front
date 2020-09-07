@@ -8,6 +8,7 @@ import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
+import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
   { path: 'produccioncalibrador', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'produccionlinea', component: LineasComponent, canActivate: [AuthGuard] },
   { path: 'produccionusuario', component: LineasComponent, canActivate: [AuthGuard] },
-  { path: 'usuarioenlinea', component: LineasComponent, canActivate: [AuthGuard] },
+  { path: 'usuarioenlinea', component: UsuarioEnLineaComponent, canActivate: [AuthGuard] },
   { path: 'usuarios', component: LineasComponent, canActivate: [AuthGuard] },
   { path: 'administrador', component: AdministradorComponent, canActivate: [AuthGuard] },
   { path: 'registroturnos', component: LineasComponent, canActivate: [AuthGuard] },

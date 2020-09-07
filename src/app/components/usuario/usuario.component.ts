@@ -177,6 +177,7 @@ export class UsuarioComponent implements OnInit {
         console.log("hola");
         console.log(this.currentUsuarioSelected);
         this.eliminarUsuario(this.currentUsuarioSelected);
+        
       }
       return `with: ${reason}`;
     }
