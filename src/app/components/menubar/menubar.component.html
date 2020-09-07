@@ -14,11 +14,11 @@
       <a><i class="fa fa-plus-circle"></i>Agregar <i class="fa fa-caret-down"></i></a>
       <ul>
         <li><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
-        <li><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
-        <li><a routerLink="/calibrador"><i class="fa fa-user"></i>Calibradora</a></li>
-        <li><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
-        <li><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
-        <li><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-user"></i>Calibradora</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
       </ul>
     </li>
     <li>
@@ -29,7 +29,7 @@
         <li><a routerLink="/log"><i class="fa fa-bars"></i>Registro log</a></li>
       </ul>
     </li>
-    <li><a routerLink="/productos"><i class="fa fa-dropbox"></i>Productos</a></li>
+    <li *ngIf="superAdmin"><a routerLink="/productos"><i class="fa fa-dropbox"></i>Productos</a></li>
 
 
 

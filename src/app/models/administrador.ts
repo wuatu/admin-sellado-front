@@ -4,6 +4,7 @@ export class Administrador {
     nombre: string;
     apellido: string;
     password: string;
+    superAdmin: boolean;
     constructor(id: string, rut: string, nombre: string, apellido: string, password: string) {
         this.id=id;
         this.rut=rut;
