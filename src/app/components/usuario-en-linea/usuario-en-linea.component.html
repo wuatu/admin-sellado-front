@@ -1,0 +1,172 @@
+<div class="row justify-content-center">
+    <div class="col-12 ">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Usuario en línea de sellado</b></h1>
+            </div>
+        </div>
+        <!--<form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
+            <div class="form-row">
+
+                <div class="col">
+                    <label for="Desde:">Desde:</label>
+                    <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                </div>
+
+                <div class="col">
+                    <label for="">Hasta:</label>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input #dpToDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col">
+                    <label for="">Buscar:</label>
+                    <div class="input-group-append">
+                        <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
+                      aria-hidden="true"></i></button>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col">
+                <div class="form-group hidden">
+                    <div class="input-group">
+                        <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                      {{ date.day }}
+                    </span>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </form> -->
+        <!--<form class="needs-validation" novalidate>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationTooltip01">Buscar Usuario</label>
+                    <input type="text" class="form-control" id="validationTooltip01" placeholder="Rut" value="Mark" required>
+                    <div class="valid-tooltip">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="col">
+                        <label for="Desde:">Desde:</label>
+                        <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationTooltipUsername">Username</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="validationTooltipUsernamePrepend">@</span>
+                        </div>
+                        <input type="text" class="form-control" id="validationTooltipUsername" placeholder="Username" aria-describedby="validationTooltipUsernamePrepend" required>
+                        <div class="invalid-tooltip">
+                            Please choose a unique and valid username.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit form</button>
+        </form>-->
+        <br>
+        <div class="col-md-12  align-self-end ">
+            <div class="text-right">
+                <button class="btn btn-primary  text-right" (click)="open(modal_agregar_usuario)"><i class="fa fa-plus-circle"></i>
+                  Agregar usuario a línea
+                </button>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12 align-content-lg-center">
+            <h3>Lista de usuarios en Lineas</h3>
+        </div>
+    </div>
+    <!--Tabla de contenido-->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">Rut</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Fecha de inicio</th>
+                <th scope="col">Fecha de termino</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usuario of usuariosEnLinea; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{usuario.rut}}</td>
+                <td>{{usuario.nombre}}</td>
+                <td>{{usuario.apellido}}</td>
+                <td>{{usuario.fechaInicio}}</td>
+                <td>{{usuario.fechaTermino}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="col-md-12  align-self-end ">
+        <div class="text-right">
+            <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fa fa-plus-circle"></i>
+              Exportar a excel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!--modal agregar-->
+<ng-template #modal_agregar_usuario let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Agregar usuario a linea</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #myform="ngForm">
+            <div class="form-group">
+                <label for="lineaLabel"><b>Calibrador:</b></label>
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="width: 250px; margin: 10px">{{selectedCalibradorText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                    </div>
+                </div>
+                <br>
+                <label for="lineaLabel"><b>Linea:</b></label>
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle style="width: 250px; margin: 10px">{{selectedLineaText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
+                    </div>
+                </div>
+                <br>
+                <label for="lineaLabel"><b>Usuario:</b></label>
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle style="width: 250px; margin: 10px">{{selectedUsuarioText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let usuario of usuarios" (click)="changeSelectedUsuario(usuario)">{{usuario.nombre +' '+ usuario.rut}}</button>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" (click)="agregarUsuarioEnLinea(myform);modal.close('Save click')">Agregar</button>
+        </div>
+    </div>
+</ng-template>
+<!--fin modal agregar-->
