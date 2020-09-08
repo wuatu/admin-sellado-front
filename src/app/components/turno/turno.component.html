@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-8">
+    <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
+      <div class="form-row">
+
+        <div class="col">
+          <label for="Desde:">Desde:</label>
+          <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate"
+            [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+            (click)="d.toggle()">
+        </div>
+
+        <div class="col">
+          <label for="">Hasta:</label>
+          <div class="form-group">
+            <div class="input-group">
+              <input #dpToDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpToDate"
+                [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col">
+          <label for="">Buscar:</label>
+          <div class="input-group-append">
+            <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
+                aria-hidden="true"></i></button>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="col">
+        <div class="form-group hidden">
+          <div class="input-group">
+            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'"
+              (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden"
+              [startDate]="fromDate!">
+            <ng-template #t let-date let-focused="focused">
+              <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                (mouseleave)="hoveredDate = null">
+                {{ date.day }}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

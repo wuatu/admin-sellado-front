@@ -18,6 +18,8 @@ import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
+import { TurnoComponent } from './components/turno/turno.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
     MonitoreoComponent,
     LectoresComponent,
     AdministradorComponent,
-    UsuarioComponent
+    UsuarioComponent,
+    TurnoComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
     CommonModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
+    NgbModule
   ],
   providers: [
     AuthService

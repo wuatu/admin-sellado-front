@@ -8,6 +8,7 @@ import { MonitoreoComponent } from './components/monitoreo/monitoreo.component';
 import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
+import { TurnoComponent } from 'src/app/components/turno/turno.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'lector', component: LectoresComponent, canActivate: [AuthGuard] },
   { path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard] },
   { path: 'rfid', component: RfidComponent, canActivate: [AuthGuard] },
+  { path: 'turnos', component: TurnoComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
