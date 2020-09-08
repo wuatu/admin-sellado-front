@@ -57,7 +57,7 @@ export class UsuarioComponent implements OnInit {
   //metodo que crea un nuevo lector
   agregarUsuario(form: NgForm) {  
     if (!form.value.nombre ) {
-      this.toastr.error('No se pudo agregar al Usuario csm', 'Oops');
+      this.toastr.error('No se pudo agregar usuario', 'Oops');
       this.rutUsuario = null;
       this.nombreUsuario = null;
       this.apellidoUsuario = null;
