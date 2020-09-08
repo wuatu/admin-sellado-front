@@ -31,4 +31,9 @@ export class AdministradorService {
   updateAdministrador(id:string, administrador:Administrador):Observable<any>{
     return this.httpClient.put(`${this.API_URL}/administrador/${id}`,administrador);
   }
+
+  getLoginAdministrador(rut:string,password:string){
+    console.log(rut,password);
+    return this.httpClient.get(`${this.API_URL}/administrador/login/${rut}/${password}`);
+  }
 }
