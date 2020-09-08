@@ -13,6 +13,7 @@ import { UsuarioEnLineaService } from '../../services/usuario-en-linea.service';
 
 declare var require: any;
 
+
 @Component({
   selector: 'app-usuario-en-linea',
   templateUrl: './usuario-en-linea.component.html',

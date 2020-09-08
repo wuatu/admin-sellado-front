@@ -8,7 +8,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule } from "@angular/common/http";
 import { LineasComponent } from './components/lineas/lineas.component';
-import {NgbAlertModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,12 +36,12 @@ import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-e
     BrowserModule,
     AppRoutingModule,  
     HttpClientModule,
-    NgbAlertModule,
     NgbModule,
     FormsModule,    
     CommonModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
+    NgbModule
   ],
   providers: [
     AuthService

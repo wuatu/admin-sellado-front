@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { AdministradorService } from 'src/app/services/administrador.service';
 import { TurnoService } from 'src/app/services/turno.service';
 import { Turno } from 'src/app/models/turno';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-monitoreo',
@@ -18,21 +19,35 @@ export class MonitoreoComponent implements OnInit {
   passAdmin = "";
   rutAdmin = "";
   closeResult = "";
-  turnoIniciado=false;
-  botonIniciarTurnoClass="btn-primary";
-  botonIniciarTurnoText="Iniciar turno";
-  constructor(private modalService: NgbModal, private toastr: ToastrService, private authService: AuthService) { }
   turnoIniciado = false;
   botonIniciarTurnoClass = "btn-primary";
   botonIniciarTurnoText = "Iniciar turno";
   turno;
+  //calendar
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate;
+  toDate: NgbDate | null = null;
+  isBusqueda = false;
+  desde: string = "";
+  hasta: string = "";
+  tituloBuscarPatente = "Búsqueda de patente";
+  cantidadResultadoBusqueda = 0;
+  isVisiblegoogleMaps = true;
+
+
   constructor(
     private modalService: NgbModal,
     private toastr: ToastrService,
     private administradorService: AdministradorService,
     private turnoService: TurnoService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+    public calendar: NgbCalendar,
+    public formatter: NgbDateParserFormatter,
+  ) {
+    this.fromDate = calendar.getToday();
+    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+  }
 
   ngOnInit() {
     //get registro
@@ -109,7 +124,7 @@ export class MonitoreoComponent implements OnInit {
         let administrador = JSON.parse(localStorage.getItem('USER'));
         console.log(administrador.id);
         let turno = new Turno();
-        turno.fechaApertura(null, new Date().toISOString(), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "");
+        turno.fechaApertura(null, this.fecha(), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "");
         this.turnoService.saveTurno(turno).subscribe(
           res => {
             this.sesionIniciada();
@@ -144,12 +159,12 @@ export class MonitoreoComponent implements OnInit {
     this.administradorService.getLoginAdministrador(this.rutAdmin, this.passAdmin).subscribe(
       res => {
         let administrador = JSON.parse(localStorage.getItem('USER'));
-        let turno:Turno=new Turno();
-        turno.id=this.turno.id;
-        turno.fecha_apertura=this.turno.fecha_apertura;
-        turno.nombre_administrador_apertura=this.turno.nombre_administrador_apertura;
-        turno.apellido_administrador_apertura=this.turno.apellido_administrador_apertura;
-        turno.fechaCierre(new Date().toISOString(), administrador.id, administrador.nombre, administrador.apellido);
+        let turno: Turno = new Turno();
+        turno.id = this.turno.id;
+        turno.fecha_apertura = this.turno.fecha_apertura;
+        turno.nombre_administrador_apertura = this.turno.nombre_administrador_apertura;
+        turno.apellido_administrador_apertura = this.turno.apellido_administrador_apertura;
+        turno.fechaCierre(this.fecha(), administrador.id, administrador.nombre, administrador.apellido);
         this.turnoService.updateTurno(this.turno.id, turno).subscribe(
           res => {
             this.sesionCerrada();
@@ -175,5 +190,41 @@ export class MonitoreoComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReasonForm(reason)}`;
     });
   }
+
+  fecha() {
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+    return localISOTime;
+  }
+
+  //calendar
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+  }
+
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
+  }
+
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
 
 }

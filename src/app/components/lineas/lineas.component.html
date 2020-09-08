@@ -87,34 +87,6 @@
             </div>
           </div>
         </div>
-<<<<<<< HEAD
-        <div class="modal-body">
-            <form #myform="ngForm">
-                <div class="form-group">
-                    <label for="lineaLabel"><b>Nombre línea:</b></label>
-                    <div class="input-group">
-                        <input type="text" #nombre='ngModel' [(ngModel)]="nombreLineaAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
-                    </div>
-                    <!--Valida formulario nombre-->
-                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                        <div *ngIf="nombre.errors.required">
-                            Nombre de línea es obligatorio
-                        </div>
-                    </div>
-                </div>
-                <!--<div class="form-group">
-                    <label for="lineaLabel"><b>Calibrador:</b></label>
-                    <div ngbDropdown>
-                        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
-                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                            <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                        </div>
-                    </div>
-                </div>-->
-            </form>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" (click)="agregarLinea(myform);modal.close('Save click')">Guardar</button>
-=======
         <div class="form-group">
           <label for="lineaLabel"><b>Calibrador:</b></label>
           <div ngbDropdown>
@@ -123,7 +95,6 @@
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
               <button class="dropdown-item" *ngFor="let calibrador of calibradores"
                 (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
->>>>>>> origin/turno
             </div>
           </div>
         </div>
