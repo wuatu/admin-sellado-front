@@ -18,6 +18,7 @@ import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
+import { CalibradorComponent } from './components/calibrador/calibrador.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-e
     LectoresComponent,
     AdministradorComponent,
     UsuarioComponent,
-    UsuarioEnLineaComponent
+    UsuarioEnLineaComponent,
+    CalibradorComponent
   ],
   imports: [
     BrowserModule,

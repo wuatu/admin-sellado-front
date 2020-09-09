@@ -9,6 +9,7 @@ import { LectoresComponent } from './components/lectores/lectores.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
+import { CalibradorComponent } from './components/calibrador/calibrador.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'lector', component: LectoresComponent, canActivate: [AuthGuard] },
   { path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard] },
   { path: 'rfid', component: RfidComponent, canActivate: [AuthGuard] },
+  { path: 'calibrador', component: CalibradorComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
