@@ -124,6 +124,7 @@ export class RfidComponent implements OnInit {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
         this.listarRfids();
         this.nombreRfidAdded=null;
+        this.ipRfidAdded=null;
       },
       err => {
         console.log(err);
@@ -150,15 +151,13 @@ export class RfidComponent implements OnInit {
 
   //metodo que sirve para editar una rfid
   editarRfid(form: NgForm) {
-    console.log(form.value.nombre);
-    console.log(this.selectedLineaObject);
     if (!form.value.nombre) {
       this.toastr.error('No se pudo editar línea', 'Oops',);
       return;
     }
     let rfid: Rfid;
     if(this.selectedLineaObject){
-      rfid = new Rfid(form.value.id, form.value.nombre, form.value.ip, this.selectedLineaObject.id);
+      rfid = new Rfid(this.selectedLineaObject.id, this.selectedLineaObject.nombre, this.selectedLineaObject.ip, this.selectedLineaObject.id);
     }    
     this.rfidService.updateRfid(rfid.id, rfid).subscribe(
       res => {
@@ -166,6 +165,7 @@ export class RfidComponent implements OnInit {
         console.log(res);
         this.listarRfids();
         this.currentRfidSelected = null;
+        this.ipRfidAdded=null;
       },
       err => {
         console.log(err);
