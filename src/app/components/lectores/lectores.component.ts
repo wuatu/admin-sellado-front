@@ -178,7 +178,6 @@ export class LectoresComponent implements OnInit {
   onEliminar(lector: Lector, modal) {
     this.currentLectorSelected = lector;
     console.log(this.currentLectorSelected);
-    this.open(modal);
   }
 
   eliminarLector(lector: Lector) {
