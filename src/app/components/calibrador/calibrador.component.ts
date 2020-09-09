@@ -30,7 +30,6 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que trae todos los registros de lineas desde la base de datos
   listarCalibradores() {  
-    console.log("Holaaa");
     this.calibradorService.getCalibradores().subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
@@ -54,7 +53,6 @@ export class CalibradorComponent implements OnInit {
       return;
     }
     let calibrador = new Calibrador(null, form.value.nombre);
-    //calibrador.nombre_selladora=this.selectedSelladoraObject.nombre;
     this.calibradorService.saveCalibrador(calibrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Calibrador agregada');
@@ -75,8 +73,6 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que sirve para editar una linea
   editarCalibrador(form: NgForm) {
-    console.log(form.value.nombre);
-    //console.log(this.selectedSelladoraObject);
     if (!form.value.nombre) {
       this.toastr.error('No se pudo editar línea', 'Oops',);
       return;
@@ -101,13 +97,11 @@ export class CalibradorComponent implements OnInit {
   //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto linea clickeado a variable global currentLineaSelected y abrir el modal
   onEliminar(calibrador: Calibrador, modal) {
     this.currentCalibradorSelected = calibrador;
-    console.log(this.currentCalibradorSelected);
     this.open(modal);
   }
 
   //metodo que elimina una linea
   eliminarLinea(calibrador: Calibrador) {
-    console.log("calibrador.id: " + calibrador.id);
     this.calibradorService.deleteCalibrador(calibrador.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Calibrador eliminado');
