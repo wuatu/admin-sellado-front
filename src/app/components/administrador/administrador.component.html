@@ -110,14 +110,14 @@
         <div class="form-group">
           <label for="administradorLabel"><b>Contraseña:</b></label>
           <div class="input-group">
-            <input type="text" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password"
+            <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password"
               class="form-control" placeholder="Contraseña" required
               [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
           </div>
           <!--Valida formulario password-->
           <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
             <div *ngIf="password.errors.required">
-              Nombre de línea es obligatorio
+              Contraseña es obligatorio
             </div>
           </div>
         </div>
@@ -190,14 +190,14 @@
         <div class="form-group">
           <label for="administradorLabel"><b>Contraseña:</b></label>
           <div class="input-group">
-            <input type="text" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password"
+            <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password"
               class="form-control" placeholder="Contraseña" required
               [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
           </div>
           <!--Valida formulario password-->
           <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
             <div *ngIf="password.errors.required">
-              Nombre de línea es obligatorio
+              Contraseña es obligatorio
             </div>
           </div>
         </div>

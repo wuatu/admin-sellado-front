@@ -74,7 +74,6 @@ export class AdministradorComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo guardar administrador', 'Oops');
-        this.administradores = null;
       }
     );
 
