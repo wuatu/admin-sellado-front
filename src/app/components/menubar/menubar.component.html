@@ -15,16 +15,16 @@
       <ul>
         <li><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
         <li *ngIf="superAdmin"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-user"></i>Calibradora</a></li>
+        <li *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-sitemap"></i>Calibradora</a></li>
         <li *ngIf="superAdmin"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
         <li *ngIf="superAdmin"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
         <li *ngIf="superAdmin"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
       </ul>
     </li>
     <li>
-      <a><i class="fa fa-list-ul"></i>Registro <i class="fa fa-caret-down"></i></a>
+      <a><i class="fa fa-list-ul"></i>Registros <i class="fa fa-caret-down"></i></a>
       <ul>
-        <li><a routerLink="/usuarioenlinea"><i class="fa fa-bars"></i>Usuario en línea</a></li>
+        <li><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
         <li><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
         <li><a routerLink="/log"><i class="fa fa-bars"></i>Registro log</a></li>
       </ul>
