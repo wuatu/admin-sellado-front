@@ -112,6 +112,8 @@ export class RfidComponent implements OnInit {
   agregarRfid(form: NgForm) {  
     this.nombreRfidAdded=form.value.nombre;
     this.ipRfidAdded=form.value.ip;
+    console.log(this.nombreRfidAdded);
+    console.log( this.selectedLineaObject);
     if (!this.nombreRfidAdded || !this.selectedLineaObject) {
       this.toastr.error('No se pudo guardar línea', 'Oops');
       return;
