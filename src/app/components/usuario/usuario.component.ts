@@ -139,7 +139,6 @@ export class UsuarioComponent implements OnInit {
   onEliminar(usuario: Usuario, modal) {
     this.currentUsuarioSelected = usuario;
     console.log(this.currentUsuarioSelected);
-    this.open(modal);
   }
   //Metodo que sirve para eliminar el registro de un usuario en la base de datos.
   eliminarUsuario(usuario: Usuario){
