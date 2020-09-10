@@ -15,6 +15,10 @@ export class UsuarioEnLineaService {
     
   }
   
+  searchUsuarioEnLinea(rutUsuario:string, fechaInicio:string){
+    return this.httpClient.get(`${this.API_URL}/usuario_en_linea_busqueda/${rutUsuario}/${fechaInicio}`);
+  }
+
   saveUsuarioEnLinea(usuarioEnLinea:UsuarioEnLinea){
     return this.httpClient.post(`${this.API_URL}/usuario_en_linea/`,usuarioEnLinea);
   }

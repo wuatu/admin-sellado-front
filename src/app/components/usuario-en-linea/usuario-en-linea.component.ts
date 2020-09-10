@@ -77,6 +77,8 @@ export class UsuarioEnLineaComponent implements OnInit {
   dateStart: string;
   timeFinish: string = " ";
   dateFinish: string = " ";
+  dateStartSearch: string;
+  dateFinishSearch: string;
   
 
   constructor(
@@ -100,13 +102,11 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   }
 
-  onSubmitBuscarPatenteRobadaForm(){
+  onSubmitBuscarUsuarioForm(){
 
   }
 
   listarUsuarios(){
-    console.log("HOLA ESTOY LISTANDO LOS USUARIOS!!!!");
-    
     this.usuarioService.getUsuarios().subscribe(
       res=>{
         console.log(res);
@@ -138,7 +138,6 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   listarCalibradores(){
-    console.log("HOLA ESTOY LISTANDO CALIBRADORES!!!!");
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         console.log(res);
@@ -154,7 +153,6 @@ export class UsuarioEnLineaComponent implements OnInit {
   
   listarUsuariosEnLinea(){
     this.exportUsuarioEnLineaArray = [];
-    console.log("HOLA ESTOY LISTANDO CALIBRADORES!!!!");
     this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
       res=>{
         console.log(res);
@@ -179,7 +177,6 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   exportarArchivoExcel(){
-    console.log("EXPORTANDO ARCHIVO EXCEL!!!!!!");
     // Se convierte el arreglo con los usuarios en linea 
      var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
 
@@ -196,15 +193,12 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   changeSelectedCalibrador(newSelected: any) { 
-    console.log("CHANGESELECTEDSELLADORA");
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     this.listarLineas(this.selectedCalibradorObject.id);
     
       
   }
-
-  
 
   agregarUsuarioEnLinea(){
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd
@@ -225,11 +219,36 @@ export class UsuarioEnLineaComponent implements OnInit {
     );
   }
 
-  filtrarUsuarioPorRUT(){
-    console.log("FILTRANDO USUARIO EN LINEA");
+  buscarUsuarioPorRut(){
+    console.log(this.rutBusqueda);
+    console.log(this.dateStartSearch);
+    console.log(this.dateFinishSearch);
+    this.exportUsuarioEnLineaArray = [];
+    this.usuarioEnLineaService.searchUsuarioEnLinea(this.rutBusqueda, this.dateStartSearch).subscribe(
+      res=>{
+        console.log(res);
+        this.usuariosEnLinea=res;
+        console.log(this.usuariosEnLinea);
+        //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
+        for (let element of this.usuariosEnLinea){
+            this.timeStart = element.fecha_inicio;
+            this.timeStart = this.timeStart.substring(0,5);
+            this.dateStart = element.fecha_inicio;
+            this.dateStart = this.dateStart.substring(6,16);
+            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador,this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
+            this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea) ;  
+        }
+        console.log(this.exportUsuarioEnLineaArray);
+      },
+      err=>{
+        console.log(err);
+        this.toastr.error('No se pudo obtener los usuarios en linea', 'Oops');
+      }
+    );
+
+
   }
   
-
   changeSelectedLinea(newSelected: any) { 
     console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected.nombre;
@@ -282,9 +301,37 @@ export class UsuarioEnLineaComponent implements OnInit {
       this.fromDate = date;
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
+      if(this.toDate.month < 10 && this.toDate.day < 10){
+        this.dateFinishSearch = this.toDate.year + "-" + "0"+this.toDate.month + "-" + "0"+this.toDate.day;
+
+      }
+      else if (this.toDate.month < 10 && this.fromDate.day >= 10){
+        this.dateFinishSearch = this.toDate.year + "-" + "0"+this.toDate.month + "-" + this.toDate.day;
+      
+      }else if(this.toDate.day < 10 && this.fromDate.month >= 10){
+        this.dateFinishSearch = this.toDate.year + "-" + this.toDate.month + "-" + "0"+this.toDate.day;
+      
+      }else{
+        this.dateFinishSearch = this.toDate.year + "-" + this.toDate.month + "-" + this.toDate.day;
+      }
     } else {
       this.toDate = null;
       this.fromDate = date;
+      if(this.fromDate.month < 10 && this.fromDate.day < 10){
+        this.dateStartSearch = this.fromDate.year + "-" + "0"+this.fromDate.month + "-" + "0"+this.fromDate.day;
+
+      }
+      else if (this.fromDate.month < 10 && this.fromDate.day >= 10){
+        this.dateStartSearch = this.fromDate.year + "-" + "0"+this.fromDate.month + "-" + this.fromDate.day;
+      
+      }else if(this.fromDate.day < 10 && this.fromDate.month >= 10){
+        this.dateStartSearch = this.fromDate.year + "-" + this.fromDate.month + "-" + "0"+this.fromDate.day;
+      
+      }else{
+        this.dateStartSearch = this.fromDate.year + "-" + this.fromDate.month + "-" + this.fromDate.day;
+      
+      }
+      
     }
   }
 
