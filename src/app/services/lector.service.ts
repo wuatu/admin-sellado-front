@@ -13,7 +13,7 @@ export class LectorService {
   getLectores(id:string){
     return this.httpClient.get(`${this.API_URL}/lectores/${id}`);
   }
-  getLectoresId(idSelladora:string, idLinea:string){
+  getLectoresId(idSelladora:number, idLinea:number){
     return this.httpClient.get(`${this.API_URL}/lectores/${idSelladora}/${idLinea}`);
   }
 

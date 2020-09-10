@@ -69,13 +69,7 @@ export class LectoresComponent implements OnInit {
     );
   }
 
-  changeSelectedCalibrador(newSelected: any) { 
-    console.log("CHANGESELECTEDSELLADORA");
-    this.selectedCalibradorText = newSelected.nombre;
-    this.selectedCalibradorObject = newSelected;
-    this.listarLineas(this.selectedCalibradorObject.id);
-      
-  }
+  
   //metodo que lista las lineas
   listarLineas(id:string){
     console.log("LISTARLINEAS");
@@ -109,6 +103,14 @@ export class LectoresComponent implements OnInit {
         this.lectores=null;
       }
     );
+  }
+  
+  changeSelectedCalibrador(newSelected: any) { 
+    console.log("CHANGESELECTEDSELLADORA");
+    this.selectedCalibradorText = newSelected.nombre;
+    this.selectedCalibradorObject = newSelected;
+    this.listarLineas(this.selectedCalibradorObject.id);
+      
   }
 
   changeSelectedLinea(newSelected2: any) { 
