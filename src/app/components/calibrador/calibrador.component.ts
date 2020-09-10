@@ -16,6 +16,7 @@ export class CalibradorComponent implements OnInit {
   closeResult = '';
   calibradores: any;
   currentCalibradorSelected: Calibrador
+  nombreCalibrador;
 
   constructor(
     private calibradorService: CalibradorService, 
@@ -48,15 +49,16 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que crea un nuevo calibrador
   agregarCalibrador(form: NgForm) {  
-    if (!form.value.nombre) {
+    if (!this.nombreCalibrador) {
       this.toastr.error('No se pudo guardar clibrador', 'Oops');
       return;
     }
-    let calibrador = new Calibrador(null, form.value.nombre);
+    let calibrador = new Calibrador(null, this.nombreCalibrador);
     this.calibradorService.saveCalibrador(calibrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Calibrador agregada');
         this.listarCalibradores();
+        this.nombreCalibrador=null;
       },
       err => {
         console.log(err);

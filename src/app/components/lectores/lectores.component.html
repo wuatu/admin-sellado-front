@@ -3,7 +3,7 @@
         <br>
         <div class="row justify-content-center">
             <div class="col-12">
-                <h1 class="text-center"><b>Lectores en lineas</b></h1>
+                <h1 class="text-center"><b>Lectores en linea</b></h1>
             </div>
         </div>
         <br>
@@ -38,7 +38,7 @@
         <br>
         <div class="row" *ngIf="selectedCalibradorObject && selectedLineaObject">
             <div class="col-12 ">
-                <h3>Lista de lectores</h3>
+                <h4>Lista de lectores</h4>
             </div>
         </div>
         <!--Tabla de contenido-->
@@ -85,10 +85,10 @@
     <div class="modal-body">
         <form #myform="ngForm">
             <div class="form-group">
-
                 <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre"
+                    required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -96,10 +96,12 @@
                         Nombre de lector es obligatorio
                     </div>
                 </div>
-                <br>
+            </div>
+            <div class="form-group">
                 <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre2='ngModel' [(ngModel)]="ipLector" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="ipLector" name="ip" id="ip" class="form-control" placeholder="Dirección ip"
+                    required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                 </div>
 
                 <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">
@@ -134,7 +136,8 @@
 
                 <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentLectorSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentLectorSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre"
+                    required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -142,10 +145,12 @@
                         Nombre de lector es obligatorio
                     </div>
                 </div>
-                <br>
+            </div>
+            <div class="form-group">
                 <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.ip" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.ip" name="ip" id="ip" class="form-control" placeholder="Dirección ip"
+                    required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                 </div>
 
                 <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">

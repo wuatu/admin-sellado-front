@@ -3,14 +3,14 @@
     <br>
     <div class="row justify-content-center">
       <div class="col-12">
-        <h4 class="text-center"><b>Calibrador</b></h4>
+        <h1 class="text-center"><b>Calibrador</b></h1>
       </div>
     </div>
     <br>
     <div class="row justify-content-center">
 
   
-      <div class="col-6 align-self-end">
+      <div class="col-12 align-self-end">
         <div class="text-right">
           <button class="btn btn-primary  text-right" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
             Agregar Calibrador</button>
@@ -56,7 +56,7 @@
 <!--modal agregar-->
 <ng-template #mymodalagregar let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Agregar línea</h4>
+    <h4 class="modal-title" id="modal-basic-title">Agregar calibrador</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
@@ -67,7 +67,7 @@
 
         <label for="lineaLabel"><b>Nombre Calibrador:</b></label>
         <div class="input-group">
-          <input type="text" #nombre='ngModel' [(ngModel)]="currentCalibradorSelected" name="nombre" id="nombre"
+          <input type="text" #nombre='ngModel' [(ngModel)]="nombreCalibrador" name="nombre" id="nombre"
             class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
         </div>
 
@@ -110,7 +110,7 @@
         <!--Valida formulario nombre-->
         <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
           <div *ngIf="nombre.errors.required">
-            Nombre de línea es obligatorio
+            Nombre de calibrador es obligatorio
           </div>
         </div>
       </div>
