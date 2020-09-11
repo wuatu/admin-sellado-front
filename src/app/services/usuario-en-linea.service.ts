@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioEnLinea } from '../models/usuario-en-linea';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +10,8 @@ export class UsuarioEnLineaService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getUsuariosEnLinea(idLinea:string, idCalibrador:string){
-    return this.httpClient.get(`${this.API_URL}/usuarios_en_linea/${idLinea}/${idCalibrador}`);
-    
-  }
-  
-  searchUsuarioEnLinea(rutUsuario:string, fechaInicio:string){
-    return this.httpClient.get(`${this.API_URL}/usuario_en_linea_busqueda/${rutUsuario}/${fechaInicio}`);
+  getUsuariosEnLinea(idLinea:string, idCalibrador:string, rutUsuario:string, fromDate:string, toDate:string){
+    return this.httpClient.get(`${this.API_URL}/usuarios_en_linea/${idLinea}/${idCalibrador}/${rutUsuario}/${fromDate}/${toDate}`);    
   }
 
   saveUsuarioEnLinea(usuarioEnLinea:UsuarioEnLinea){

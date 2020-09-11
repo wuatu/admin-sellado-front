@@ -64,14 +64,15 @@ export class UsuarioEnLineaComponent implements OnInit {
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
 
-  rutBusqueda: string;
+  rutBusqueda: string=null;
 
   nombreLinea: string ="lineaPrueba";
   nombreCalibrador: string = "calibradorPrueba";
 
-  nombreExcel = 'UsuariosEnLinea.xlsx';
+  nombreExcel = 'UsuariosEnLinea';
   
   exportUsuarioEnLineaArray: any = [];
+  exportUsuarioEnLineaArrayAux: any = [];
   dateSave: string;
   timeStart: string;
   dateStart: string;
@@ -93,8 +94,10 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   ) { 
     this.fromDate = calendar.getToday();
-    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+    this.toDate = null;
+    this.hasta=null;
+    this.rutUsuario=null
   }
   
   ngOnInit() {
@@ -152,20 +155,33 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
   
   listarUsuariosEnLinea(){
-    this.exportUsuarioEnLineaArray = [];
-    this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
+    this.exportUsuarioEnLineaArray = [];  
+      this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id,this.rutBusqueda,this.desde,this.hasta).subscribe(    
       res=>{
         console.log(res);
         this.usuariosEnLinea=res;
         console.log(this.usuariosEnLinea);
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
         for (let element of this.usuariosEnLinea){
+          
             this.timeStart = element.fecha_inicio;
-            this.timeStart = this.timeStart.substring(0,5);
+            this.timeStart = this.timeStart.substring(11,19);
             this.dateStart = element.fecha_inicio;
-            this.dateStart = this.dateStart.substring(6,16);
-            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador,this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
-            this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea) ;  
+            this.dateStart = this.dateStart.substring(0,10);
+            console.log(element.fecha_inicio);
+            console.log(new Date(element.fecha_inicio));
+            console.log(new Date(element.fecha_inicio).toString());
+            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
+            this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
+            console.log(this.rutBusqueda);
+            console.log(this.desde);
+            console.log(this.hasta);
+            if(this.selectedLineaObject.id && this.selectedCalibradorObject.id && this.rutBusqueda!=null && this.desde && this.hasta!=null){
+              this.exportUsuarioEnLineaArrayAux=this.exportUsuarioEnLineaArray;
+            }
+        }
+        if(this.usuariosEnLinea.length==0){
+          this.exportUsuarioEnLineaArray=null;
         }
         console.log(this.exportUsuarioEnLineaArray);
       },
@@ -189,7 +205,7 @@ export class UsuarioEnLineaComponent implements OnInit {
      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
      /* Guarda el archivo */
-     XLSX.writeFile(wb, this.nombreExcel);
+     XLSX.writeFile(wb, this.nombreExcel+(new Date()).toISOString()+".xls");
   }
 
   changeSelectedCalibrador(newSelected: any) { 
@@ -203,7 +219,7 @@ export class UsuarioEnLineaComponent implements OnInit {
   agregarUsuarioEnLinea(){
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd
     this.dateSave = this.fecha();
-    this.dateSave = this.dateSave.substring(11,16)+" "+this.dateSave.substring(0,10);
+    //this.dateSave = this.dateSave.substring(11,16)+" "+this.dateSave.substring(0,10);
     //se crea un usuario en linea para exportar
     let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, "", this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre);
     console.log(usuarioEnLinea);
@@ -220,6 +236,11 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   buscarUsuarioPorRut(){
+    if(this.rutBusqueda==''){
+      this.rutBusqueda=null;
+    }
+    this.listarUsuariosEnLinea();
+    /*
     console.log(this.rutBusqueda);
     console.log(this.dateStartSearch);
     console.log(this.dateFinishSearch);
@@ -244,8 +265,10 @@ export class UsuarioEnLineaComponent implements OnInit {
         console.log(err);
         this.toastr.error('No se pudo obtener los usuarios en linea', 'Oops');
       }
+      
     );
 
+    */
 
   }
   
@@ -291,7 +314,7 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   fecha() {
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+    var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
     return localISOTime;
   }
 
@@ -299,8 +322,13 @@ export class UsuarioEnLineaComponent implements OnInit {
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
+      //const dateStringAux:string=(this.fromDate.year+"-"+(this.fromDate.month-1)+"-"+this.fromDate.day);
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
+      this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month-1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
+
+    /*
       if(this.toDate.month < 10 && this.toDate.day < 10){
         this.dateFinishSearch = this.toDate.year + "-" + "0"+this.toDate.month + "-" + "0"+this.toDate.day;
 
@@ -314,9 +342,13 @@ export class UsuarioEnLineaComponent implements OnInit {
       }else{
         this.dateFinishSearch = this.toDate.year + "-" + this.toDate.month + "-" + this.toDate.day;
       }
+      */
     } else {
       this.toDate = null;
       this.fromDate = date;
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+      this.hasta=null;
+      /*
       if(this.fromDate.month < 10 && this.fromDate.day < 10){
         this.dateStartSearch = this.fromDate.year + "-" + "0"+this.fromDate.month + "-" + "0"+this.fromDate.day;
 
@@ -331,6 +363,7 @@ export class UsuarioEnLineaComponent implements OnInit {
         this.dateStartSearch = this.fromDate.year + "-" + this.fromDate.month + "-" + this.fromDate.day;
       
       }
+      */
       
     }
   }

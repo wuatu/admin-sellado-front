@@ -1,5 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule,LOCALE_ID  } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeCl from '@angular/common/locales/es-CL';
+registerLocaleData(localeCl);
 import { NgbModule, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,7 +49,9 @@ import { CalibradorComponent } from './components/calibrador/calibrador.componen
     NgbModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    { provide: LOCALE_ID, useValue: 'es-CL'},
+
   ],
   bootstrap: [AppComponent]
 })
