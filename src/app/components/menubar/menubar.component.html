@@ -1,35 +1,35 @@
 <!-- menu vertical -->
 <nav id="menu" class="left show" style="height: 100%">
-  <ul style="height: 90%">
-    <li><a routerLink="/monitoreo"><i class="fa fa-bar-chart"></i>Monitoreo</a></li>
-    <li>
-      <a><i class="fa fa-line-chart"></i>Producción <i class="fa fa-caret-down"></i></a>
-      <ul>
-        <li><a routerLink="/produccioncalibrador"><i class="fa fa-line-chart"></i>Calibradora</a></li>
-        <li><a routerLink="/produccionlinea"><i class="fa fa-line-chart"></i>Línea</a></li>
-        <li><a routerLink="/produccionusuario"><i class="fa fa-line-chart"></i>Usuario</a></li>
-      </ul>
-    </li>
-    <li>
-      <a><i class="fa fa-plus-circle"></i>Administrar <i class="fa fa-caret-down"></i></a>
-      <ul>
-        <li><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-sitemap"></i>Calibradora</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
-        <li *ngIf="superAdmin"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
-      </ul>
-    </li>
-    <li>
-      <a><i class="fa fa-list-ul"></i>Registros <i class="fa fa-caret-down"></i></a>
-      <ul>
-        <li><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
-        <li><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
-        <li><a routerLink="/log"><i class="fa fa-bars"></i>Registro log</a></li>
-      </ul>
-    </li>
-    <li *ngIf="superAdmin"><a routerLink="/productos"><i class="fa fa-dropbox"></i>Productos</a></li>
+    <ul style="height: 90%">
+        <li><a routerLink="/monitoreo"><i class="fa fa-bar-chart"></i>Monitoreo</a></li>
+        <li>
+            <a><i class="fa fa-line-chart"></i>Producción <i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li><a routerLink="/produccioncalibrador"><i class="fa fa-line-chart"></i>Calibradora</a></li>
+                <li><a routerLink="/produccionlinea"><i class="fa fa-line-chart"></i>Línea</a></li>
+                <li><a routerLink="/produccionusuario"><i class="fa fa-line-chart"></i>Usuario</a></li>
+            </ul>
+        </li>
+        <li>
+            <a><i class="fa fa-plus-circle"></i>Administrar <i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
+                <li *ngIf="superAdmin"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
+                <li *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-sitemap"></i>Calibradora</a></li>
+                <li *ngIf="superAdmin"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
+                <li *ngIf="superAdmin"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
+                <li *ngIf="superAdmin"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
+            </ul>
+        </li>
+        <li>
+            <a><i class="fa fa-list-ul"></i>Registros <i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
+                <li><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
+                <li><a routerLink="/registro"><i class="fa fa-bars"></i>Registro log</a></li>
+            </ul>
+        </li>
+        <li *ngIf="superAdmin"><a routerLink="/productos"><i class="fa fa-dropbox"></i>Productos</a></li>
 
 
 

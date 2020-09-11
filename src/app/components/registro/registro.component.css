@@ -1,0 +1,8 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.ngx-pagination {
+    padding-left: 0;
+}
