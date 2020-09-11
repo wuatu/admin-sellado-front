@@ -4,6 +4,8 @@ import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
+import { TurnoService } from 'src/app/services/turno.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-turno',
@@ -17,11 +19,14 @@ export class TurnoComponent implements OnInit {
   desde: string = "";
   hasta: string = "";
   hoveredDate: NgbDate | null = null;
+  turnos: any;
 
   constructor(
     private authService: AuthService,
     public calendar: NgbCalendar,
-    public formatter: NgbDateParserFormatter,) {
+    public formatter: NgbDateParserFormatter,
+    private turnoService: TurnoService,
+    private toastr: ToastrService,) {
 
       this.fromDate = calendar.getToday();
       this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -30,7 +35,26 @@ export class TurnoComponent implements OnInit {
      }
 
   ngOnInit() {
-    
+    this.listarTurnos();
+  }
+
+  //metodo que trae todos los registros de lineas desde la base de datos
+  listarTurnos() {  
+    console.log("Holaaa");
+    this.turnoService.getTurnos().subscribe(
+      res => {
+        //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
+        this.turnos = res;
+      },
+      err => {
+        if (err.status != 404) {
+          console.log(err.status);
+          this.toastr.error('No se pudo listar turnos', 'Oops');
+        } else{
+          this.turnos=null;
+        }
+      }
+    )
   }
 
   //calendar

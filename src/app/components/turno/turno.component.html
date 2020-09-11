@@ -48,6 +48,39 @@
           </div>
         </div>
       </div>
+
+      <div class="col-12">
+        <!--Tabla de contenido--> 
+        <h4 class="text-center"><b>Apertura/Cierre de Turno</b></h4>   
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Fecha Apertura</th>
+              <th scope="col">Id Administrador</th>
+              <th scope="col">Nombre Administrador Apertura</th>
+              <th scope="col">Apellido Administrador Apertura</th>
+              <th scope="col">Fecha Cierre</th>
+              <th scope="col">Id Administrador</th>
+              <th scope="col">Nombre Administrador Cierre</th>
+              <th scope="col">Apellido Administrador Cierre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let turno of turnos; let i = index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{turno.fecha_apertura}}</td>
+              <td>{{turno.id_administrador_apertura}}</td>
+              <td>{{turno.nombre_administrador_apertura}}</td>
+              <td>{{turno.apellido_administrador_apertura}}</td>
+              <td>{{turno.fecha_cierre}}</td>
+              <td>{{turno.id_administrador_cierre}}</td>
+              <td>{{turno.nombre_administrador_cierre}}</td>
+              <td>{{turno.apellido_administrador_cierre}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </form>
   </div>
 </div>
