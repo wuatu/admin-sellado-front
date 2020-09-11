@@ -10,9 +10,9 @@
             <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
                 <div class="form-row">
                     <div class="col-sm-2 my-1">
-                        <label for="Desde:">Desde:</label>
-                        <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut"
-                            id="rut" class="form-control" placeholder="Rut colaborador">
+                        <label for="Desde:">Rut:</label>
+                        <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut"
+                            class="form-control" placeholder="Rut colaborador">
                     </div>
                     <div class="col-sm-2 my-1">
                         <label for="Desde:">Desde:</label>
@@ -97,7 +97,9 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
                 <th scope="col">Fecha de inicio</th>
+                <th scope="col">Hora de inicio</th>
                 <th scope="col">Fecha de termino</th>
+                <th scope="col">Hora de termino</th>
             </tr>
         </thead>
         <tbody>
@@ -106,8 +108,10 @@
                 <td>{{usuarioEnLinea.RUT}}</td>
                 <td>{{usuarioEnLinea.NOMBRE}}</td>
                 <td>{{usuarioEnLinea.APELLIDO}}</td>
-                <td>{{usuarioEnLinea.HORA_INICIO }} {{usuarioEnLinea.FECHA_INICIO}}</td>
+                <td>{{usuarioEnLinea.FECHA_INICIO}} </td>
+                <td>{{usuarioEnLinea.HORA_INICIO}}</td>
                 <td>{{usuarioEnLinea.TERMINO}}</td>
+                <td>{{usuarioEnLinea.HORA_TERMINO}}</td>
             </tr>
         </tbody>
     </table>
@@ -167,3 +171,23 @@
     </div>
 </ng-template>
 <!--fin modal agregar-->
+
+<!--Modal confirmación-->
+<ng-template #mymodalconfirmar let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Colaborador registrado</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>Colaborador se encuentra registrado en otra línea</p>
+        <p>¿Seguro que quieres cambiar línea de trabajo?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
+    </div>
+</ng-template>
+<!--fin modal confirmacion-->
