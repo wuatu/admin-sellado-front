@@ -73,8 +73,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 align-self-end ">
-                <button class="btn btn-primary  text-right" (click)="open(modal_agregar_usuario)"><i
+            <div class="col-sm-4 align-self-end">
+                <button class="btn btn-primary  text-right" (click)="open(modal_agregar_usuario)" *ngIf="selectedCalibradorObject && selectedLineaObject" id="excel-table"><i
                         class="fa fa-plus-circle"></i>
                     Agregar colaborador a línea
                 </button>
@@ -110,7 +110,7 @@
                 <td>{{usuarioEnLinea.APELLIDO}}</td>
                 <td>{{usuarioEnLinea.FECHA_INICIO}} </td>
                 <td>{{usuarioEnLinea.HORA_INICIO}}</td>
-                <td>{{usuarioEnLinea.TERMINO}}</td>
+                <td>{{usuarioEnLinea.FECHA_TERMINO}}</td>
                 <td>{{usuarioEnLinea.HORA_TERMINO}}</td>
             </tr>
         </tbody>
@@ -122,6 +122,7 @@
             </button>
         </div>
     </div>
+    <br>
 </div>
 
 
@@ -166,14 +167,14 @@
         </form>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary"
-                (click)="agregarUsuarioEnLinea(myform);modal.close('Save click')">Agregar</button>
+                (click)="agregarUsuarioEnLinea(modalAsignarUsuario,modalUsuarioExisteEnLinea);modal.close('Save click')">Agregar</button>
         </div>
     </div>
 </ng-template>
 <!--fin modal agregar-->
 
-<!--Modal confirmación-->
-<ng-template #mymodalconfirmar let-modal>
+<!--Modal modalAsignarUsuario-->
+<ng-template #modalAsignarUsuario let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-title">Colaborador registrado</h4>
         <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
@@ -187,7 +188,26 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary"
             (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="cerrarTurnoYasignarUsuarioALinea();modal.dismiss('ok')">Aceptar</button>
+    </div>
+</ng-template>
+<!--fin modal modalAsignarUsuario-->
+
+<!--Modal modalUsuarioExisteEnLinea-->
+<ng-template #modalUsuarioExisteEnLinea let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Colaborador existe</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <p>Colaborador ya se encuentra registrado en esta línea</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modal.dismiss('cancel click')">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>
-<!--fin modal confirmacion-->
+<!--fin modal modalUsuarioExisteEnLinea-->
