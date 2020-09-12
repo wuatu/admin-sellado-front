@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-12 ">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Registro-Log</b></h1>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row align-self-start">
+        <div class="col-12 text-left">
+            <h4>Lista de registros</h4>
+        </div>
+    </div>
+    <!--Tabla de contenido-->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">id administrador</th>
+                <th scope="col">Nombre administrador</th>
+                <th scope="col">Apellido administrador</th>
+                <th scope="col">Registro</th>
+                <th scope="col">fecha</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let registro of registros  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{registro.id_administrador}}</td>
+                <td>{{registro.nombre_administrador}}</td>
+                <td>{{registro.apellido_administrador}}</td>
+                <td>{{registro.registro}}</td>
+                <td>{{registro.fecha}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="pagination">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>

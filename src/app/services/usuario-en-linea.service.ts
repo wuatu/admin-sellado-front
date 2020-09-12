@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UsuarioEnLinea } from '../models/usuario-en-linea';
 import { Observable, from } from 'rxjs';
-import { ExportUsuarioEnLinea } from '../models/export-usuario-en-linea';
 
 @Injectable({
   providedIn: 'root'

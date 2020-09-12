@@ -22,6 +22,9 @@ import { AdministradorComponent } from './components/administrador/administrador
 import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
+import { RegistroComponent } from './components/registro/registro.component';
+//import { JwPaginationComponent } from 'jw-angular-pagination';
+import {NgxPaginationModule} from 'ngx-pagination'; 
 
 @NgModule({
   declarations: [
@@ -35,7 +38,8 @@ import { CalibradorComponent } from './components/calibrador/calibrador.componen
     AdministradorComponent,
     UsuarioComponent,
     UsuarioEnLineaComponent,
-    CalibradorComponent
+    CalibradorComponent,
+    RegistroComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,8 @@ import { CalibradorComponent } from './components/calibrador/calibrador.componen
     CommonModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
-    NgbModule
+    NgbModule,
+    NgxPaginationModule
   ],
   providers: [
     AuthService,

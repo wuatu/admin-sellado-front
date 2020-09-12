@@ -69,8 +69,8 @@ export class UsuarioEnLineaComponent implements OnInit {
   nombreCalibrador: string = "calibradorPrueba";
 
   nombreExcel = 'UsuariosEnLinea';
-
   exportUsuarioEnLineaArray: any = [];
+  exportUsuarioEnLineaArrayAux: any = [];
   dateSave: string;
   timeStart: string;
   dateStart: string;
@@ -396,7 +396,6 @@ export class UsuarioEnLineaComponent implements OnInit {
       
       }
       */
-
     }
   }
 
