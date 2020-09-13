@@ -20,6 +20,8 @@ export class TurnoComponent implements OnInit {
   hasta: string = "";
   hoveredDate: NgbDate | null = null;
   turnos: any;
+  selectedfromDate: string = "";
+  selectedToDate: string = "";
 
   constructor(
     private authService: AuthService,
@@ -31,17 +33,55 @@ export class TurnoComponent implements OnInit {
       this.fromDate = calendar.getToday();
       this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
       this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
-      
      }
 
   ngOnInit() {
     this.listarTurnos();
   }
 
+  captureDates(){
+    const fromYear = this.fromDate.year;
+    const fromMonth = this.fromDate.month;
+    const fromDay = this.fromDate.day;
+    const toYear = this.toDate.year;
+    const toMonth = this.toDate.month;
+    const toDay = this.toDate.day;
+
+    if((fromMonth>0 && fromMonth<10) && (fromDay>0 && fromDay<10)){
+      this.selectedfromDate = fromYear +"-0"+fromMonth+"-0"+fromDay;
+    }
+    else if(fromMonth>0 && fromMonth<10)
+    {
+      this.selectedfromDate = fromYear +"-0"+fromMonth+"-"+fromDay;
+    }
+    else if(fromDay>0 && fromDay<10)
+    {
+      this.selectedfromDate = fromYear +"-"+fromMonth+"-0"+fromDay;
+    }
+    else{
+      this.selectedfromDate = fromYear +"-"+fromMonth+"-"+fromDay;
+    }
+
+    if((toMonth>0 && toMonth<10) && (toDay>0 && toDay<10)){
+      this.selectedToDate = toYear+"-0"+ toMonth +"-0"+ toDay;
+    }
+    else if(toMonth>0 && toMonth<10){
+      this.selectedToDate = toYear+"-0"+ toMonth +"-"+ toDay;
+    }
+    else if(toDay>0 && toDay<10){
+      this.selectedToDate = toYear+"-"+ toMonth +"-0"+ toDay;
+    }
+    else{
+      this.selectedToDate = toYear+"-"+ toMonth +"-"+ toDay;
+    }
+  }
+
   //metodo que trae todos los registros de lineas desde la base de datos
   listarTurnos() {  
-    console.log("Holaaa");
-    this.turnoService.getTurnos().subscribe(
+    this.captureDates();
+    console.log("this.selectedfromDate: " + this.selectedfromDate);
+    console.log("this.selectedToDate: " + this.selectedToDate);
+    this.turnoService.getTurnos(this.selectedfromDate, this.selectedToDate).subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
         this.turnos = res;
@@ -61,8 +101,10 @@ export class TurnoComponent implements OnInit {
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
+      this.listarTurnos();      
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
+      this.listarTurnos();      
     } else {
       this.toDate = null;
       this.fromDate = date;

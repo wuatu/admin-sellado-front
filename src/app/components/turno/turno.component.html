@@ -21,13 +21,13 @@
         </div>
 
 
-        <div class="col">
+        <!--<div class="col">
           <label for="">Buscar:</label>
           <div class="input-group-append">
             <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
                 aria-hidden="true"></i></button>
           </div>
-        </div>
+        </div>-->
 
 
       </div>
@@ -51,7 +51,8 @@
 
       <div class="col-12">
         <!--Tabla de contenido--> 
-        <h4 class="text-center"><b>Apertura/Cierre de Turno</b></h4>   
+        <h4 class="text-center"><b>Apertura/Cierre de Turno</b></h4>  
+         
         <table class="table table-hover">
           <thead>
             <tr>
@@ -69,11 +70,11 @@
           <tbody>
             <tr *ngFor="let turno of turnos; let i = index">
               <th scope="row">{{i+1}}</th>
-              <td>{{turno.fecha_apertura}}</td>
+              <td>{{ turno.fecha_apertura | date:'yyyy-MM-dd HH:mm:ss' }}</td>
               <td>{{turno.id_administrador_apertura}}</td>
               <td>{{turno.nombre_administrador_apertura}}</td>
               <td>{{turno.apellido_administrador_apertura}}</td>
-              <td>{{turno.fecha_cierre}}</td>
+              <td>{{turno.fecha_cierre | date:'yyyy-MM-dd HH:mm:ss'}}</td>
               <td>{{turno.id_administrador_cierre}}</td>
               <td>{{turno.nombre_administrador_cierre}}</td>
               <td>{{turno.apellido_administrador_cierre}}</td>
