@@ -6,6 +6,8 @@ import { formatDate } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
 import { TurnoService } from 'src/app/services/turno.service';
 import { ToastrService } from 'ngx-toastr';
+import * as XLSX from 'xlsx';
+import { ExportTurno } from 'src/app/models/export-turno';
 
 @Component({
   selector: 'app-turno',
@@ -22,6 +24,8 @@ export class TurnoComponent implements OnInit {
   turnos: any;
   selectedfromDate: string = "";
   selectedToDate: string = "";
+  exportTurnoArray: any = [];
+  nombreExcel = 'Turnos';
 
   constructor(
     private authService: AuthService,
@@ -78,6 +82,7 @@ export class TurnoComponent implements OnInit {
 
   //metodo que trae todos los registros de lineas desde la base de datos
   listarTurnos() {  
+    this.exportTurnoArray = [];
     this.captureDates();
     console.log("this.selectedfromDate: " + this.selectedfromDate);
     console.log("this.selectedToDate: " + this.selectedToDate);
@@ -85,6 +90,25 @@ export class TurnoComponent implements OnInit {
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
         this.turnos = res;
+
+        let id = 0;
+        //Se crea un objeto de la clase export-turno con la información devuelta de la base de datos 
+        for (let element of this.turnos) {
+          id = id+1;         
+          let exportTurno = new ExportTurno(id,
+                                          element.fecha_apertura.substring(0, 10),
+                                          element.fecha_apertura.substring(11, 19),
+                                          element.id_administrador_apertura,
+                                          element.nombre_administrador_apertura,
+                                          element.apellido_administrador_apertura,
+                                          element.fecha_cierre.substring(0, 10),
+                                          element.fecha_cierre.substring(11, 19),
+                                          element.id_administrador_cierre,
+                                          element.nombre_administrador_cierre,
+                                          element.apellido_administrador_cierre);
+
+          this.exportTurnoArray.push(exportTurno);          
+        }
       },
       err => {
         if (err.status != 404) {
@@ -126,6 +150,21 @@ export class TurnoComponent implements OnInit {
   validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
     const parsed = this.formatter.parse(input);
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
+  exportarArchivoExcel() {
+    // Se convierte el arreglo con los usuarios en linea 
+    var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
+
+    //se convierte el Json a xlsx en formato workSheet
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+
+    /* genera el workbook y agrega el worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* Guarda el archivo */
+    XLSX.writeFile(wb, this.nombreExcel + (new Date()).toISOString() + ".xls");
   }
 
 }

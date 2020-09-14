@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-8">
-    <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
+    <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
       <div class="form-row">
 
         <div class="col">
@@ -19,17 +19,6 @@
             </div>
           </div>
         </div>
-
-
-        <!--<div class="col">
-          <label for="">Buscar:</label>
-          <div class="input-group-append">
-            <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
-                aria-hidden="true"></i></button>
-          </div>
-        </div>-->
-
-
       </div>
 
       <div class="col">
@@ -82,6 +71,12 @@
           </tbody>
         </table>
       </div>
+
+
+        <div class="input-group-append" style="float:right">
+          <button class="ml-1 btn btn-primary btn-sm" type="submit ">Ver en Excel</button>
+        </div>
+
     </form>
   </div>
 </div>
