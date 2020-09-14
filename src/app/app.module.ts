@@ -25,6 +25,7 @@ import { CalibradorComponent } from './components/calibrador/calibrador.componen
 import { RegistroComponent } from './components/registro/registro.component';
 //import { JwPaginationComponent } from 'jw-angular-pagination';
 import {NgxPaginationModule} from 'ngx-pagination'; 
+import { TurnoComponent } from './components/turno/turno.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     UsuarioComponent,
     UsuarioEnLineaComponent,
     CalibradorComponent,
-    RegistroComponent
+    RegistroComponent,
+    TurnoComponent
   ],
   imports: [
     BrowserModule,

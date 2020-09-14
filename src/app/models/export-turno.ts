@@ -1,0 +1,39 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
+export class ExportTurno {
+    ID: number;
+    FECHA_APERTURA: string;
+    HORA_APERTURA: string;
+    ID_ADMINISTRADOR_APERTURA: string;
+    NOMBRE_ADMINISTRADOR_APERTURA: string;
+    APELLIDO_ADMINISTRADOR_APERTURA: string;
+    FECHA_CIERRE: string;
+    HORA_CIERRE: string;
+    ID_ADMINSTRADOR_CIERRE: string;
+    NOMBRE_ADMINISTRADOR_CIERRE: string;
+    APELLIDO_ADMINISTRADOR_CIERRE: string;
+
+    constructor(ID: number,
+        FECHA_APERTURA: string,
+        HORA_APERTURA: string, 
+        ID_ADMINISTRADOR_APERTURA: string, 
+        NOMBRE_ADMINISTRADOR_APERTURA: string,
+        APELLIDO_ADMINISTRADOR_APERTURA: string,
+        FECHA_CIERRE: string,
+        HORA_CIERRE: string,
+        ID_ADMINSTRADOR_CIERRE: string,
+        NOMBRE_ADMINISTRADOR_CIERRE: string,
+        APELLIDO_ADMINISTRADOR_CIERRE: string){
+            this.ID = ID;
+            this.FECHA_APERTURA = FECHA_APERTURA;
+            this.HORA_APERTURA = HORA_APERTURA;
+            this.ID_ADMINISTRADOR_APERTURA = ID_ADMINISTRADOR_APERTURA;
+            this.NOMBRE_ADMINISTRADOR_APERTURA = NOMBRE_ADMINISTRADOR_APERTURA;
+            this.APELLIDO_ADMINISTRADOR_APERTURA = APELLIDO_ADMINISTRADOR_APERTURA;
+            this.FECHA_CIERRE = FECHA_CIERRE;
+            this.HORA_CIERRE = HORA_CIERRE;
+            this.ID_ADMINSTRADOR_CIERRE = ID_ADMINSTRADOR_CIERRE;
+            this.NOMBRE_ADMINISTRADOR_CIERRE = NOMBRE_ADMINISTRADOR_CIERRE;
+            this.APELLIDO_ADMINISTRADOR_CIERRE = APELLIDO_ADMINISTRADOR_CIERRE;
+    }
+}

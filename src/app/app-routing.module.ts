@@ -11,6 +11,7 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
+import { TurnoComponent } from './components/turno/turno.component';
 
 
 const routes: Routes = [
@@ -30,6 +31,8 @@ const routes: Routes = [
   { path: 'rfid', component: RfidComponent, canActivate: [AuthGuard] },
   { path: 'calibrador', component: CalibradorComponent, canActivate: [AuthGuard] },
   { path: 'registro', component: RegistroComponent, canActivate: [AuthGuard] },
+  { path: 'turnos', component: TurnoComponent, canActivate: [AuthGuard] },
+
 ];
 
 @NgModule({
