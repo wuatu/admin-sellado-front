@@ -1,0 +1,107 @@
+<div class="row">
+    <div class="col-12 ">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Seguimiento de cajas</b></h1>
+            </div>
+        </div>
+        <hr>
+        <div class="col-12">
+            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+                <div class="form-row">
+                    <div class="col-sm-4 my-1">
+                        <label for="Desde:">Envase:</label>
+                        <input type="text" #envase='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Nombre o id de envase">
+                    </div>
+                    <div class="col-sm-2 my-1">
+                        <label for="Desde:">Desde:</label>
+                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
+                    </div>
+                    <div class="col-sm-2 my-1">
+                        <label for="">Hasta:</label>
+                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
+                    </div>
+                    <div class="col-auto my-1">
+                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarUsuarioPorRut()" type="submit " style="margin-top: 33px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group hidden">
+                        <div class="input-group">
+                            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr>
+
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-md-4  align-self-end text-left ">
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="width: 200px">{{selectedCalibradorText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4  align-self-end text-left ">
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle style="width: 180px">{{selectedLineaText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+    <br>
+    <div class="row ">
+        <div class="col-md-12 ">
+            <h4>Lista de registros de cajas</h4>
+        </div>
+    </div>
+    <!--Tabla de contenido-->
+    <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject">
+        <thead>
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">id envase</th>
+                <th scope="col">Envase</th>
+                <th scope="col">Nombre calibrador</th>
+                <th scope="col">Nombre linea</th>
+                <th scope="col">Rut usuario</th>
+                <th scope="col">Nombre usuario</th>
+                <th scope="col">Apellido usuario</th>
+                <th scope="col">Fecha sellado</th>
+                <th scope="col">Verificado</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let seguimiento of seguimientoDeCajas  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{seguimiento.id_caja}}</td>
+                <td>{{seguimiento.envase_caja}}</td>
+                <td>{{seguimiento.nombre_calibrador}}</td>
+                <td>{{seguimiento.nombre_linea}}</td>
+                <td>{{seguimiento.rut_usuario}}</td>
+                <td>{{seguimiento.nombre_usuario}}</td>
+                <td>{{seguimiento.apellido_usuario}}</td>
+                <td>{{seguimiento.fecha_sellado}}</td>
+                <td>{{seguimiento.is_verificado}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="pagination">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>

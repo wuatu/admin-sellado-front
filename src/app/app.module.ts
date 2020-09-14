@@ -23,8 +23,8 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
-//import { JwPaginationComponent } from 'jw-angular-pagination';
-import {NgxPaginationModule} from 'ngx-pagination'; 
+import {NgxPaginationModule} from 'ngx-pagination';
+import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component'; 
 
 @NgModule({
   declarations: [
@@ -39,7 +39,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     UsuarioComponent,
     UsuarioEnLineaComponent,
     CalibradorComponent,
-    RegistroComponent
+    RegistroComponent,
+    SeguimientoDeCajasComponent
   ],
   imports: [
     BrowserModule,
