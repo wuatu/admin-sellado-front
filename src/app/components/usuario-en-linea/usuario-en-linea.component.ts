@@ -80,6 +80,7 @@ export class UsuarioEnLineaComponent implements OnInit {
   dateFinish: string = " ";
   dateStartSearch: string;
   dateFinishSearch: string;
+
   
 
   constructor(
@@ -215,6 +216,8 @@ export class UsuarioEnLineaComponent implements OnInit {
     
       
   }
+  
+
 
   agregarUsuarioEnLinea(){
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd

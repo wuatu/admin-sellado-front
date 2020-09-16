@@ -24,8 +24,10 @@ import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-e
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import {NgxPaginationModule} from 'ngx-pagination';
-import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component'; 
-
+import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
+import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component'; 
+//Gráficos
+import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +42,8 @@ import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/s
     UsuarioEnLineaComponent,
     CalibradorComponent,
     RegistroComponent,
-    SeguimientoDeCajasComponent
+    SeguimientoDeCajasComponent,
+    ProduccionColaboradorComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/s
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
     NgbModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ChartsModule
   ],
   providers: [
     AuthService,

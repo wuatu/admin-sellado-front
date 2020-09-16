@@ -48,7 +48,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
 
-  rutBusqueda: string=null;
+  toSearch: string;
 
   dateSave: string;
   timeStart: string;
@@ -57,6 +57,11 @@ export class SeguimientoDeCajasComponent implements OnInit {
   dateFinish: string = " ";
   dateStartSearch: string;
   dateFinishSearch: string;
+
+  // Array para el dropdown del selector de atributos de busqueda de la caja
+  dropDownSearch: any [] = [{nombre:'Envase'}, {nombre:'Variedad'}, {nombre:'Categoria'}, {nombre:'Calibre'}];
+  SearchText: string="Seleccionar criterio";    
+  selectedSearch:any;
 
   constructor(private toastr: ToastrService,
     private seguimientoDeCajasService: SeguimientoDeCajasService,
@@ -114,21 +119,44 @@ export class SeguimientoDeCajasComponent implements OnInit {
     );
   }
 
-  buscarUsuarioPorRut(){
-    console.log(this.rutBusqueda + this.desde + this.hasta);
+  buscarPorCriterio(){
+    console.log(this.selectedSearch + this.toSearch + this.desde + this.hasta);
     this.seguimientoDeCajas = [];
-    this.seguimientoDeCajasService.getSeguimientoDeCajasSearch(this.rutBusqueda, this.desde, this.hasta).subscribe(
-      res=>{
-        console.log(res);
-        this.seguimientoDeCajas=res;
-        console.log(this.seguimientoDeCajas);
-        //this.listarSeguimientoDeCajas();
-      },
-      err=>{
-        console.log(err);
-        this.toastr.error('No se pudo obtener la busqueda de seguimiento de cajas', 'Oops');
-      }
-    );
+    if(!this.selectedLineaObject && !this.selectedCalibradorObject && this.selectedSearch){
+      console.log("busqueda de solo busqueda");
+      this.seguimientoDeCajasService.getSearch(this.selectedSearch, this.toSearch, this.desde, this.hasta).subscribe(
+        res=>{
+          console.log(res);
+          this.seguimientoDeCajas=res;
+          console.log(this.seguimientoDeCajas);
+          //this.listarSeguimientoDeCajas();
+        },
+        err=>{
+          console.log(err);
+          this.toastr.error('No se pudo obtener la busqueda de seguimiento de cajas', 'Oops');
+        }
+      );
+    }else if(this.selectedLineaObject && this.selectedCalibradorObject && this.selectedSearch){
+      console.log("busqueda de con caliper y line");
+      this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
+        res=>{
+          console.log(res);
+          this.seguimientoDeCajas=res;
+          console.log(this.seguimientoDeCajas);
+          //this.listarSeguimientoDeCajas();
+        },
+        err=>{
+          console.log(err);
+          this.toastr.error('No se pudo obtener la busqueda de seguimiento de cajas', 'Oops');
+        }
+      );
+    }
+  }
+  
+  changeSelectedSearch(newSelected: any) { 
+    this.SearchText = newSelected.nombre;
+    this.selectedSearch = newSelected.nombre;
+    console.log(this.selectedSearch);      
   }
 
   changeSelectedLinea(newSelected: any) { 

@@ -12,6 +12,7 @@ import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-e
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
+import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'calibrador', component: CalibradorComponent, canActivate: [AuthGuard] },
   { path: 'registro', component: RegistroComponent, canActivate: [AuthGuard] },
   { path: 'seguimientodecajas', component: SeguimientoDeCajasComponent, canActivate: [AuthGuard] },
+  { path: 'produccioncolaborador', component: ProduccionColaboradorComponent, canActivate: [AuthGuard] },
   
 ];
 
