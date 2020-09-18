@@ -26,6 +26,7 @@ import { RegistroComponent } from './components/registro/registro.component';
 //import { JwPaginationComponent } from 'jw-angular-pagination';
 import {NgxPaginationModule} from 'ngx-pagination'; 
 import { TurnoComponent } from './components/turno/turno.component';
+import { CajaComponent } from './components/caja/caja.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { TurnoComponent } from './components/turno/turno.component';
     UsuarioEnLineaComponent,
     CalibradorComponent,
     RegistroComponent,
-    TurnoComponent
+    TurnoComponent,
+    CajaComponent
   ],
   imports: [
     BrowserModule,

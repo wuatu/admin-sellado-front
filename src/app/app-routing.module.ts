@@ -12,6 +12,7 @@ import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-e
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { TurnoComponent } from './components/turno/turno.component';
+import { CajaComponent } from './components/caja/caja.component';
 
 
 const routes: Routes = [
@@ -32,7 +33,7 @@ const routes: Routes = [
   { path: 'calibrador', component: CalibradorComponent, canActivate: [AuthGuard] },
   { path: 'registro', component: RegistroComponent, canActivate: [AuthGuard] },
   { path: 'turnos', component: TurnoComponent, canActivate: [AuthGuard] },
-
+  { path: 'caja', component: CajaComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
