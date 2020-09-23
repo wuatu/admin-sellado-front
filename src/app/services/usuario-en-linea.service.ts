@@ -18,8 +18,4 @@ export class UsuarioEnLineaService {
     return this.httpClient.post(`${this.API_URL}/usuario_en_linea/`,usuarioEnLinea);
   }
 
-  cerrarTurnoUsuarioEnLinea(id:number,currentUsuarioEnLineaSelected:UsuarioEnLinea){
-    return this.httpClient.put(`${this.API_URL}/usuario_en_linea/${id}`,currentUsuarioEnLineaSelected);
-  }
-
 }

@@ -6,8 +6,8 @@
             <a #produccion><i class="fa fa-line-chart"></i>Producción <i class="fa fa-caret-down"></i></a>
             <ul>
                 <li *ngIf="expandItem == 1"><a routerLink="/produccioncalibrador"><i class="fa fa-line-chart"></i>Calibradora</a></li>
-                <li *ngIf="expandItem == 1"><a routerLink="/produccionlinea"><i class="fa fa-line-chart"></i>Línea</a></li>
-                <li *ngIf="expandItem == 1"><a routerLink="/produccionusuario"><i class="fa fa-line-chart"></i>Usuario</a></li>
+                <!--<li *ngIf="expandItem == 1"><a routerLink="/produccionlinea"><i class="fa fa-line-chart"></i>Línea</a></li>-->
+                <li *ngIf="expandItem == 1"><a routerLink="/produccioncolaborador"><i class="fa fa-line-chart"></i>Usuario</a></li>
             </ul>
         </li>
         <li (click)="setCurrentItem(2,produccion,administrar,registros)">
@@ -27,10 +27,10 @@
             <ul>
                 <li *ngIf="superAdmin && expandItem == 3"><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
                 <li *ngIf="superAdmin && expandItem == 3"><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
-                <li *ngIf="superAdmin && expandItem == 3"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro log</a></li>
+                <li *ngIf="superAdmin && expandItem == 3"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro log</a></li>                
             </ul>
         </li>
-        <li><a routerLink="/seguimientocajas"><i class="fa fa-dropbox"></i>Seguimiento cajas</a></li>
+        <li><a routerLink="/seguimientodecajas"><i class="fa fa-bars"></i>Seguimiento de cajas</a></li>
 
 
 

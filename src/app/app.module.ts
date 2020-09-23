@@ -23,10 +23,14 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
-//import { JwPaginationComponent } from 'jw-angular-pagination';
-import {NgxPaginationModule} from 'ngx-pagination'; 
 import { TurnoComponent } from './components/turno/turno.component';
 import { CajaComponent } from './components/caja/caja.component';
+import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
+import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component'; 
+//paginador
+import {NgxPaginationModule} from 'ngx-pagination';
+//Gráficos
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -42,8 +46,10 @@ import { CajaComponent } from './components/caja/caja.component';
     UsuarioEnLineaComponent,
     CalibradorComponent,
     RegistroComponent,
-    TurnoComponent,
-    CajaComponent
+    CajaComponent,
+    SeguimientoDeCajasComponent,
+    ProduccionColaboradorComponent,
+    TurnoComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +61,8 @@ import { CajaComponent } from './components/caja/caja.component';
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), // ToastrModule added
     NgbModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ChartsModule
   ],
   providers: [
     AuthService,
