@@ -1,16 +1,15 @@
-
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-2" *ngIf="isLoggedIn"> 
-                <app-menubar *ngIf="isLoggedIn"></app-menubar>
-            </div>
-            <div class="col-9 p-20" *ngIf="!showMenu else elseShowMenu">
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-2" *ngIf="isLoggedIn">
+            <app-menubar *ngIf="isLoggedIn"></app-menubar>
+        </div>
+        <div class="col-9 p-20" *ngIf="!showMenu else elseShowMenu">
+            <router-outlet></router-outlet>
+        </div>
+        <ng-template #elseShowMenu>
+            <div class="col-11 p-20">
                 <router-outlet></router-outlet>
             </div>
-            <ng-template #elseShowMenu>
-                <div class="col-11 p-20">            
-                    <router-outlet></router-outlet>
-                </div>
-            </ng-template>
-        </div>
+        </ng-template>
     </div>
+</div>

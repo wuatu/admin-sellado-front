@@ -71,7 +71,7 @@
         <hr>
     </div>
     <br>
-    <div class="row ">
+    <div class="row " *ngIf="selectedCalibradorObject && selectedLineaObject || selectedSearch">
         <div class="col-md-12 ">
             <h4>Lista de registros de cajas</h4>
         </div>
@@ -109,6 +109,6 @@
         </tbody>
     </table>
 </div>
-<div class="pagination">
+<div class="pagination" *ngIf="selectedCalibradorObject && selectedLineaObject || selectedSearch">
     <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
 </div>
