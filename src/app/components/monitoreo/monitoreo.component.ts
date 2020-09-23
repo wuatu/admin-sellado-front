@@ -57,13 +57,19 @@ export class MonitoreoComponent implements OnInit {
         if (this.turno) {
           console.log(this.turno.id);
           this.sesionIniciada();
-          this.toastr.info("Turno se encuentra iniciado", "Información");
+          this.toastr.info("Turno se encuentra iniciado", "Información", {
+            positionClass: 'toast-bottom-right' 
+         });
         } else {
-          this.toastr.info("Favor inicie turno", "Información");
+          this.toastr.info("Favor inicie turno", "Información", {
+            positionClass: 'toast-bottom-right' 
+         });
         }
       },
       err => {
-        this.toastr.info('No se ha iniciado turno', 'Información');
+        this.toastr.info('No se ha iniciado turno', 'Información', {
+          positionClass: 'toast-bottom-right' 
+       });
       }
     )
     setInterval(() => {

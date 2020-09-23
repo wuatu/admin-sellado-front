@@ -24,13 +24,13 @@ export class CajaComponent implements OnInit {
   listarCajas() {  
     this.cajaService.getCajas().subscribe(
       res => {
-        //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
+        //los registros se almacena en array cajas que sirve para llenar la tabla de vista lineas
         this.cajas = res;
       },
       err => {
         if (err.status != 404) {
           console.log(err.status);
-          this.toastr.error('No se pudo listar calibradores', 'Oops');
+          this.toastr.error('No se pudo listar cajas', 'Oops');
         } else{
           this.cajas=null;
         }

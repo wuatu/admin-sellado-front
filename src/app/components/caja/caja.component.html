@@ -1,68 +1,65 @@
-<div class="row justify-content-start" style="padding-top: 25px;">
+<div class="row" style="padding-top: 25px;">
   <div class="col-12">
     <div class="row justify-content-center">
       <div class="col-12">
         <h1 class="text-center"><b>Cajas</b></h1>
       </div>
     </div>
-    <div class="form-row">
 
-      <div class="col-sm-2 my-1">
-        <label for="">Buscar</label>
-        <div class="form-group">
-          <div class="input-group">
-            <input #dpToDate class="form-control  ml-1" placeholder="id o envase" name="idEnvase">
+    <div class="row justify-content-end">
+      <div class="col-12 align-self-end">
+        <div class="form-row">
+          <div class="col-sm-4 my-1">
+            <label for="">Buscar</label>
+            <div class="form-group">
+              <div class="input-group">
+                <input #dpToDate class="form-control  ml-1" placeholder="id o envase" name="idEnvase">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-auto my-1">
+            <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit "
+              style="margin-top: 33px;">Buscar
+              <i class="fas fa-search" aria-hidden="true"></i></button>
           </div>
         </div>
       </div>
-
-        <div class="col-auto my-1">
-          <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit "
-            style="margin-top: 33px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
-        </div>
-
     </div>
+<hr>
     <div class="row">
-
-      <div class="row">
-        <div class="col-12">
-          <h4 class="text-center">Lista de cajas</h4>
-        </div>
-      </div>
-
       <div class="col-12">
-        <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
-          <!--Tabla de contenido-->
-
-
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Envase</th>
-                <th scope="col">Variedad</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Calibre</th>
-                <th scope="col">Correlativo</th>
-                <th scope="col">Ponderación</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let caja of cajas; let i = index">
-                <th scope="row">{{i+1}}</th>
-                <td>{{caja.envase }}</td>
-                <td>{{caja.variedad}}</td>
-                <td>{{caja.categoria}}</td>
-                <td>{{caja.calibre}}</td>
-                <td>{{caja.correlativo}}</td>
-                <td>{{caja.ponderacion}}</td>
-              </tr>
-            </tbody>
-          </table>
-
-        </form>
+        <h4 class="text-left">Lista de cajas</h4>
       </div>
-
     </div>
+
+    <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
+      <!--Tabla de contenido-->
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Envase</th>
+            <th scope="col">Variedad</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Calibre</th>
+            <th scope="col">Correlativo</th>
+            <th scope="col">Ponderación</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let caja of cajas; let i = index">
+            <th scope="row">{{i+1}}</th>
+            <td>{{caja.envase }}</td>
+            <td>{{caja.variedad}}</td>
+            <td>{{caja.categoria}}</td>
+            <td>{{caja.calibre}}</td>
+            <td>{{caja.correlativo}}</td>
+            <td>{{caja.ponderacion}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </form>
   </div>
 </div>
