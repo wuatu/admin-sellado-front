@@ -10,8 +10,8 @@ export class TurnoService {
   API_URL = "http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getTurnos() {
-    return this.httpClient.get(`${this.API_URL}/turnos`);
+  getTurnos(selectedfromDate: string, selectedToDate: string) {
+    return this.httpClient.get(`${this.API_URL}/turnos/${selectedfromDate}/${selectedToDate}`);
   }
 
   getTurno(id: string) {

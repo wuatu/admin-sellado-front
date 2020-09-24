@@ -205,7 +205,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
   agregarRegistroDeCajas(){
     
-    let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+2000, 22, "linea_"+2000, 2000+1100, "rfid_"+2000, "192.168.0."+2000, 2000, "lector_"+2000, "192.168.10."+2000, 2000, "rut_"+1100, "nombre_"+2000, "apellido_"+2000, "5468"+2000, 2000, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-16", "2020-09-31", 1,1);
+    let registroCaja = new SeguimientoDeCajas(null, 2, "calibrador_"+2, 25, "linea_"+2, 1000+1200, "rfid_"+2200, "192.168.0."+2200, 2200, "lector_"+1000, "192.168.10."+2200, 2200, "rut_"+2200, "nombre_"+2200, "apellido_"+2200, "5468"+2200, 2200, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-01", "2020-09-31", 1,1);
     this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
       res=>{
         this.toastr.success('Operación satisfactoria', 'Registro agregado');

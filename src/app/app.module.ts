@@ -23,11 +23,17 @@ import { UsuarioComponent } from './components/usuario/usuario.component';
 import { UsuarioEnLineaComponent } from './components/usuario-en-linea/usuario-en-linea.component';
 import { CalibradorComponent } from './components/calibrador/calibrador.component';
 import { RegistroComponent } from './components/registro/registro.component';
-import {NgxPaginationModule} from 'ngx-pagination';
+import { TurnoComponent } from './components/turno/turno.component';
+import { CajaComponent } from './components/caja/caja.component';
 import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
 import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component'; 
+//paginador
+import {NgxPaginationModule} from 'ngx-pagination';
 //Gráficos
 import { ChartsModule } from 'ng2-charts';
+import { ProduccionPorCalibradorComponent } from './components/produccion-por-calibrador/produccion-por-calibrador.component';
+import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,8 +48,12 @@ import { ChartsModule } from 'ng2-charts';
     UsuarioEnLineaComponent,
     CalibradorComponent,
     RegistroComponent,
+    CajaComponent,
     SeguimientoDeCajasComponent,
-    ProduccionColaboradorComponent
+    ProduccionColaboradorComponent,
+    TurnoComponent,
+    ProduccionPorCalibradorComponent,
+    ProduccionPorLineaComponent
   ],
   imports: [
     BrowserModule,

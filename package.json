@@ -30,7 +30,7 @@
     "jshint": "^2.12.0",
     "jw-angular-pagination": "^1.2.0",
     "jw-paginate": "^1.0.4",
-    "ng2-charts": "^2.4.1",
+    "ng2-charts": "^2.4.2",
     "ngx-pagination": "^5.0.0",
     "ngx-toastr": "^13.0.0",
     "rxjs": "~6.6.2",

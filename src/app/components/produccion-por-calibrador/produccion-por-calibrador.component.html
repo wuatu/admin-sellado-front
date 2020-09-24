@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-12 ">
+        <div class="row justify-content-center; no-printme">
+            <div class="col-12" style="margin-block-end: 20px; margin-top: 20px;">
+                <h1 class="text-center"><b>Producción por calibradora</b></h1>
+            </div>
+        </div>
+        <div class="col-12; no-printme">
+            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+                <div class="form-row">
+                    <div class="col-xs-2 my-1">
+                        <div ngbDropdown>
+                            <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 my-1">
+                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
+                    </div>
+                    <div class="col-sm-2 my-1">
+                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
+                    </div>
+                    <div class="col-auto my-1">
+                        <button class="ml-1 btn btn-primary btn-sm" (click)="contarCajasCalibradorPorFecha()" type="submit " style="margin-top: 3px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+                    </div>
+                    <hr>
+                </div>
+                <div class="col">
+                    <div class="form-group hidden">
+                        <div class="input-group">
+                            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                  {{ date.day }}
+                              </span>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row justify-content-start" id="imprimirGraficoID" *ngIf="mostrarGrafico">
+        <div class="col-12; no-printme" style="margin-block-end: 20px; margin-left: 20px">
+            <h6 class="text-left">
+                <b>Resultado de busqueda: {{selectedCalibradorText}} {{desde}} {{hasta}}</b>
+            </h6>
+        </div>
+        <div class="col-md-12  align-self-end p-20" style="margin-bottom: 20px;">
+            <div class="text-right">
+                <button class="btn btn-info text-right"><i class="fas fa-box"></i>
+                  Total de cajas selladas: {{numBox}}
+              </button>
+            </div>
+        </div>
+        <br>
+        <div class="col-12" style="margin-block-end: 20px">
+            <h5 class="text-center">
+                <b>Cajas selladas desde {{desde}} hasta {{hasta}} en {{selectedCalibradorText}}</b>
+            </h5>
+        </div>
+        <!--********************************** GRAFICO ************************************-->
+
+        <div class="col-10">
+            <div class="flex ">
+                <div class="flex-item justify-content-center">
+                    <div style="display: block;">
+                        <canvas baseChart width="900" height="600" [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+                    </div>
+                </div>
+                <div class="flex-item; no-printme">
+                    <div class="col-md-12  align-self-end ">
+                        <div class="text-right">
+                            <button class="btn btn-primary  text-right" style="margin-top: 10px; margin-block-end: 30px;" (click)="imprimirGrafico()"><i class="fas fa-print"></i>
+                              Imprimir gráfico
+                          </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--***********************************************************************************-->
+    </div>
+</div>
