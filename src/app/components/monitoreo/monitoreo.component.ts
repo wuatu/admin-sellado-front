@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -13,6 +13,7 @@ import { formatDate } from '@angular/common';
   styleUrls: ['./monitoreo.component.css']
 })
 export class MonitoreoComponent implements OnInit {
+  @ViewChild("mymodaliniciarturno") modalIniciarTurno: ElementRef;
   iniciarCerrar = "iniciar";
   IniciarCerrar = "Iniciar";
   time = new Date();
@@ -70,11 +71,13 @@ export class MonitoreoComponent implements OnInit {
         this.toastr.info('No se ha iniciado turno', 'Información', {
           positionClass: 'toast-bottom-right' 
        });
+       this.open(this.modalIniciarTurno);
       }
     )
     setInterval(() => {
       this.time = new Date();
     }, 1000);
+
   }
 
   //metodo que abre un modal
