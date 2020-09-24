@@ -44,13 +44,15 @@ export class MenubarComponent implements OnInit {
     this.router.navigate(['/auth/login']);
   }
 
-  setCurrentItem(i,produccion?,administrar?,registros?) {
+  setCurrentItem(i,produccion?,administrar?,registros?,seguimiento?) {
     if(this.expandItemAnterior==1 && i != 1){
       produccion.click();
     } else if(this.expandItemAnterior==2 && i != 2){
       administrar.click();
     } else if(this.expandItemAnterior==3 && i != 3){
       registros.click();
+    } else if(this.expandItemAnterior==4 && i != 4){
+      seguimiento.click();
     } else{
 
     }
@@ -72,6 +74,12 @@ export class MenubarComponent implements OnInit {
     } else if(i == 3 && this.expandItemAnterior!=3){
       this.expandItem=3;
       this.expandItemAnterior=3;
+    } else if (i == 4 && this.expandItemAnterior==4) {
+      this.expandItem=4;
+      this.expandItemAnterior=0;
+    } else if(i == 4 && this.expandItemAnterior!=4){
+      this.expandItem=4;
+      this.expandItemAnterior=4;
     }
   }
 }
