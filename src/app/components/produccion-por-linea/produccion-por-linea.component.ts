@@ -40,8 +40,8 @@ export class ProduccionPorLineaComponent implements OnInit {
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   isBusqueda = false;
-  desde: string = "";
-  hasta: string = "";
+  desde: string = " ";
+  hasta: string = " ";
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
   dateSave: string;
@@ -103,7 +103,10 @@ export class ProduccionPorLineaComponent implements OnInit {
   }
 
   contarCajasLineaPorFecha(){
-
+    if(this.selectedCalibradorText == "Selecciona una calibrador" || this.selectedLineaText == "Selecciona una linea" || this.desde == " " || this.hasta == " " ){
+      this.toastr.error('se debe seleccionar calibrador, línea y fecha.', 'Oops');
+      return;
+    }
     console.log(this.selectedCalibradorObject.id + this.selectedLineaObject.id + "  " +this.desde+ " " + this.hasta);
     this.cajasLinea = [];
     this.produccionPorLineaService.getBoxOfLine(this.selectedCalibradorObject.id,this.selectedLineaObject.id ,this.desde, this.hasta).subscribe(

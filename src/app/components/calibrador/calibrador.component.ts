@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CalibradorService } from 'src/app/services/calibrador.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { LineaService } from 'src/app/services/linea.service';
+import { CalibradorService } from 'src/app/services/calibrador.service';
 import { NgForm } from '@angular/forms';
 import { Calibrador } from 'src/app/models/calibrador';
+import { RegistroService } from 'src/app/services/registro.service';
+import { Registro } from 'src/app/models/registro';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-calibrador',
@@ -19,36 +21,36 @@ export class CalibradorComponent implements OnInit {
   nombreCalibrador;
 
   constructor(
-    private calibradorService: CalibradorService, 
-    private modalService: NgbModal, 
+    private modalService: NgbModal,
     private toastr: ToastrService,
-  //servicio de linea, contiene los metodos CRUD de lineas
-  private lineaService: LineaService) { }
+    //servicio de calibrador, contiene los metodos CRUD de calibradors
+    private calibradorService: CalibradorService,
+    private registoService:RegistroService) { }
 
   ngOnInit() {
     this.listarCalibradores();
   }
 
-  //metodo que trae todos los registros de lineas desde la base de datos
-  listarCalibradores() {  
+  //metodo que trae todos los registros de calibradors desde la base de datos
+  listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
       res => {
-        //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
+        //los registros se almacena en array calibradores que sirve para llenar la tabla de vista calibradors
         this.calibradores = res;
       },
       err => {
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar calibradores', 'Oops');
-        } else{
-          this.calibradores=null;
+        } else {
+          this.calibradores = null;
         }
       }
     )
   }
 
   //metodo que crea un nuevo calibrador
-  agregarCalibrador(form: NgForm) {  
+  agregarCalibrador(form: NgForm) {
     if (!this.nombreCalibrador) {
       this.toastr.error('No se pudo guardar clibrador', 'Oops');
       return;
@@ -56,9 +58,13 @@ export class CalibradorComponent implements OnInit {
     let calibrador = new Calibrador(null, this.nombreCalibrador);
     this.calibradorService.saveCalibrador(calibrador).subscribe(
       res => {
+        //crea registro        
+        let mensajeRegistro="Se ha creado un nuevo calibrador, nombre: "+ this.nombreCalibrador;        
+        this.registoService.creaRegistro(mensajeRegistro);
+        //toatsr
         this.toastr.success('Operación satisfactoria', 'Calibrador agregada');
         this.listarCalibradores();
-        this.nombreCalibrador=null;
+        this.nombreCalibrador = null;        
       },
       err => {
         console.log(err);
@@ -68,12 +74,12 @@ export class CalibradorComponent implements OnInit {
 
   }
 
-  //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto calibrador clickeado a variable global currentLineaSelected
+  //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto calibrador clickeado a variable global currentCalibradorSelected
   onEditar(calibrador: Calibrador) {
     this.currentCalibradorSelected = calibrador;
   }
 
-  //metodo que sirve para editar una linea
+  //metodo que sirve para editar una calibrador
   editarCalibrador(form: NgForm) {
     if (!form.value.nombre) {
       this.toastr.error('No se pudo editar línea', 'Oops',);
@@ -81,9 +87,13 @@ export class CalibradorComponent implements OnInit {
     }
 
     let calibrador = new Calibrador(form.value.id, form.value.nombre);
-   
+
     this.calibradorService.updateCalibrador(calibrador.id, calibrador).subscribe(
       res => {
+        //crea registro        
+        let mensajeRegistro="Se ha editado un calibrador, id: "+ calibrador.id;        
+        this.registoService.creaRegistro(mensajeRegistro);
+
         this.toastr.success('Operación satisfactoria', 'Calibrador editada');
         console.log(res);
         this.listarCalibradores();
@@ -96,16 +106,20 @@ export class CalibradorComponent implements OnInit {
     );
   }
 
-  //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto linea clickeado a variable global currentLineaSelected y abrir el modal
+  //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto calibrador clickeado a variable global currentCalibradorSelected y abrir el modal
   onEliminar(calibrador: Calibrador, modal) {
     this.currentCalibradorSelected = calibrador;
     this.open(modal);
   }
 
-  //metodo que elimina una linea
-  eliminarLinea(calibrador: Calibrador) {
+  //metodo que elimina una calibrador
+  eliminarCalibrador(calibrador: Calibrador) {
     this.calibradorService.deleteCalibrador(calibrador.id).subscribe(
       res => {
+        //crea registro        
+        let mensajeRegistro="Se ha eliminado un calibrador, nombre: "+ calibrador.nombre;        
+        this.registoService.creaRegistro(mensajeRegistro);
+
         this.toastr.success('Operación satisfactoria', 'Calibrador eliminado');
         console.log(res);
         this.listarCalibradores();
@@ -115,10 +129,10 @@ export class CalibradorComponent implements OnInit {
         this.toastr.error('No se pudo eliminar calibrador', 'Oops');
       }
     );
-  } 
+  }
 
   //metodo que abre un modal
-  open(modal) {    
+  open(modal) {
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -137,7 +151,7 @@ export class CalibradorComponent implements OnInit {
     } else {
       if (reason == 'ok') {
         console.log("hola");
-        this.eliminarLinea(this.currentCalibradorSelected);
+        this.eliminarCalibrador(this.currentCalibradorSelected);
       }
       return `with: ${reason}`;
     }

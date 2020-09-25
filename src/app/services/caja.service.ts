@@ -22,12 +22,13 @@ export class CajaService {
     return this.httpClient.delete(`${this.API_URL}/caja/${id}`);
   }
 
-  saveCalibrador(caja:Caja){
+  saveCaja(caja:Caja){
     return this.httpClient.post(`${this.API_URL}/caja/`,caja);
   }
 
-  updateCalibrador(id:string, caja:Caja):Observable<any>{
-    return this.httpClient.put(`${this.API_URL}/calibrador/${id}`,caja);
+  updateCaja(id:string, caja:Caja):Observable<any>{
+    console.log(caja);
+    return this.httpClient.put(`${this.API_URL}/caja/${id}`,caja);
   }
 
 }

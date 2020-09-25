@@ -31,8 +31,8 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   isBusqueda = false;
-  desde: string = "";
-  hasta: string = "";
+  desde: string = " ";
+  hasta: string = " "; 
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
   dateSave: string;
@@ -78,6 +78,10 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
   contarCajasCalibradorPorFecha(){
     //this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
+    if(this.selectedCalibradorText == "Selecciona una calibrador" || this.desde == " " || this.hasta == " " ){
+      this.toastr.error('se debe seleccionar calibrador y fecha.', 'Oops');
+      return;
+    }
     console.log(this.selectedCalibradorObject.id + "  " +this.desde+ " " + this.hasta);
     this.cajasCalibrador = [];
     this.produccionPorCalibradorService.getLineOfCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
@@ -269,3 +273,4 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
 
 }
+
