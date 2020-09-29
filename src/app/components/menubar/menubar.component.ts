@@ -14,9 +14,6 @@ declare var name: any;
 export class MenubarComponent implements OnInit {
   superAdmin = false;
   admin: Administrador = JSON.parse(localStorage.getItem('USER'));
-  isCollapseProduccion = false;
-  isCollapseAdministrar = true;
-  isCollapseRegistros = true;
   expandItem=0;
   expandItemAnterior=0;
   constructor(
