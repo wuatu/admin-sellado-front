@@ -23,15 +23,18 @@ export class SeguimientoDeCajas {
     correlativo_caja: string;
     ponderacion_caja: string;
     fecha_sellado: string;
+    hora_sellado: string;
     fecha_validacion: string;
+    hora_validacion: string;
     is_verificado: number;
     is_before_time: number;
+    id_apertura_cierre_de_turno: number;
 
     constructor(id: number, id_calibrador: number, nombre_calibrador: string, id_linea: number, nombre_linea: string, id_rfid: number,
         nombre_rfid: string, ip_rfid: string, id_lector: number, nombre_lector: string, ip_lector: string, id_usuario: number,
         rut_usuario: string, nombre_usuario: string, apellido_usuario: string, codigo_de_barra: string, id_caja: number,
         envase_caja: string, variedad_caja: string, categoria_caja: string, calibre_caja: string, correlativo_caja: string, ponderacion_caja: string,
-        fecha_sellado: string, fecha_validacion: string, is_verificado: number, is_before_time: number)
+        fecha_sellado: string,hora_sellado: string , fecha_validacion: string, hora_validacion: string ,is_verificado: number, is_before_time: number, id_apertura_cierre_de_turno: number)
         {
             this.id = id;
             this.id_calibrador = id_calibrador;
@@ -57,8 +60,11 @@ export class SeguimientoDeCajas {
             this.correlativo_caja = correlativo_caja;
             this.ponderacion_caja = ponderacion_caja;
             this.fecha_sellado = fecha_sellado;
+            this.hora_sellado = hora_sellado;
             this.fecha_validacion = fecha_validacion;
+            this.hora_validacion = hora_validacion;
             this.is_verificado = is_verificado;
             this.is_before_time = is_before_time;
+            this.id_apertura_cierre_de_turno = id_apertura_cierre_de_turno;
         }
 }

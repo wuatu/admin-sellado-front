@@ -79,7 +79,9 @@ export class MonitoreoComponent implements OnInit {
     }, 1000);
 
   }
+  onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm:string){
 
+  }
   //metodo que abre un modal
   open(modal) {
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -133,7 +135,8 @@ export class MonitoreoComponent implements OnInit {
         let administrador = JSON.parse(localStorage.getItem('USER'));
         console.log(administrador.id);
         let turno = new Turno();
-        turno.fechaApertura(null, this.fecha(), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "");
+        let fecha = this.fecha();
+        turno.fechaApertura(null, fecha.substring(0,10), fecha.substring(11,19) ,administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "");
         this.turnoService.saveTurno(turno).subscribe(
           res => {
             this.sesionIniciada();
@@ -173,7 +176,8 @@ export class MonitoreoComponent implements OnInit {
         turno.fecha_apertura = this.turno.fecha_apertura;
         turno.nombre_administrador_apertura = this.turno.nombre_administrador_apertura;
         turno.apellido_administrador_apertura = this.turno.apellido_administrador_apertura;
-        turno.fechaCierre(this.fecha(), administrador.id, administrador.nombre, administrador.apellido);
+        let fecha = this.fecha();
+        turno.fechaCierre(fecha.substring(0,10),fecha.substring(11,19), administrador.id, administrador.nombre, administrador.apellido);
         this.turnoService.updateTurno(this.turno.id, turno).subscribe(
           res => {
             this.sesionCerrada();

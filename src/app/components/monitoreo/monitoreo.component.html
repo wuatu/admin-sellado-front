@@ -1,225 +1,214 @@
 <div class="row justify-content-center mt-3">
-  <div class="col-4">    
-  </div>
-  <div class="col-4 text-center">
-    <h1><b>Monitoreo</b></h1>
-  </div>
-  <div class="col-4 text-center">
-    <button class="btn {{botonIniciarTurnoClass}}" (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
+    <div class="col-4">
+    </div>
+    <div class="col-4 text-center">
+        <h1><b>Monitoreo</b></h1>
+    </div>
+    <div class="col-4 text-center">
+        <button class="btn {{botonIniciarTurnoClass}}" (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
     </button>
-      <h2><b>{{ time | date: 'hh:mm:ss a'}}</b></h2>    
-  </div>
+        <h2><b>{{ time | date: 'hh:mm:ss a'}}</b></h2>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-8">
-    <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
-      <div class="form-row">
+    <div class="col-8">
+        <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
+            <div class="form-row">
 
-        <div class="col">
-          <label for="Desde:">Desde:</label>
-          <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate"
-            [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
-            (click)="d.toggle()">
-        </div>
+                <div class="col">
+                    <label for="Desde:">Desde:</label>
+                    <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                </div>
 
-        <div class="col">
-          <label for="">Hasta:</label>
-          <div class="form-group">
-            <div class="input-group">
-              <input #dpToDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpToDate"
-                [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
-            </div>
-          </div>
-        </div>
+                <div class="col">
+                    <label for="">Hasta:</label>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input #dpToDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+                        </div>
+                    </div>
+                </div>
 
 
-        <div class="col">
-          <label for="">Buscar:</label>
-          <div class="input-group-append">
-            <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
+                <div class="col">
+                    <label for="">Buscar:</label>
+                    <div class="input-group-append">
+                        <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
                 aria-hidden="true"></i></button>
-          </div>
-        </div>
+                    </div>
+                </div>
 
 
-      </div>
+            </div>
 
-      <div class="col">
-        <div class="form-group hidden">
-          <div class="input-group">
-            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'"
-              (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden"
-              [startDate]="fromDate!">
-            <ng-template #t let-date let-focused="focused">
-              <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
-                [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
-                (mouseleave)="hoveredDate = null">
+            <div class="col">
+                <div class="form-group hidden">
+                    <div class="input-group">
+                        <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
                 {{ date.day }}
               </span>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-12">
-    <div class="card w-100">
-      <div class="card-body">
-        <h5 class="card-title"> <b>Calibrador L1</b></h5>
-        <div class="row">
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>4</b></h1>
-                <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por minuto</b></p>
-              </div>
+    <div class="col-12">
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title"> <b>Calibrador L1</b></h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>4</b></h1>
+                                <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por minuto</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>3</b></h1>
+                                <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>120</b></h1>
+                                <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>3</b></h1>
-                <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>120</b></h1>
-                <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <div class="row mt-3 mb-3">
-  <div class="col-12">
-    <div class="card w-100">
-      <div class="card-body">
-        <h5 class="card-title"> <b>Calibrador L2</b></h5>
-        <div class="row">
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>5</b></h1>
-                <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por minuto</b></p>
-              </div>
+    <div class="col-12">
+        <div class="card w-100">
+            <div class="card-body">
+                <h5 class="card-title"> <b>Calibrador L2</b></h5>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>5</b></h1>
+                                <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por minuto</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>4</b></h1>
+                                <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h1 class="card-title text-center"><b>183</b></h1>
+                                <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>4</b></h1>
-                <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="card" style="width: 18rem;">
-              <div class="card-body">
-                <h1 class="card-title text-center"><b>183</b></h1>
-                <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 
 <!--Modal confirmación-->
 <ng-template #mymodalconfirmar let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">{{IniciarCerrar}} turno</h4>
-    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">{{IniciarCerrar}} turno</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <p>¿Seguro que quieres {{iniciarCerrar}} turno?</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
-  </div>
+    </div>
+    <div class="modal-body">
+        <p>¿Seguro que quieres {{iniciarCerrar}} turno?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
+    </div>
 </ng-template>
 <!--fin modal confirmacion-->
 
 <!--modal autenticacion-->
 <ng-template #myModalAutenticar let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Autenticación</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Autenticación</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">×</span>
     </button>
-  </div>
-  <div class="modal-body">
-    <form #myform="ngForm">
-      <div class="form-group">
-
-        <label for="lineaLabel"><b>Rut:</b></label>
-        <div class="input-group">
-          <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control"
-            placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
-        </div>
-
-        <!--Valida formulario nombre-->
-        <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
-          <div *ngIf="rut.errors.required">
-            Rut es obligatorio
-          </div>
-        </div>
-
-        <label for="lineaLabel"><b>Contraseña:</b></label>
-        <div class="input-group">
-          <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password"
-            class="form-control" placeholder="Contraseña" required
-            [ngClass]="{ 'is-invalid': submitted && password.errors }">
-        </div>
-
-        <!--Valida formulario contraseña-->
-        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
-          <div *ngIf="password.errors.required">
-            Contraseña es obligatorio
-          </div>
-        </div>
-      </div>
-    </form>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-      <button type="submit" class="btn btn-primary"
-        (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
     </div>
-  </div>
+    <div class="modal-body">
+        <form #myform="ngForm">
+            <div class="form-group">
+
+                <label for="lineaLabel"><b>Rut:</b></label>
+                <div class="input-group">
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Rut">
+                </div>
+
+                <!--Valida formulario nombre-->
+                <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
+                    <div *ngIf="rut.errors.required">
+                        Rut es obligatorio
+                    </div>
+                </div>
+
+                <label for="lineaLabel"><b>Contraseña:</b></label>
+                <div class="input-group">
+                    <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password" class="form-control" placeholder="Contraseña">
+                </div>
+
+                <!--Valida formulario contraseña-->
+                <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                    <div *ngIf="password.errors.required">
+                        Contraseña es obligatorio
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="submit" class="btn btn-primary" (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
+        </div>
+    </div>
 </ng-template>
 <!--fin modal autenticacion-->
 
 <!--Modal iniciar turno-->
 <ng-template #mymodaliniciarturno let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-title">No se ha iniciado turno</h4>
-    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">No se ha iniciado turno</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <div class="modal-body text-center">
-    <img src="assets/images/info.png" width="50px">
-    <h5 class="mt-3">¿Quieres iniciar turno?</h5>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="open(myModalAutenticar)">Aceptar</button>
-  </div>
+    </div>
+    <div class="modal-body text-center">
+        <img src="assets/images/info.png" width="50px">
+        <h5 class="mt-3">¿Quieres iniciar turno?</h5>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="open(myModalAutenticar)">Aceptar</button>
+    </div>
 </ng-template>
 <!--fin modal iniciar turno-->

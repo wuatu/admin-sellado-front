@@ -175,15 +175,20 @@ export class SeguimientoDeCajasComponent implements OnInit {
       this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
+      console.log("toDate "+ date);
       this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month-1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
 
     
     } else {
       this.toDate = null;
       this.fromDate = date;
+      console.log("fromDate "+ date);
       this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
       this.hasta=null;
     }
+    
+    
+
   }
 
   isHovered(date: NgbDate) {
@@ -204,17 +209,31 @@ export class SeguimientoDeCajasComponent implements OnInit {
   }
 
   agregarRegistroDeCajas(){
-    
-    let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+2000, 22, "linea_"+2000, 2000+1100, "rfid_"+2000, "192.168.0."+2000, 2000, "lector_"+2000, "192.168.10."+2000, 2000, "rut_"+1100, "nombre_"+2000, "apellido_"+2000, "5468"+2000, 2000, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-16", "2020-09-31", 1,1);
+    let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-01", "08:35:00" , "2020-09-24", "08:39:02" , 1,1, 0);
     this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
       res=>{
-        this.toastr.success('Operación satisfactoria', 'Registro agregado');
+       this.toastr.success('Operación satisfactoria', 'Registro agregado');
       },
       err=>{
         console.log(err);
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }
     ); 
+
+    /*for(let j=1; j<10 ; j++){
+      for(let i=6; i<10 ;i++){
+        let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-0"+j, "0"+i+":00:00" , "2020-09-24", "08:39:02" , 1,1, 0);
+        this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
+          res=>{
+            this.toastr.success('Operación satisfactoria', 'Registro agregado');
+          },
+          err=>{
+            console.log(err);
+            this.toastr.error('No se pudo obtener a los registros', 'Oops');
+          }
+        ); 
+      }
+    }*/
     
 
     /*for (let i = 1100 ; i<=1200; i++){

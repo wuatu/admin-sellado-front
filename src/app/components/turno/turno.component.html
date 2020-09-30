@@ -1,102 +1,94 @@
 <div class="row justify-content-start" style="padding-top: 25px;">
-  <div class="col-12">
-    <div class="row justify-content-center">
-      <div class="col-12">
-        <h1 class="text-center"><b>Apertura/Cierre de Turno</b></h1>
-      </div>
-    </div>
-    <div class="form-row">
-
-      <div class="col-sm-2 my-1">
-        <label for="Desde:">Desde:</label>
-        <div class="form-group">
-          <div class="input-group">
-            <input #dpFromDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpFromDate"
-              [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
-              (click)="d.toggle()">
-          </div>
+    <div class="col-12">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Apertura/Cierre de Turno</b></h1>
+            </div>
         </div>
-      </div>
+        <div class="form-row">
 
-      <div class="col-sm-2 my-1">
-        <label for="">Hasta:</label>
-        <div class="form-group">
-          <div class="input-group">
-            <input #dpToDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpToDate"
-              [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
-          </div>
+            <div class="col-sm-2 my-1">
+                <label for="Desde:">Desde:</label>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input #dpFromDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-2 my-1">
+                <label for="">Hasta:</label>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input #dpToDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-auto my-1">
+                <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit " style="margin-top: 33px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+            </div>
+
         </div>
-      </div>
-
-        <div class="col-auto my-1">
-          <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit "
-            style="margin-top: 33px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
-        </div>
-
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <div class="form-group hidden">
-          <div class="input-group">
-            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'"
-              (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden"
-              [startDate]="fromDate!">
-            <ng-template #t let-date let-focused="focused">
-              <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
-                [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
-                (mouseleave)="hoveredDate = null">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group hidden">
+                    <div class="input-group">
+                        <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
                 {{ date.day }}
               </span>
-            </ng-template>
-          </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h4 class="text-center">Lista de turnos</h4>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
+                    <!--Tabla de contenido-->
+
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">N°</th>
+                                <th scope="col">Fecha apertura</th>
+                                <th scope="col">Nombre apertura</th>
+                                <th scope="col">Apellido apertura</th>
+                                <th scope="col">Fecha cierre</th>
+                                <th scope="col">Nombre cierre</th>
+                                <th scope="col">Apellido cierre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let turno of turnos; let i = index">
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{ turno.fecha_apertura}} {{turno.hora_apertura}}</td>
+                                <td>{{turno.nombre_administrador_apertura}}</td>
+                                <td>{{turno.apellido_administrador_apertura}}</td>
+                                <td>{{turno.fecha_cierre}} {{turno.hora_cierre}}</td>
+                                <td>{{turno.nombre_administrador_cierre}}</td>
+                                <td>{{turno.apellido_administrador_cierre}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+                    <div class="input-group-append" style="float:right">
+                        <button class="ml-1 btn btn-primary" type="submit "><i class="fas fa-download"></i> Exportar a excel</button>
+                    </div>
+
+                </form>
+            </div>
+
         </div>
-      </div>
-
-      <div class="row">
-        <div class="col-12">
-          <h4 class="text-center">Lista de turnos</h4>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
-          <!--Tabla de contenido-->
-
-
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">N°</th>
-                <th scope="col">Fecha apertura</th>
-                <th scope="col">Nombre apertura</th>
-                <th scope="col">Apellido apertura</th>
-                <th scope="col">Fecha cierre</th>
-                <th scope="col">Nombre cierre</th>
-                <th scope="col">Apellido cierre</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let turno of turnos; let i = index">
-                <th scope="row">{{i+1}}</th>
-                <td>{{ turno.fecha_apertura | date:'yyyy-MM-dd HH:mm:ss' }}</td>
-                <td>{{turno.nombre_administrador_apertura}}</td>
-                <td>{{turno.apellido_administrador_apertura}}</td>
-                <td>{{turno.fecha_cierre | date:'yyyy-MM-dd HH:mm:ss'}}</td>
-                <td>{{turno.nombre_administrador_cierre}}</td>
-                <td>{{turno.apellido_administrador_cierre}}</td>
-              </tr>
-            </tbody>
-          </table>
-
-
-
-          <div class="input-group-append" style="float:right">
-            <button class="ml-1 btn btn-primary" type="submit "><i class="fas fa-download"></i> Exportar a excel</button>
-          </div>
-
-        </form>
-      </div>
-
     </div>
-  </div>
-</div> 
+</div>
