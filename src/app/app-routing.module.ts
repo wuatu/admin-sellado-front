@@ -15,6 +15,8 @@ import { CajaComponent } from './components/caja/caja.component';
 import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
 import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component';
 import { TurnoComponent } from './components/turno/turno.component';
+import { ProduccionPorCalibradorComponent } from './components/produccion-por-calibrador/produccion-por-calibrador.component';
+import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
 
 
 const routes: Routes = [
@@ -38,6 +40,8 @@ const routes: Routes = [
   { path: 'caja', component: CajaComponent, canActivate: [AuthGuard] },
   { path: 'seguimientodecajas', component: SeguimientoDeCajasComponent, canActivate: [AuthGuard] },
   { path: 'produccioncolaborador', component: ProduccionColaboradorComponent, canActivate: [AuthGuard] },
+  { path: 'produccionporcalibrador', component: ProduccionPorCalibradorComponent, canActivate: [AuthGuard] },
+  { path: 'produccionporlinea', component: ProduccionPorLineaComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

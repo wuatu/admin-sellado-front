@@ -95,13 +95,13 @@ export class TurnoComponent implements OnInit {
         for (let element of this.turnos) {
           id = id + 1;
           let exportTurno = new ExportTurno(id,
-            element.fecha_apertura.substring(0, 10),
-            element.fecha_apertura.substring(11, 19),
+            element.fecha_apertura,
+            element.hora_apertura,
             element.id_administrador_apertura,
             element.nombre_administrador_apertura,
             element.apellido_administrador_apertura,
-            element.fecha_cierre.substring(0, 10),
-            element.fecha_cierre.substring(11, 19),
+            element.fecha_cierre,
+            element.hora_cierre,
             element.id_administrador_cierre,
             element.nombre_administrador_cierre,
             element.apellido_administrador_cierre);
@@ -160,10 +160,11 @@ export class TurnoComponent implements OnInit {
 
     /* genera el workbook y agrega el worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.utils.book_append_sheet(wb, ws, 'turnos');
 
     /* Guarda el archivo */
-    XLSX.writeFile(wb, this.nombreExcel + (new Date()).toISOString() + ".xls");
+    let fecha = (new Date()).toISOString();
+    XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
   }
 
   buscarPorFecha() {

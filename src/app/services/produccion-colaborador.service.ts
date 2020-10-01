@@ -16,10 +16,14 @@ export class ProduccionColaboradorService {
   getProduccionSearchNumberBox(rutSearch:string, fromDateSearch: string, toDateSearch: string){
     return this.httpClient.get(`${this.API_URL}/registros_produccion_colaborador_cajas_diarias/${rutSearch}/${fromDateSearch}/${toDateSearch}`);
   }
+  getNumberBoxByType(rutSearch:string, fromDateSearch: string, toDateSearch: string){
+    return this.httpClient.get(`${this.API_URL}/registros_produccion_colaborador_tipo_cajas_diarias/${rutSearch}/${fromDateSearch}/${toDateSearch}`);
+  }
 
   updateRegistroProduccionUsuario(id:number, registroProduccionColaborador:SeguimientoDeCajas):Observable<any>{
     return this.httpClient.put(`${this.API_URL}/registro_produccion_colaborador_update/${id}`, registroProduccionColaborador);
   }
+  
   
   
 

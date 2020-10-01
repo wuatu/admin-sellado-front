@@ -24,8 +24,7 @@
                             disabled placeholder="Hasta">
                     </div>
                     <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarUsuarioPorRut()" type="submit "
-                            style="margin-top: 3px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarUsuarioPorRut();produccionSearchNumberBox();searchNumberBoxByType()" type="submit " style="margin-top: 3px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
                     </div>
                     <hr>
                 </div>
@@ -48,44 +47,65 @@
             </form>
         </div>
     </div>
-</div>
-<div class="row" *ngIf="nombre && apellido" id="imprimirGraficoID">
-    <div class="col-12; no-printme" style="margin-block-end: 10px; margin-left: 20px">
+    <div class="col-10; no-printme" style="margin-block-end: 10px; margin-left: 20px">
         <h5 class="text-left">
             <b>Resultado de busqueda: </b>
         </h5>
     </div>
-    <div class="col-md-12  align-self-end p-20" style="margin-bottom: 20px;">
+</div>
+<div class="row justify-content-center" *ngIf="nombre && apellido">
+    <div class="col-10" style="margin-block-end: 20px">
+        <h5 class="text-center">
+            <b>Productividad {{nombre}} {{apellido}} desde {{desde}} hasta {{hasta}} </b>
+        </h5>
+    </div>
+    <div class="col-md-4  align-self-center; no-printme" *ngIf="nombre && apellido">
+        <!--Tabla de contenido-->
+        <table class="table table-hover;  justify-content-center" *ngIf="nombre && apellido">
+            <thead>
+                <tr>
+                    <th scope="col">Envase</th>
+                    <th class=" text-center" scope="col">Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let caja of produccionNumberBoxByType ">
+                    <td>{{caja.ENVASE}}</td>
+                    <td class=" text-center">{{caja.CANTIDAD}}</td>
+                </tr>
+                <td>Cajas Totales</td>
+                <td class=" text-center">{{numBox}}</td>
+            </tbody>
+        </table>
+    </div>
+    <!--<div class="col-md-12  align-self-end p-20" style="margin-bottom: 20px;">
         <div class="text-right">
             <button class="btn btn-info text-right"><i class="fas fa-box"></i>
                 Cajas totales: {{numBox}}
             </button>
         </div>
-    </div>
-    <br>
-    <div class="col-12" style="margin-block-end: 20px">
-        <h3 class="text-center">
-            <b>Productividad {{nombre}} {{apellido}} desde {{desde}} hasta {{hasta}} </b>
-        </h3>
-    </div>
+    </div>-->
+
+
+</div>
+<div class="col-12" *ngIf="nombre && apellido" id="imprimirGraficoID" style="margin-block-end: 20px">
+    <h5 class="text-center">
+        <b>Gráfico cantidad de cajas por día </b>
+    </h5>
 </div>
 <!--********************************** GRAFICO ************************************-->
 <div class="row justify-content-center" *ngIf="nombre && apellido" id="imprimirGraficoID">
-    <div class="col-10">
+    <div class="col-12">
         <div class="flex ">
             <div class="flex-item">
                 <div style="display: block;">
-                    <canvas baseChart width="900" height="500" [datasets]="lineChartData" [labels]="lineChartLabels"
-                        [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend"
-                        [chartType]="lineChartType" (chartHover)="chartHovered($event)"
-                        (chartClick)="chartClicked($event)"></canvas>
+                    <canvas baseChart width="900" height="500" [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
                 </div>
             </div>
             <div class="flex-item; no-printme">
                 <div class="col-md-12  align-self-end ">
                     <div class="text-right">
-                        <button class="btn btn-primary  text-right" style="margin-top: 10px;"
-                            (click)="imprimirGrafico()"><i class="fas fa-print"></i>
+                        <button class="btn btn-primary  text-right" style="margin-top: 10px;margin-block-end: 30px;" (click)="imprimirGrafico()"><i class="fas fa-print"></i>
                             Imprimir gráfico
                         </button>
                     </div>
@@ -99,47 +119,57 @@
 <!--***********************************************************************************-->
 
 
-<div class="row justify-content-center; no-printme" *ngIf="nombre && apellido">
-    <div class="col-12 " style="margin-top: 30px;">
-        <h3 class="text-center">
-            <b>Lista de registros de {{nombre}} {{apellido}} desde {{desde}} hasta {{hasta}}</b>
-        </h3>
+
+
+<!--***********************************************************************************-->
+
+
+<div class="row justify-content-center" *ngIf="nombre && apellido">
+    <div class="col-10 align-self-center; no-printme" style="margin-block-end: 20px">
+        <h5 class="text-center">
+            <b>Lista de registros de {{nombre}} {{apellido}} desde {{desde}} hasta {{hasta}} </b>
+        </h5>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover;  justify-content-center" *ngIf="nombre && apellido">
+    <table class="table table-hover; no-printme ;justify-content-center" *ngIf="nombre && apellido">
         <thead>
             <tr>
                 <th scope="col">N°</th>
                 <th scope="col">Código de barra</th>
+                <th scope="col">Envase</th>
                 <th scope="col">Linea</th>
                 <th scope="col">Lector</th>
                 <th scope="col">Puerto</th>
+                <th scope="col">Rut</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
                 <th scope="col">Verificado</th>
                 <th scope="col">A tiempo</th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody>
-            <tr
-                *ngFor="let produccion of produccionColaborador  | paginate: {itemsPerPage: 10, currentPage:p}; let i = index">
+            <tr *ngFor="let produccion of produccionColaborador  | paginate: {itemsPerPage: 10, currentPage:p}; let i = index">
                 <th scope="row">{{i+1}}</th>
                 <td>{{produccion.codigo_de_barra}}</td>
+                <td>{{produccion.envase_caja}}</td>
                 <td>{{produccion.nombre_linea}}</td>
                 <td>{{produccion.nombre_lector}}</td>
                 <td>{{produccion.ip_lector}}</td>
+                <td>{{produccion.rut_usuario}}</td>
                 <td>{{produccion.nombre_usuario}}</td>
                 <td>{{produccion.apellido_usuario}}</td>
                 <td>{{produccion.fecha_sellado}}</td>
+                <td>{{produccion.hora_sellado}}</td>
                 <td>
-                    <div *ngIf="produccion.is_verificado else caca"> si</div>
-                    <ng-template #caca> no</ng-template>
+                    <div *ngIf="produccion.is_verificado else verified"> si</div>
+                    <ng-template #verified> no</ng-template>
                 </td>
                 <td>
-                    <div *ngIf="produccion.is_before_time else caca2"> si</div>
-                    <ng-template #caca2> no</ng-template>
+                    <div *ngIf="produccion.is_before_time else to_time"> si</div>
+                    <ng-template #to_time> no</ng-template>
                 </td>
                 <td>
                     <button class="btn btn-primary text-white mr-1" (click)="onEditar(produccion);open(mymodaleditar)">
@@ -167,7 +197,7 @@
 <!--modal editar-->
 <ng-template #mymodaleditar let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Editar registro de colabordor</h4>
+        <h4 class="modal-title" id="modal-basic-title">Editar registro de colaborador</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">×</span>
         </button>
@@ -203,20 +233,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<label for="patentelabel"><b>Verificado:</b></label>
-                <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="verificado" name="nombre" id="nombre" class="form-control" placeholder="{{currentSeguimientoSelected.is_verificado}}" required>
-                </div>
-                <label for="patentelabel"><b>a tiempo:</b></label>
-                <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="a_tiempo" name="nombre" id="nombre" class="form-control" placeholder="{{currentSeguimientoSelected.is_before_time}}" required>
-                </div>
-                
-                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
-                    <div *ngIf="nombre.errors.required">
-                        Nombre de calibrador es obligatorio
-                    </div>
-                </div>-->
             </div>
         </form>
         <div class="modal-footer">

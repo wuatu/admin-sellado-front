@@ -30,6 +30,7 @@ export class ProduccionColaboradorComponent implements OnInit {
   a_tiempo: number;
     
   produccionColaborador: any = [];
+  produccionNumberBoxByType: any = [];
   produccionColaboradorNumberBox: any = [];
   produccionColaboradorExportarExcel: any = [];
   //calendar
@@ -37,8 +38,8 @@ export class ProduccionColaboradorComponent implements OnInit {
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   isBusqueda = false;
-  desde: string = "";
-  hasta: string = "";
+  desde: string = " ";
+  hasta: string = " ";
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
 
@@ -52,7 +53,7 @@ export class ProduccionColaboradorComponent implements OnInit {
   dateStartSearch: string;
   dateFinishSearch: string;
 
-  nombreExcel = 'Produccion Usuario';
+  nombreExcel = 'Produccion_Colaborador';
   nombre: any;
   apellido: any;
 
@@ -100,7 +101,11 @@ export class ProduccionColaboradorComponent implements OnInit {
     window.print();
   }
   buscarUsuarioPorRut(){
-    this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
+    if(this.rutBusqueda == null || this.desde == " " || this.hasta == " " ){
+      this.toastr.error('se debe ingresar rut y fecha.', 'Oops');
+      return;
+    }
+    
     console.log(this.rutBusqueda + this.desde + this.hasta);
     this.produccionColaborador = [];
     this.produccionColaboradorExportarExcel = [];
@@ -123,7 +128,7 @@ export class ProduccionColaboradorComponent implements OnInit {
           }else{
             newIsTime = "no";
           }
-          let exportExcelProduccion = new ProduccionColaboradorExcel(element.codigo_de_barra, element.nombre_linea, element.nombre_lector, element.ip_lector, element.nombre_usuario, element.apellido_usuario, element.fecha_sellado, newVerificado, newIsTime);
+          let exportExcelProduccion = new ProduccionColaboradorExcel(element.codigo_de_barra, element.envase_caja,element.nombre_linea, element.nombre_lector, element.ip_lector, element.nombre_usuario, element.apellido_usuario, element.rut_usuario ,element.fecha_sellado, element.hora_sellado,newVerificado, newIsTime);
           this.produccionColaboradorExportarExcel.push(exportExcelProduccion);
           if(bandera == 0){
             this.nombre = element.nombre_usuario;
@@ -144,11 +149,12 @@ export class ProduccionColaboradorComponent implements OnInit {
       }
     );
   }
-  produccionSearchNumberBox(rut: string, fechaDesde: string, fechaHasta:string){
+  produccionSearchNumberBox(){
     this.produccionColaboradorNumberBox = [];
-    this.produccionColaboradorService.getProduccionSearchNumberBox(rut, fechaDesde, fechaHasta).subscribe(
+    this.produccionColaboradorService.getProduccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res=>{
         console.log(res);
+        this.toastr.success('Operación satisfactoria', 'cajas Obtenidas');
         this.produccionColaboradorNumberBox=res;
         console.log("backend!!!!");
         console.log(this.produccionColaboradorNumberBox);
@@ -157,25 +163,49 @@ export class ProduccionColaboradorComponent implements OnInit {
       },
       err=>{
         console.log(err);
-        this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
+        //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
+      }
+    );
+  }
+  searchNumberBoxByType(){
+    this.produccionNumberBoxByType = [];
+    this.produccionColaboradorService.getNumberBoxByType(this.rutBusqueda, this.desde, this.hasta).subscribe(
+      res=>{
+        console.log(res);
+        this.toastr.success('Operación satisfactoria', 'cajas por tipo Obtenidas');
+        this.produccionNumberBoxByType=res;
+        console.log("este es el numero de cajas por tipo ");
+        console.log(this.produccionNumberBoxByType);
+        
+      },
+      err=>{
+        console.log(err);
+        //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
       }
     );
   }
 
   exportarArchivoExcel(){
+    let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
+    this.produccionNumberBoxByType.push(cajas);
+    console.log(cajas);
+    
     // Se convierte el arreglo con los usuarios en linea 
      var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-
+     var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
      console.log(jsonArray);
+     console.log(jsonArray2);
      //se convierte el Json a xlsx en formato workSheet
      const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-
+     const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
      /* genera el workbook y agrega el worksheet */
      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+     XLSX.utils.book_append_sheet(wb, ws, 'Registro de producción');
+     XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
 
      /* Guarda el archivo */
-     XLSX.writeFile(wb, this.nombreExcel+(new Date()).toISOString()+".xls");
+     let dateDownload : string = new Date().toISOString();
+     XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
   }
   
   cajasTotales(cajas: any []){
@@ -254,7 +284,7 @@ export class ProduccionColaboradorComponent implements OnInit {
       this.selectedOptionToTime = "si";
     }else{
       this.SearchTextToTime = "no";
-      this.selectedOptionToTime = "si";
+      this.selectedOptionToTime = "no";
     }
   }
 
@@ -280,7 +310,7 @@ export class ProduccionColaboradorComponent implements OnInit {
     //this.SearchTextVerified = "Seleccionar opción";  
     //this.SearchTextToTime = "Seleccionar opción";
     if(this.verificado != this.currentSeguimientoSelected.is_verificado || this.a_tiempo != this.currentSeguimientoSelected.is_before_time){
-      let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador,this.currentSeguimientoSelected.nombre_calibrador,this.currentSeguimientoSelected.id_linea,this.currentSeguimientoSelected.nombre_linea ,this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja,this.currentSeguimientoSelected.variedad_caja ,this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.fecha_validacion , this.verificado, this.a_tiempo );
+      let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador,this.currentSeguimientoSelected.nombre_calibrador,this.currentSeguimientoSelected.id_linea,this.currentSeguimientoSelected.nombre_linea ,this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja,this.currentSeguimientoSelected.variedad_caja ,this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_sellado,this.currentSeguimientoSelected.fecha_validacion , this.currentSeguimientoSelected.hora_validacion ,this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
       console.log(registroProduccionColaborador);
       this.produccionColaboradorService.updateRegistroProduccionUsuario(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
@@ -298,6 +328,7 @@ export class ProduccionColaboradorComponent implements OnInit {
       this.toastr.error('Los valores seleccionados ya estan registrados', 'Oops',);
     }
   }
+  
 
   
 

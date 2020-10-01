@@ -27,6 +27,9 @@ import { TurnoComponent } from './components/turno/turno.component';
 import { CajaComponent } from './components/caja/caja.component';
 import { SeguimientoDeCajasComponent } from './components/seguimiento-de-cajas/seguimiento-de-cajas.component';
 import { ProduccionColaboradorComponent } from './components/produccion-colaborador/produccion-colaborador.component'; 
+import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
+import { ProduccionPorCalibradorComponent } from './components/produccion-por-calibrador/produccion-por-calibrador.component';
+
 //paginador
 import {NgxPaginationModule} from 'ngx-pagination';
 //Gráficos
@@ -49,7 +52,9 @@ import { ChartsModule } from 'ng2-charts';
     CajaComponent,
     SeguimientoDeCajasComponent,
     ProduccionColaboradorComponent,
-    TurnoComponent
+    TurnoComponent,
+    ProduccionPorLineaComponent,
+    ProduccionPorCalibradorComponent
   ],
   imports: [
     BrowserModule,

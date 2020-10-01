@@ -31,6 +31,8 @@ export class UsuarioEnLineaComponent implements OnInit {
   apellidoUsuario:string;
   fechaInicio:string;
   fechaTermino:string;
+  horaInicio:string;
+  horaTermino:string;
   
   currentUsuarioEnLineaSelected: UsuarioEnLinea;  
 
@@ -69,11 +71,12 @@ export class UsuarioEnLineaComponent implements OnInit {
   nombreLinea: string ="lineaPrueba";
   nombreCalibrador: string = "calibradorPrueba";
 
-  nombreExcel = 'UsuariosEnLinea';
+  nombreExcel = 'ColaboradoresEnLinea';
   
   exportUsuarioEnLineaArray: any = [];
   exportUsuarioEnLineaArrayAux: any = [];
   dateSave: string;
+  HourSave: string;
   timeStart: string;
   dateStart: string;
   timeFinish: string = " ";
@@ -165,13 +168,13 @@ export class UsuarioEnLineaComponent implements OnInit {
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
         for (let element of this.usuariosEnLinea){
           
-            this.timeStart = element.fecha_inicio;
-            this.timeStart = this.timeStart.substring(11,19);
+            this.timeStart = element.hora_inicio;
+            //this.timeStart = this.timeStart.substring(11,19);
             this.dateStart = element.fecha_inicio;
-            this.dateStart = this.dateStart.substring(0,10);
-            console.log(element.fecha_inicio);
-            console.log(new Date(element.fecha_inicio));
-            console.log(new Date(element.fecha_inicio).toString());
+            //this.dateStart = this.dateStart.substring(0,10);
+            //console.log(element.fecha_inicio);
+            //console.log(new Date(element.fecha_inicio));
+            //console.log(new Date(element.fecha_inicio).toString());
             let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
             this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
             console.log(this.rutBusqueda);
@@ -203,10 +206,11 @@ export class UsuarioEnLineaComponent implements OnInit {
 
      /* genera el workbook y agrega el worksheet */
      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+     XLSX.utils.book_append_sheet(wb, ws, 'colaboradores en línea');
 
      /* Guarda el archivo */
-     XLSX.writeFile(wb, this.nombreExcel+(new Date()).toISOString()+".xls");
+     let fecha = (new Date()).toISOString();
+     XLSX.writeFile(wb, this.nombreExcel+"_"+ fecha.substring(0,10)+".xls");
   }
 
   changeSelectedCalibrador(newSelected: any) { 
@@ -221,10 +225,11 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   agregarUsuarioEnLinea(){
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd
-    this.dateSave = this.fecha();
+    this.dateSave = this.fecha().substring(0,10);
+    this.HourSave = this.fecha().substring(11,19);
     //this.dateSave = this.dateSave.substring(11,16)+" "+this.dateSave.substring(0,10);
     //se crea un usuario en linea para exportar
-    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, "", this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre);
+    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, this.HourSave, "","" , this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre);
     console.log(usuarioEnLinea);
     this.usuarioEnLineaService.saveUsuarioEnLinea(usuarioEnLinea).subscribe(
       res => {
