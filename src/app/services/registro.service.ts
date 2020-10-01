@@ -28,7 +28,7 @@ export class RegistroService {
   creaRegistro(mensajeRegistro:string){
     const user = JSON.parse(localStorage.getItem('USER'));
     let fecha = this.getFecha();
-    let registro=new Registro(user.id,user.nombre,user.apellido,mensajeRegistro, fecha.substring(0,10), fecha.substring(11,19));
+    let registro=new Registro(null,user.id,user.nombre,user.apellido,mensajeRegistro, fecha.substring(0,10), fecha.substring(11,19));
     this.postRegistro(registro).subscribe(
       res=>{
         console.log("Registro almacenado satisfactoriamente");
