@@ -7,31 +7,35 @@
             </div>
         </div>
         <hr>
-        <div class="col-12">
+        <div class="col-12 " style="margin-left: 60px;">
             <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
                 <div class="form-row">
-                    <div class="col-xs-2 my-1  ">
+                    <div class="col-lg-4 col-md-12 align-self-start  ">
                         <div ngbDropdown>
-                            <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle>{{SearchText}}</button>
+                            <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{SearchText}}</button>
                             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                                 <button class="dropdown-item" *ngFor="let search of dropDownSearch" (click)="changeSelectedSearch(search)">{{search.nombre}}</button>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3 my-1">
-                        <input type="text" #envase='ngModel' [(ngModel)]="toSearch" name="rut" id="rut" class="form-control" placeholder="Criterio">
+                    <div class="col-lg-4 col-md-12  align-self-start ">
+                        <div ngbDropdown>
+                            <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="width: 210px">{{selectedCalibradorText}}</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                                <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-2 my-1">
+                    <div class="col-lg-4 col-md-12  align-self-start ">
+                        <div ngbDropdown>
+                            <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle style="width: 190px">{{selectedLineaText}}</button>
+                            <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                                <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
+                            </div>
+                        </div>
+                    </div>
 
-                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
-                    </div>
-                    <div class="col-sm-2 my-1">
 
-                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
-                    </div>
-                    <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary btn-sm form-control" (click)="buscarPorCriterio()" type="submit " style="margin-top: 2px">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
-                    </div>
                 </div>
                 <div class="col">
                     <div class="form-group hidden">
@@ -48,36 +52,40 @@
             </form>
         </div>
         <hr>
-
         <br>
         <div class="row justify-content-center">
-            <div class="col-md-4  align-self-end text-left ">
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="width: 200px">{{selectedCalibradorText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                    </div>
-                </div>
+            <div class="col-lg-3 col-md-12">
+                <input type="text" #envase='ngModel' [(ngModel)]="toSearch" name="rut" id="rut" class="form-control" placeholder="Criterio">
             </div>
-            <div class="col-md-4  align-self-end text-left ">
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle style="width: 180px">{{selectedLineaText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
-                    </div>
-                </div>
+            <div class="col-lg-3 col-md-12">
+                <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <button class="ml-1 btn btn-primary btn-sm form-control" (click)="buscarPorCriterio()" type="submit " style="margin-top: 2px">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
             </div>
         </div>
         <hr>
     </div>
     <br>
-    <div class="row " *ngIf="selectedCalibradorObject && selectedLineaObject || selectedSearch">
+    <div class="col-md-12  align-self-end p-20" style="margin-bottom: 20px;">
+        <div class="text-right" *ngIf="nombreColaborador">
+            <button class="btn btn-info text-left "><i class="fas fa-box"></i>
+                Total de {{toSearch}} selladas: {{numBox}}
+            </button>
+        </div>
+    </div>
+
+
+    <div class="row col-lg-12" *ngIf="nombreColaborador">
         <div class="col-md-12 ">
             <h4>Lista de registros de cajas</h4>
         </div>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject || selectedSearch">
+    <table class="table table-hover" *ngIf="nombreColaborador ">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -111,6 +119,6 @@
         </tbody>
     </table>
 </div>
-<div class="pagination" *ngIf="selectedCalibradorObject && selectedLineaObject || selectedSearch">
+<div class="pagination" *ngIf="nombreColaborador">
     <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
 </div>

@@ -5,6 +5,9 @@ import { Administrador } from 'src/app/models/administrador';
 import { ToastrService } from 'ngx-toastr';
 import { AdministradorService } from 'src/app/services/administrador.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { RegistroService } from '../../services/registro.service';
+
+
 
 @Component({
   selector: 'app-administrador',
@@ -14,7 +17,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class AdministradorComponent implements OnInit {
   closeResult = '';
   administradores: any;
-  currentAdministradorSelected: any
+  currentAdministradorSelected: any;
+  
 
   addId:string;
   addRut: string;
@@ -29,7 +33,8 @@ export class AdministradorComponent implements OnInit {
     private administradorService: AdministradorService,
     private authService: AuthService,
     //servicio toast ventana emergente que sirve para mostrar información al usuario
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private registroService: RegistroService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
@@ -65,6 +70,7 @@ export class AdministradorComponent implements OnInit {
     this.administradorService.saveAdministrador(administrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
+        this.registroService.creaRegistro("Se ha creado un administrador, rut "+administrador.rut+" y nombre: "+administrador.nombre+" "+administrador.apellido);
         this.listarAdministradores();
         this.addRut = null;
         this.addNombre=null;
@@ -108,6 +114,7 @@ export class AdministradorComponent implements OnInit {
     this.administradorService.updateAdministrador(administrador.id, administrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea editada');
+        this.registroService.creaRegistro("Se ha editado un administrador, id: "+administrador.id+", rut: "+administrador.rut+"y nombre "+administrador.nombre+" "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
         this.currentAdministradorSelected = null;
@@ -124,6 +131,8 @@ export class AdministradorComponent implements OnInit {
     );
   }
 
+  
+
   //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto administrador clickeado a variable global currentAdministradorSelected y abrir el modal
   onEliminar(administrador: Administrador, modal) {
     this.currentAdministradorSelected = administrador;
@@ -136,6 +145,7 @@ export class AdministradorComponent implements OnInit {
     this.administradorService.deleteAdministrador(administrador.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea eliminada');
+        this.registroService.creaRegistro("Se ha elimidado un administrador, id:  "+administrador.id+", rut; "+administrador.rut+" y nombre: "+administrador.nombre + " "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
       },
@@ -154,6 +164,8 @@ export class AdministradorComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
+  
 
   //metodo que sirve para saber la razon por la cual un modal fue cerrado
   private getDismissReason(reason: any): string {    

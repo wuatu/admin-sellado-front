@@ -17,6 +17,7 @@ import { NgForm } from '@angular/forms';
 import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-excel';
 
 import * as XLSX from 'xlsx'; 
+import { RegistroService } from '../../services/registro.service';
 
 @Component({
   selector: 'app-produccion-por-calibrador',
@@ -81,7 +82,8 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     private calibradorService:CalibradorService,
     private produccionPorCalibradorService: ProduccionPorCalibradorService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private registroService: RegistroService
     ) { }
 
   ngOnInit() {
@@ -210,6 +212,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
       this.produccionPorCalibradorService.updateRegistroProduccionCaliper(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Registro editado');
+          this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: "+registroProduccionColaborador.id);
           console.log(res);
           this.buscarRegistroCalibrador();
           this.currentSeguimientoSelected = null;

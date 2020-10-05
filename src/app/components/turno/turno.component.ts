@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./turno.component.css']
 })
 export class TurnoComponent implements OnInit {
+  pageOfItems: Array<any>;
+  p: number = 1;
 
   fromDate: NgbDate;
   toDate: NgbDate | null = null;

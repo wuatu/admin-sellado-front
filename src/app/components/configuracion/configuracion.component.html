@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-12 ">
+        <div class="row justify-content-center">
+            <div class="col-12" style="margin-block-end: 20px; margin-top: 20px;">
+                <h1 class="text-center"><b>Configuración</b></h1>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-12 justify-content-start" style="margin-top: 20px;">
+                <h6 class="text-left">Configurar tiempo máximo de espera</h6>
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <input type="text" #maxTime='ngModel' [(ngModel)]="minute" name="minute" id="minute" class="form-control" placeholder="{{maxWaitTime.max_wait_time}}">
+            </div>
+            <div *ngIf="maxTime.invalid && (maxTime.dirty || maxTime.touched)" class="alert alert-danger">
+                <div *ngIf="maxTime.errors.required">
+                    El tiempo es obligatorio
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-12">
+                <button class="ml-1 btn btn-primary btn-sm form-control" (click)="updateMinutes()" type="submit " style="margin-top: 2px">Guardar  <i class="fas fa-save" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>

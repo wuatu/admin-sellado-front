@@ -72,8 +72,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutUsuario" name="rut" id="rut" class="form-control" placeholder="Rut"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutUsuario" name="rut" id="rut" class="form-control" placeholder="Rut" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rut.invalid && (nombre.dirty || rut.touched)" class="alert alert-danger">
@@ -85,8 +84,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Nombre:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreUsuario" name="nombre" id="nombre" class="form-control" placeholder="Nombre"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreUsuario" name="nombre" id="nombre" class="form-control" placeholder="Nombre" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -98,8 +96,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Apellido:</b></label>
                 <div class="input-group">
-                    <input type="text" #apellido='ngModel' [(ngModel)]="apellidoUsuario" name="apellido" id="apellido" class="form-control" placeholder="Apellido"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #apellido='ngModel' [(ngModel)]="apellidoUsuario" name="apellido" id="apellido" class="form-control" placeholder="Apellido" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
@@ -111,8 +108,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rfid:</b></label>
                 <div class="input-group">
-                    <input type="text" #rfid='ngModel' [(ngModel)]="rfidUsuario" name="rfid" id="rfid" class="form-control" placeholder="Rfid"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rfid='ngModel' [(ngModel)]="rfidUsuario" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rfid.invalid && (rfid.dirty || rfid.touched)" class="alert alert-danger">
@@ -121,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </form>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary" (click)="agregarUsuario(myform);modal.close('Save click')">Agregar</button>
@@ -147,8 +143,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="currentUsuarioSelected.rut" name="rut" id="rut" class="form-control" placeholder="Rut"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rut='ngModel' [(ngModel)]="currentUsuarioSelected.rut" name="rut" id="rut" class="form-control" placeholder="Rut" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rut.invalid && (nombre.dirty || rut.touched)" class="alert alert-danger">
@@ -160,8 +155,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Nombre:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentUsuarioSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentUsuarioSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -173,8 +167,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Apellido:</b></label>
                 <div class="input-group">
-                    <input type="text" #apellido='ngModel' [(ngModel)]="currentUsuarioSelected.apellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #apellido='ngModel' [(ngModel)]="currentUsuarioSelected.apellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
@@ -186,8 +179,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rfid:</b></label>
                 <div class="input-group">
-                    <input type="text" #rfid='ngModel' [(ngModel)]="currentUsuarioSelected.rfid" name="rfid" id="rfid" class="form-control" placeholder="Rfid"
-                    class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rfid='ngModel' [(ngModel)]="currentUsuarioSelected.rfid" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rfid.invalid && (rfid.dirty || rfid.touched)" class="alert alert-danger">
@@ -195,10 +187,10 @@
                         Rfid de usuario es obligatorio
                     </div>
                 </div>
-            </div>           
+            </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarLector(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" class="btn btn-primary" (click)="editarUsuario(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

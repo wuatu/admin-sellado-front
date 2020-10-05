@@ -17,6 +17,7 @@ import { ProduccionColaboradorComponent } from './components/produccion-colabora
 import { TurnoComponent } from './components/turno/turno.component';
 import { ProduccionPorCalibradorComponent } from './components/produccion-por-calibrador/produccion-por-calibrador.component';
 import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
+import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'produccioncolaborador', component: ProduccionColaboradorComponent, canActivate: [AuthGuard] },
   { path: 'produccionporcalibrador', component: ProduccionPorCalibradorComponent, canActivate: [AuthGuard] },
   { path: 'produccionporlinea', component: ProduccionPorLineaComponent, canActivate: [AuthGuard] },
+  { path: 'configuracion', component: ConfiguracionComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

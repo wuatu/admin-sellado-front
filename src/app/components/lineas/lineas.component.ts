@@ -6,6 +6,8 @@ import { Linea } from 'src/app/models/linea';
 import { ToastrService } from 'ngx-toastr';
 import { CalibradorService } from 'src/app/services/calibrador.service';
 import { Calibrador } from 'src/app/models/calibrador';
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-lineas',
@@ -31,7 +33,8 @@ export class LineasComponent implements OnInit {
     //servicio toast ventana emergente que sirve para mostrar información al usuario
     private toastr: ToastrService,
     //servicio de calibrador
-    private calibradorService:CalibradorService
+    private calibradorService:CalibradorService,
+    private registroService: RegistroService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
@@ -84,6 +87,7 @@ export class LineasComponent implements OnInit {
     this.lineaService.saveLinea(linea).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
+        this.registroService.creaRegistro("Se ha creado una línea, nombre: "+ this.nombreLineaAdded+", calibradora: "+this.selectedCalibradorObject.nombre);
         this.listarLineas();
         this.nombreLineaAdded=null;
       },
@@ -127,6 +131,7 @@ export class LineasComponent implements OnInit {
     this.lineaService.updateLinea(linea.id, linea).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea editada');
+        this.registroService.creaRegistro("Se ha editado una linea, id: "+ linea.id+", calibradora: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarLineas();
         this.currentLineaSelected = null;
@@ -150,6 +155,7 @@ export class LineasComponent implements OnInit {
     this.lineaService.deleteLinea(linea.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea eliminada');
+        this.registroService.creaRegistro("Se ha eliminado una linea, id: "+ linea.id+", calibradora: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarLineas();
       },

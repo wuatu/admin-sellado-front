@@ -148,11 +148,12 @@
         </div>
         <hr>
     </div>
+    <div class="pagination justify-content-center ; no-printme " *ngIf="nombre && apellido">
+        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+    </div>
 </div>
 
-<div class="pagination justify-content-center ; no-printme " *ngIf="nombre && apellido">
-    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
-</div>
+
 
 <!--modal editar-->
 <ng-template #mymodaleditar let-modal>

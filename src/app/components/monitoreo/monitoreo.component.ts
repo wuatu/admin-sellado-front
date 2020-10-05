@@ -6,6 +6,8 @@ import { AdministradorService } from 'src/app/services/administrador.service';
 import { TurnoService } from 'src/app/services/turno.service';
 import { Turno } from 'src/app/models/turno';
 import { formatDate } from '@angular/common';
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-monitoreo',
@@ -41,6 +43,7 @@ export class MonitoreoComponent implements OnInit {
     private toastr: ToastrService,
     private administradorService: AdministradorService,
     private turnoService: TurnoService,
+    private registroService: RegistroService,
     private authService: AuthService,
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
@@ -136,11 +139,12 @@ export class MonitoreoComponent implements OnInit {
         console.log(administrador.id);
         let turno = new Turno();
         let fecha = this.fecha();
-        turno.fechaApertura(null, fecha.substring(0,10), fecha.substring(11,19) ,administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "");
+        turno.fechaApertura(null, fecha.substring(0,10),fecha.substring(11,19) ,administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "");
         this.turnoService.saveTurno(turno).subscribe(
           res => {
             this.sesionIniciada();
             this.toastr.success("Turno iniciado correctamente");
+            this.registroService.creaRegistro("Turno iniciado");
           },
           err => {
             this.toastr.error('Error al iniciar turno', 'Error');
@@ -159,12 +163,16 @@ export class MonitoreoComponent implements OnInit {
     this.botonIniciarTurnoClass = "btn-danger"
     this.botonIniciarTurnoText = "Cerrar Turno";
     this.turnoIniciado = true;
+    this.IniciarCerrar = "Cerrar";
+    this.iniciarCerrar = "cerrar";
   }
 
   sesionCerrada() {
     this.botonIniciarTurnoClass = "btn-primary"
     this.botonIniciarTurnoText = "Iniciar Turno";
     this.turnoIniciado = false;
+    this.IniciarCerrar = "Iniciar";
+    this.iniciarCerrar = "iniciar";
   }
 
   private cerrarTurno() {
@@ -182,6 +190,7 @@ export class MonitoreoComponent implements OnInit {
           res => {
             this.sesionCerrada();
             this.toastr.success("Turno cerrado correctamente");
+            this.registroService.creaRegistro("Turno cerrado");
           },
           err => {
             this.toastr.error('Error al cerrar turno', 'Error');

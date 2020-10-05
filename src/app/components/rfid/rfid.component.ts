@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CalibradorService } from 'src/app/services/calibrador.service';
 import { Calibrador } from 'src/app/models/calibrador';
 import { LineaService } from 'src/app/services/linea.service';
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-rfids',
@@ -43,7 +45,8 @@ export class RfidComponent implements OnInit {
     private toastr: ToastrService,
     //servicio de calibrador
     private calibradorService:CalibradorService,
-    private lineaService:LineaService
+    private lineaService:LineaService,
+    private registroService: RegistroService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
@@ -121,7 +124,8 @@ export class RfidComponent implements OnInit {
     let rfid = new Rfid(null, this.nombreRfidAdded,this.ipRfidAdded,this.selectedLineaObject.id);
     this.rfidService.saveRfid(rfid).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea agregada');
+        this.toastr.success('Operación satisfactoria', 'rfid agregado');
+        this.registroService.creaRegistro("Se ha creado un rfid, nombre: "+this.nombreRfidAdded+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrado);
         this.listarRfids();
         this.nombreRfidAdded=null;
         this.ipRfidAdded=null;
@@ -161,7 +165,8 @@ export class RfidComponent implements OnInit {
     }    
     this.rfidService.updateRfid(rfid.id, rfid).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea editada');
+        this.toastr.success('Operación satisfactoria', 'rfid editado');
+        this.registroService.creaRegistro("Se ha editado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
         console.log(res);
         this.listarRfids();
         this.currentRfidSelected = null;
@@ -185,7 +190,8 @@ export class RfidComponent implements OnInit {
   eliminarRfid(rfid: Rfid) {
     this.rfidService.deleteRfid(rfid.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea eliminada');
+        this.toastr.success('Operación satisfactoria', 'rfid eliminado');
+        this.registroService.creaRegistro("Se ha un rfid un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
         console.log(res);
         this.listarRfids();
       },

@@ -43,52 +43,76 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <h4 class="text-center">Lista de turnos</h4>
-                </div>
-            </div>
-
+        </div>
+        <div class="row">
             <div class="col-12">
+                <h4 class="text-left">Lista de turnos</h4>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
                 <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
                     <!--Tabla de contenido-->
-
-
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">N°</th>
-                                <th scope="col">Fecha apertura</th>
-                                <th scope="col">Nombre apertura</th>
-                                <th scope="col">Apellido apertura</th>
+                                <th scope="col">Fecha inicio</th>
+                                <th scope="col">Hora inicio</th>
+                                <th scope="col">Nombre inicio</th>
+                                <th scope="col">Apellido inicio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let turno of turnos | paginate: {itemsPerPage: 10, currentPage:p} ; let i = index">
+                                <th scope="row">{{i+1}}</th>
+                                <td>{{turno.fecha_apertura}}</td>
+                                <td>{{turno.hora_apertura}}</td>
+                                <td>{{turno.nombre_administrador_apertura}}</td>
+                                <td>{{turno.apellido_administrador_apertura}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="exportarArchivoExcel()">
+                    <!--Tabla de contenido-->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
                                 <th scope="col">Fecha cierre</th>
+                                <th scope="col">Hora cierre</th>
                                 <th scope="col">Nombre cierre</th>
                                 <th scope="col">Apellido cierre</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let turno of turnos; let i = index">
-                                <th scope="row">{{i+1}}</th>
-                                <td>{{ turno.fecha_apertura}} {{turno.hora_apertura}}</td>
-                                <td>{{turno.nombre_administrador_apertura}}</td>
-                                <td>{{turno.apellido_administrador_apertura}}</td>
-                                <td>{{turno.fecha_cierre}} {{turno.hora_cierre}}</td>
+                            <tr *ngFor="let turno of turnos | paginate: {itemsPerPage: 10, currentPage:p} ; let i = index">
+                                <td>{{turno.fecha_cierre}}</td>
+                                <td>{{turno.hora_cierre}}</td>
                                 <td>{{turno.nombre_administrador_cierre}}</td>
                                 <td>{{turno.apellido_administrador_cierre}}</td>
                             </tr>
                         </tbody>
                     </table>
-
-
-
-                    <div class="input-group-append" style="float:right">
-                        <button class="ml-1 btn btn-primary" type="submit "><i class="fas fa-download"></i> Exportar a excel</button>
-                    </div>
-
                 </form>
             </div>
+        </div>
 
+    </div>
+    <div class="col-md-12  align-self-end ; no-printme">
+        <div class="text-right">
+            <button class="btn btn-primary  text-right" style="margin: 10px;" (click)="exportarArchivoExcel()"><i class="fas fa-download"></i>
+                Exportar a excel
+            </button>
         </div>
     </div>
+    <!--<div class="input-group-append align-self-end" style="float:right">
+        <button class="ml-1 btn btn-primary" (click)="exportarArchivoExcel()" type="submit "><i class="fas fa-download"></i> Exportar a excel</button>
+    </div>-->
+</div>
+<div class="pagination ">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
 </div>
