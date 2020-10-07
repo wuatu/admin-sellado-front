@@ -7,42 +7,6 @@
             </div>
         </div>
         <hr>
-        <div class="col-12">
-            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
-                <div class="form-row">
-
-                    <div class="col-sm-3 my-1">
-                        <label for="Desde:">Rut:</label>
-                        <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Rut colaborador">
-                    </div>
-                    <div class="col-sm-2 my-1">
-                        <label for="Desde:">Desde:</label>
-                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
-                    </div>
-                    <div class="col-sm-2 my-1">
-                        <label for="">Hasta:</label>
-                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
-                    </div>
-                    <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarUsuarioPorRut()" type="submit " style="margin-top: 33px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group hidden">
-                        <div class="input-group">
-                            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
-                            <ng-template #t let-date let-focused="focused">
-                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                                    {{ date.day }}
-                                </span>
-                            </ng-template>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <hr>
         <div class="row justify-content-center">
             <div class="col-sm-4  align-self-end text-left ">
                 <div ngbDropdown>
@@ -60,23 +24,60 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 align-self-end ">
-                <button class="btn btn-primary  text-right" (click)="open(modal_agregar_usuario)"><i
-                        class="fa fa-plus-circle"></i>
-                    Agregar colaborador a línea
-                </button>
-            </div>
         </div>
         <hr>
+        <div class="col-12">
+            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+                <div class="form-row" style="margin-left: 120px;">
+
+                    <div class="col-sm-3 my-1">
+                        <!--<label for="Desde:">Rut:</label>-->
+                        <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Rut colaborador">
+                    </div>
+                    <div class="col-sm-2 my-1">
+
+                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
+                    </div>
+                    <div class="col-sm-2 my-1">
+
+                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
+                    </div>
+                    <div class="col-auto my-1">
+                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarUsuarioPorRut()" type="submit " style="margin-top: 3px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group hidden">
+                        <div class="input-group">
+                            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <br>
+    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray">
+        <div class="text-right">
+            <button class="btn btn-primary " (click)="open(modal_agregar_usuario)"><i class="fa fa-plus-circle"></i>
+                Agregar colaborador a línea
+            </button>
+        </div>
     </div>
     <br>
     <div class="row">
-        <div class="col-md-12" *ngIf="selectedCalibradorObject && selectedLineaObject" style="margin: 20px;">
+        <div class="col-md-12" *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray" style="margin: 20px;">
             <h4>Lista de colaboradores en línea de sellado</h4>
         </div>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject" id="excel-table">
+    <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray" id="excel-table">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -102,7 +103,7 @@
             </tr>
         </tbody>
     </table>
-    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject">
+    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray">
         <div class="text-right">
             <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fas fa-download"></i>
                 Exportar a excel

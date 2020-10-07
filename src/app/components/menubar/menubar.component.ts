@@ -12,8 +12,8 @@ declare var name: any;
   styleUrls: ['./menubar.component.css']
 })
 export class MenubarComponent implements OnInit {
-  superAdmin = false;
-  admin: Administrador = JSON.parse(localStorage.getItem('USER'));
+  rol = 0;
+  admin: Administrador ;
   isCollapseProduccion = false;
   isCollapseAdministrar = true;
   isCollapseRegistros = true;
@@ -28,9 +28,15 @@ export class MenubarComponent implements OnInit {
 
   ngOnInit() {
     new name();
+    this.admin = JSON.parse(localStorage.getItem('USER'));
     console.log(this.admin);
-    if (this.admin.superAdmin == true) {
-      this.superAdmin = true;
+    console.log(" la wea mala wn "+ this.admin.nombre, this.admin.apellido, this.admin.rut, this.admin.rol);
+    if (this.admin.rol == 1) {
+      console.log(" la wea buena wn "+ this.rol);
+      this.rol = 1;
+      console.log(" la wea buena wn "+ this.rol);
+    }else if(this.admin.rol == 2){
+      this.rol = 2;
     }
   }
 

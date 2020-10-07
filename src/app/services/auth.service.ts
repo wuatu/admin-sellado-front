@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
 import { JwtResponse } from '../models/jwt-response';
 import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { Administrador } from '../models/administrador';
+import { AdministradorService } from './administrador.service';
+
 
 @Injectable({
   providedIn: 'root'  // <- ADD THIS
@@ -15,7 +17,12 @@ export class AuthService {
   private token: string;
   private _isLoggedIn = new Subject<boolean>();
   isLoggedIn = false;
-  constructor(private httpClient: HttpClient) { }
+  
+  admin: any;
+  
+  constructor(private httpClient: HttpClient, private administradorService:AdministradorService) { }
+
+  
 
   register(user: Administrador): Observable<JwtResponse> {
     return this.httpClient.post<JwtResponse>(`${this.AUTH_SERVER}/register`,
@@ -34,6 +41,24 @@ export class AuthService {
       user).pipe(tap(
         (res: JwtResponse) => {
           if (res) {
+            /*console.log(res);
+           
+            this.administradorService.getAdmin(user.rut).subscribe(
+              res2 => {
+                this.admin = res2;
+                res.dataUser.rol = this.admin.rol;
+                //guardar token
+                localStorage.setItem('USER', JSON.stringify(res.dataUser));
+                this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
+
+              },
+              err => {
+                
+              }
+            )*/
+            
+
+            
             console.log(res);
             //guardar token
             localStorage.setItem('USER', JSON.stringify(res.dataUser));

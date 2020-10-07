@@ -8,6 +8,8 @@ import { CalibradorService } from 'src/app/services/calibrador.service';
 import { LineaService } from 'src/app/services/linea.service';
 import { Linea } from 'src/app/models/Linea';
 import { Calibrador } from 'src/app/models/calibrador';
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-lectores',
@@ -41,17 +43,22 @@ export class LectoresComponent implements OnInit {
 
   selectedLectorObject:any;
 
+  rol:number;
+
   constructor(
     private modalService: NgbModal,
     private lineaService: LineaService,
     private toastr: ToastrService,
     private calibradorService:CalibradorService,
-    private lectorService:LectorService
+    private lectorService:LectorService,
+    private registroService: RegistroService
     ) {}
 
   ngOnInit() {
     this.listarCalibradores(); 
     //this.listarLineas();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   //metodo que lista las calibradores
@@ -161,6 +168,7 @@ export class LectoresComponent implements OnInit {
     this.lectorService.saveLector(lector).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Lector agregado');
+        this.registroService.creaRegistro("Se ha creado un lector, nombre: "+this.nombreLector);
         this.nombreLector = null;
         this.ipLector = null;
         this.listarLectores();
@@ -186,6 +194,7 @@ export class LectoresComponent implements OnInit {
     this.lectorService.deleteLector(lector.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Lector eliminado');
+        this.registroService.creaRegistro("Se ha eliminado un lector, id: "+ lector.id);
         console.log(res);
         this.listarLectores();
       },
@@ -202,11 +211,9 @@ export class LectoresComponent implements OnInit {
       res=>{
         this.selectedLineaObject=res;
         this.selectedLineaText=this.selectedLineaObject.nombre;
-        console.log("HOLA...");
       },
       err=>{
         console.log(err);
-        console.log("HOLA...");
         this.toastr.error('No se pudo obtener el lector id', 'Oops',);
       }
     )
@@ -230,6 +237,7 @@ export class LectoresComponent implements OnInit {
     this.lectorService.updateLector(lector.id, lector).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Lector editado');
+        this.registroService.creaRegistro("Se ha editado un lector, id: "+lector.id+" y nombre: "+lector.nombre);
         console.log(res);
         this.listarLectores();
         this.currentLectorSelected = null;

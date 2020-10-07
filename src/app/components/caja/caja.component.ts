@@ -4,6 +4,8 @@ import { Caja } from 'src/app/models/caja';
 import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-caja',
@@ -22,15 +24,19 @@ export class CajaComponent implements OnInit {
   calibreCaja: string;
   correlativoCaja: string;
   ponderacionCaja: number;
+  rol: number;
 
   constructor(
     private cajaService: CajaService,
     private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private registroService: RegistroService
   ) { }
 
   ngOnInit() {
     this.listarCajas();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   //metodo que trae todos los registros de cajas desde la base de datos
@@ -63,6 +69,7 @@ export class CajaComponent implements OnInit {
     this.cajaService.saveCaja(caja).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Caja agregada');
+        this.registroService.creaRegistro("Se ha creado una caja, envase: "+this.envaseCaja+", variedad: "+this.variedadCaja+", calibre: "+this.calibreCaja+", correlativo: "+this.correlativoCaja+" y ponderación: "+this.ponderacionCaja);
         this.listarCajas();
         this.envaseCaja=null;  
         this.variedadCaja=null;  
@@ -87,7 +94,7 @@ export class CajaComponent implements OnInit {
     editarCaja(form: NgForm) {
       console.log(this.currentCajaSelected.envase);
       if (!this.currentCajaSelected.envase || !this.currentCajaSelected.variedad || !this.currentCajaSelected.categoria || !this.currentCajaSelected.calibre || !this.currentCajaSelected.correlativo || !this.currentCajaSelected.ponderacion) {
-        this.toastr.error('No se pudo editar cajaass', 'Oops');
+        this.toastr.error('No se pudo editar la caja', 'Oops');
         return;
       }
   
@@ -96,6 +103,7 @@ export class CajaComponent implements OnInit {
       this.cajaService.updateCaja(caja.id, caja).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Caja editada');
+          this.registroService.creaRegistro("Se ha editado una caja, id: "+caja.id);
           console.log(res);
           this.listarCajas();
           this.currentCajaSelected = null;
@@ -118,6 +126,7 @@ export class CajaComponent implements OnInit {
       this.cajaService.deleteCaja(caja.id).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Caja eliminado');
+          this.registroService.creaRegistro("Se ha eliminado una cada, id: "+caja.id);
           console.log(res);
           this.listarCajas();
         },

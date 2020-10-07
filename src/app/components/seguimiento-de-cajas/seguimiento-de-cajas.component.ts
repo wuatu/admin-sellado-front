@@ -43,8 +43,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   isBusqueda = false;
-  desde: string = "";
-  hasta: string = "";
+  desde: string = null;
+  hasta: string = null;
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
 
@@ -63,6 +63,10 @@ export class SeguimientoDeCajasComponent implements OnInit {
   SearchText: string="Seleccionar criterio";    
   selectedSearch:any;
 
+  numBox: number = 0; 
+  bandera: number = 0;
+  nombreColaborador:any;
+
   constructor(private toastr: ToastrService,
     private seguimientoDeCajasService: SeguimientoDeCajasService,
     private calibradorService: CalibradorService,
@@ -75,8 +79,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
     
     //this.agregarRegistroDeCajas();
   }
-  
-  listarSeguimientoDeCajas(){
+  //lista todos los registros que estan en la tabla de la base datos
+  /*listarSeguimientoDeCajas(){
     this.seguimientoDeCajasService.getSeguimientoDeCajas(this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
       res=>{
         console.log(res);
@@ -87,7 +91,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }
     );
-  }
+  }*/
 
   listarLineas(id:string){
     console.log("HOLA ESTOY LISTANDO !!!!");
@@ -123,14 +127,27 @@ export class SeguimientoDeCajasComponent implements OnInit {
     console.log(this.selectedSearch + this.toSearch + this.desde + this.hasta);
     this.seguimientoDeCajas = [];
     if(!this.selectedLineaObject && !this.selectedCalibradorObject && this.selectedSearch){
-      console.log("busqueda de solo busqueda");
       this.toastr.error('Se debe seleccionar calibrador y linea', 'Oops');
+      return;
+    }else if(!this.selectedSearch){
+      this.toastr.error('Se debe seleccionar el criterio a buscar', 'Oops');
+      return;
+    }else if(this.desde == null || this.hasta == null){
+      this.toastr.error('Se debe seleccionar el rango de fecha de busqueda', 'Oops');
+      return;
     }else if(this.selectedLineaObject && this.selectedCalibradorObject && this.selectedSearch){
       console.log("busqueda de con caliper y line");
       this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
         res=>{
           console.log(res);
           this.seguimientoDeCajas=res;
+          this.numBox = this.seguimientoDeCajas.length;
+          if(this.bandera == 0){
+            this.nombreColaborador = this.seguimientoDeCajas[0].nombre_usuario;
+            console.log(this.seguimientoDeCajas.nombre_usuario+"!!!!!!!!!!!!!");
+            this.bandera ++;
+          }
+          this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
           console.log(this.seguimientoDeCajas);
           //this.listarSeguimientoDeCajas();
         },
@@ -152,7 +169,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
     console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected.nombre;
     this.selectedLineaObject=newSelected;
-    this.listarSeguimientoDeCajas();
+    
   }
 
   changeSelectedCalibrador(newSelected: any) { 

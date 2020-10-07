@@ -5,35 +5,36 @@
         <li (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)">
             <a #produccion><i class="fa fa-line-chart"></i>Producción <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccionporcalibrador"><i class="fa fa-line-chart"></i>Calibrador</a></li>
-                <li (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccionporlinea"><i class="fa fa-line-chart"></i>Línea</a></li>
-                <li (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccioncolaborador"><i class="fa fa-line-chart"></i>Colaborador</a></li>
+                <li *ngIf="expandItem == 1" (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccionporcalibrador"><i class="fa fa-line-chart"></i>Calibrador</a></li>
+                <li *ngIf="expandItem == 1" (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccionporlinea"><i class="fa fa-line-chart"></i>Línea</a></li>
+                <li *ngIf="expandItem == 1" (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)"><a routerLink="/produccioncolaborador"><i class="fa fa-line-chart"></i>Colaborador</a></li>
             </ul>
         </li>
         <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)">
             <a #administrar><i class="fa fa-plus-circle"></i>Administrar <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/caja"><i class="fa fa-dropbox"></i>Cajas</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)" *ngIf="superAdmin"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)" *ngIf="superAdmin"><a routerLink="/calibrador"><i class="fa fa-sitemap"></i>Calibradora</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)" *ngIf="superAdmin"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)" *ngIf="superAdmin"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
-                <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)" *ngIf="superAdmin"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
+                <li *ngIf="expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/caja"><i class="fa fa-dropbox"></i>Cajas</a></li>
+                <li *ngIf="expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/usuarioadmin"><i class="fa fa-user"></i>Usuario</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/calibrador"><i class="fa fa-sitemap"></i>Calibradora</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/lineas"><i class="fa fa-bars"></i>Líneas</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/lector"><i class="fa fa-barcode"></i>Lector</a></li>
+                <li *ngIf="rol == 1 || rol == 2 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento)"><a routerLink="/rfid"><i class="fa fa-tags"></i>RFID</a></li>
             </ul>
         </li>
         <li (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento)">
             <a #seguimiento><i class="fa fa-search"></i>Buscar <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento)" *ngIf="expandItem == 4"><a routerLink="/seguimientodecajas"><i class="fa fa-box "></i>Cajas</a></li>
-                <li (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento)" *ngIf="expandItem == 4"><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
+                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento)"><a routerLink="/seguimientodecajas"><i class="fa fa-box "></i>Cajas</a></li>
+                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento)"><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
             </ul>
         </li>
         <li (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento)">
             <a #registros><i class="fa fa-list-ul"></i>Registros <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento)" *ngIf="expandItem == 3"><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
-                <li (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento)" *ngIf="expandItem == 3"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro-log</a></li>
+                <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento)"><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
+                <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento)"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro-log</a></li>
             </ul>
         </li>
         <li><a routerLink="/configuracion"><i class="fa fa-cog"></i>Configuración</a></li>

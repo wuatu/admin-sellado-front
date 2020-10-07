@@ -19,6 +19,7 @@ export class CalibradorComponent implements OnInit {
   calibradores: any;
   currentCalibradorSelected: Calibrador
   nombreCalibrador;
+  rol: number;
 
   constructor(
     private modalService: NgbModal,
@@ -29,6 +30,8 @@ export class CalibradorComponent implements OnInit {
 
   ngOnInit() {
     this.listarCalibradores();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   //metodo que trae todos los registros de calibradors desde la base de datos

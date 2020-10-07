@@ -12,6 +12,9 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-excel';
 
 import * as XLSX from 'xlsx'; 
+import { RegistroService } from '../../services/registro.service';
+
+
 
 
 @Component({
@@ -65,15 +68,20 @@ export class ProduccionColaboradorComponent implements OnInit {
   dropDownToTime: any [] = [{opcion:'si'}, {opcion:'no'}];
   SearchTextToTime: string="Seleccionar opción";    
   selectedOptionToTime:string = null;
-  
+  rol: number;
+
   constructor(
     private toastr: ToastrService,
     private produccionColaboradorService: ProduccionColaboradorService,
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private registroService: RegistroService
+    ) { }
   
   ngOnInit() {
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   changeSelectedVerified(newSelected: any) { 
@@ -315,6 +323,7 @@ export class ProduccionColaboradorComponent implements OnInit {
       this.produccionColaboradorService.updateRegistroProduccionUsuario(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Registro editado');
+          this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: "+registroProduccionColaborador.id);
           console.log(res);
           this.buscarUsuarioPorRut();
           this.currentSeguimientoSelected = null;

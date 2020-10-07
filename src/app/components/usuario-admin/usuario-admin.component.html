@@ -3,21 +3,22 @@
         <br>
         <div class="row justify-content-center">
             <div class="col-12">
-                <h1 class="text-center"><b>Administrador</b></h1>
+                <h1 class="text-center"><b>Usuario</b></h1>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-12 align-self-end">
                 <div class="text-right">
-                    <button class="btn btn-primary  text-right" *ngIf="rol != 2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
-            Agregar administrador</button>
+                    <button class="btn btn-primary  text-right" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+                        Agregar usuario
+                    </button>
                 </div>
             </div>
             <br>
             <div class="row text-left" *ngIf="administradores">
                 <div class="col-12">
-                    <h4>Lista de administradores</h4>
+                    <h4>Lista de usuarios</h4>
                 </div>
             </div>
             <!--Tabla de contenido-->
@@ -28,8 +29,8 @@
                         <th scope="col">Rut</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
-                        <th *ngIf="rol != 2" scope="col">Editar</th>
-                        <th *ngIf="rol != 2" scope="col">Eliminar</th>
+                        <th *ngIf="rol!=2" scope="col">Editar</th>
+                        <th *ngIf="rol!=2" scope="col">Eliminar</th>
                         <th *ngIf="rol == 2" scope="col"> </th>
                         <th *ngIf="rol == 2" scope="col"> </th>
                     </tr>
@@ -41,12 +42,12 @@
                         <td>{{administrador.nombre}}</td>
                         <td>{{administrador.apellido}}</td>
                         <td>
-                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(administrador);open(mymodaleditar)">
+                            <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(administrador);open(mymodaleditar)">
                 <i class="fa fa-edit"></i>
               </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(administrador,mymodalconfirmar)">
+                            <button class="btn btn-danger text-white mr-1" *ngIf="rol!=2" (click)="onEliminar(administrador,mymodalconfirmar)">
                 <i class="fa fa-trash-alt"></i>
               </button>
                         </td>
@@ -59,7 +60,7 @@
     <!--modal agregar-->
     <ng-template #mymodalagregar let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Agregar administrador</h4>
+            <h4 class="modal-title" id="modal-basic-title">Agregar usuario</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">×</span>
       </button>
@@ -128,7 +129,7 @@
     <!--modal editar-->
     <ng-template #mymodaleditar let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Editar administrador</h4>
+            <h4 class="modal-title" id="modal-basic-title">Editar usuario</h4>
             <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">×</span>
       </button>
@@ -207,7 +208,7 @@
       </button>
         </div>
         <div class="modal-body">
-            <p>¿Seguro que quieres eliminar un administrador?</p>
+            <p>¿Seguro que quieres eliminar un usuario?</p>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>

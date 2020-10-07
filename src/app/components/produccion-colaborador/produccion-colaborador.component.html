@@ -47,7 +47,7 @@
             </form>
         </div>
     </div>
-    <div class="col-10; no-printme" style="margin-block-end: 10px; margin-left: 20px">
+    <div class="col-10; no-printme" *ngIf="nombre && apellido" style="margin-block-end: 10px; margin-left: 20px">
         <h5 class="text-left">
             <b>Resultado de busqueda: </b>
         </h5>
@@ -147,7 +147,8 @@
                 <th scope="col">Hora</th>
                 <th scope="col">Verificado</th>
                 <th scope="col">A tiempo</th>
-                <th scope="col">Editar</th>
+                <th *ngIf=" rol!=2" scope="col">Editar</th>
+                <th *ngIf="rol == 2" scope="col"> </th>
             </tr>
         </thead>
         <tbody>
@@ -172,7 +173,7 @@
                     <ng-template #to_time> no</ng-template>
                 </td>
                 <td>
-                    <button class="btn btn-primary text-white mr-1" (click)="onEditar(produccion);open(mymodaleditar)">
+                    <button class="btn btn-primary text-white mr-1" *ngIf=" rol!=2" (click)="onEditar(produccion);open(mymodaleditar)">
                         <i class="fa fa-edit"></i>
                     </button>
                 </td>

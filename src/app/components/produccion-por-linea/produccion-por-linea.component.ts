@@ -21,6 +21,8 @@ import { NgForm } from '@angular/forms';
 import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-excel';
 
 import * as XLSX from 'xlsx'; 
+import { RegistroService } from '../../services/registro.service';
+
 
 @Component({
   selector: 'app-produccion-por-linea',
@@ -87,6 +89,8 @@ export class ProduccionPorLineaComponent implements OnInit {
   dateFinishSearch: string;
   mostrarGrafico: any;
 
+  rol: number;
+
   constructor(
     private toastr: ToastrService,
     public calendar: NgbCalendar,
@@ -94,12 +98,14 @@ export class ProduccionPorLineaComponent implements OnInit {
     private calibradorService:CalibradorService,
     private lineaService: LineaService,
     private produccionPorLineaService: ProduccionPorLineaService,
-    private modalService: NgbModal
-    
+    private modalService: NgbModal,
+    private registroService: RegistroService
   ) { }
 
   ngOnInit() {
     this.listarCalibradores();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol); 
   }
 
 
@@ -240,6 +246,7 @@ export class ProduccionPorLineaComponent implements OnInit {
       this.produccionPorLineaService.updateRegistroProduccionLinea(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Registro editado');
+          this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: "+registroProduccionColaborador.id+", calibradora: "+this.currentSeguimientoSelected.nombre_calibrador);
           console.log(res);
           this.buscarRegistroCalibradorLinea();
           this.currentSeguimientoSelected = null;

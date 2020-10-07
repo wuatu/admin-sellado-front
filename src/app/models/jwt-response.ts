@@ -1,9 +1,10 @@
 export interface JwtResponse {
     dataUser:{
         id:number,
-        rut;string,
+        rut:string,
         nombre:string,
         apellido:string,
+        rol:number,
         accessToken:string,
         expiresIn:string
     }

@@ -34,6 +34,8 @@ import { ProduccionPorCalibradorComponent } from './components/produccion-por-ca
 import {NgxPaginationModule} from 'ngx-pagination';
 //Gráficos
 import { ChartsModule } from 'ng2-charts';
+import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
+import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +56,9 @@ import { ChartsModule } from 'ng2-charts';
     ProduccionColaboradorComponent,
     TurnoComponent,
     ProduccionPorLineaComponent,
-    ProduccionPorCalibradorComponent
+    ProduccionPorCalibradorComponent,
+    ConfiguracionComponent,
+    UsuarioAdminComponent
   ],
   imports: [
     BrowserModule,
