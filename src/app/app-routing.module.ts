@@ -18,6 +18,7 @@ import { TurnoComponent } from './components/turno/turno.component';
 import { ProduccionPorCalibradorComponent } from './components/produccion-por-calibrador/produccion-por-calibrador.component';
 import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
+import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
 
 
 const routes: Routes = [
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path: 'produccionporcalibrador', component: ProduccionPorCalibradorComponent, canActivate: [AuthGuard] },
   { path: 'produccionporlinea', component: ProduccionPorLineaComponent, canActivate: [AuthGuard] },
   { path: 'configuracion', component: ConfiguracionComponent, canActivate: [AuthGuard] },
+  { path: 'usuarioadmin', component: UsuarioAdminComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

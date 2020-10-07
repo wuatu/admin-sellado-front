@@ -25,6 +25,8 @@ export class AdministradorComponent implements OnInit {
   addNombre: string;
   addApellido: string;
   addPassword: string;
+  addRol:number = 0;
+  rol:number;
 
   constructor(
     //servicio del modal
@@ -40,6 +42,9 @@ export class AdministradorComponent implements OnInit {
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {
     this.listarAdministradores();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
+    
   }
 
   //metodo que trae todos los registros de administradores desde la base de datos
@@ -52,7 +57,7 @@ export class AdministradorComponent implements OnInit {
       err => {
         if (err.status != 404) {
           console.log(err.status);
-          this.toastr.error('No se pudo listar administradors', 'Oops');
+          this.toastr.error('No se pudo listar administrador', 'Oops');
         } else {
           this.administradores = null;
         }
@@ -66,7 +71,7 @@ export class AdministradorComponent implements OnInit {
       this.toastr.error('No se pudo guardar administrador', 'Oops');
       return;
     }
-    let administrador = new Administrador(null, this.addRut, this.addNombre, this.addApellido, this.addPassword);
+    let administrador = new Administrador(null, this.addRut, this.addNombre, this.addApellido, this.addPassword,this.addRol);
     this.administradorService.saveAdministrador(administrador).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Línea agregada');
@@ -87,6 +92,7 @@ export class AdministradorComponent implements OnInit {
 
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto administrador clickeado a variable global currentAdministradorSelected
   onEditar(administrador: Administrador) {
+    console.log("id: "+administrador.id);
     this.administradorService.getAdministrador(administrador.id).subscribe(
       res => {
         this.currentAdministradorSelected = res;
@@ -98,7 +104,7 @@ export class AdministradorComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error('No se pudo obtener calibrador id', 'Oops',);
+        this.toastr.error('No se pudo obtener el administrador id', 'Oops',);
       }
     )
   }
@@ -110,11 +116,11 @@ export class AdministradorComponent implements OnInit {
       return;
     }
     let administrador: Administrador;
-    administrador = new Administrador(this.addId, this.addRut,this.addNombre, this.addApellido, this.addPassword);  
+    administrador = new Administrador(this.addId, this.addRut,this.addNombre, this.addApellido, this.addPassword,this.addRol);  
     this.administradorService.updateAdministrador(administrador.id, administrador).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea editada');
-        this.registroService.creaRegistro("Se ha editado un administrador, id: "+administrador.id+", rut: "+administrador.rut+"y nombre "+administrador.nombre+" "+administrador.apellido);
+        this.toastr.success('Operación satisfactoria', 'Administrador editado');
+        this.registroService.creaRegistro("Se ha editado un administrador, id: "+administrador.id+", rut: "+administrador.rut+" y nombre "+administrador.nombre+" "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
         this.currentAdministradorSelected = null;

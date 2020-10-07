@@ -24,6 +24,7 @@ export class LineasComponent implements OnInit {
   selectedCalibradorTextModificar: string="Selecciona una calibrador";  
   selectedCalibradorObject:any;
   selectedCalibradorObjectModificar:any;
+  rol:number;
 
   constructor(
     //servicio del modal
@@ -39,7 +40,9 @@ export class LineasComponent implements OnInit {
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {      
-    this.listarCalibradores();    
+    this.listarCalibradores(); 
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);   
   }
 
   //metodo que lista las calibradores

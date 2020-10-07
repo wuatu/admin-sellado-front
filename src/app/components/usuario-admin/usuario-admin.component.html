@@ -1,3 +1,218 @@
-<p>
-  usuario-admin works!
-</p>
+<div class="row">
+    <div class="col-12">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Usuario</b></h1>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-12 align-self-end">
+                <div class="text-right">
+                    <button class="btn btn-primary  text-right" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+                        Agregar usuario
+                    </button>
+                </div>
+            </div>
+            <br>
+            <div class="row text-left" *ngIf="administradores">
+                <div class="col-12">
+                    <h4>Lista de usuarios</h4>
+                </div>
+            </div>
+            <!--Tabla de contenido-->
+            <table class="table table-hover" *ngIf="administradores">
+                <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">Rut</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th *ngIf="rol!=2" scope="col">Editar</th>
+                        <th *ngIf="rol!=2" scope="col">Eliminar</th>
+                        <th *ngIf="rol == 2" scope="col"> </th>
+                        <th *ngIf="rol == 2" scope="col"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let administrador of administradores; let i = index">
+                        <th scope="row">{{i+1}}</th>
+                        <td>{{administrador.rut}}</td>
+                        <td>{{administrador.nombre}}</td>
+                        <td>{{administrador.apellido}}</td>
+                        <td>
+                            <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(administrador);open(mymodaleditar)">
+                <i class="fa fa-edit"></i>
+              </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger text-white mr-1" *ngIf="rol!=2" (click)="onEliminar(administrador,mymodalconfirmar)">
+                <i class="fa fa-trash-alt"></i>
+              </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--modal agregar-->
+    <ng-template #mymodalagregar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Agregar usuario</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <form #myform="ngForm">
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Rut:</b></label>
+                    <div class="input-group">
+                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario rut-->
+                    <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
+                        <div *ngIf="rut.errors.required">
+                            Rut es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Nombre:</b></label>
+                    <div class="input-group">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario nombre-->
+                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                        <div *ngIf="nombre.errors.required">
+                            Nombre es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Apellido:</b></label>
+                    <div class="input-group">
+                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario apellido-->
+                    <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
+                        <div *ngIf="apellido.errors.required">
+                            Apellido es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Contraseña:</b></label>
+                    <div class="input-group">
+                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password" class="form-control" placeholder="Contraseña" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario password-->
+                    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                        <div *ngIf="password.errors.required">
+                            Contraseña es obligatorio
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="agregarAdministrador(myform);modal.close('Save click')">Guardar</button>
+            </div>
+        </div>
+    </ng-template>
+    <!--fin modal agregar-->
+
+    <!--modal editar-->
+    <ng-template #mymodaleditar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar usuario</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <form #myform="ngForm">
+                <!--Id de administrador clickeada se almacena en un input hidden-->
+                <div class="form-group">
+                    <input type="hidden" ngModel [(ngModel)]="addId" name="id" id="id">
+                </div>
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Rut:</b></label>
+                    <div class="input-group">
+                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario rut-->
+                    <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
+                        <div *ngIf="rut.errors.required">
+                            Rut es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Nombre:</b></label>
+                    <div class="input-group">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario nombre-->
+                    <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                        <div *ngIf="nombre.errors.required">
+                            Nombre es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Apellido:</b></label>
+                    <div class="input-group">
+                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario apellido-->
+                    <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
+                        <div *ngIf="apellido.errors.required">
+                            Apellido es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="administradorLabel"><b>Contraseña:</b></label>
+                    <div class="input-group">
+                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password" class="form-control" placeholder="Contraseña" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    </div>
+                    <!--Valida formulario password-->
+                    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                        <div *ngIf="password.errors.required">
+                            Contraseña es obligatorio
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" (click)="editarAdministrador(myform);modal.close('Save click')">Guardar</button>
+            </div>
+        </div>
+    </ng-template>
+    <!--fin modal editar-->
+
+    <!--Modal confirmación-->
+    <ng-template #mymodalconfirmar let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Eliminar línea</h4>
+            <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+        <div class="modal-body">
+            <p>¿Seguro que quieres eliminar un usuario?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
+        </div>
+    </ng-template>
+    <!--fin modal confirmacion-->

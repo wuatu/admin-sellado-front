@@ -89,6 +89,8 @@ export class ProduccionPorLineaComponent implements OnInit {
   dateFinishSearch: string;
   mostrarGrafico: any;
 
+  rol: number;
+
   constructor(
     private toastr: ToastrService,
     public calendar: NgbCalendar,
@@ -102,6 +104,8 @@ export class ProduccionPorLineaComponent implements OnInit {
 
   ngOnInit() {
     this.listarCalibradores();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol); 
   }
 
 

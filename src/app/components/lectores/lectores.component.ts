@@ -43,6 +43,8 @@ export class LectoresComponent implements OnInit {
 
   selectedLectorObject:any;
 
+  rol:number;
+
   constructor(
     private modalService: NgbModal,
     private lineaService: LineaService,
@@ -55,6 +57,8 @@ export class LectoresComponent implements OnInit {
   ngOnInit() {
     this.listarCalibradores(); 
     //this.listarLineas();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   //metodo que lista las calibradores
@@ -207,11 +211,9 @@ export class LectoresComponent implements OnInit {
       res=>{
         this.selectedLineaObject=res;
         this.selectedLineaText=this.selectedLineaObject.nombre;
-        console.log("HOLA...");
       },
       err=>{
         console.log(err);
-        console.log("HOLA...");
         this.toastr.error('No se pudo obtener el lector id', 'Oops',);
       }
     )

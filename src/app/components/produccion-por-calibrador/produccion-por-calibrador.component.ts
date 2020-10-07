@@ -74,7 +74,8 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   dateStartSearch: string;
   dateFinishSearch: string;
   mostrarGrafico: any;
-
+  
+  rol: number;
 
   constructor(
     private toastr: ToastrService,
@@ -87,7 +88,9 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.listarCalibradores();    
+    this.listarCalibradores(); 
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);   
   }
 
   //metodo que lista las calibradores

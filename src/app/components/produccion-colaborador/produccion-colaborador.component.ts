@@ -68,7 +68,8 @@ export class ProduccionColaboradorComponent implements OnInit {
   dropDownToTime: any [] = [{opcion:'si'}, {opcion:'no'}];
   SearchTextToTime: string="Seleccionar opción";    
   selectedOptionToTime:string = null;
-  
+  rol: number;
+
   constructor(
     private toastr: ToastrService,
     private produccionColaboradorService: ProduccionColaboradorService,
@@ -79,6 +80,8 @@ export class ProduccionColaboradorComponent implements OnInit {
     ) { }
   
   ngOnInit() {
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   changeSelectedVerified(newSelected: any) { 

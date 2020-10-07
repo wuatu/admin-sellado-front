@@ -17,12 +17,10 @@
             <div class="form-row">
 
                 <div class="col">
-                    <label for="Desde:">Desde:</label>
                     <input #dpFromDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
                 </div>
 
                 <div class="col">
-                    <label for="">Hasta:</label>
                     <div class="form-group">
                         <div class="input-group">
                             <input #dpToDate class="form-control form-control-sm ml-1" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
@@ -32,7 +30,6 @@
 
 
                 <div class="col">
-                    <label for="">Buscar:</label>
                     <div class="input-group-append">
                         <button class="ml-1 btn btn-primary btn-sm" type="submit ">Buscar <i class="fas fa-search"
                 aria-hidden="true"></i></button>
@@ -160,7 +157,6 @@
     <div class="modal-body">
         <form #myform="ngForm">
             <div class="form-group">
-
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
                     <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Rut">

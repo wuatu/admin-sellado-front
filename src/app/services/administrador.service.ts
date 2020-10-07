@@ -10,13 +10,18 @@ export class AdministradorService {
 
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
+  
+  getUserAdmin(){
+    return this.httpClient.get(`${this.API_URL}/user_admin`);
+  }
 
   getAdministradores(){
     return this.httpClient.get(`${this.API_URL}/administradores`);
   }
 
   getAdministrador(id:string){
-    return this.httpClient.get(`${this.API_URL}/administrador/${id}`);
+    console.log("getAdministrador");
+    return this.httpClient.get(`${this.API_URL}/administrador_/${id}`);
   }
 
   deleteAdministrador(id:string){
@@ -36,4 +41,11 @@ export class AdministradorService {
     console.log(rut,password);
     return this.httpClient.get(`${this.API_URL}/administrador/login/${rut}/${password}`);
   }
+
+  getAdmin(rut:string){
+    return this.httpClient.get(`${this.API_URL}/administrador/${rut}`);
+  }
+
+
+  
 }

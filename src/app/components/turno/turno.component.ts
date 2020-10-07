@@ -29,6 +29,7 @@ export class TurnoComponent implements OnInit {
   selectedToDate: string = "";
   exportTurnoArray: any = [];
   nombreExcel = 'Turnos';
+  mostrar:any = false;
 
   constructor(
     private authService: AuthService,
@@ -83,6 +84,7 @@ export class TurnoComponent implements OnInit {
 
   //metodo que trae todos los registros de lineas desde la base de datos
   listarTurnos() {
+    
     this.exportTurnoArray = [];
     this.captureDates();
     console.log("this.selectedfromDate: " + this.selectedfromDate);
@@ -91,7 +93,7 @@ export class TurnoComponent implements OnInit {
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
         this.turnos = res;
-
+        this.mostrar = true;
         let id = 0;
         //Se crea un objeto de la clase export-turno con la información devuelta de la base de datos 
         for (let element of this.turnos) {
@@ -126,10 +128,8 @@ export class TurnoComponent implements OnInit {
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
-      this.listarTurnos();
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      this.listarTurnos();
     } else {
       this.toDate = null;
       this.fromDate = date;

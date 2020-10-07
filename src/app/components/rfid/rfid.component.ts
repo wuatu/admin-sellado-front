@@ -36,6 +36,10 @@ export class RfidComponent implements OnInit {
   selectedLineaId:string;
   selectedLineaObjectModificar:any;
 
+  selectedRfidObject:any;
+  
+  rol: number;
+
   constructor(
     //servicio del modal
     private modalService: NgbModal,
@@ -52,7 +56,9 @@ export class RfidComponent implements OnInit {
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {      
     this.listarCalibradores();    
-    this.listarLineas();  
+    this.listarLineas();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);   
   }
 
   //metodo que lista las calibradores
@@ -103,7 +109,7 @@ export class RfidComponent implements OnInit {
       err => {
         if (err.status != 404) {
           console.log(err.status);
-          this.toastr.error('No se pudo listar líneas', 'Oops');
+          this.toastr.error('No se pudo listar Rfid', 'Oops');
         } else{
           this.rfids=null;
         }
@@ -118,7 +124,7 @@ export class RfidComponent implements OnInit {
     console.log(this.nombreRfidAdded);
     console.log( this.selectedLineaObject);
     if (!this.nombreRfidAdded || !this.selectedLineaObject) {
-      this.toastr.error('No se pudo guardar línea', 'Oops');
+      this.toastr.error('No se pudo guardar Rfid', 'Oops');
       return;
     }
     let rfid = new Rfid(null, this.nombreRfidAdded,this.ipRfidAdded,this.selectedLineaObject.id);
@@ -132,7 +138,7 @@ export class RfidComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error('No se pudo guardar línea', 'Oops');
+        this.toastr.error('No se pudo guardar Rfid', 'Oops');
       }
     );
 
@@ -143,12 +149,12 @@ export class RfidComponent implements OnInit {
     this.currentRfidSelected = rfid;
     this.lineaService.getLinea(rfid.fk_linea).subscribe(
       res=>{
-        this.selectedLineaObject=res;
-        this.selectedLineaText=this.selectedLineaObject.nombre;
+        this.selectedRfidObject = res;
+        this.selectedLineaText = this.selectedLineaObject.nombre;
       },
       err=>{
         console.log(err);
-        this.toastr.error('No se pudo obtener linea id', 'Oops',);
+        this.toastr.error('No se pudo obtener Rfid id', 'Oops',);
       }
     )
   }
@@ -156,12 +162,12 @@ export class RfidComponent implements OnInit {
   //metodo que sirve para editar una rfid
   editarRfid(form: NgForm) {
     if (!form.value.nombre) {
-      this.toastr.error('No se pudo editar línea', 'Oops',);
+      this.toastr.error('No se pudo editar Rfid', 'Oops',);
       return;
     }
     let rfid: Rfid;
     if(this.selectedLineaObject){
-      rfid = new Rfid(this.selectedLineaObject.id, this.selectedLineaObject.nombre, this.selectedLineaObject.ip, this.selectedLineaObject.id);
+      rfid = new Rfid(this.currentRfidSelected.id, this.currentRfidSelected.nombre, this.currentRfidSelected.ip, this.selectedLineaObject.id);
     }    
     this.rfidService.updateRfid(rfid.id, rfid).subscribe(
       res => {
@@ -174,7 +180,7 @@ export class RfidComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error('No se pudo editar línea', 'Oops',);
+        this.toastr.error('No se pudo editar Rfid', 'Oops',);
       }
     );
   }
@@ -191,13 +197,13 @@ export class RfidComponent implements OnInit {
     this.rfidService.deleteRfid(rfid.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'rfid eliminado');
-        this.registroService.creaRegistro("Se ha un rfid un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
+        this.registroService.creaRegistro("Se ha eliminado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
         console.log(res);
         this.listarRfids();
       },
       err => {
         console.log(err);
-        this.toastr.error('No se pudo eliminar línea', 'Oops');
+        this.toastr.error('No se pudo eliminar el Rfid', 'Oops');
       }
     );
   }  
@@ -217,11 +223,9 @@ export class RfidComponent implements OnInit {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      console.log("sera");
       return 'by clicking on a backdrop';
     } else {
       if (reason == 'ok') {
-        console.log("hola");
         this.eliminarRfid(this.currentRfidSelected);
       }
       return `with: ${reason}`;

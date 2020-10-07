@@ -27,7 +27,8 @@ export class UsuarioComponent implements OnInit {
   selectedUsuarioObject:any;
   selectedUsuarioObjectModificar:any;
   selectedUsuarioText:string="Nombre";
-
+  
+  rol: number;
 
   constructor(
     private modalService: NgbModal,
@@ -38,6 +39,8 @@ export class UsuarioComponent implements OnInit {
 
   ngOnInit() {
     this.listarUsuarios();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
   
   //metodo que lista los usuarios registrados en el sistema.
@@ -48,7 +51,6 @@ export class UsuarioComponent implements OnInit {
       res=>{
         console.log(res);
         this.usuarios=res;
-        
       },
       err=>{
         console.log(err);

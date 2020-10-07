@@ -24,6 +24,7 @@ export class CajaComponent implements OnInit {
   calibreCaja: string;
   correlativoCaja: string;
   ponderacionCaja: number;
+  rol: number;
 
   constructor(
     private cajaService: CajaService,
@@ -34,6 +35,8 @@ export class CajaComponent implements OnInit {
 
   ngOnInit() {
     this.listarCajas();
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    console.log("rol: "+this.rol);
   }
 
   //metodo que trae todos los registros de cajas desde la base de datos
