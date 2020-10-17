@@ -7,6 +7,9 @@ import { TurnoService } from 'src/app/services/turno.service';
 import { Turno } from 'src/app/models/turno';
 import { formatDate } from '@angular/common';
 import { RegistroService } from '../../services/registro.service';
+import { CalibradorService } from '../../services/calibrador.service';
+import { MonitoreoService } from '../../services/monitoreo.service';
+
 
 
 @Component({
@@ -37,6 +40,28 @@ export class MonitoreoComponent implements OnInit {
   cantidadResultadoBusqueda = 0;
   isVisiblegoogleMaps = true;
 
+  calibradores: any = [];
+  cajasCalibrador1Turno: any = [];
+  cajasCalibrador2Turno: any = [];
+  cajasCalibrador1Hora: any = [];
+  cajasCalibrador2Hora: any = [];
+  cajasCalibrador1Minuto: any = [];
+  cajasCalibrador2Minuto: any = [];
+
+  totalTurno1: number = 0;
+  totalHora1: number = 0;
+  totalMinuto1: number = 0;
+
+  totalTurno2: number = 0;
+  totalHora2: number = 0;
+  totalMinuto2: number = 0;
+
+  fechaActual: string;
+  fechaInicioTurno: string = null;
+  horaInicioTurno: string = null;
+
+  turnoActual: any = [];
+  
 
   constructor(
     private modalService: NgbModal,
@@ -47,6 +72,8 @@ export class MonitoreoComponent implements OnInit {
     private authService: AuthService,
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
+    private calibradorService: CalibradorService,
+    private monitoreoService: MonitoreoService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -54,13 +81,296 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+
+    //Lista los calibradores que estan registrados en la base de datos.
+    this.listarCalibradores();
+
     //get registro
+    this.getRegistro();
+
+
+    setInterval(() => {
+      this.time = new Date();
+    }, 1000);
+
+  }
+  onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm:string){
+
+  }
+
+  getTurnoActual(){
+    this.monitoreoService.getGetLastTurno().subscribe(
+      res => {
+        console.log("turno cargado");
+        this.turnoActual = res;
+        console.log(this.turnoActual);
+        this.getProduccionTurno();
+        this.getAverageforMinute();
+        this.getAverageLastHour();
+      },
+      err => {
+        console.log("el turno no se pudo cargar!!!!");
+      }
+    )
+  }
+
+  getAverageforMinute(){
+    console.log("entre a getAverageForMinute");
+    this.fechaActual = this.fecha().substring(0,10);
+    if(this.fechaActual == this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getAverageforMinute(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador1Minuto = res;
+          //console.log(this.cajasCalibrador1Turno[0].total);
+          if(this.cajasCalibrador1Minuto[0].total == null){
+            this.totalMinuto1 = 0;
+          }
+          else{
+            this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
+          }
+          
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por minuto");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getAverageforMinute(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador2Minuto = res;
+          //console.log(this.cajasCalibrador2Turno[0].total);
+          if(this.cajasCalibrador2Minuto[0].total == null){
+            this.totalMinuto2 = 0;
+          }
+          else{
+            this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
+          }
+          
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por minuto");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }else if(this.fechaActual > this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getAverageforMinute(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador1Minuto = res;
+          if(this.cajasCalibrador1Minuto[0].total == null){
+            this.totalMinuto1 = 0;
+          }
+          else{
+            this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
+          }
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por minuto : "+ this.totalMinuto1);
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getAverageforMinute(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador2Minuto = res;
+          if(this.cajasCalibrador2Minuto[0].total == null){
+            this.totalMinuto2 = 0;
+          }
+          else{
+            this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
+          }
+          
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por minuto: "+ this.totalMinuto1);
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }
+  }
+
+  getAverageLastHour(){
+    console.log("entre a getAverageLastHour");
+    this.fechaActual = this.fecha().substring(0,10);
+    console.log("fecha inicio turno : " + this.turnoActual[0].hora_apertura);
+    if(this.fechaActual == this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador1Hora = res;
+          //console.log(this.cajasCalibrador1Turno[0].total);
+          if(this.cajasCalibrador1Hora[0].total == null){
+            this.totalHora1 = 0;
+          }
+          else{
+            this.totalHora1 = this.cajasCalibrador1Hora[0].total;
+          }
+          this.toastr.success('obtenido','obtenido');
+          console.log("ultima hora success : "+ this.cajasCalibrador1Hora[0].total);
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador2Hora = res;
+          //console.log(this.cajasCalibrador2Turno[0].total);
+          if(this.cajasCalibrador2Hora[0].total == null){
+            this.totalHora2 = 0;
+          }
+          else{
+            this.totalHora2 = this.cajasCalibrador2Hora[0].total;
+          }
+          
+          this.toastr.success('obtenido','obtenido');
+          console.log("ultima hora success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }else if(this.fechaActual > this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador1Hora = res;
+          if(this.cajasCalibrador1Hora[0].total == null){
+            this.totalHora1 = 0;
+          }
+          else{
+            this.totalHora1 = this.cajasCalibrador1Hora[0].total;
+          }
+          this.toastr.success('obtenido','obtenido');
+          console.log("ultima hora success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador2Hora = res;
+          if(this.cajasCalibrador2Hora[0].total == null){
+            this.totalHora2 = 0;
+          }
+          else{
+            this.totalHora2 = this.cajasCalibrador2Hora[0].total;
+          }
+          
+          this.toastr.success('obtenido','obtenido');
+          console.log("ultima hora success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }
+
+  }
+
+  /*getMinutes(horaInicio: string, horaActual:string){
+        
+    var hora1 = horaInicio.split(":");
+    var hora2 = horaActual.split(":");
+    var t1 = new Date();
+    var t2 = new Date();
+    t1.setHours(parseInt(hora1[0]), parseInt(hora1[1]), parseInt(hora1[2]));
+    t2.setHours(parseInt(hora2[0]), parseInt(hora2[1]), parseInt(hora2[2]));
+            
+    var minutos;
+    if((t2.getHours()-t1.getHours()) == 0){
+        minutos = t2.getMinutes()-t1.getMinutes();
+    }else{
+        minutos = (t2.getHours()-t1.getHours())*60;
+        if((t2.getMinutes()-t1.getMinutes())<0){
+            minutos = (minutos - (t2.getMinutes()-t1.getMinutes())*-1);
+        }else{
+            minutos = minutos + (t2.getMinutes()-t1.getMinutes());
+        }
+    }
+        
+    return minutos;
+  }*/
+
+  
+
+  //get produccion del turno 
+  getProduccionTurno(){
+    console.log("entre a getProduccionTurno");
+    this.fechaActual = this.fecha().substring(0,10);
+    if(this.fechaActual == this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getProduccionSearch(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador1Turno = res;
+          //console.log(this.cajasCalibrador1Turno[0].total);
+          this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por turno success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getProduccionSearch(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+        res => {
+          this.cajasCalibrador2Turno = res;
+          //console.log(this.cajasCalibrador2Turno[0].total);
+          this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por turno success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }else if(this.fechaActual>this.turnoActual[0].fecha_apertura){
+      //consulta calibrador 1
+      this.monitoreoService.getProduccionSearch(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador1Turno = res;
+          this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por turno success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+      //consulta calibrador 2
+      this.monitoreoService.getProduccionSearch(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+        res => {
+          this.cajasCalibrador2Turno = res;
+          this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
+          this.toastr.success('obtenido','obtenido');
+          console.log("produccion por turno success");
+        },
+        err => {
+          this.toastr.error('NO obtenido','NO obtenido');
+        }
+      )
+    }
+  } 
+
+  getRegistro(){
     this.turnoService.getTurnoSinId().subscribe(
       res => {
         this.turno = res;
         if (this.turno) {
           console.log(this.turno.id);
           this.sesionIniciada();
+          this.getTurnoActual();
           this.toastr.info("Turno se encuentra iniciado", "Información", {
             positionClass: 'toast-bottom-right' 
          });
@@ -77,13 +387,22 @@ export class MonitoreoComponent implements OnInit {
        this.open(this.modalIniciarTurno);
       }
     )
-    setInterval(() => {
-      this.time = new Date();
-    }, 1000);
-
   }
-  onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm:string){
-
+  
+  //metodo que lista las calibradores
+  listarCalibradores(){
+    this.calibradorService.getCalibradores().subscribe(
+      res=>{
+        console.log(res);
+        this.calibradores=res;
+        console.log(this.calibradores);
+        
+      },
+      err=>{
+        console.log(err);
+        this.toastr.error('No se pudo obtener calibradores', 'Oops');
+      }
+    );
   }
   //metodo que abre un modal
   open(modal) {
@@ -145,6 +464,15 @@ export class MonitoreoComponent implements OnInit {
             this.sesionIniciada();
             this.toastr.success("Turno iniciado correctamente");
             this.registroService.creaRegistro("Turno iniciado");
+            //*************** carga el turno guardado ****************
+            this.getTurnoActual();
+            
+
+
+            //localStorage.setItem('TURNO', JSON.stringify(turno));
+            //guardo los datos del turno iniciado
+            this.fechaInicioTurno = fecha.substring(0,10);
+            this.horaInicioTurno =  fecha.substring(11,19);
           },
           err => {
             this.toastr.error('Error al iniciar turno', 'Error');
@@ -191,6 +519,10 @@ export class MonitoreoComponent implements OnInit {
             this.sesionCerrada();
             this.toastr.success("Turno cerrado correctamente");
             this.registroService.creaRegistro("Turno cerrado");
+            //localStorage.setItem('TURNO', JSON.stringify(null));
+            //se borran los datos del turno que estaba abierto
+            this.fechaInicioTurno = null;
+            this.horaInicioTurno =  null;
           },
           err => {
             this.toastr.error('Error al cerrar turno', 'Error');

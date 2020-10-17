@@ -23,18 +23,14 @@ export class MenubarComponent implements OnInit {
     public menubar: MenubarService,
     private authService: AuthService,
     private router: Router,
-  ) {
+  ){
   }
 
   ngOnInit() {
     new name();
     this.admin = JSON.parse(localStorage.getItem('USER'));
-    console.log(this.admin);
-    console.log(" la wea mala wn "+ this.admin.nombre, this.admin.apellido, this.admin.rut, this.admin.rol);
-    if (this.admin.rol == 1) {
-      console.log(" la wea buena wn "+ this.rol);
+    if(this.admin.rol == 1) {
       this.rol = 1;
-      console.log(" la wea buena wn "+ this.rol);
     }else if(this.admin.rol == 2){
       this.rol = 2;
     }
@@ -59,6 +55,8 @@ export class MenubarComponent implements OnInit {
       registros.click();
     } else if(this.expandItemAnterior==4 && i != 4){
       seguimiento.click();
+    } else if(this.expandItemAnterior==5 && i != 5){
+
     } else{
 
     }
@@ -86,6 +84,12 @@ export class MenubarComponent implements OnInit {
     } else if(i == 4 && this.expandItemAnterior!=4){
       this.expandItem=4;
       this.expandItemAnterior=4;
+    }else if (i == 5 && this.expandItemAnterior==5) {
+      this.expandItem=5;
+      this.expandItemAnterior=0;
+    } else if(i == 5 && this.expandItemAnterior!=5){
+      this.expandItem=5;
+      this.expandItemAnterior=5;
     }
   }
 }

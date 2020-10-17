@@ -19,6 +19,8 @@ import { ProduccionPorCalibradorComponent } from './components/produccion-por-ca
 import { ProduccionPorLineaComponent } from './components/produccion-por-linea/produccion-por-linea.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
+import { MonitoreoCalibrador1Component } from './components/monitoreo-calibrador1/monitoreo-calibrador1.component';
+import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador2/monitoreo-calibrador2.component';
 
 
 const routes: Routes = [
@@ -46,6 +48,8 @@ const routes: Routes = [
   { path: 'produccionporlinea', component: ProduccionPorLineaComponent, canActivate: [AuthGuard] },
   { path: 'configuracion', component: ConfiguracionComponent, canActivate: [AuthGuard] },
   { path: 'usuarioadmin', component: UsuarioAdminComponent, canActivate: [AuthGuard] },
+  { path: 'monitoreocalibrador1', component: MonitoreoCalibrador1Component, canActivate: [AuthGuard] },
+  { path: 'monitoreocalibrador2', component:MonitoreoCalibrador2Component, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

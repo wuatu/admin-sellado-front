@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="row justify-content-center">
+            <div class=" text-center" style="margin-top: 30px;">
+                <h1><b>Monitoreo Calibrador 2</b></h1>
+            </div>
+            <div class="col-md-12 text-right">
+                <h2><b>{{ time | date: 'hh:mm:ss a'}}</b></h2>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <h5 class="card-title"> <b>Calibrador L2</b></h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card" style="width: 18rem;">
+                                        <div class="card-body">
+                                            <h1 class="card-title text-center"><b>{{totalHora2}}</b></h1>
+                                            <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por minuto</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card" style="width: 18rem;">
+                                        <div class="card-body">
+                                            <h1 class="card-title text-center"><b>{{totalMinuto2}}</b></h1>
+                                            <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card" style="width: 18rem;">
+                                        <div class="card-body">
+                                            <h1 class="card-title text-center"><b>{{totalTurno2}}</b></h1>
+                                            <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12" style="margin-top: 30px;">
+                    <div class="card w-100">
+                        <div class="card-body" style="margin: 20px;">
+                            <div>
+                                <div style="display: block; ">
+                                    <canvas baseChart [datasets]="barChartData" width="800" height="500" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

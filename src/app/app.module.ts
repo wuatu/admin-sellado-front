@@ -36,6 +36,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
 import { ChartsModule } from 'ng2-charts';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
+import { MonitoreoCalibrador1Component } from './components/monitoreo-calibrador1/monitoreo-calibrador1.component';
+import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador2/monitoreo-calibrador2.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.
     ProduccionPorLineaComponent,
     ProduccionPorCalibradorComponent,
     ConfiguracionComponent,
-    UsuarioAdminComponent
+    UsuarioAdminComponent,
+    MonitoreoCalibrador1Component,
+    MonitoreoCalibrador2Component
   ],
   imports: [
     BrowserModule,

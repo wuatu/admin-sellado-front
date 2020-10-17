@@ -1,7 +1,17 @@
 <!-- menu vertical -->
 <nav id="menu" class="left show" style="height: 100%">
     <ul style="height: 90%">
-        <li><a routerLink="/monitoreo"><i class="fa fa-bar-chart"></i>Monitoreo</a></li>
+        <!--<li><a routerLink="/monitoreo"><i class="fa fa-bar-chart"></i>Monitoreo</a></li>-->
+
+        <li (click)="setCurrentItem(5,produccion,administrar,registros,seguimiento)">
+            <a #produccion><i class="fa fa-line-chart"></i>Monitoreo <i class="fa fa-caret-down"></i></a>
+            <ul>
+                <li *ngIf="expandItem == 5" (click)="setCurrentItem(5,produccion,administrar,registros,seguimiento)"><a routerLink="/monitoreo"><i class="fa fa-line-chart"></i>General</a></li>
+                <li *ngIf="expandItem == 5" (click)="setCurrentItem(5,produccion,administrar,registros,seguimiento)"><a routerLink="monitoreocalibrador1"><i class="fa fa-line-chart"></i>Calibrador 1</a></li>
+                <li *ngIf="expandItem == 5" (click)="setCurrentItem(5,produccion,administrar,registros,seguimiento)"><a routerLink="monitoreocalibrador2"><i class="fa fa-line-chart"></i>Calibrador 2</a></li>
+            </ul>
+        </li>
+
         <li (click)="setCurrentItem(1,produccion,administrar,registros,seguimiento)">
             <a #produccion><i class="fa fa-line-chart"></i>Producción <i class="fa fa-caret-down"></i></a>
             <ul>

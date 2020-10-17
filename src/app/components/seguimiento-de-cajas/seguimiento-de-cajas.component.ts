@@ -226,7 +226,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   }
 
   agregarRegistroDeCajas(){
-    let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-01", "08:35:00" , "2020-09-24", "08:39:02" , 1,1, 0);
+    /*let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-08", "12:16:40" , "2020-09-24", "08:39:02" , 1,1, 0);
     this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
       res=>{
        this.toastr.success('Operación satisfactoria', 'Registro agregado');
@@ -235,11 +235,11 @@ export class SeguimientoDeCajasComponent implements OnInit {
         console.log(err);
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }
-    ); 
+    ); */
 
-    /*for(let j=1; j<10 ; j++){
-      for(let i=6; i<10 ;i++){
-        let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-0"+j, "0"+i+":00:00" , "2020-09-24", "08:39:02" , 1,1, 0);
+    //for(let j=1; j<10 ; j++){
+      for(let i=30; i<59 ;i++){
+        let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-15", "15:"+i+":15" , "2020-10-16", "08:39:02" , 1,1, 0);
         this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
           res=>{
             this.toastr.success('Operación satisfactoria', 'Registro agregado');
@@ -250,7 +250,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
           }
         ); 
       }
-    }*/
+    //}
     
 
     /*for (let i = 1100 ; i<=1200; i++){
