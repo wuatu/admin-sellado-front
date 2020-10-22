@@ -70,14 +70,18 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Rut:</b></label>
                     <div class="input-group">
-                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" [(ngModel)]="addRut" #rut='ngModel' name="rut" id="rut" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                     </div>
                     <!--Valida formulario rut-->
                     <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
                         <div *ngIf="rut.errors.required">
                             Rut es obligatorio
                         </div>
+                        <div *ngIf="rut.errors.rutValidation">
+                            {{rut.errors.rutValidation.message}}
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="form-group">
@@ -120,7 +124,7 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" (click)="agregarAdministrador(myform);modal.close('Save click')">Guardar</button>
+                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarAdministrador(myform);modal.close('Save click')">Guardar</button>
             </div>
         </div>
     </ng-template>
@@ -193,7 +197,7 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" (click)="editarAdministrador(myform);modal.close('Save click')">Guardar</button>
+                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarAdministrador(myform);modal.close('Save click')">Guardar</button>
             </div>
         </div>
     </ng-template>

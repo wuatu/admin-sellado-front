@@ -14,20 +14,21 @@ export class RfidService {
     return this.httpClient.get(`${this.API_URL}/rfids/${id_calibrador}/${id_linea}`);
   }
 
-  getRfid(id:string){
+  getRfid(id:number){
     return this.httpClient.get(`${this.API_URL}/rfid/${id}`);
   }
 
-  deleteRfid(id:string){
+  deleteRfid(id:number){
     return this.httpClient.delete(`${this.API_URL}/rfid/${id}`);
   }
 
   saveRfid(rfid:Rfid){
     console.log(rfid);
+    console.log("service save !!!!!!!");
     return this.httpClient.post(`${this.API_URL}/rfid/`,rfid);
   }
 
-  updateRfid(id:string, rfid:Rfid):Observable<any>{
+  updateRfid(id:number, rfid:Rfid):Observable<any>{
     return this.httpClient.put(`${this.API_URL}/rfid/${id}`,rfid);
   }
 

@@ -74,14 +74,18 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutUsuario" name="rut" id="rut" class="form-control" placeholder="Rut" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutUsuario" name="rut" id="rut" class="form-control" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                 </div>
 
                 <div *ngIf="rut.invalid && (nombre.dirty || rut.touched)" class="alert alert-danger">
                     <div *ngIf="rut.errors.required">
                         Rut de usuario es obligatorio
                     </div>
+                    <div *ngIf="rut.errors.rutValidation">
+                        {{rut.errors.rutValidation.message}}
+                    </div>
                 </div>
+
             </div>
             <div class="form-group">
                 <label for="lineaLabel"><b>Nombre:</b></label>
@@ -122,7 +126,7 @@
 
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarUsuario(myform);modal.close('Save click')">Agregar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarUsuario(myform);modal.close('Save click')">Agregar</button>
         </div>
     </div>
 </ng-template>
@@ -145,19 +149,23 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="currentUsuarioSelected.rut" name="rut" id="rut" class="form-control" placeholder="Rut" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rut='ngModel' [(ngModel)]="currentUsuarioSelected.rut" name="rut" id="rut" class="form-control" placeholder="Rut
+                    " class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rut.invalid && (nombre.dirty || rut.touched)" class="alert alert-danger">
                     <div *ngIf="rut.errors.required">
                         Rut de usuario es obligatorio
                     </div>
+                    <div *ngIf="rut.errors.rutValidation">
+                        {{rut.errors.rutValidation.message}}
+                    </div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="lineaLabel"><b>Nombre:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentUsuarioSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentUsuarioSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" class="form-control">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -169,7 +177,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Apellido:</b></label>
                 <div class="input-group">
-                    <input type="text" #apellido='ngModel' [(ngModel)]="currentUsuarioSelected.apellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #apellido='ngModel' [(ngModel)]="currentUsuarioSelected.apellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" class="form-control">
                 </div>
 
                 <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
@@ -192,7 +200,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarUsuario(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarUsuario(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

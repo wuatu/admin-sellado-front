@@ -81,7 +81,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarCalibrador(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarCalibrador(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -115,7 +115,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarCalibrador(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarCalibrador(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

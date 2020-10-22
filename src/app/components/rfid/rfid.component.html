@@ -44,7 +44,11 @@
                 <tr>
                     <th scope="col">N°</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Ip</th>
+                    <th scope="col">Port</th>
+                    <th scope="col">BaudRate</th>
+                    <th scope="col">Parity</th>
+                    <th scope="col">Stop Bits</th>
+                    <th scope="col">Data Bits</th>
                     <th *ngIf="rol!=2" scope="col">Editar</th>
                     <th *ngIf="rol!=2" scope="col">Eliminar</th>
                     <th *ngIf="rol == 2" scope="col"> </th>
@@ -56,6 +60,10 @@
                     <th scope="row">{{i+1}}</th>
                     <td>{{rfid.nombre}}</td>
                     <td>{{rfid.ip}}</td>
+                    <td>{{rfid.baudRate}}</td>
+                    <td>{{rfid.parity}}</td>
+                    <td>{{rfid.stopBits}}</td>
+                    <td>{{rfid.dataBits}}</td>
                     <td>
                         <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(rfid);open(mymodaleditar)">
               <i class="fa fa-edit"></i>
@@ -85,7 +93,7 @@
             <div class="form-group">
                 <label for="rfidLabel"><b>Nombre RFID:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreRfidAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && rfid.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreRfidAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
 
                 <!--Valida formulario nombre-->
@@ -95,40 +103,59 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label for="rfidLabel"><b>Ip RFID:</b></label>
                 <div class="input-group">
                     <input type="text" #ip='ngModel' [(ngModel)]="ipRfidAdded" name="ip" id="ip" class="form-control" placeholder="ip" required [ngClass]="{ 'is-invalid': submitted && rfid.errors }">
-                </div>
+                </div>-->
 
-                <!--Valida formulario nombre-->
+            <!--Valida formulario nombre
                 <div *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="alert alert-danger">
                     <div *ngIf="ip.errors.required">
                         Ip es obligatorio
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="rfidLabel"><b>Calibrador:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                    </div>
+            </div>-->
+            <label for="lineaLabel"><b>Port:</b></label>
+            <div ngbDropdown>
+
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px" required>{{portText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let port of dropDownPort" (click)="changeSelectedPort(port)">{{port.nombre}}</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="rfidLabel"><b>Línea:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedLineaText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
-                    </div>
+
+            <label for="lineaLabel"><b>BaudRate:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{baudRateText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let baudRate of dropDownBaudRate" (click)="changeSelectedBaudRate(baudRate)">{{baudRate.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Parity Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{parityBitText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let parityBit of dropDownParityBit" (click)="changeSelectedParityBit(parityBit)">{{parityBit.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Stop Bits:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{stopBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let stopBits of dropDownStopBits" (click)="changeSelectedStopBits(stopBits)">{{stopBits.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Data Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{dataBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let dataBits of dropDownDataBits" (click)="changeSelectedDataBits(dataBits)">{{dataBits.nombre}}</button>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarRfid(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="agregarRfid(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -151,7 +178,7 @@
             <div class="form-group">
                 <label for="patentelabel"><b>Nombre línea:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentRfidSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required>
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentRfidSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
                 <!--Valida formulario nombre-->
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -160,40 +187,57 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label for="rfidLabel"><b>Ip RFID:</b></label>
                 <div class="input-group">
                     <input type="text" #ip='ngModel' [(ngModel)]="currentRfidSelected.ip" name="ip" id="ip" class="form-control" placeholder="ip" required [ngClass]="{ 'is-invalid': submitted && rfid.errors }">
-                </div>
+                </div>-->
 
-                <!--Valida formulario nombre-->
+            <!--Valida formulario nombre
                 <div *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="alert alert-danger">
                     <div *ngIf="ip.errors.required">
                         Ip es obligatorio
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="rfidLabel"><b>Calibrador:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibradorModificar(calibrador)">{{calibrador.nombre}}</button>
-                    </div>
+            </div>-->
+            <label for="lineaLabel"><b>Port:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{portText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let port of dropDownPort" (click)="changeSelectedPort(port)">{{port.nombre}}</button>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="rfidLabel"><b>Línea:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedLineaText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
-                    </div>
+            <label for="lineaLabel"><b>BaudRate:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{baudRateText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let baudRate of dropDownBaudRate" (click)="changeSelectedBaudRate(baudRate)">{{baudRate.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Parity Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{parityBitText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let parityBit of dropDownParityBit" (click)="changeSelectedParityBit(parityBit)">{{parityBit.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Stop Bits:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{stopBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let stopBits of dropDownStopBits" (click)="changeSelectedStopBits(stopBits)">{{stopBits.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Data Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{dataBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let dataBits of dropDownDataBits" (click)="changeSelectedDataBits(dataBits)">{{dataBits.nombre}}</button>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarRfid(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="editarRfid(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -202,13 +246,13 @@
 <!--Modal confirmación-->
 <ng-template #mymodalconfirmar let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-title">Eliminar línea</h4>
+        <h4 class="modal-title" id="modal-title">Eliminar rfid</h4>
         <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
     </div>
     <div class="modal-body">
-        <p>¿Seguro que quieres eliminar una línea?</p>
+        <p>¿Seguro que quieres eliminar el rfid?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>

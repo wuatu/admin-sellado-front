@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { RegistroService } from '../../services/registro.service';
+//import { RutValidationDirective } from '../../Directive/rut-validation-directive.directive';
+
 
 
 @Component({

@@ -47,7 +47,11 @@
                 <tr>
                     <th scope="col">N°</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">ip</th>
+                    <th scope="col">Port</th>
+                    <th scope="col">BaudRate</th>
+                    <th scope="col">Parity</th>
+                    <th scope="col">Stop Bits</th>
+                    <th scope="col">Data Bits</th>
                     <th *ngIf="rol != 2" scope="col">Editar</th>
                     <th *ngIf="rol != 2" scope="col">Eliminar</th>
                     <th *ngIf="rol == 2" scope="col"> </th>
@@ -59,6 +63,10 @@
                     <th scope="row">{{i+1}}</th>
                     <td>{{lector.nombre}}</td>
                     <td>{{lector.ip}}</td>
+                    <td>{{lector.baudRate}}</td>
+                    <td>{{lector.parity}}</td>
+                    <td>{{lector.stopBits}}</td>
+                    <td>{{lector.dataBits}}</td>
                     <td>
                         <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(lector);open(modal_editar_lector)">
                           <i class="fa fa-edit" ></i>
@@ -89,7 +97,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -98,21 +106,44 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="lineaLabel"><b>Dirección IP:</b></label>
-                <div class="input-group">
-                    <input type="text" #nombre2='ngModel' [(ngModel)]="ipLector" name="ip" id="ip" class="form-control" placeholder="Dirección ip" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+            <label for="lineaLabel"><b>Port:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{portText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let port of dropDownPort" (click)="changeSelectedPort(port)">{{port.nombre}}</button>
                 </div>
-
-                <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">
-                    <div *ngIf="nombre2.errors.required">
-                        Dirección ip es obligatoria
-                    </div>
+            </div>
+            <label for="lineaLabel"><b>BaudRate:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{baudRateText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let baudRate of dropDownBaudRate" (click)="changeSelectedBaudRate(baudRate)">{{baudRate.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Parity Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{parityBitText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let parityBit of dropDownParityBit" (click)="changeSelectedParityBit(parityBit)">{{parityBit.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Stop Bits:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{stopBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let stopBits of dropDownStopBits" (click)="changeSelectedStopBits(stopBits)">{{stopBits.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Data Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{dataBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let dataBits of dropDownDataBits" (click)="changeSelectedDataBits(dataBits)">{{dataBits.nombre}}</button>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarLector(myform);modal.close('Save click')">Agregar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="agregarLector(myform);modal.close('Save click')">Agregar</button>
         </div>
     </div>
 </ng-template>
@@ -136,7 +167,7 @@
 
                 <label for="lineaLabel"><b>Nombre lector:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentLectorSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreLector" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
 
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -145,10 +176,10 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label for="lineaLabel"><b>Dirección IP:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre2='ngModel' [(ngModel)]="currentLectorSelected.ip" name="ip" id="ip" class="form-control" placeholder="Dirección ip" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    <input type="text" #nombre2='ngModel' [(ngModel)]="ipLector" name="ip" id="ip" class="form-control" placeholder="Dirección ip">
                 </div>
 
                 <div *ngIf="nombre2.invalid && (nombre2.dirty || nombre2.touched)" class="alert alert-danger">
@@ -156,10 +187,45 @@
                         Dirección ip es obligatoria
                     </div>
                 </div>
+            </div>-->
+            <label for="lineaLabel"><b>Port:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{portText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let port of dropDownPort" (click)="changeSelectedPort(port)">{{port.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>BaudRate:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{baudRateText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let baudRate of dropDownBaudRate" (click)="changeSelectedBaudRate(baudRate)">{{baudRate.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Parity Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{parityBitText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let parityBit of dropDownParityBit" (click)="changeSelectedParityBit(parityBit)">{{parityBit.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Stop Bits:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{stopBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let stopBits of dropDownStopBits" (click)="changeSelectedStopBits(stopBits)">{{stopBits.nombre}}</button>
+                </div>
+            </div>
+            <label for="lineaLabel"><b>Data Bit:</b></label>
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{dataBitsText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let dataBits of dropDownDataBits" (click)="changeSelectedDataBits(dataBits)">{{dataBits.nombre}}</button>
+                </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarLector(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="editarLector(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

@@ -1,0 +1,212 @@
+<div class="row justify-content-start">
+    <div class="col-12">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Lectores validadores en calibrador</b></h1>
+            </div>
+        </div>
+        <br>
+        <div class="row justify-content-center">
+
+            <div class="col-md-4  align-self-end text-left ">
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4  align-self-end ">
+                <div class="text-right" *ngIf="selectedCalibradorObject">
+                    <button class="btn btn-primary  text-right" *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
+                    Agregar lector validador
+                  </button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row" *ngIf="selectedCalibradorObject && bandera">
+            <div class="col-12 ">
+                <h4>Lista de lectores Validadores</h4>
+            </div>
+        </div>
+        <!--Tabla de contenido-->
+        <table class="table table-hover" *ngIf="selectedCalibradorObject && bandera">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Ip</th>
+                    <th scope="col">Máximo tiempo de espera </th>
+                    <th *ngIf="rol != 2" scope="col">Editar</th>
+                    <th *ngIf="rol != 2" scope="col">Eliminar</th>
+                    <th *ngIf="rol == 2" scope="col"> </th>
+                    <th *ngIf="rol == 2" scope="col"> </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let lector of lectoresValidador; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{lector.nombre}}</td>
+                    <td>{{lector.ip}}</td>
+                    <td>{{lector.max_wait_time}}</td>
+                    <td>
+                        <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(lector);open(modal_editar_lector)">
+                        <i class="fa fa-edit" ></i>
+                      </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(lector);open(modal_confirmar_eliminacion)">
+                        <i class="fa fa-trash-alt" ></i>
+                      </button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--modal agregar-->
+<ng-template #modal_agregar_lector let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Agregar Lector validador</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+  <span aria-hidden="true">×</span>
+</button>
+    </div>
+    <div class="modal-body">
+        <form #myform="ngForm">
+            <div class="form-group">
+                <label for="lineaLabel"><b>Nombre lector validador:</b></label>
+                <div class="input-group">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreValidador" name="nombre" id="nombre" class="form-control" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }" placeholder="Nombre">
+                </div>
+
+                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
+                    <div *ngIf="nombre.errors.required">
+                        Nombre de lector validador es obligatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lineaLabel"><b>Ip lector validador:</b></label>
+                <div class="input-group">
+                    <input type="ipaddress" #ipAdd='ngModel' [(ngModel)]="ipValidador" name="ipAdd" id="ipAdd" class="form-control" required maxlength="15" ipValidation placeholder="Ej: 192.168.0.1">
+                </div>
+
+                <div *ngIf="ipAdd.invalid && (ipAdd.dirty || ipAdd.touched)" class="alert alert-danger">
+                    <div *ngIf="ipAdd.errors.required">
+                        Ip de lector validador es obligatorio
+                    </div>
+                    <div *ngIf="ipAdd.errors.ipValidation">
+                        {{ipAdd.errors.ipValidation.message}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lineaLabel"><b>Máximo tiempo de espera:</b></label>
+                <div class="input-group">
+                    <input type="text" #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }" placeholder="Máximo tiempo de espera">
+                </div>
+
+                <div *ngIf="max.invalid && (max.dirty || max.touched)" class="alert alert-danger">
+                    <div *ngIf="max.errors.required">
+                        Máximo tiempo de espera es obligatorio
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+        <div class="modal-footer">
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarLector(myform);modal.close('Save click')">Agregar</button>
+        </div>
+    </div>
+</ng-template>
+<!--fin modal agregar-->
+
+<!--modal editar-->
+<ng-template #modal_editar_lector let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Editar lector Validador</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <form #myform="ngForm">
+            <!--Id de linea clickeada se almacena en un input hidden-->
+            <div class="form-group">
+                <input type="hidden" ngModel [(ngModel)]="currentLectorValidadorSelected.id" name="id" id="id">
+            </div>
+            <div class="form-group">
+
+                <label for="lineaLabel"><b>Nombre lector validador:</b></label>
+                <div class="input-group">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreValidador" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                </div>
+
+                <div *ngIf=" nombre.invalid && (nombre.dirty || nombre.touched) " class="alert alert-danger ">
+                    <div *ngIf="nombre.errors.required ">
+                        Nombre de lector validador es obligatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+
+                <label for="lineaLabel "><b>Ip lector validador:</b></label>
+                <div class="input-group ">
+                    <input type="text " #ip='ngModel' [(ngModel)]="ipValidador" name="ip " id="ip " class="form-control " required maxlength="15" ipValidation placeholder="Dirección ip">
+                </div>
+
+                <div *ngIf="ip.invalid && (ip.dirty || ip.touched) " class="alert alert-danger ">
+                    <div *ngIf="ip.errors.required ">
+                        Ip de lector validador es obligatorio
+                    </div>
+                    <div *ngIf="ip.errors.ipValidation">
+                        {{ip.errors.ipValidation.message}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group ">
+
+                <label for="lineaLabel "><b>Máximo tiempo de espera:</b></label>
+                <div class="input-group ">
+                    <input type="text " #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control " placeholder="Máximo tiempo de espera" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                </div>
+
+                <div *ngIf="max.invalid && (max.dirty || max.touched) " class="alert alert-danger ">
+                    <div *ngIf="max.errors.required ">
+                        Máximo tiempo de espera es obligatorio
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div class="modal-footer ">
+            <button type="submit " [disabled]="!myform.valid" class="btn btn-primary " (click)="editarLector(myform);modal.close( 'Save click') ">Guardar</button>
+        </div>
+    </div>
+</ng-template>
+<!--fin modal editar-->
+
+<!--Modal confirmación de eliminación-->
+<ng-template #modal_confirmar_eliminacion let-modal>
+    <div class="modal-header ">
+        <h4 class="modal-title " id="modal-title ">Eliminar lector validador</h4>
+        <button type="button " class="btn btn-outline-danger " aria-describedby="modal-title " (click)="modal.dismiss( 'Cross click') ">
+  <span aria-hidden="true ">&times;</span>
+</button>
+    </div>
+    <div class="modal-body ">
+        <p>¿Seguro que deseas eliminar este lector validador?</p>
+    </div>
+    <div class="modal-footer ">
+        <button type="button " class="btn btn-outline-secondary " (click)="modal.dismiss( 'cancel click') ">Cancelar</button>
+        <button type="button " class="btn btn-danger " (click)="modal.dismiss( 'ok') ">Aceptar</button>
+    </div>
+</ng-template>
+<!--fin modal confirmacion eliminación-->

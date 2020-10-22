@@ -21,6 +21,7 @@ import { ConfiguracionComponent } from './components/configuracion/configuracion
 import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
 import { MonitoreoCalibrador1Component } from './components/monitoreo-calibrador1/monitoreo-calibrador1.component';
 import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador2/monitoreo-calibrador2.component';
+import { LectorValidadorComponent } from './components/lector-validador/lector-validador.component';
 
 
 const routes: Routes = [
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'usuarioadmin', component: UsuarioAdminComponent, canActivate: [AuthGuard] },
   { path: 'monitoreocalibrador1', component: MonitoreoCalibrador1Component, canActivate: [AuthGuard] },
   { path: 'monitoreocalibrador2', component:MonitoreoCalibrador2Component, canActivate: [AuthGuard] },
+  { path: 'lectorValidador', component:LectorValidadorComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -43,6 +43,31 @@ export class LectoresComponent implements OnInit {
 
   selectedLectorObject:any;
 
+  // Array para el dropdown del selector de baudRate
+  dropDownBaudRate: any [] = [{nombre:'115200'}, {nombre:'19200'}, {nombre:'256000'}, {nombre:'38400'}, {nombre:'57600'}, {nombre:'9600'}];
+  baudRateText: string = "BaudRate";    
+  selectedBaudRate:any = null;
+
+  // Array para el dropdown del selector de parity
+  dropDownParityBit: any [] = [{nombre:'None'}, {nombre:'Even'}, {nombre:'Odd'}, {nombre:'Space'}, {nombre:'Mart'}];
+  parityBitText: string ="Parity";    
+  selectedParityBit:any = null;
+
+  // Array para el dropdown del selector de stopBits
+  dropDownStopBits: any [] = [{nombre:'1'}, {nombre:'1.5'}, {nombre:'2'}];
+  stopBitsText: string ="Stop Bits";    
+  selectedStopBits:any = null;
+
+  // Array para el dropdown del selector de dataBits
+  dropDownDataBits: any [] = [{nombre:'5'}, {nombre:'6'}, {nombre:'7'}, {nombre:'8'}];
+  dataBitsText: string ="Data Bits";    
+  selectedDataBits:any = null;
+    
+  // dropdown del selector de port
+  dropDownPort: any = [];// [{nombre:'5'}, {nombre:'6'}, {nombre:'7'}, {nombre:'8'}];
+  portText: string ="Port";    
+  selectedPort:any = null;
+
   rol:number;
 
   constructor(
@@ -56,9 +81,19 @@ export class LectoresComponent implements OnInit {
 
   ngOnInit() {
     this.listarCalibradores(); 
+    this.completeDropDownPort();
     //this.listarLineas();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     console.log("rol: "+this.rol);
+  }
+
+
+  completeDropDownPort(){
+    for(let i = 1; i<100; i++){
+      var p = {nombre: 'COM'+i};
+      this.dropDownPort.push(p);
+    }
+    console.log(this.dropDownPort);
   }
 
   //metodo que lista las calibradores
@@ -111,6 +146,33 @@ export class LectoresComponent implements OnInit {
       }
     );
   }
+
+  changeSelectedBaudRate(newSelected: any) { 
+    this.baudRateText = newSelected.nombre;
+    this.selectedBaudRate = newSelected.nombre;
+    console.log(this.selectedBaudRate);      
+  }
+  changeSelectedParityBit(newSelected: any) { 
+    this.parityBitText = newSelected.nombre;
+    this.selectedParityBit = newSelected.nombre;
+    console.log(this.selectedParityBit);      
+  }
+  changeSelectedStopBits(newSelected: any) { 
+    this.stopBitsText = newSelected.nombre;
+    this.selectedStopBits = newSelected.nombre;
+    console.log(this.selectedStopBits);      
+  }
+  changeSelectedDataBits(newSelected: any) { 
+    this.dataBitsText = newSelected.nombre;
+    this.selectedDataBits = newSelected.nombre;
+    console.log(this.selectedDataBits);      
+  }
+
+  changeSelectedPort(newSelected: any) { 
+    this.portText = newSelected.nombre;
+    this.selectedPort = newSelected.nombre;
+    console.log(this.selectedPort);      
+  }
   
   changeSelectedCalibrador(newSelected: any) { 
     console.log("CHANGESELECTEDSELLADORA");
@@ -156,14 +218,12 @@ export class LectoresComponent implements OnInit {
 
   //metodo que crea un nuevo lector
   agregarLector(form: NgForm) {  
-    if (!form.value.nombre || !this.selectedCalibradorObject || !this.selectedLineaObject) {
-      this.toastr.error('No se pudo guardar lector', 'Oops');
-      this.nombreLector = null;
-      this.ipLector = null;
+    if (this.nombreLector == null || this.selectedPort == null || this.selectedBaudRate == null || this.selectedParityBit == null || this.selectedStopBits == null || this.selectedDataBits == null || this.selectedLineaObject.id == null) {
+      this.toastr.error('No se pudo guardar el Lector, por favor complete todos los campos.', 'Oops');
       return;
     }
     
-    let lector = new Lector(null, this.nombreLector, this.ipLector,this.selectedLineaObject.id);
+    let lector = new Lector(null, this.nombreLector, this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits,this.selectedLineaObject.id);
     
     this.lectorService.saveLector(lector).subscribe(
       res => {
@@ -171,14 +231,14 @@ export class LectoresComponent implements OnInit {
         this.registroService.creaRegistro("Se ha creado un lector, nombre: "+this.nombreLector);
         this.nombreLector = null;
         this.ipLector = null;
+        this.clearDate();
         this.listarLectores();
         
       },
       err => {
         console.log(err);
         this.toastr.error('No se pudo guardar el lector', 'Oops');
-        this.nombreLector = null;
-        this.ipLector = null;
+        this.clearDate();
       }
     );
 
@@ -207,6 +267,27 @@ export class LectoresComponent implements OnInit {
 
   onEditar(lector: Lector) {
     this.currentLectorSelected = lector;
+
+    this.nombreLector = this.currentLectorSelected.nombre;
+    this.ipLector = this.currentLectorSelected.ip;
+
+    this.selectedBaudRate = this.currentLectorSelected.baudRate;
+    this.baudRateText = this.currentLectorSelected.baudRate;
+
+    this.selectedParityBit = this.currentLectorSelected.parity;
+    this.parityBitText = this.currentLectorSelected.parity;
+
+    this.selectedStopBits = this.currentLectorSelected.stopBits;
+    this.stopBitsText = this.currentLectorSelected.stopBits;
+
+    this.selectedDataBits = this.currentLectorSelected.dataBits;
+    this.dataBitsText = this.currentLectorSelected.dataBits;
+
+    this.selectedPort = this.currentLectorSelected.ip;
+    this.portText = this.currentLectorSelected.ip;
+
+    console.log(this.currentLectorSelected);
+
     this.lineaService.getLinea(lector.fk_linea).subscribe(
       res=>{
         this.selectedLineaObject=res;
@@ -226,12 +307,13 @@ export class LectoresComponent implements OnInit {
     console.log(this.selectedLineaObject);
     console.log(this.currentLectorSelected);
     if (!form.value.nombre) {
+      
       this.toastr.error('No se pudo editar el lector', 'Oops',);
       return;
     }
     let lector: Lector;
     if(this.selectedLineaObject){
-      lector = new Lector(this.currentLectorSelected.id, this.currentLectorSelected.nombre, this.currentLectorSelected.ip, this.selectedLineaObject.id);
+      lector = new Lector(this.currentLectorSelected.id, this.nombreLector, this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits, this.selectedLineaObject.id);
       
     }    
     this.lectorService.updateLector(lector.id, lector).subscribe(
@@ -239,14 +321,35 @@ export class LectoresComponent implements OnInit {
         this.toastr.success('Operación satisfactoria', 'Lector editado');
         this.registroService.creaRegistro("Se ha editado un lector, id: "+lector.id+" y nombre: "+lector.nombre);
         console.log(res);
+        this.clearDate();
         this.listarLectores();
         this.currentLectorSelected = null;
       },
       err => {
         console.log(err);
+        this.clearDate();
         this.toastr.error('No se pudo editar el lector', 'Oops',);
       }
     );
+  }
+
+  clearDate(){
+    this.nombreLector = null;
+
+    this.selectedBaudRate = null;
+    this.baudRateText = "Baud Rate";
+
+    this.selectedParityBit = null;
+    this.parityBitText = "Parity";
+
+    this.selectedStopBits = null;
+    this.stopBitsText = "Stop Bits";
+
+    this.selectedDataBits = null;
+    this.dataBitsText = "Data Bits";
+
+    this.selectedPort = null;
+    this.portText = "Port";
   }
 
   

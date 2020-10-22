@@ -169,7 +169,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -269,7 +269,7 @@
 
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

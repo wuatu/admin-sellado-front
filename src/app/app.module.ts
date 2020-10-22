@@ -38,6 +38,10 @@ import { ConfiguracionComponent } from './components/configuracion/configuracion
 import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.component';
 import { MonitoreoCalibrador1Component } from './components/monitoreo-calibrador1/monitoreo-calibrador1.component';
 import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador2/monitoreo-calibrador2.component';
+import { LectorValidadorComponent } from './components/lector-validador/lector-validador.component';
+import { RutValidationDirective } from './directive/rut-validation-directive.directive';
+import { ipValidationDirective } from './directive/ip-validation-directive.directive';
+
 
 @NgModule({
   declarations: [
@@ -62,7 +66,10 @@ import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador
     ConfiguracionComponent,
     UsuarioAdminComponent,
     MonitoreoCalibrador1Component,
-    MonitoreoCalibrador2Component
+    MonitoreoCalibrador2Component,
+    LectorValidadorComponent,
+    RutValidationDirective,
+    ipValidationDirective
   ],
   imports: [
     BrowserModule,

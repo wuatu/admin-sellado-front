@@ -10,18 +10,18 @@ export class LectorService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getLectores(id:string){
+  getLectores(id:number){
     return this.httpClient.get(`${this.API_URL}/lectores/${id}`);
   }
-  getLectoresId(idSelladora:number, idLinea:number){
-    return this.httpClient.get(`${this.API_URL}/lectores/${idSelladora}/${idLinea}`);
+  getLectoresId(id_calibrador:number, id_linea:number){
+    return this.httpClient.get(`${this.API_URL}/lectores/${id_calibrador}/${id_linea}`);
   }
 
-  getLector(id:string){
+  getLector(id:number){
     return this.httpClient.get(`${this.API_URL}/lector/${id}`);
   }
 
-  deleteLector(id:string){
+  deleteLector(id:number){
     return this.httpClient.delete(`${this.API_URL}/lector/${id}`);
   }
 
@@ -30,7 +30,7 @@ export class LectorService {
     return this.httpClient.post(`${this.API_URL}/lector/`,lector);
   }
 
-  updateLector(id:string, lector:Lector):Observable<any>{
+  updateLector(id:number, lector:Lector):Observable<any>{
     return this.httpClient.put(`${this.API_URL}/lector/${id}`,lector);
   }
 }

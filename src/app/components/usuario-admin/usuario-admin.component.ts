@@ -66,6 +66,10 @@ export class UsuarioAdminComponent implements OnInit {
 
   //metodo que crea una nueva administrador
   agregarAdministrador(form: NgForm) {
+    console.log(form.value);
+    if (form.value.rut == null){
+      return;
+    }
     if (!this.addNombre || !this.addApellido || !this.addRut || !this.addPassword) {
       this.toastr.error('No se pudo guardar administrador', 'Oops');
       return;

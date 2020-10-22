@@ -8,6 +8,7 @@ import { CalibradorService } from 'src/app/services/calibrador.service';
 import { Calibrador } from 'src/app/models/calibrador';
 import { LineaService } from 'src/app/services/linea.service';
 import { RegistroService } from '../../services/registro.service';
+import { Linea } from '../../models/linea';
 
 
 @Component({
@@ -18,9 +19,12 @@ import { RegistroService } from '../../services/registro.service';
 export class RfidComponent implements OnInit {
   closeResult = '';
   rfids: any;
-  currentRfidSelected: Rfid
   nombreRfidAdded: string;
   ipRfidAdded: string;
+
+  currentCalibradorSelected: Calibrador;
+  currentLineaSelected: Linea;
+  currentRfidSelected: Rfid;
 
   calibradores: any = [];
   selectedCalibradorText: string="Selecciona una calibrador";  
@@ -32,12 +36,37 @@ export class RfidComponent implements OnInit {
   lineas: any = [];
   selectedLineaText: string="Selecciona una línea";  
   selectedLineaTextModificar: string="Selecciona una línea";  
-  selectedLineaObject:any;
-  selectedLineaId:string;
-  selectedLineaObjectModificar:any;
+  selectedLineaObject:any = null;
+  selectedLineaId:string = null;
+  selectedLineaObjectModificar:any = null;
 
-  selectedRfidObject:any;
+  selectedRfidObject:any = null;
   
+  // Array para el dropdown del selector de baudRate
+  dropDownBaudRate: any [] = [{nombre:'115200'}, {nombre:'19200'}, {nombre:'256000'}, {nombre:'38400'}, {nombre:'57600'}, {nombre:'9600'}];
+  baudRateText: string="BaudRate";    
+  selectedBaudRate:any = null;
+
+  // Array para el dropdown del selector de parity
+  dropDownParityBit: any [] = [{nombre:'None'}, {nombre:'Even'}, {nombre:'Odd'}, {nombre:'Space'}, {nombre:'Mart'}];
+  parityBitText: string="Parity";    
+  selectedParityBit:any = null;
+
+  // Array para el dropdown del selector de stopBits
+  dropDownStopBits: any [] = [{nombre:'1'}, {nombre:'1.5'}, {nombre:'2'}];
+  stopBitsText: string="Stop Bits";    
+  selectedStopBits:any = null;
+
+  // Array para el dropdown del selector de dataBits
+  dropDownDataBits: any [] = [{nombre:'5'}, {nombre:'6'}, {nombre:'7'}, {nombre:'8'}];
+  dataBitsText: string="Data Bits";    
+  selectedDataBits:any = null;
+    
+  // dropdown del selector de port
+  dropDownPort: any = [];// [{nombre:'5'}, {nombre:'6'}, {nombre:'7'}, {nombre:'8'}];
+  portText: string="Port";    
+  selectedPort:any = null;
+
   rol: number;
 
   constructor(
@@ -56,9 +85,17 @@ export class RfidComponent implements OnInit {
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {      
     this.listarCalibradores();    
-    this.listarLineas();
+    this.completeDropDownPort();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     console.log("rol: "+this.rol);   
+  }
+
+  completeDropDownPort(){
+    for(let i = 1; i<100; i++){
+      var p = {nombre: 'COM'+i};
+      this.dropDownPort.push(p);
+    }
+    console.log(this.dropDownPort);
   }
 
   //metodo que lista las calibradores
@@ -67,6 +104,7 @@ export class RfidComponent implements OnInit {
       res=>{
         console.log(res);
         this.calibradores=res;
+        this.listarLineas();
       },
       err=>{
         console.log(err);
@@ -105,6 +143,8 @@ export class RfidComponent implements OnInit {
       res => {
         //los registros se almacena en array rfids que sirve para llenar la tabla de vista rfids
         this.rfids = res;
+        console.log("Rfids");
+        console.log(this.rfids);
       },
       err => {
         if (err.status != 404) {
@@ -123,16 +163,17 @@ export class RfidComponent implements OnInit {
     this.ipRfidAdded=form.value.ip;
     console.log(this.nombreRfidAdded);
     console.log( this.selectedLineaObject);
-    if (!this.nombreRfidAdded || !this.selectedLineaObject) {
-      this.toastr.error('No se pudo guardar Rfid', 'Oops');
+    if (this.nombreRfidAdded == null || this.selectedPort == null || this.selectedBaudRate == null || this.selectedParityBit == null || this.selectedStopBits == null || this.selectedDataBits == null || this.selectedLineaObject.id == null) {
+      this.toastr.error('No se pudo guardar Rfid, por favor complete todos los campos.', 'Oops');
       return;
     }
-    let rfid = new Rfid(null, this.nombreRfidAdded,this.ipRfidAdded,this.selectedLineaObject.id);
+    let rfid = new Rfid(null, this.nombreRfidAdded,this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits,this.selectedLineaObject.id);
     this.rfidService.saveRfid(rfid).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'rfid agregado');
         this.registroService.creaRegistro("Se ha creado un rfid, nombre: "+this.nombreRfidAdded+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrado);
         this.listarRfids();
+        this.clearDate();
         this.nombreRfidAdded=null;
         this.ipRfidAdded=null;
       },
@@ -147,6 +188,25 @@ export class RfidComponent implements OnInit {
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto rfid clickeado a variable global currentRfidSelected
   onEditar(rfid: Rfid) {
     this.currentRfidSelected = rfid;
+
+    this.nombreRfidAdded = this.currentRfidSelected.nombre;
+    this.ipRfidAdded = this.currentRfidSelected.ip;
+
+    this.selectedBaudRate = this.currentRfidSelected.baudRate;
+    this.baudRateText = this.currentRfidSelected.baudRate;
+
+    this.selectedParityBit = this.currentRfidSelected.parity;
+    this.parityBitText = this.currentRfidSelected.parity;
+
+    this.selectedStopBits = this.currentRfidSelected.stopBits;
+    this.stopBitsText = this.currentRfidSelected.stopBits;
+
+    this.selectedDataBits = this.currentRfidSelected.dataBits;
+    this.dataBitsText = this.currentRfidSelected.dataBits;
+
+    this.selectedPort = this.currentRfidSelected.ip;
+    this.portText = this.currentRfidSelected.ip;
+
     this.lineaService.getLinea(rfid.fk_linea).subscribe(
       res=>{
         this.selectedRfidObject = res;
@@ -167,7 +227,7 @@ export class RfidComponent implements OnInit {
     }
     let rfid: Rfid;
     if(this.selectedLineaObject){
-      rfid = new Rfid(this.currentRfidSelected.id, this.currentRfidSelected.nombre, this.currentRfidSelected.ip, this.selectedLineaObject.id);
+      rfid = new Rfid(this.currentRfidSelected.id, this.currentRfidSelected.nombre, this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits, this.selectedLineaObject.id);
     }    
     this.rfidService.updateRfid(rfid.id, rfid).subscribe(
       res => {
@@ -175,6 +235,7 @@ export class RfidComponent implements OnInit {
         this.registroService.creaRegistro("Se ha editado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
         console.log(res);
         this.listarRfids();
+        this.clearDate();
         this.currentRfidSelected = null;
         this.ipRfidAdded=null;
       },
@@ -232,6 +293,33 @@ export class RfidComponent implements OnInit {
     }
   }
 
+  changeSelectedBaudRate(newSelected: any) { 
+    this.baudRateText = newSelected.nombre;
+    this.selectedBaudRate = newSelected.nombre;
+    console.log(this.selectedBaudRate);      
+  }
+  changeSelectedParityBit(newSelected: any) { 
+    this.parityBitText = newSelected.nombre;
+    this.selectedParityBit = newSelected.nombre;
+    console.log(this.selectedParityBit);      
+  }
+  changeSelectedStopBits(newSelected: any) { 
+    this.stopBitsText = newSelected.nombre;
+    this.selectedStopBits = newSelected.nombre;
+    console.log(this.selectedStopBits);      
+  }
+  changeSelectedDataBits(newSelected: any) { 
+    this.dataBitsText = newSelected.nombre;
+    this.selectedDataBits = newSelected.nombre;
+    console.log(this.selectedDataBits);      
+  }
+
+  changeSelectedPort(newSelected: any) { 
+    this.portText = newSelected.nombre;
+    this.selectedPort = newSelected.nombre;
+    console.log(this.selectedPort);      
+  }
+
   changeSelectedCalibrador(newSelected: any) { 
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject=newSelected;
@@ -253,5 +341,24 @@ export class RfidComponent implements OnInit {
   changeSelectedCalibradorLinea(newSelected: any) { 
     this.selectedLineaText = newSelected.nombre;
     this.selectedLineaObject=newSelected;
+  }
+
+  clearDate(){
+    this.nombreRfidAdded = null;
+
+    this.selectedBaudRate = null;
+    this.baudRateText = "Baud Rate";
+
+    this.selectedParityBit = null;
+    this.parityBitText = "Parity";
+
+    this.selectedStopBits = null;
+    this.stopBitsText = "Stop Bits";
+
+    this.selectedDataBits = null;
+    this.dataBitsText = "Data Bits";
+
+    this.selectedPort = null;
+    this.portText = "Port";
   }
 }
