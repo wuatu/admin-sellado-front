@@ -63,7 +63,7 @@
     </div>
     <hr>
     <br>
-    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray">
+    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject">
         <div class="text-right">
             <button class="btn btn-primary " (click)="open(modal_agregar_usuario)"><i class="fa fa-plus-circle"></i>
                 Agregar colaborador a línea
@@ -72,12 +72,12 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-md-12" *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray" style="margin: 20px;">
+        <div class="col-md-12" *ngIf="bandera == true" style="margin: 20px;">
             <h4>Lista de colaboradores en línea de sellado</h4>
         </div>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray" id="excel-table">
+    <table class="table table-hover" *ngIf="bandera == true" id="excel-table">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -91,26 +91,31 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let usuarioEnLinea of exportUsuarioEnLineaArray; let i = index">
+            <tr *ngFor="let usuarioEnLinea of exportUsuarioEnLineaArray | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                 <th scope="row">{{i+1}}</th>
                 <td>{{usuarioEnLinea.RUT}}</td>
                 <td>{{usuarioEnLinea.NOMBRE}}</td>
                 <td>{{usuarioEnLinea.APELLIDO}}</td>
                 <td>{{usuarioEnLinea.FECHA_INICIO}} </td>
                 <td>{{usuarioEnLinea.HORA_INICIO}}</td>
-                <td>{{usuarioEnLinea.TERMINO}}</td>
+                <td>{{usuarioEnLinea.FECHA_TERMINO}}</td>
                 <td>{{usuarioEnLinea.HORA_TERMINO}}</td>
             </tr>
         </tbody>
     </table>
-    <div class="col-md-12  align-self-end " *ngIf="selectedCalibradorObject && selectedLineaObject && exportUsuarioEnLineaArray">
+    <div class="col-md-12  align-self-end " *ngIf="bandera == true">
         <div class="text-right">
             <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fas fa-download"></i>
                 Exportar a excel
             </button>
         </div>
     </div>
+
 </div>
+<div class="pagination" *ngIf="bandera == true">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>
+
 
 
 <!--modal agregar-->
@@ -151,7 +156,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="agregarUsuarioEnLinea(myform);modal.close('Save click')">Agregar</button>
+            <button type="submit" class="btn btn-primary" (click)="validarColaboradorEnLinea();modal.close('Save click')">Agregar</button>
         </div>
     </div>
 </ng-template>

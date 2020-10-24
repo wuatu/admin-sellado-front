@@ -505,6 +505,7 @@ export class MonitoreoComponent implements OnInit {
           res => {
             this.sesionCerrada();
             this.toastr.success("Turno cerrado correctamente");
+            this.cerrarTurnoColaboradores();
             this.registroService.creaRegistro("Turno cerrado");
             //se borran los datos del turno que estaba abierto
             this.fechaInicioTurno = null;
@@ -521,6 +522,19 @@ export class MonitoreoComponent implements OnInit {
     )
     this.rutAdmin = "";
     this.passAdmin = "";
+  }
+
+  cerrarTurnoColaboradores(){
+    let fecha = this.fecha();
+    this.turnoService.closeTurnCollaborators(fecha.substring(0,10),fecha.substring(11,19)).subscribe(
+      res => {
+        this.sesionCerrada();
+        this.toastr.success("Turno cerrado correctamente para colaboradores");
+      },
+      err => {
+        this.toastr.error('Error al cerrar turno para los colaboradores', 'Error');
+      }
+    );
   }
 
   openModal(modal) {

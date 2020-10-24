@@ -15,7 +15,16 @@ export class UsuarioEnLineaService {
   }
 
   saveUsuarioEnLinea(usuarioEnLinea:UsuarioEnLinea){
+    console.log("saveUsuarioEnLinea");
     return this.httpClient.post(`${this.API_URL}/usuario_en_linea/`,usuarioEnLinea);
+  }
+
+  getValidationCollaborator(id_turno:number, id_usuario:number, id_linea:number){
+    return this.httpClient.get(`${this.API_URL}/usuarios_en_linea/${id_turno}/${id_usuario}/${id_linea}`);    
+  }
+  
+  closeTurnCollaborator(id_turno:number, id_usuario:number, id_linea:number, fecha_termino:string, hora_termino:string):Observable<any>{
+    return this.httpClient.put(`${this.API_URL}/usuarios_en_linea/${id_turno}/${id_usuario}/${id_linea}/${fecha_termino}/${hora_termino}`,"");    
   }
 
 }

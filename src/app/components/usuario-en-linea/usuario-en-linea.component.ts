@@ -14,6 +14,7 @@ import { UsuarioEnLineaService } from '../../services/usuario-en-linea.service';
 import { formatDate } from '@angular/common';
 import * as XLSX from 'xlsx'; 
 import { RegistroService } from '../../services/registro.service';
+import { MonitoreoService } from '../../services/monitoreo.service';
 
 
 
@@ -27,7 +28,10 @@ declare var require: any;
 })
 export class UsuarioEnLineaComponent implements OnInit {
   closeResult = '';
+  pageOfItems: Array<any>;
 
+  p: number = 1;
+  
   rutUsuario:string;
   nombreUsuario:string;
   apellidoUsuario:string;
@@ -86,6 +90,8 @@ export class UsuarioEnLineaComponent implements OnInit {
   dateStartSearch: string;
   dateFinishSearch: string;
 
+  turnoActual: any = [];
+  bandera: boolean = false;
   
 
   constructor(
@@ -97,12 +103,14 @@ export class UsuarioEnLineaComponent implements OnInit {
     private lineaService: LineaService,
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private monitoreoService: MonitoreoService
 
   ) { }
   
   ngOnInit() {
     this.listarCalibradores();
+    this.getTurnoActual();
 
   }
 
@@ -158,6 +166,7 @@ export class UsuarioEnLineaComponent implements OnInit {
       this.toastr.error('Se debe seleccionar calibradora y linea ','Oops');
       return;  
     }
+    this.bandera = false;
     this.exportUsuarioEnLineaArray = [];  
     this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id,this.rutBusqueda,this.desde,this.hasta).subscribe(    
       res=>{
@@ -165,18 +174,12 @@ export class UsuarioEnLineaComponent implements OnInit {
         this.usuariosEnLinea=res;
         console.log(this.usuariosEnLinea);
         console.log("entro");
+        this.bandera = true;
 
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
         for (let element of this.usuariosEnLinea){
-           
-            this.timeStart = element.hora_inicio;
-            //this.timeStart = this.timeStart.substring(11,19);
-            this.dateStart = element.fecha_inicio;
-            //this.dateStart = this.dateStart.substring(0,10);
-            //console.log(element.fecha_inicio);
-            //console.log(new Date(element.fecha_inicio));
-            //console.log(new Date(element.fecha_inicio).toString());
-            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
+            console.log(element);
+            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, element.hora_inicio, element.fecha_inicio, element.hora_termino, element.fecha_termino);
             this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
             console.log(this.rutBusqueda);
             console.log(this.desde);
@@ -202,6 +205,37 @@ export class UsuarioEnLineaComponent implements OnInit {
     );
   }
 
+  validarColaboradorEnLinea(){
+    this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
+      res => {
+        console.log("La respuesta de la consulta fue : "+ res[0].enTurno)
+        if(res[0].enTurno == 0){
+          this.agregarUsuarioEnLinea();
+        }else if(res[0].enTurno > 0){
+          this.toastr.error('No se pudo agregar, ya esta en la linea', 'Oops');
+        }
+      },
+      err => {
+        console.log(err);
+        console.log("No se pudo obtener la validación"); 
+      }
+    );
+  }
+
+  closeTurnColaboratorChangeLine(){
+    let fecha = this.fecha();
+    this.usuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id,fecha.substring(0,10),fecha.substring(11,19)).subscribe(
+      res => {
+        this.toastr.success('Operación satisfactoria', 'turno cerrado en la linea anterior');
+        console.log("turno cerrado al colaborador en la linea anterior");
+      },
+      err => {
+        console.log(err);
+        console.log("No se pudo cerrar turno en la linea anterior"); 
+      }
+    );
+  }
+
   exportarArchivoExcel(){
     // Se convierte el arreglo con los usuarios en linea 
      var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
@@ -219,19 +253,35 @@ export class UsuarioEnLineaComponent implements OnInit {
      XLSX.writeFile(wb, this.nombreExcel+"_"+ fecha.substring(0,10)+".xls");
   }
 
+  //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
+  getTurnoActual(){
+    this.monitoreoService.getGetLastTurno().subscribe(
+      res => {
+        console.log("turno cargado");
+        this.turnoActual = res;
+        console.log(this.turnoActual);
+      },
+      err => {
+        console.log("el turno no se pudo cargar!!!!");
+      }
+    )
+  }
+
   agregarUsuarioEnLinea(){
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd
     this.dateSave = this.fecha().substring(0,10);
     this.HourSave = this.fecha().substring(11,19);
     //this.dateSave = this.dateSave.substring(11,16)+" "+this.dateSave.substring(0,10);
     //se crea un usuario en linea para exportar
-    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, this.HourSave, "","" , this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre);
+    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, this.HourSave, "","" , this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre, this.turnoActual[0].id);
     console.log(usuarioEnLinea);
     this.usuarioEnLineaService.saveUsuarioEnLinea(usuarioEnLinea).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Colaborador en línea agregado');
+        this.closeTurnColaboratorChangeLine();
         this.registroService.creaRegistro("Se ha agregado el usuario con rut: "+this.selectedUsuarioObject.rut+", nombre: "+ this.selectedUsuarioObject.nombre+" en la linea "+ this.selectedLineaObject.nombre+" del calibrador "+ this.selectedCalibradorObject.nombre);
         this.listarUsuariosEnLinea();
+
       },
       err => {
         console.log(err);

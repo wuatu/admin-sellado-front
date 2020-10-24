@@ -42,6 +42,8 @@ export class AdministradorService {
     return this.httpClient.get(`${this.API_URL}/administrador/login/${rut}/${password}`);
   }
 
+  
+
   getAdmin(rut:string){
     return this.httpClient.get(`${this.API_URL}/administrador/${rut}`);
   }

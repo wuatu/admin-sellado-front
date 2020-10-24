@@ -33,4 +33,9 @@ export class TurnoService {
   updateTurno(fecha_apertura: string, turno: Turno): Observable<any> {
     return this.httpClient.put(`${this.API_URL}/turno/${fecha_apertura}`, turno);
   }
+
+  closeTurnCollaborators(fecha_termino:string, hora_termino:string):Observable<any>{
+    console.log("closeTurnCollaborators");
+    return this.httpClient.put(`${this.API_URL}/turno/${fecha_termino}/${hora_termino}`,"");
+  }
 }
