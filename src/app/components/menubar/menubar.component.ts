@@ -14,9 +14,6 @@ declare var name: any;
 export class MenubarComponent implements OnInit {
   rol = 0;
   admin: Administrador ;
-  isCollapseProduccion = false;
-  isCollapseAdministrar = true;
-  isCollapseRegistros = true;
   expandItem=0;
   expandItemAnterior=0;
   constructor(
@@ -46,7 +43,7 @@ export class MenubarComponent implements OnInit {
     this.router.navigate(['/auth/login']);
   }
 
-  setCurrentItem(i,produccion?,administrar?,registros?,seguimiento?) {
+  setCurrentItem(i,produccion?,administrar?,registros?,seguimiento?,monitoreo?) {
     if(this.expandItemAnterior==1 && i != 1){
       produccion.click();
     } else if(this.expandItemAnterior==2 && i != 2){
@@ -56,7 +53,7 @@ export class MenubarComponent implements OnInit {
     } else if(this.expandItemAnterior==4 && i != 4){
       seguimiento.click();
     } else if(this.expandItemAnterior==5 && i != 5){
-
+      monitoreo.click();
     } else{
 
     }
