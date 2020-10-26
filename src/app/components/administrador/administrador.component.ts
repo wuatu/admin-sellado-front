@@ -51,6 +51,8 @@ export class AdministradorComponent implements OnInit {
   listarAdministradores() {
     this.administradorService.getAdministradores().subscribe(
       res => {
+        console.log(res);
+        console.log(res.status);
         //los registros se almacena en array administradores que sirve para llenar la tabla de vista administradores
         this.administradores = res;
       },

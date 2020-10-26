@@ -139,7 +139,7 @@ export class MonitoreoComponent implements OnInit {
             this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
           }
           
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por minuto");
         },
         err => {
@@ -158,7 +158,7 @@ export class MonitoreoComponent implements OnInit {
             this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
           }
           
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por minuto");
         },
         err => {
@@ -178,7 +178,7 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
           }
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por minuto : "+ this.totalMinuto1);
         },
         err => {
@@ -197,7 +197,7 @@ export class MonitoreoComponent implements OnInit {
             this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
           }
           
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por minuto: "+ this.totalMinuto1);
         },
         err => {
@@ -223,7 +223,7 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora1 = this.cajasCalibrador1Hora[0].total;
           }
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("ultima hora success : "+ this.cajasCalibrador1Hora[0].total);
         },
         err => {
@@ -242,7 +242,7 @@ export class MonitoreoComponent implements OnInit {
             this.totalHora2 = this.cajasCalibrador2Hora[0].total;
           }
           
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("ultima hora success");
         },
         err => {
@@ -262,7 +262,7 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora1 = this.cajasCalibrador1Hora[0].total;
           }
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("ultima hora success");
         },
         err => {
@@ -280,7 +280,7 @@ export class MonitoreoComponent implements OnInit {
             this.totalHora2 = this.cajasCalibrador2Hora[0].total;
           }
           
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("ultima hora success");
         },
         err => {
@@ -300,11 +300,11 @@ export class MonitoreoComponent implements OnInit {
     if(this.fechaActual == this.turnoActual[0].fecha_apertura){
       //consulta calibrador 1
       this.monitoreoService.getProduccionSearch(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
-        res => {
+        (res) => {
           this.cajasCalibrador1Turno = res;
           //console.log(this.cajasCalibrador1Turno[0].total);
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por turno success");
         },
         err => {
@@ -317,7 +317,7 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador2Turno = res;
           //console.log(this.cajasCalibrador2Turno[0].total);
           this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por turno success");
         },
         err => {
@@ -331,7 +331,7 @@ export class MonitoreoComponent implements OnInit {
         res => {
           this.cajasCalibrador1Turno = res;
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por turno success");
         },
         err => {
@@ -343,7 +343,7 @@ export class MonitoreoComponent implements OnInit {
         res => {
           this.cajasCalibrador2Turno = res;
           this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
-          this.toastr.success('obtenido','obtenido');
+          //this.toastr.success('obtenido','obtenido');
           console.log("produccion por turno success");
         },
         err => {

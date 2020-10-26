@@ -16,7 +16,7 @@ export class AdministradorService {
   }
 
   getAdministradores(){
-    return this.httpClient.get(`${this.API_URL}/administradores`);
+    return this.httpClient.get(`${this.API_URL}/administradores`,{observe: 'response'});
   }
 
   getAdministrador(id:string){
