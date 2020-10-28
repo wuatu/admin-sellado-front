@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-12 ">
+        <br>
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Registro-Producción</b></h1>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row align-self-start" *ngIf="bandera == true">
+        <div class="col-12 text-left">
+            <h4>Lista de registros-producción</h4>
+        </div>
+    </div>
+    <!--Tabla de contenido-->
+    <table class="table table-hover" *ngIf="bandera == true">
+        <thead>
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">Id colaborador </th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Registro</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let registroProduccion of registrosProduccion  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{registroProduccion.id_colaborador}}</td>
+                <td>{{registroProduccion.nombre_colaborador}}</td>
+                <td>{{registroProduccion.apellido_colaborador}}</td>
+                <td>{{registroProduccion.registro}}</td>
+                <td>{{registroProduccion.fecha}}</td>
+                <td>{{registroProduccion.hora}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="pagination" *ngIf="bandera == true">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { RegistroService } from '../../services/registro.service';
 import { Registro } from '../../models/registro';
 import { ToastrService } from 'ngx-toastr';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
 
 @Component({
   selector: 'app-registro',
@@ -23,45 +25,33 @@ export class RegistroComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    private registroService: RegistroService) 
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService) 
     {
 
     }
 
   ngOnInit() {
     this.listarRegistros();
-    //this.agregarRegistro();
   }
 
 
   listarRegistros(){
     this.registroService.getRegistros().subscribe(
       res=>{
-        this.registros=res;
+        this.registros=res.body;
+        if(res.status == 200){
+          this.toastr.success('registros obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no existen registros actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los registros, método listarRegistros, component registro');
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }
     );
-  }
-
-  agregarRegistro(){
-    let x = 1;
-    for(let j = 1 ; j<10 ; j++){
-      for (let i = 1 ; i<10; i++){
-        let registro = new Registro(null, x,this.nombre_administrador+"-"+x, this.apellido_administrador+"-"+x, this.registro+"-"+x, "2020-09-0"+j,"0"+i+":00:00");
-        this.registroService.postRegistro(registro).subscribe(
-          res=>{
-            this.toastr.success('Operación satisfactoria', 'Registro agregado');
-          },
-          err=>{
-            console.log(err);
-            this.toastr.error('No se pudo obtener a los registros', 'Oops');
-          }
-        );
-        x++;
-      }
-    } 
   }
 }

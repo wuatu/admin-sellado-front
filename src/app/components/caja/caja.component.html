@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit " style="margin-top: 33px;">Buscar
+                        <button class="ml-1 btn btn-primary" (click)="buscarCaja()" type="submit " style="margin-top: 33px;">Buscar
               <i class="fas fa-search" aria-hidden="true"></i></button>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Envase Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase" class="form-control" placeholder="Envase" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase" class="form-control" placeholder="Envase" required [ngClass]="{ 'is-invalid': submitted && envase.errors }">
                 </div>
                 <!--Valida formulario envase-->
                 <div *ngIf="envase.invalid && (envase.dirty || envase.touched)" class="alert alert-danger">
@@ -102,7 +102,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Variedad Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #variedad='ngModel' [(ngModel)]="variedadCaja" name="variedad" id="variedad" class="form-control" placeholder="Variedad" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #variedad='ngModel' [(ngModel)]="variedadCaja" name="variedad" id="variedad" class="form-control" placeholder="Variedad" required [ngClass]="{ 'is-invalid': submitted && variedad.errors }">
                 </div>
                 <!--Valida formulario variedad-->
                 <div *ngIf="variedad.invalid && (variedad.dirty || variedad.touched)" class="alert alert-danger">
@@ -116,7 +116,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Categoria Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #categoria='ngModel' [(ngModel)]="categoriaCaja" name="categoria" id="categoria" class="form-control" placeholder="Categoria" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #categoria='ngModel' [(ngModel)]="categoriaCaja" name="categoria" id="categoria" class="form-control" placeholder="Categoria" required [ngClass]="{ 'is-invalid': submitted && categoria.errors }">
                 </div>
                 <!--Valida formulario categoria-->
                 <div *ngIf="categoria.invalid && (categoria.dirty || categoria.touched)" class="alert alert-danger">
@@ -130,7 +130,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Calibre Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #calibre='ngModel' [(ngModel)]="calibreCaja" name="calibre" id="calibre" class="form-control" placeholder="Calibre" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #calibre='ngModel' [(ngModel)]="calibreCaja" name="calibre" id="calibre" class="form-control" placeholder="Calibre" required [ngClass]="{ 'is-invalid': submitted && calibre.errors }">
                 </div>
                 <!--Valida formulario calibre-->
                 <div *ngIf="calibre.invalid && (calibre.dirty || calibre.touched)" class="alert alert-danger">
@@ -144,7 +144,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Correlativo Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #correlativo='ngModel' [(ngModel)]="correlativoCaja" name="correlativo" id="correlativo" class="form-control" placeholder="Correlativo" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #correlativo='ngModel' [(ngModel)]="correlativoCaja" name="correlativo" id="correlativo" class="form-control" placeholder="Correlativo" required [ngClass]="{ 'is-invalid': submitted && correlativo.errors }">
                 </div>
                 <!--Valida formulario correlativo-->
                 <div *ngIf="correlativo.invalid && (correlativo.dirty || correlativo.touched)" class="alert alert-danger">
@@ -158,7 +158,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Ponderacion Caja:</b></label>
                 <div class="input-group">
-                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderacion" required [ngClass]="{ 'is-invalid': submitted && linea.errors }">
+                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderacion" required [ngClass]="{ 'is-invalid': submitted && ponderacion.errors }">
                 </div>
                 <!--Valida formulario ponderacion-->
                 <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)" class="alert alert-danger">

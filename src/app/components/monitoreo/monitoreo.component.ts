@@ -9,6 +9,7 @@ import { formatDate } from '@angular/common';
 import { RegistroService } from '../../services/registro.service';
 import { CalibradorService } from '../../services/calibrador.service';
 import { MonitoreoService } from '../../services/monitoreo.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 
@@ -73,7 +74,8 @@ export class MonitoreoComponent implements OnInit {
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
     private calibradorService: CalibradorService,
-    private monitoreoService: MonitoreoService
+    private monitoreoService: MonitoreoService,
+    private registroDevService: RegistroDevService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -108,15 +110,27 @@ export class MonitoreoComponent implements OnInit {
   getTurnoActual(){
     this.monitoreoService.getGetLastTurno().subscribe(
       res => {
+        console.log("status: "+res.status);
+        console.log(res);
+        if(res.status == 200){
+          this.toastr.success('turno obtenido','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no hay turnos actualmente para mostrar','Operación satisfactoria');
+        }
         console.log("turno cargado");
-        this.turnoActual = res;
+        this.turnoActual = res.body;
+              
         console.log(this.turnoActual);
         this.getProduccionTurno();
         this.getAverageforMinute();
         this.getAverageLastHour();
       },
       err => {
-        console.log("el turno no se pudo cargar!!!!");
+        console.log(err.status); 
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+              
+        this.toastr.error('error al cargar el turno.');
+        
       }
     )
   }
@@ -143,7 +157,9 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por minuto");
         },
         err => {
-          this.toastr.error('NO obtenido','NO obtenido');
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
+        
+          this.toastr.error('No obtenido','No obtenido');
         }
       )
       //consulta para el calibrador 2
@@ -162,6 +178,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por minuto");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 2, método getAverageForMinute, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -182,6 +199,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por minuto : "+ this.totalMinuto1);
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -201,6 +219,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por minuto: "+ this.totalMinuto1);
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -227,6 +246,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("ultima hora success : "+ this.cajasCalibrador1Hora[0].total);
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 1, método getAverageLastHour, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -246,6 +266,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("ultima hora success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 2, método getAverageLastHour, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -266,6 +287,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("ultima hora success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 1, método getAverageLastHour, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -284,6 +306,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("ultima hora success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 2, método getAverageLastHour, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -308,6 +331,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por turno success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 1, método getProduccionTurno, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -321,6 +345,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por turno success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 2, método getProduccionTurno, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -335,6 +360,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por turno success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 1, método getProduccionTurno, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -347,6 +373,7 @@ export class MonitoreoComponent implements OnInit {
           console.log("produccion por turno success");
         },
         err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 2, método getProduccionTurno, component monitoreo');
           this.toastr.error('NO obtenido','NO obtenido');
         }
       )
@@ -372,6 +399,7 @@ export class MonitoreoComponent implements OnInit {
         }
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el registro del turno, método getRegistro, component monitoreo');
         this.toastr.info('No se ha iniciado turno', 'Información', {
           positionClass: 'toast-bottom-right' 
        });
@@ -384,13 +412,14 @@ export class MonitoreoComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
         console.log(this.calibradores);
         
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo');
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
@@ -462,11 +491,13 @@ export class MonitoreoComponent implements OnInit {
             this.horaInicioTurno =  fecha.substring(11,19);
           },
           err => {
+            this.registroDevService.creaRegistroDev('No se crear el registro de iniciar turno, método iniciarTurno, component monitoreo');
             this.toastr.error('Error al iniciar turno', 'Error');
           }
         );
       },
       err => {
+        this.registroDevService.creaRegistroDev('Credenciales inválidas para crear el registro de inicio de turno, método iniciarTurno, component monitoreo');
         this.toastr.error('Credenciales inválidas', 'Error');
       }
     )
@@ -512,11 +543,13 @@ export class MonitoreoComponent implements OnInit {
             this.horaInicioTurno =  null;
           },
           err => {
+            this.registroDevService.creaRegistroDev('No se pudo crear el registro de cerrar turno, método cerrarTurno, component monitoreo');
             this.toastr.error('Error al cerrar turno', 'Error');
           }
         );
       },
       err => {
+        this.registroDevService.creaRegistroDev('Credenciales inválidas para crear el registro cerrar turno, método cerrarTurno, component monitoreo');
         this.toastr.error('Credenciales inválidas', 'Error');
       }
     )
@@ -532,6 +565,7 @@ export class MonitoreoComponent implements OnInit {
         this.toastr.success("Turno cerrado correctamente para colaboradores");
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo cerrar turno a los colaboradores, método cerrarTurnoColaboradores, component monitoreo');
         this.toastr.error('Error al cerrar turno para los colaboradores', 'Error');
       }
     );

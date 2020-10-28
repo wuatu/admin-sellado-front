@@ -22,6 +22,7 @@ import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-
 
 import * as XLSX from 'xlsx'; 
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 @Component({
@@ -99,7 +100,8 @@ export class ProduccionPorLineaComponent implements OnInit {
     private lineaService: LineaService,
     private produccionPorLineaService: ProduccionPorLineaService,
     private modalService: NgbModal,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
   ) { }
 
   ngOnInit() {
@@ -113,11 +115,12 @@ export class ProduccionPorLineaComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-por-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
@@ -128,11 +131,12 @@ export class ProduccionPorLineaComponent implements OnInit {
     this.lineaService.getLineasId(id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.lineas=res;
+        console.log(res.body);
+        this.lineas=res.body;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component monitoreo-por-linea');
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
     );
@@ -155,8 +159,14 @@ export class ProduccionPorLineaComponent implements OnInit {
     this.produccionPorLineaService.getProduccionSearch(this.selectedCalibradorObject.id,this.selectedLineaObject.id ,this.desde, this.hasta).subscribe(
       res=>{
         //console.log(res);
-        this.produccionLinea=res;
+        this.produccionLinea=res.body;
         console.log(this.produccionLinea);
+        if(res.status == 200){
+          this.toastr.success('Producción de línea obtenida','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No hay producción para esta línea actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         var bandera = 0;
         var newVerificado;
         var newIsTime;
@@ -188,6 +198,7 @@ export class ProduccionPorLineaComponent implements OnInit {
       },
       err=>{
         //console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la produccion de la linea, método buscarRegistroCalibradorLinea, component monitoreo-por-linea');
         this.toastr.error('No se pudo obtener la busqueda de produccion del calibrador', 'Oops');
       }
     );
@@ -206,12 +217,12 @@ export class ProduccionPorLineaComponent implements OnInit {
         this.cajasLinea=res;
         this.mostrarGrafico = "true";
         console.log(this.cajasLinea);
-        this.toastr.success('Operación satisfactoria', 'cajas Obtenidas');
         this.cajasTotales(this.cajasLinea);
         this.pushData(this.cajasLinea);
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudo obtener la produccion de la linea en la fecha indicada, método contarCajasLineaPorFecha, component monitoreo-por-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener las cajas de la linea', 'Oops');
       }
@@ -253,6 +264,7 @@ export class ProduccionPorLineaComponent implements OnInit {
         },
         err => {
           console.log(err);
+          this.registroDevService.creaRegistroDev('No se pudo editar el registro producción, método editarRegistroProduccion, component monitoreo-por-linea');
           this.toastr.error('No se pudo editar registro', 'Oops',);
         }
       );
@@ -344,20 +356,25 @@ export class ProduccionPorLineaComponent implements OnInit {
   }
   
   exportarArchivoExcel(){
-    // Se convierte el arreglo con los usuarios en linea 
-     var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-
-     console.log(jsonArray);
-     //se convierte el Json a xlsx en formato workSheet
-     const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-
-     /* genera el workbook y agrega el worksheet */
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-     /* Guarda el archivo */
-     let dateDownload : string = new Date().toISOString();
-     XLSX.writeFile(wb, this.nombreExcel+"_"+this.selectedLineaObject.nombre+"_"+dateDownload.substring(0,10)+".xls");
+    try {
+      // Se convierte el arreglo con los usuarios en linea 
+       var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
+  
+       console.log(jsonArray);
+       //se convierte el Json a xlsx en formato workSheet
+       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+  
+       /* genera el workbook y agrega el worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+       /* Guarda el archivo */
+       let dateDownload : string = new Date().toISOString();
+       XLSX.writeFile(wb, this.nombreExcel+"_"+this.selectedLineaObject.nombre+"_"+dateDownload.substring(0,10)+".xls");
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-linea');
+    }
+    
   }
 
   fecha() {

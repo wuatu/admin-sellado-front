@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class CajaComponent implements OnInit {
     private cajaService: CajaService,
     private toastr: ToastrService,
     private modalService: NgbModal,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
   ) { }
 
   ngOnInit() {
@@ -39,17 +41,28 @@ export class CajaComponent implements OnInit {
     console.log("rol: "+this.rol);
   }
 
+  buscarCaja(){
+    
+  }
+
   //metodo que trae todos los registros de cajas desde la base de datos
   listarCajas() {
     this.cajaService.getCajas().subscribe(
       res => {
         //los registros se almacena en array cajas que sirve para llenar la tabla de vista cajas
-        this.cajas = res;
+        this.cajas = res.body;
+        if(res.status == 200){
+          this.toastr.success('Cajas obtenidas','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen registros de cajas actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err => {
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar cajas', 'Oops');
+          this.registroDevService.creaRegistroDev('No se pudo obtener la lista de cajas, método listarCajas, component caja');
         } else {
           this.cajas = null;
         }
@@ -81,6 +94,7 @@ export class CajaComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo guardar caja', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo guardar caja, método agregarCaja, component caja');
       }
     );
   }
@@ -111,6 +125,7 @@ export class CajaComponent implements OnInit {
         err => {
           console.log(err);
           this.toastr.error('No se pudo editar caja', 'Oops',);
+          this.registroDevService.creaRegistroDev('No se pudo editar caja, método editarCaja, component caja');
         }
       );
     }
@@ -133,6 +148,7 @@ export class CajaComponent implements OnInit {
         err => {
           console.log(err);
           this.toastr.error('No se pudo eliminar caja', 'Oops');
+          this.registroDevService.creaRegistroDev('No se pudo eliminar caja, método eliminarCaja, component caja');
         }
       );
     } 

@@ -7,6 +7,7 @@ import { Calibrador } from 'src/app/models/calibrador';
 import { RegistroService } from 'src/app/services/registro.service';
 import { Registro } from 'src/app/models/registro';
 import { UtilsService } from 'src/app/services/utils.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 @Component({
   selector: 'app-calibrador',
@@ -26,7 +27,9 @@ export class CalibradorComponent implements OnInit {
     private toastr: ToastrService,
     //servicio de calibrador, contiene los metodos CRUD de calibradors
     private calibradorService: CalibradorService,
-    private registoService:RegistroService) { }
+    private registoService:RegistroService,
+    private registroDevService: RegistroDevService
+    ) { }
 
   ngOnInit() {
     this.listarCalibradores();
@@ -39,9 +42,16 @@ export class CalibradorComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista calibradors
-        this.calibradores = res;
+        this.calibradores = res.body;
+        if(res.status == 200){
+          this.toastr.success('Calibradores obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen calibradores actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener la lista de calibradores, método listarCalibradores, component calibrador');
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar calibradores', 'Oops');
@@ -55,7 +65,7 @@ export class CalibradorComponent implements OnInit {
   //metodo que crea un nuevo calibrador
   agregarCalibrador(form: NgForm) {
     if (!this.nombreCalibrador) {
-      this.toastr.error('No se pudo guardar clibrador', 'Oops');
+      this.toastr.error('No se pudo guardar calibrador', 'Oops');
       return;
     }
     let calibrador = new Calibrador(null, this.nombreCalibrador);
@@ -71,7 +81,8 @@ export class CalibradorComponent implements OnInit {
       },
       err => {
         console.log(err);
-        this.toastr.error('No se pudo guardar línea', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo agregar calibrador, método agregarCalibrador, component calibrador');
+        this.toastr.error('No se pudo guardar calibrador', 'Oops');
       }
     );
 
@@ -85,7 +96,7 @@ export class CalibradorComponent implements OnInit {
   //metodo que sirve para editar una calibrador
   editarCalibrador(form: NgForm) {
     if (!form.value.nombre) {
-      this.toastr.error('No se pudo editar línea', 'Oops',);
+      this.toastr.error('No se pudo editar calibrador, por favor ingrese un nombre para el calibrador', 'Oops',);
       return;
     }
 
@@ -104,6 +115,7 @@ export class CalibradorComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo editar calibrador, método editarCalibrador, component calibrador');
         this.toastr.error('No se pudo editar calibrador', 'Oops',);
       }
     );
@@ -130,6 +142,7 @@ export class CalibradorComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo eliminar calibrador', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo eliminar calibrador, método eliminarCalibrador, component calibrador');
       }
     );
   }

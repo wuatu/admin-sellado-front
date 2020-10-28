@@ -13,6 +13,7 @@ import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-
 
 import * as XLSX from 'xlsx'; 
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 
@@ -76,7 +77,8 @@ export class ProduccionColaboradorComponent implements OnInit {
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
     private modalService: NgbModal,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
     ) { }
   
   ngOnInit() {
@@ -120,7 +122,13 @@ export class ProduccionColaboradorComponent implements OnInit {
     this.produccionColaboradorService.getProduccionSearch(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res=>{
         //console.log(res);
-        this.produccionColaborador=res;
+        this.produccionColaborador=res.body;
+        if(res.status == 200){
+          this.toastr.success('Producción obtenida','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no hay producción actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         //console.log(this.produccionColaborador);
         var bandera = 0;
         var newVerificado;
@@ -153,6 +161,7 @@ export class ProduccionColaboradorComponent implements OnInit {
       },
       err=>{
         //console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la producción del usuario, método buscarUsuarioPorRut, component produccion-colaborador');
         this.toastr.error('No se pudo obtener la busqueda de produccion del usuario', 'Oops');
       }
     );
@@ -162,7 +171,6 @@ export class ProduccionColaboradorComponent implements OnInit {
     this.produccionColaboradorService.getProduccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res=>{
         console.log(res);
-        this.toastr.success('Operación satisfactoria', 'cajas Obtenidas');
         this.produccionColaboradorNumberBox=res;
         console.log("backend!!!!");
         console.log(this.produccionColaboradorNumberBox);
@@ -171,6 +179,7 @@ export class ProduccionColaboradorComponent implements OnInit {
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la producción del colaborador, método produccionSearchNumberBox, component produccion-colaborador');
         //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
       }
     );
@@ -180,41 +189,44 @@ export class ProduccionColaboradorComponent implements OnInit {
     this.produccionColaboradorService.getNumberBoxByType(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res=>{
         console.log(res);
-        this.toastr.success('Operación satisfactoria', 'cajas por tipo Obtenidas');
         this.produccionNumberBoxByType=res;
-        console.log("este es el numero de cajas por tipo ");
-        console.log(this.produccionNumberBoxByType);
         
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la producción del usuario por tipo de caja, método searchNumberBoxByType, component produccion-colaborador');
         //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
       }
     );
   }
 
   exportarArchivoExcel(){
-    let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
-    this.produccionNumberBoxByType.push(cajas);
-    console.log(cajas);
+    try {
+      let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
+      this.produccionNumberBoxByType.push(cajas);
+      console.log(cajas);
+      
+      // Se convierte el arreglo con los usuarios en linea 
+       var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
+       var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
+       console.log(jsonArray);
+       console.log(jsonArray2);
+       //se convierte el Json a xlsx en formato workSheet
+       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+       const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
+       /* genera el workbook y agrega el worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Registro de producción');
+       XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
+  
+       /* Guarda el archivo */
+       let dateDownload : string = new Date().toISOString();
+       XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
     
-    // Se convierte el arreglo con los usuarios en linea 
-     var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-     var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
-     console.log(jsonArray);
-     console.log(jsonArray2);
-     //se convierte el Json a xlsx en formato workSheet
-     const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-     const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
-     /* genera el workbook y agrega el worksheet */
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Registro de producción');
-     XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
-
-     /* Guarda el archivo */
-     let dateDownload : string = new Date().toISOString();
-     XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
-  }
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar la producción a excel, método exportarArchivoExcel, component produccion-colaborador');
+    }
+    }
   
   cajasTotales(cajas: any []){
     this.numBox = 0;
@@ -330,6 +342,7 @@ export class ProduccionColaboradorComponent implements OnInit {
         },
         err => {
           console.log(err);
+          this.registroDevService.creaRegistroDev('No se pudo editar el registro de produccion, método editarRegistroProduccion, component produccion-colaborador');
           this.toastr.error('No se pudo editar registro', 'Oops',);
         }
       );

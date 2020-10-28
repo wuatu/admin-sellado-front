@@ -9,6 +9,7 @@ import { LineaService } from 'src/app/services/linea.service';
 import { Linea } from 'src/app/models/Linea';
 import { Calibrador } from 'src/app/models/calibrador';
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 @Component({
@@ -76,7 +77,8 @@ export class LectoresComponent implements OnInit {
     private toastr: ToastrService,
     private calibradorService:CalibradorService,
     private lectorService:LectorService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
     ) {}
 
   ngOnInit() {
@@ -101,12 +103,14 @@ export class LectoresComponent implements OnInit {
     
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
       },
       err=>{
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo obtener la lista de calibradores, método listarCalibradores, component lectores');
+        
       }
     );
   }
@@ -117,14 +121,16 @@ export class LectoresComponent implements OnInit {
     console.log("LISTARLINEAS");
     this.lineaService.getLineasId(id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
-      res2=>{
-        console.log(res2);
-        this.lineas=res2;
+      res=>{
+        console.log(res.body);
+        this.lineas=res.body;
         
       },
       err=>{
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo obtener la lista de líneas del calibrador, método listarLineas, component lectores');
+        
       }
     );
   }
@@ -134,13 +140,21 @@ export class LectoresComponent implements OnInit {
     console.log(this.selectedCalibradorObject.id,"  ", this.selectedLineaObject.id);
     this.lectorService.getLectoresId(this.selectedCalibradorObject.id, this.selectedLineaObject.id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
-      res3=>{
-        console.log(res3);
-        this.lectores=res3;
+      res=>{
+        console.log(res.body);
+        this.lectores=res.body;
+        if(res.status == 200){
+          this.toastr.success('Lectores obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen registros de lectores actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la lista de lectores, método listarLectores, component lectores');
+        
         this.toastr.error('No se pudo obtener lineas', 'Oops');
         this.lectores=null;
       }
@@ -238,6 +252,8 @@ export class LectoresComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo guardar el lector', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo agregar lector, método agregarLector, component lectores');
+        
         this.clearDate();
       }
     );
@@ -260,6 +276,8 @@ export class LectoresComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo eliminar el lector, método eliminarLector, component lectores');
+        
         this.toastr.error('No se pudo eliminar lector', 'Oops');
       }
     );
@@ -290,11 +308,13 @@ export class LectoresComponent implements OnInit {
 
     this.lineaService.getLinea(lector.fk_linea).subscribe(
       res=>{
-        this.selectedLineaObject=res;
+        this.selectedLineaObject=res.body;
         this.selectedLineaText=this.selectedLineaObject.nombre;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la lista de líneas del calibrador, método onEditar, component lectores');
+        
         this.toastr.error('No se pudo obtener el lector id', 'Oops',);
       }
     )
@@ -328,6 +348,7 @@ export class LectoresComponent implements OnInit {
       err => {
         console.log(err);
         this.clearDate();
+        this.registroDevService.creaRegistroDev('No se pudo editar el lector, método editarLector, component lectores');
         this.toastr.error('No se pudo editar el lector', 'Oops',);
       }
     );

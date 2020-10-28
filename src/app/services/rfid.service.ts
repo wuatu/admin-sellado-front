@@ -11,11 +11,11 @@ export class RfidService {
   constructor(private httpClient: HttpClient) { }
 
   getRfids(id_calibrador:string,id_linea:string){
-    return this.httpClient.get(`${this.API_URL}/rfids/${id_calibrador}/${id_linea}`);
+    return this.httpClient.get(`${this.API_URL}/rfids/${id_calibrador}/${id_linea}`,{observe: 'response'});
   }
 
   getRfid(id:number){
-    return this.httpClient.get(`${this.API_URL}/rfid/${id}`);
+    return this.httpClient.get(`${this.API_URL}/rfid/${id}`,{observe: 'response'});
   }
 
   deleteRfid(id:number){

@@ -10,12 +10,12 @@ export class UsuarioService {
   constructor(private httpClient: HttpClient) { }
 
   getUsuarios(){
-    return this.httpClient.get(`${this.API_URL}/usuarios`);
+    return this.httpClient.get(`${this.API_URL}/usuarios`,{observe: 'response'});
   }
   
 
   getUsuario(id:string){
-    return this.httpClient.get(`${this.API_URL}/usuario/${id}`);
+    return this.httpClient.get(`${this.API_URL}/usuario/${id}`,{observe: 'response'});
   }
 
   deleteUsuario(id:string){

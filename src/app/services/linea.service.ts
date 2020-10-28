@@ -11,15 +11,15 @@ export class LineaService {
   constructor(private httpClient: HttpClient) { }
 
   getLineasId(id:string){
-    return this.httpClient.get(`${this.API_URL}/lineas/${id}`);
+    return this.httpClient.get(`${this.API_URL}/lineas/${id}`,{observe: 'response'});
   }
 
   getLineas(){
-    return this.httpClient.get(`${this.API_URL}/lineas/`);
+    return this.httpClient.get(`${this.API_URL}/lineas/`,{observe: 'response'});
   }
 
   getLinea(id:string){
-    return this.httpClient.get(`${this.API_URL}/linea/${id}`);
+    return this.httpClient.get(`${this.API_URL}/linea/${id}`,{observe: 'response'});
   }
 
   deleteLinea(id:string){

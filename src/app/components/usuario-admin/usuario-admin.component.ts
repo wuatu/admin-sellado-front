@@ -8,6 +8,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { RegistroService } from '../../services/registro.service';
 import { UsuarioAdminService } from '../../services/usuario-admin.service';
 import { UsuarioService } from '../../services/usuario.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
 
 
 @Component({
@@ -39,7 +41,8 @@ export class UsuarioAdminComponent implements OnInit {
     //servicio toast ventana emergente que sirve para mostrar información al usuario
     private toastr: ToastrService,
     private registroService: RegistroService,
-    private usuarioAdminService: UsuarioAdminService) { }
+    private usuarioAdminService: UsuarioAdminService,
+    private registroDevService: RegistroDevService) { }
 
   ngOnInit() {
     this.listarUserAdmin();
@@ -51,9 +54,16 @@ export class UsuarioAdminComponent implements OnInit {
     this.usuarioAdminService.getUsersAdmin().subscribe(
       res => {
         //los registros se almacena en array administradores que sirve para llenar la tabla de vista administradores
-        this.administradores = res;
+        this.administradores = res.body;
+        if(res.status == 200){
+          this.toastr.success('Usuarios  obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no hay usuarios actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios-admin, método listarUserAdmin, component usuario-admin');
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar administradors', 'Oops');
@@ -89,6 +99,7 @@ export class UsuarioAdminComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo agregar al usuario-admin, método agregarAdministrador, component usuario-admin');
         this.toastr.error('No se pudo guardar administrador', 'Oops');
       }
     );
@@ -100,7 +111,7 @@ export class UsuarioAdminComponent implements OnInit {
     console.log("On Editar : "+ administrador.id);
     this.usuarioAdminService.getUserAdmin(administrador.id).subscribe(
       res => {
-        this.currentAdministradorSelected = res;
+        this.currentAdministradorSelected = res.body;
         this.addId = this.currentAdministradorSelected.id;
         this.addRut = this.currentAdministradorSelected.rut;
         this.addNombre = this.currentAdministradorSelected.nombre;
@@ -109,6 +120,7 @@ export class UsuarioAdminComponent implements OnInit {
         this.addRol = this.currentAdministradorSelected.rol;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener al usuario-admin, método onEditar, component usuario-admin');
         console.log(err);
         this.toastr.error('No se pudo obtener usuario id', 'Oops',);
       }
@@ -137,6 +149,7 @@ export class UsuarioAdminComponent implements OnInit {
         this.addPassword=null;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo editar al usuario-admin, método editarAdministrador, component usuario-admin');
         console.log(err);
         this.toastr.error('No se pudo editar administrador', 'Oops',);
       }
@@ -162,6 +175,7 @@ export class UsuarioAdminComponent implements OnInit {
         this.listarUserAdmin();
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo eliminar al usuario-admin, método eliminarAdministrador, component usuario-admin');
         console.log(err);
         this.toastr.error('No se pudo eliminar administrador', 'Oops');
       }

@@ -12,7 +12,7 @@ export class AdministradorService {
   constructor(private httpClient: HttpClient) { }
   
   getUserAdmin(){
-    return this.httpClient.get(`${this.API_URL}/user_admin`);
+    return this.httpClient.get(`${this.API_URL}/user_admin`,{observe: 'response'});
   }
 
   getAdministradores(){
@@ -21,7 +21,7 @@ export class AdministradorService {
 
   getAdministrador(id:string){
     console.log("getAdministrador");
-    return this.httpClient.get(`${this.API_URL}/administrador_/${id}`);
+    return this.httpClient.get(`${this.API_URL}/administrador_/${id}`,{observe: 'response'});
   }
 
   deleteAdministrador(id:string){
@@ -39,7 +39,7 @@ export class AdministradorService {
 
   getLoginAdministrador(rut:string,password:string){
     console.log(rut,password);
-    return this.httpClient.get(`${this.API_URL}/administrador/login/${rut}/${password}`);
+    return this.httpClient.get(`${this.API_URL}/administrador/login/${rut}/${password}`,{observe: 'response'});
   }
 
   

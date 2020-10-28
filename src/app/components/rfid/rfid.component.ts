@@ -9,6 +9,8 @@ import { Calibrador } from 'src/app/models/calibrador';
 import { LineaService } from 'src/app/services/linea.service';
 import { RegistroService } from '../../services/registro.service';
 import { Linea } from '../../models/linea';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
 
 
 @Component({
@@ -79,7 +81,8 @@ export class RfidComponent implements OnInit {
     //servicio de calibrador
     private calibradorService:CalibradorService,
     private lineaService:LineaService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
@@ -102,11 +105,12 @@ export class RfidComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
-        this.listarLineas();
+        console.log(res.body);
+        this.calibradores=res.body;
+        
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component rfid');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
@@ -114,12 +118,13 @@ export class RfidComponent implements OnInit {
   }
 
   listarLineas(){
-    this.lineaService.getLineas().subscribe(
+    this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res=>{
-        console.log(res);
-        this.lineas=res;
+        console.log(res.body);
+        this.lineas=res.body;
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las lineas del calibrador, método listarLineas, component rfid');
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
@@ -142,11 +147,18 @@ export class RfidComponent implements OnInit {
     this.rfidService.getRfids(this.selectedCalibradorId,this.selectedLineaId).subscribe(
       res => {
         //los registros se almacena en array rfids que sirve para llenar la tabla de vista rfids
-        this.rfids = res;
+        this.rfids = res.body;
+        if(res.status == 200){
+          this.toastr.success('Rfid obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no existen rfid actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         console.log("Rfids");
         console.log(this.rfids);
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los rfids, método listarRfids, component rfid');
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar Rfid', 'Oops');
@@ -178,6 +190,7 @@ export class RfidComponent implements OnInit {
         this.ipRfidAdded=null;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo agregar el rfid, método agregarRfid, component rfid');
         console.log(err);
         this.toastr.error('No se pudo guardar Rfid', 'Oops');
       }
@@ -209,10 +222,11 @@ export class RfidComponent implements OnInit {
 
     this.lineaService.getLinea(rfid.fk_linea).subscribe(
       res=>{
-        this.selectedRfidObject = res;
+        this.selectedRfidObject = res.body;
         this.selectedLineaText = this.selectedLineaObject.nombre;
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método onEditar, component rfid');
         console.log(err);
         this.toastr.error('No se pudo obtener Rfid id', 'Oops',);
       }
@@ -240,6 +254,7 @@ export class RfidComponent implements OnInit {
         this.ipRfidAdded=null;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo editar el rfid, método editarRfid, component rfid');
         console.log(err);
         this.toastr.error('No se pudo editar Rfid', 'Oops',);
       }
@@ -264,6 +279,7 @@ export class RfidComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo eliminar el rfid, método eliminarRfid, component rfid');
         this.toastr.error('No se pudo eliminar el Rfid', 'Oops');
       }
     );
@@ -324,7 +340,8 @@ export class RfidComponent implements OnInit {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject=newSelected;
     console.log(this.selectedCalibradorObject);
-    this.listarRfids();  
+    this.listarLineas();
+     
   }
 
   changeSelectedCalibradorModificar(newSelected: any) { 

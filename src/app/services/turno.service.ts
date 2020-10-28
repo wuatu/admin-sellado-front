@@ -11,7 +11,7 @@ export class TurnoService {
   constructor(private httpClient: HttpClient) { }
 
   getTurnos(selectedfromDate: string, selectedToDate: string) {
-    return this.httpClient.get(`${this.API_URL}/turnos/${selectedfromDate}/${selectedToDate}`);
+    return this.httpClient.get(`${this.API_URL}/turnos/${selectedfromDate}/${selectedToDate}`,{observe: 'response'});
   }
 
   getTurno(id: string) {

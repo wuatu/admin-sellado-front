@@ -15,7 +15,7 @@ import { formatDate } from '@angular/common';
 import * as XLSX from 'xlsx'; 
 import { RegistroService } from '../../services/registro.service';
 import { MonitoreoService } from '../../services/monitoreo.service';
-
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 declare var require: any;
@@ -104,7 +104,8 @@ export class UsuarioEnLineaComponent implements OnInit {
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
     private registroService: RegistroService,
-    private monitoreoService: MonitoreoService
+    private monitoreoService: MonitoreoService,
+    private registroDevService: RegistroDevService
 
   ) { }
   
@@ -122,13 +123,15 @@ export class UsuarioEnLineaComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe(
       res=>{
         console.log(res);
-        this.usuarios=res;
+        this.usuarios=res.body;
+        
         //this.listarCalibradores();
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario-en-linea');
         console.log(err);
-        this.toastr.error('No se pudo obtener a los usuarios', 'Oops');
+        console.log('No se pudo obtener a los usuarios');
       }
     );
   }
@@ -136,12 +139,13 @@ export class UsuarioEnLineaComponent implements OnInit {
   listarLineas(id:string){
     console.log("HOLA ESTOY LISTANDO !!!!");
     this.lineaService.getLineasId(id).subscribe(
-      res2=>{
-        console.log(res2);
-        this.lineas=res2;
+      res=>{
+        console.log(res.body);
+        this.lineas=res.body;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component usuario-en-linea');
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
     );
@@ -150,11 +154,12 @@ export class UsuarioEnLineaComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component usuario-en-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
@@ -170,8 +175,14 @@ export class UsuarioEnLineaComponent implements OnInit {
     this.exportUsuarioEnLineaArray = [];  
     this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id,this.rutBusqueda,this.desde,this.hasta).subscribe(    
       res=>{
-        console.log(res);
-        this.usuariosEnLinea=res;
+        console.log(res.body);
+        if(res.status == 200){
+          this.toastr.success('Usuarios en linea obtenido','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no hay usuarios en linea actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
+        this.usuariosEnLinea = res.body;
         console.log(this.usuariosEnLinea);
         console.log("entro");
         this.bandera = true;
@@ -199,6 +210,7 @@ export class UsuarioEnLineaComponent implements OnInit {
         console.log(this.exportUsuarioEnLineaArray);
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios en línea, método listarUsuariosEnLinea, component usuario-en-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener los colaboradores en linea', 'Oops');
       }
@@ -206,6 +218,7 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   validarColaboradorEnLinea(){
+    console.log(this.turnoActual[0].id + '  ' + this.selectedUsuarioObject.id + '  ' + this.selectedLineaObject.id);
     this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
       res => {
         console.log("La respuesta de la consulta fue : "+ res[0].enTurno)
@@ -216,6 +229,7 @@ export class UsuarioEnLineaComponent implements OnInit {
         }
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo validar si el usuario esta en la línea, método validarColaboradorEnLinea, component usuario-en-linea');
         console.log(err);
         console.log("No se pudo obtener la validación"); 
       }
@@ -230,6 +244,7 @@ export class UsuarioEnLineaComponent implements OnInit {
         console.log("turno cerrado al colaborador en la linea anterior");
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo cerrar el turno del colaborador en la línea que se encontraba, método closeTurnCollaboratorChangeLine, component usuario-en-linea');
         console.log(err);
         console.log("No se pudo cerrar turno en la linea anterior"); 
       }
@@ -237,20 +252,25 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   exportarArchivoExcel(){
-    // Se convierte el arreglo con los usuarios en linea 
-     var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
-
-     console.log(jsonArray);
-     //se convierte el Json a xlsx en formato workSheet
-     const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-
-     /* genera el workbook y agrega el worksheet */
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'colaboradores en línea');
-
-     /* Guarda el archivo */
-     let fecha = (new Date()).toISOString();
-     XLSX.writeFile(wb, this.nombreExcel+"_"+ fecha.substring(0,10)+".xls");
+    try {
+      // Se convierte el arreglo con los usuarios en linea 
+       var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
+  
+       console.log(jsonArray);
+       //se convierte el Json a xlsx en formato workSheet
+       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+  
+       /* genera el workbook y agrega el worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'colaboradores en línea');
+  
+       /* Guarda el archivo */
+       let fecha = (new Date()).toISOString();
+       XLSX.writeFile(wb, this.nombreExcel+"_"+ fecha.substring(0,10)+".xls");
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar los usuarios en linea al archivo excel, método exportarArchivoExcel, component usuario-en-linea');
+    }
+    
   }
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
@@ -258,10 +278,11 @@ export class UsuarioEnLineaComponent implements OnInit {
     this.monitoreoService.getGetLastTurno().subscribe(
       res => {
         console.log("turno cargado");
-        this.turnoActual = res;
+        this.turnoActual = res.body;
         console.log(this.turnoActual);
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component usuario-en-linea');
         console.log("el turno no se pudo cargar!!!!");
       }
     )
@@ -284,6 +305,7 @@ export class UsuarioEnLineaComponent implements OnInit {
 
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo agregar al usuario en línea, método agregarUsuarioEnLinea, component usuario-en-linea');
         console.log(err);
         this.toastr.error('No se pudo agregar al colaborador en línea', 'Oops'); 
       }

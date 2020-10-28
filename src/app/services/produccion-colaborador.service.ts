@@ -10,7 +10,7 @@ export class ProduccionColaboradorService {
   constructor(private httpClient: HttpClient) { }
   
   getProduccionSearch(rutSearch:string, fromDateSearch: string, toDateSearch: string){
-    return this.httpClient.get(`${this.API_URL}/registros_produccion_colaborador/${rutSearch}/${fromDateSearch}/${toDateSearch}`);
+    return this.httpClient.get(`${this.API_URL}/registros_produccion_colaborador/${rutSearch}/${fromDateSearch}/${toDateSearch}`,{observe: 'response'});
   }
   
   getProduccionSearchNumberBox(rutSearch:string, fromDateSearch: string, toDateSearch: string){

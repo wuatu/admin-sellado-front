@@ -26,7 +26,7 @@ export class MonitoreoService {
   
   getGetLastTurno(){
     console.log("Service  getGetLastTurno");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/`);
+    return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/`,{observe: 'response'});
   }
   
 

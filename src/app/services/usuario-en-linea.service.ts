@@ -11,7 +11,7 @@ export class UsuarioEnLineaService {
   constructor(private httpClient: HttpClient) { }
 
   getUsuariosEnLinea(idLinea:string, idCalibrador:string, rutUsuario:string, fromDate:string, toDate:string){
-    return this.httpClient.get(`${this.API_URL}/usuarios_en_linea/${idLinea}/${idCalibrador}/${rutUsuario}/${fromDate}/${toDate}`);    
+    return this.httpClient.get(`${this.API_URL}/usuarios_en_linea/${idLinea}/${idCalibrador}/${rutUsuario}/${fromDate}/${toDate}`,{observe: 'response'});    
   }
 
   saveUsuarioEnLinea(usuarioEnLinea:UsuarioEnLinea){

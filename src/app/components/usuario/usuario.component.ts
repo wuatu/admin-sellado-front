@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { RegistroService } from '../../services/registro.service';
 //import { RutValidationDirective } from '../../Directive/rut-validation-directive.directive';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 
@@ -36,7 +37,8 @@ export class UsuarioComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private usuarioService: UsuarioService,
-    private RegistroService: RegistroService
+    private RegistroService: RegistroService,
+    private registroDevService: RegistroDevService
   ) { }
 
   ngOnInit() {
@@ -52,9 +54,16 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe(
       res=>{
         console.log(res);
-        this.usuarios=res;
+        this.usuarios=res.body;
+        if(res.status == 200){
+          this.toastr.success('Colaboradores obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no hay colaboradores actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario');
         console.log(err);
         this.toastr.error('No se pudo obtener a los colaboradores', 'Oops');
       }
@@ -86,6 +95,7 @@ export class UsuarioComponent implements OnInit {
         
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo agregar al usuario, método agregarUsuario, component usuario');
         console.log(err);
         this.toastr.error('No se pudo agregar al colaborador', 'Oops');
         this.rutUsuario = null;
@@ -103,12 +113,13 @@ export class UsuarioComponent implements OnInit {
     console.log(this.currentUsuarioSelected);
     this.usuarioService.getUsuario(this.currentUsuarioSelected.id).subscribe(
       res=>{
-        this.selectedUsuarioObject=res;
+        this.selectedUsuarioObject=res.body;
         this.selectedUsuarioText=this.selectedUsuarioObject.nombre;
         console.log("HOLA HOLA");
         console.log(this.selectedUsuarioObject);
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudo obtener al usuario, método onEditar, component usuario');
         console.log(err);
         this.toastr.error('No se pudo obtener el colaborador id', 'Oops',);
       }
@@ -138,6 +149,7 @@ export class UsuarioComponent implements OnInit {
         this.currentUsuarioSelected = null;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo editar al usuario, método editarUsuario, component usuario');
         console.log(err);
         this.listarUsuarios();
         this.toastr.error('No se pudo editar el Colaborador', 'Oops',);
@@ -159,6 +171,7 @@ export class UsuarioComponent implements OnInit {
         this.listarUsuarios();
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo eliminar al usuario, método eliminarUsuario, component usuario');
         console.log(err);
         this.toastr.error('No se pudo eliminar el colaborador', 'Oops');
       }

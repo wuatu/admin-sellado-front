@@ -11,11 +11,11 @@ export class CajaService {
   constructor(private httpClient: HttpClient) { }
 
   getCajas(){
-    return this.httpClient.get(`${this.API_URL}/cajas`);
+    return this.httpClient.get(`${this.API_URL}/cajas`,{observe: 'response'});
   }
 
   getCaja(id:string){
-    return this.httpClient.get(`${this.API_URL}/caja/${id}`);
+    return this.httpClient.get(`${this.API_URL}/caja/${id}`,{observe: 'response'});
   }
 
   deleteCaja(id:string){

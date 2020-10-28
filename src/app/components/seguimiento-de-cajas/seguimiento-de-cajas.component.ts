@@ -8,6 +8,9 @@ import { Calibrador } from '../../models/calibrador';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { SeguimientoDeCajas } from '../../models/seguimiento-de-cajas';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
+
 
 @Component({
   selector: 'app-seguimiento-de-cajas',
@@ -72,7 +75,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
     private calibradorService: CalibradorService,
     private lineaService: LineaService,
     public calendar: NgbCalendar,
-    public formatter: NgbDateParserFormatter) { }
+    public formatter: NgbDateParserFormatter,
+    private registroDevService: RegistroDevService) { }
 
   ngOnInit() {
     this.listarCalibradores();
@@ -96,13 +100,20 @@ export class SeguimientoDeCajasComponent implements OnInit {
   listarLineas(id:string){
     console.log("HOLA ESTOY LISTANDO !!!!");
     this.lineaService.getLineasId(id).subscribe(
-      res2=>{
-        console.log(res2);
-        this.lineas=res2;
+      res=>{
+        console.log(res.body);
+        this.lineas=res.body;
+        if(res.status == 200){
+          this.toastr.success('Líneas obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no existen líneas actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         //this.listarSeguimientoDeCajas();
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método listarLineas, component seguimiento-de-cajas');
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
@@ -112,11 +123,12 @@ export class SeguimientoDeCajasComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
         
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component seguimiento-de-cajas');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
@@ -139,8 +151,14 @@ export class SeguimientoDeCajasComponent implements OnInit {
       console.log("busqueda de con caliper y line");
       this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
         res=>{
-          console.log(res);
-          this.seguimientoDeCajas=res;
+          console.log(res.body);
+          this.seguimientoDeCajas=res.body;
+          if(res.status == 200){
+            this.toastr.success('Cajas selladas obtenidas','Operación satisfactoria');
+          }else if(res.status == 204){
+            this.toastr.success('no existen cajas selladas actualmente para mostrar','Operación satisfactoria');
+            return;
+          }
           this.numBox = this.seguimientoDeCajas.length;
           if(this.bandera == 0){
             this.nombreColaborador = this.seguimientoDeCajas[0].nombre_usuario;
@@ -152,6 +170,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
           //this.listarSeguimientoDeCajas();
         },
         err=>{
+          this.registroDevService.creaRegistroDev('No se pudieron obtener las cajas por el criterio seleccionado, método buscarPorCriterio, component seguimiento-de-cajas');
           console.log(err);
           this.toastr.error('No se pudo obtener la busqueda de seguimiento de cajas', 'Oops');
         }

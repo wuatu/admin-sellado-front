@@ -16,7 +16,7 @@ export class ProduccionPorLineaService {
   } 
   
   getProduccionSearch(id_caliper:number,id_line: number ,fromDateSearch: string, toDateSearch: string){
-    return this.httpClient.get(`${this.API_URL}/registros_cajas_calibrador_linea/${id_caliper}/${id_line}/${fromDateSearch}/${toDateSearch}`);
+    return this.httpClient.get(`${this.API_URL}/registros_cajas_calibrador_linea/${id_caliper}/${id_line}/${fromDateSearch}/${toDateSearch}`,{observe: 'response'});
   }
 
   updateRegistroProduccionLinea(id ,registroProduccionColaborador:SeguimientoDeCajas):Observable<any>{

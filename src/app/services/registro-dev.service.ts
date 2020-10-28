@@ -1,35 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Registro } from '../models/registro';
 import { UtilsService } from './utils.service';
+import { RegistroDev } from '../models/registro-dev';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RegistroService {
+export class RegistroDevService {
   API_URL="http://localhost:3000/api"
   constructor(
     private httpClient: HttpClient, 
     private utilsService:UtilsService
     ) { }
 
-  getRegistros(){
-    return this.httpClient.get(`${this.API_URL}/registros`,{observe: 'response'});    
+  getRegistrosDev(){
+    return this.httpClient.get(`${this.API_URL}/registros_dev`,{observe: 'response'});    
   }
-  postRegistro(registro:Registro){
-    console.log(registro);
-    return this.httpClient.post(`${this.API_URL}/registro`,registro);    
+  postRegistroDev(registroDev:RegistroDev){
+    console.log("registro Dev"+ registroDev);
+    return this.httpClient.post(`${this.API_URL}/registro_dev`,registroDev);    
   }
 
   getFecha():string{
     return this.utilsService.getFecha();
   }
 
-  creaRegistro(mensajeRegistro:string){
-    const user = JSON.parse(localStorage.getItem('USER'));
+  creaRegistroDev(mensajeRegistro:string){
     let fecha = this.getFecha();
-    let registro=new Registro(null,user.id,user.nombre,user.apellido,mensajeRegistro, fecha.substring(0,10), fecha.substring(11,19));
-    this.postRegistro(registro).subscribe(
+    let registro=new RegistroDev(null, '510',mensajeRegistro, fecha.substring(0,10), fecha.substring(11,19));
+    this.postRegistroDev(registro).subscribe(
       res=>{
         console.log("Registro almacenado satisfactoriamente");
       }, 
@@ -41,3 +40,4 @@ export class RegistroService {
 
 
 }
+

@@ -7,6 +7,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from '@angular/forms';
 import { LectorValidador } from '../../models/lector-validador';
 import { LectorValidadorService } from '../../services/lector-validador.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
 
 @Component({
   selector: 'app-lector-validador',
@@ -41,7 +43,8 @@ export class LectorValidadorComponent implements OnInit {
     private toastr: ToastrService,
     private calibradorService:CalibradorService,
     private lectorValidadorService:LectorValidadorService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
 
   ) { }
 
@@ -57,11 +60,12 @@ export class LectorValidadorComponent implements OnInit {
     
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibrador, component lector-validador');
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
@@ -73,13 +77,19 @@ export class LectorValidadorComponent implements OnInit {
     this.lectorValidadorService.getLectoresValidadorId(this.selectedCalibradorObject.id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.lectoresValidador=res;
-        this.toastr.success('Lectores validadores listados','Operación satisfactoria');
+        console.log(res.body);
+        this.lectoresValidador=res.body;
         this.bandera = "mostrar";
+        if(res.status == 200){
+          this.toastr.success('Lectores validadores obtenido','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen lectores validadores actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los lectores-validadores, método listarLectoresValidador, component lector-validador');
         this.toastr.error('No se pudo obtener letores validadores', 'Oops');
         this.lectoresValidador=null;
       }
@@ -142,6 +152,8 @@ export class LectorValidadorComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo agregar lectores-validadores, método agregarLector, component lector-validador');
+        
         this.toastr.error('No se pudo guardar el lector', 'Oops');
         
       }
@@ -165,6 +177,7 @@ export class LectorValidadorComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo eliminar el lector-validador, método eliminarLector, component lector-validador');
         this.toastr.error('No se pudo eliminar lector validador', 'Oops');
       }
     );
@@ -206,7 +219,8 @@ export class LectorValidadorComponent implements OnInit {
         },
         err => {
           console.log(err);
-          
+          this.registroDevService.creaRegistroDev('No se pudo editar el lector-validador, método editarLector, component lector-validador');
+        
           this.toastr.error('No se pudo editar el lector Validador', 'Oops',);
         }
       );

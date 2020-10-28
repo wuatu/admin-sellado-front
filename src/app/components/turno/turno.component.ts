@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 import { ExportTurno } from 'src/app/models/export-turno';
 import { FormsModule } from '@angular/forms';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 @Component({
   selector: 'app-turno',
@@ -36,7 +37,9 @@ export class TurnoComponent implements OnInit {
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
     private turnoService: TurnoService,
-    private toastr: ToastrService,) {
+    private toastr: ToastrService,
+    private registroDevService: RegistroDevService
+    ) {
 
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -92,7 +95,13 @@ export class TurnoComponent implements OnInit {
     this.turnoService.getTurnos(this.selectedfromDate, this.selectedToDate).subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
-        this.turnos = res;
+        this.turnos = res.body;
+        if(res.status == 200){
+          this.toastr.success('Turnos  obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen registros de turnos actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         this.mostrar = true;
         let id = 0;
         //Se crea un objeto de la clase export-turno con la información devuelta de la base de datos 
@@ -114,8 +123,10 @@ export class TurnoComponent implements OnInit {
         }
       },
       err => {
+        
         if (err.status != 404) {
           console.log(err.status);
+          this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos, método listarTurnos, component turno');
           this.toastr.error('No se pudo listar turnos', 'Oops');
         } else {
           this.turnos = null;
@@ -154,19 +165,24 @@ export class TurnoComponent implements OnInit {
   }
 
   exportarArchivoExcel() {
-    // Se convierte el arreglo con los usuarios en linea 
-    var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
-
-    //se convierte el Json a xlsx en formato workSheet
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
-
-    /* genera el workbook y agrega el worksheet */
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'turnos');
-
-    /* Guarda el archivo */
-    let fecha = (new Date()).toISOString();
-    XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
+    try {
+      // Se convierte el arreglo con los usuarios en linea 
+      var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
+  
+      //se convierte el Json a xlsx en formato workSheet
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+  
+      /* genera el workbook y agrega el worksheet */
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'turnos');
+  
+      /* Guarda el archivo */
+      let fecha = (new Date()).toISOString();
+      XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar los turnos al archivo excel, método exportarArchivoExcel, component turno');
+    }
+    
   }
 
   buscarPorFecha() {

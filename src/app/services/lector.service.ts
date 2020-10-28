@@ -11,14 +11,15 @@ export class LectorService {
   constructor(private httpClient: HttpClient) { }
 
   getLectores(id:number){
-    return this.httpClient.get(`${this.API_URL}/lectores/${id}`);
+    return this.httpClient.get(`${this.API_URL}/lectores/${id}`,{observe: 'response'});
   }
+
   getLectoresId(id_calibrador:number, id_linea:number){
-    return this.httpClient.get(`${this.API_URL}/lectores/${id_calibrador}/${id_linea}`);
+    return this.httpClient.get(`${this.API_URL}/lectores/${id_calibrador}/${id_linea}`,{observe: 'response'});
   }
 
   getLector(id:number){
-    return this.httpClient.get(`${this.API_URL}/lector/${id}`);
+    return this.httpClient.get(`${this.API_URL}/lector/${id}`,{observe: 'response'});
   }
 
   deleteLector(id:number){

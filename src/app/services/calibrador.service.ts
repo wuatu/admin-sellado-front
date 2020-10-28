@@ -11,11 +11,11 @@ export class CalibradorService {
   constructor(private httpClient: HttpClient) { }
 
   getCalibradores(){
-    return this.httpClient.get(`${this.API_URL}/calibradores`);
+    return this.httpClient.get(`${this.API_URL}/calibradores`,{observe: 'response'});
   }
 
   getCalibrador(id:string){
-    return this.httpClient.get(`${this.API_URL}/calibrador/${id}`);
+    return this.httpClient.get(`${this.API_URL}/calibrador/${id}`,{observe: 'response'});
   }
 
   deleteCalibrador(id:string){

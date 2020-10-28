@@ -18,6 +18,8 @@ import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-
 
 import * as XLSX from 'xlsx'; 
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
+
 
 @Component({
   selector: 'app-produccion-por-calibrador',
@@ -84,7 +86,8 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     private calibradorService:CalibradorService,
     private produccionPorCalibradorService: ProduccionPorCalibradorService,
     private modalService: NgbModal,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
     ) { }
 
   ngOnInit() {
@@ -97,11 +100,12 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-por-calibrador');
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
@@ -122,13 +126,13 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         this.cajasCalibrador=res;
         this.mostrarGrafico = "true";
         console.log(this.cajasCalibrador);
-        this.toastr.success('Operación satisfactoria', 'cajas Obtenidas');
         this.cajasTotales(this.cajasCalibrador);
         this.pushData(this.cajasCalibrador);
         
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
         if(this.selectedCalibradorText != "Selecciona una calibrador" && this.desde != " " && this.hasta != " " ){
           this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
         }
@@ -150,8 +154,14 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     this.produccionPorCalibradorService.getProduccionSearch(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
       res=>{
         //console.log(res);
-        this.produccionCalibrador=res;
+        this.produccionCalibrador=res.body;
         //console.log(this.produccionColaborador);
+        if(res.status == 200){
+          this.toastr.success('Producción de calibrador obtenida','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No hay producción para este calibrador actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
         var bandera = 0;
         var newVerificado;
         var newIsTime;
@@ -183,6 +193,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         }
       },
       err=>{
+        this.registroDevService.creaRegistroDev('No se pudo obtener la producción del calibrador, método buscarRegistroCalibrador, component monitoreo-por-calibrador2');
         //console.log(err);
         this.toastr.error('No se pudo obtener la busqueda de produccion del calibrador', 'Oops');
       }
@@ -226,6 +237,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         }
       );
     }else{
+      this.registroDevService.creaRegistroDev('No se pudo editar el registro de produccion, método editarRegistroProduccion, component monitoreo-por-calibrador');
       this.toastr.error('Los valores seleccionados ya estan registrados', 'Oops',);
     }
   }
@@ -305,20 +317,25 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
   
   exportarArchivoExcel(){
-    // Se convierte el arreglo con los usuarios en linea 
-     var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-
-     console.log(jsonArray);
-     //se convierte el Json a xlsx en formato workSheet
-     const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-
-     /* genera el workbook y agrega el worksheet */
-     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
-
-     /* Guarda el archivo */
-     let dateDownload : string = new Date().toISOString();
-     XLSX.writeFile(wb, this.nombreExcel+ "_" +this.selectedCalibradorObject.nombre+ "_" +dateDownload.substring(0,10)+".xls");
+    try {
+      // Se convierte el arreglo con los usuarios en linea 
+       var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
+  
+       console.log(jsonArray);
+       //se convierte el Json a xlsx en formato workSheet
+       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+  
+       /* genera el workbook y agrega el worksheet */
+       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+       XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+  
+       /* Guarda el archivo */
+       let dateDownload : string = new Date().toISOString();
+       XLSX.writeFile(wb, this.nombreExcel+ "_" +this.selectedCalibradorObject.nombre+ "_" +dateDownload.substring(0,10)+".xls");
+    
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-calibrador');
+    }
   }
 
 

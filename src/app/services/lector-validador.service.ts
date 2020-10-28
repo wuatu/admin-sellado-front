@@ -11,15 +11,15 @@ export class LectorValidadorService {
   constructor(private httpClient: HttpClient) { }
 
   getLectoresValidador(id:number){
-    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id}`);
+    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id}`,{observe: 'response'});
   }
   getLectoresValidadorId(id_calibrador:number){
     console.log("getLectoresValidadorId");
-    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id_calibrador}`);
+    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id_calibrador}`,{observe: 'response'});
   }
 
   getLectorValidador(id:number){
-    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id}`);
+    return this.httpClient.get(`${this.API_URL}/lectoresValidador/${id}`,{observe: 'response'});
   }
 
   deleteLectorValidador(id:number){

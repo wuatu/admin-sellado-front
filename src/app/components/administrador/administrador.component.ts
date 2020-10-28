@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AdministradorService } from 'src/app/services/administrador.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { RegistroService } from '../../services/registro.service';
-
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 @Component({
@@ -36,7 +36,8 @@ export class AdministradorComponent implements OnInit {
     private authService: AuthService,
     //servicio toast ventana emergente que sirve para mostrar información al usuario
     private toastr: ToastrService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
   ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
@@ -53,13 +54,20 @@ export class AdministradorComponent implements OnInit {
       res => {
         console.log(res);
         console.log(res.status);
+        if(res.status == 200){
+          this.toastr.success('Administradores obtenidos','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('no existen registros de administradores para mostrar','Operación satisfactoria');
+          return;
+        }
         //los registros se almacena en array administradores que sirve para llenar la tabla de vista administradores
-        this.administradores = res;
+        this.administradores = res.body;
       },
       err => {
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar administrador', 'Oops');
+          this.registroDevService.creaRegistroDev('No se pudo obtener la lista de administradores, método listar administradores, component administrador');
         } else {
           this.administradores = null;
         }
@@ -86,6 +94,7 @@ export class AdministradorComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo agregar un administrador, component administrador, método agregarAdministrador');
         this.toastr.error('No se pudo guardar administrador', 'Oops');
       }
     );
@@ -107,6 +116,7 @@ export class AdministradorComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo obtener el administrador id', 'Oops',);
+        this.registroDevService.creaRegistroDev('No se pudo editar el administrador, método onEditar, component administrador');
       }
     )
   }
@@ -135,6 +145,7 @@ export class AdministradorComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo editar administrador', 'Oops',);
+        this.registroDevService.creaRegistroDev('No se pudo editar al administrador, método editarAdministrador, component administrador');
       }
     );
   }
@@ -152,7 +163,7 @@ export class AdministradorComponent implements OnInit {
   eliminarAdministrador(administrador: Administrador) {
     this.administradorService.deleteAdministrador(administrador.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea eliminada');
+        this.toastr.success('Operación satisfactoria', 'Administrador eliminado');
         this.registroService.creaRegistro("Se ha elimidado un administrador, id:  "+administrador.id+", rut; "+administrador.rut+" y nombre: "+administrador.nombre + " "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
@@ -160,6 +171,7 @@ export class AdministradorComponent implements OnInit {
       err => {
         console.log(err);
         this.toastr.error('No se pudo eliminar administrador', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo eliminar el administrador, método eliminarAdministrador, component administrador');
       }
     );
   }

@@ -12,12 +12,12 @@ export class UsuarioAdminService {
   constructor(private httpClient: HttpClient) { }
   
   getUsersAdmin(){
-    return this.httpClient.get(`${this.API_URL}/user_admin`);
+    return this.httpClient.get(`${this.API_URL}/user_admin`,{observe: 'response'});
   }
 
   getUserAdmin(id:string){
     console.log("getUserAdmin");
-    return this.httpClient.get(`${this.API_URL}/user_admin_/${id}`);
+    return this.httpClient.get(`${this.API_URL}/user_admin_/${id}`,{observe: 'response'});
   }
 
   deleteUserAdmin(id:string){

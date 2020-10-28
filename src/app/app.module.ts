@@ -41,6 +41,8 @@ import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador
 import { LectorValidadorComponent } from './components/lector-validador/lector-validador.component';
 import { RutValidationDirective } from './directive/rut-validation-directive.directive';
 import { ipValidationDirective } from './directive/ip-validation-directive.directive';
+import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
+import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
 
 
 @NgModule({
@@ -69,7 +71,9 @@ import { ipValidationDirective } from './directive/ip-validation-directive.direc
     MonitoreoCalibrador2Component,
     LectorValidadorComponent,
     RutValidationDirective,
-    ipValidationDirective
+    ipValidationDirective,
+    RegistroDevComponent,
+    RegistroProduccionComponent
   ],
   imports: [
     BrowserModule,

@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CalibradorService } from 'src/app/services/calibrador.service';
 import { Calibrador } from 'src/app/models/calibrador';
 import { RegistroService } from '../../services/registro.service';
+import { RegistroDevService } from '../../services/registro-dev.service';
 
 
 @Component({
@@ -35,8 +36,9 @@ export class LineasComponent implements OnInit {
     private toastr: ToastrService,
     //servicio de calibrador
     private calibradorService:CalibradorService,
-    private registroService: RegistroService
-  ) { }
+    private registroService: RegistroService,
+    private registroDevService: RegistroDevService
+    ) { }
 
   //metodo constructor, se llama cuando todas las vistas estan cargadas
   ngOnInit() {      
@@ -49,11 +51,13 @@ export class LineasComponent implements OnInit {
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res);
-        this.calibradores=res;
+        console.log(res.body);
+        this.calibradores=res.body;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component calibradores');
+        
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
@@ -65,9 +69,17 @@ export class LineasComponent implements OnInit {
     this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res => {
         //los registros se almacena en array lineas que sirve para llenar la tabla de vista lineas
-        this.lineas = res;
+        this.lineas = res.body;
+        if(res.status == 200){
+          this.toastr.success('Líneas obtenidas','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen registros de líneas actualmente para mostrar','Operación satisfactoria');
+          return;
+        }
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component linea');
+        
         if (err.status != 404) {
           console.log(err.status);
           this.toastr.error('No se pudo listar líneas', 'Oops');
@@ -96,6 +108,8 @@ export class LineasComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo agregar la línea, método agregarLinea, component linea');
+        
         this.toastr.error('No se pudo guardar línea', 'Oops');
         this.lineas=null;
       }
@@ -108,11 +122,13 @@ export class LineasComponent implements OnInit {
     this.currentLineaSelected = linea;
     this.calibradorService.getCalibrador(linea.fk_calibrador).subscribe(
       res=>{
-        this.selectedCalibradorObject=res;
+        this.selectedCalibradorObject=res.body;
         this.selectedCalibradorText=this.selectedCalibradorObject.nombre;
       },
       err=>{
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo obetener el calibrador, método onEditar, component linea');
+        
         this.toastr.error('No se pudo obtener calibrador id', 'Oops',);
       }
     )
@@ -140,6 +156,8 @@ export class LineasComponent implements OnInit {
         this.currentLineaSelected = null;
       },
       err => {
+        this.registroDevService.creaRegistroDev('No se pudo editar la linea, método editarLinea, component linea');
+        
         console.log(err);
         this.toastr.error('No se pudo editar línea', 'Oops',);
       }
@@ -164,6 +182,8 @@ export class LineasComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudo eliminar la línea, método eliminarLinea, component linea');
+        
         this.toastr.error('No se pudo eliminar línea', 'Oops');
       }
     );

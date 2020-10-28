@@ -22,6 +22,9 @@ import { UsuarioAdminComponent } from './components/usuario-admin/usuario-admin.
 import { MonitoreoCalibrador1Component } from './components/monitoreo-calibrador1/monitoreo-calibrador1.component';
 import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador2/monitoreo-calibrador2.component';
 import { LectorValidadorComponent } from './components/lector-validador/lector-validador.component';
+import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
+import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
+
 
 
 const routes: Routes = [
@@ -52,6 +55,8 @@ const routes: Routes = [
   { path: 'monitoreocalibrador1', component: MonitoreoCalibrador1Component, canActivate: [AuthGuard] },
   { path: 'monitoreocalibrador2', component:MonitoreoCalibrador2Component, canActivate: [AuthGuard] },
   { path: 'lectorValidador', component:LectorValidadorComponent, canActivate: [AuthGuard] },
+  { path: 'registroDev', component:RegistroDevComponent, canActivate: [AuthGuard] },
+  { path: 'registroProduccion', component:RegistroProduccionComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
