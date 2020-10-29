@@ -218,7 +218,7 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   validarColaboradorEnLinea(){
-    console.log(this.turnoActual[0].id + '  ' + this.selectedUsuarioObject.id + '  ' + this.selectedLineaObject.id);
+    
     this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
       res => {
         console.log("La respuesta de la consulta fue : "+ res[0].enTurno)

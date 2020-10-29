@@ -18,6 +18,11 @@ export class CajaService {
     return this.httpClient.get(`${this.API_URL}/caja/${id}`,{observe: 'response'});
   }
 
+  searchBox(criterio:string){
+    console.log("searchBox : "+criterio);
+    return this.httpClient.get(`${this.API_URL}/caja_search/${criterio}`,{observe: 'response'});
+  }
+
   deleteCaja(id:string){
     return this.httpClient.delete(`${this.API_URL}/caja/${id}`);
   }

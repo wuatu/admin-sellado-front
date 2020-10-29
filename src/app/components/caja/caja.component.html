@@ -8,16 +8,16 @@
         <div class="row ">
             <div class="col-6 align-self-start">
                 <div class="form-row">
-                    <div class="col-sm-6 my-1">
+                    <div class="col-sm-6 my-1" *ngIf="bandera == true">
                         <label for="">Buscar</label>
                         <div class="form-group">
                             <div class="input-group">
-                                <input #dpToDate class="form-control  ml-1" placeholder="id o envase" name="idEnvase">
+                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control  ml-1" placeholder="id o envase" id="criterio" name="criterio">
                             </div>
                         </div>
                     </div>
-                    <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary" (click)="buscarCaja()" type="submit " style="margin-top: 33px;">Buscar
+                    <div class="col-auto my-1" *ngIf="bandera == true">
+                        <button class="ml-1 btn btn-primary" (click)="searchBox()" type="submit " style="margin-top: 33px;">Buscar
               <i class="fas fa-search" aria-hidden="true"></i></button>
                     </div>
                 </div>
@@ -27,17 +27,17 @@
           caja</button>
             </div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="bandera == true">
             <div class="col-12">
                 <h4 class="text-left">Lista de cajas</h4>
             </div>
         </div>
         <form #buscarPatenteRobadaForm="ngForm">
             <!--Tabla de contenido-->
-            <table class="table table-hover">
+            <table class="table table-hover" *ngIf="bandera == true">
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
+                        <th scope="col">N°</th>
                         <th scope="col">Envase</th>
                         <th scope="col">Variedad</th>
                         <th scope="col">Categoria</th>
@@ -51,7 +51,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let caja of cajas; let i = index">
+                    <tr *ngFor="let caja of cajas | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                         <th scope="row">{{i+1}}</th>
                         <td>{{caja.envase }}</td>
                         <td>{{caja.variedad}}</td>
@@ -75,6 +75,9 @@
 
         </form>
     </div>
+</div>
+<div class="pagination" *ngIf="bandera == true">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
 </div>
 
 <!--modal agregar-->

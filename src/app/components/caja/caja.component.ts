@@ -14,10 +14,14 @@ import { RegistroDevService } from '../../services/registro-dev.service';
   styleUrls: ['./caja.component.css']
 })
 export class CajaComponent implements OnInit {
+  registrosDev:any = [];
+  pageOfItems: Array<any>;
+  p: number = 1;
 
   closeResult = '';
   currentCajaSelected: Caja
-  cajas: any;
+  cajas: any = [];
+  resultSearch: any;
   id: string;
   envaseCaja: string;
   variedadCaja: string;
@@ -26,6 +30,8 @@ export class CajaComponent implements OnInit {
   correlativoCaja: string;
   ponderacionCaja: number;
   rol: number;
+  criterio:string = null;
+  bandera:boolean = false;
 
   constructor(
     private cajaService: CajaService,
@@ -41,17 +47,43 @@ export class CajaComponent implements OnInit {
     console.log("rol: "+this.rol);
   }
 
-  buscarCaja(){
-    
+  searchBox(){
+   
+    if(this.criterio == null){
+      this.toastr.error('Ingrese un id o envase a buscar','Oops');
+      return;
+    }
+    this.bandera = false;
+    console.log("el criterio de busqueda es :"+this.criterio);
+    this.cajaService.searchBox(this.criterio).subscribe(
+      res =>{
+        if(res.status == 200){
+          console.log("resultado busqueda : "+ res.body);
+          this.cajas = null;
+          this.cajas = res.body;
+          this.bandera = true;
+          
+          this.toastr.success('Cajas obtenidas','Búsqueda satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No existen registros para mostrar en la búsqueda','Búsqueda satisfactoria');
+          return;  
+        }
+      },
+    err =>{
+      this.registroDevService.creaRegistroDev('No se pudo realizar la búsqueda de cajas, método searchBox, component caja');
+    }
+    )
   }
 
   //metodo que trae todos los registros de cajas desde la base de datos
   listarCajas() {
+    this.bandera = false;
     this.cajaService.getCajas().subscribe(
       res => {
         //los registros se almacena en array cajas que sirve para llenar la tabla de vista cajas
         this.cajas = res.body;
         if(res.status == 200){
+          this.bandera = true;
           this.toastr.success('Cajas obtenidas','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen registros de cajas actualmente para mostrar','Operación satisfactoria');
