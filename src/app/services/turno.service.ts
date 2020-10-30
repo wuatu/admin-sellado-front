@@ -36,6 +36,6 @@ export class TurnoService {
 
   closeTurnCollaborators(fecha_termino:string, hora_termino:string):Observable<any>{
     console.log("closeTurnCollaborators");
-    return this.httpClient.put(`${this.API_URL}/turno/${fecha_termino}/${hora_termino}`,"");
+    return this.httpClient.put(`${this.API_URL}/turno/${fecha_termino}/${hora_termino}`,"",{observe: 'response'});
   }
 }

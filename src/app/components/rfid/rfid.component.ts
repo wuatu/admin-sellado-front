@@ -70,7 +70,7 @@ export class RfidComponent implements OnInit {
   selectedPort:any = null;
 
   rol: number;
-
+  
   constructor(
     //servicio del modal
     private modalService: NgbModal,

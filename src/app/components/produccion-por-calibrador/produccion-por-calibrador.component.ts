@@ -54,7 +54,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   calibradores: any = [];
   cajasCalibrador: any = [];
   produccionCalibrador: any = [];
-  produccionColaboradorExportarExcel: any = [];
+  produccionCalibradorExportarExcel: any = [];
   selectedCalibradorText: string="Selecciona una calibrador";  
   selectedCalibradorObject:any;
   
@@ -150,7 +150,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     
     console.log(this.selectedCalibradorObject.id + this.desde + this.hasta);
     this.produccionCalibrador = [];
-    this.produccionColaboradorExportarExcel = [];
+    this.produccionCalibradorExportarExcel = [];
     this.produccionPorCalibradorService.getProduccionSearch(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
       res=>{
         //console.log(res);
@@ -177,7 +177,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
             newIsTime = "no";
           }
           let exportExcelProduccion = new ProduccionColaboradorExcel(element.codigo_de_barra, element.envase_caja,element.nombre_linea, element.nombre_lector, element.ip_lector, element.nombre_usuario, element.apellido_usuario, element.rut_usuario,element.fecha_sellado, element.hora_sellado ,newVerificado, newIsTime);
-          this.produccionColaboradorExportarExcel.push(exportExcelProduccion);
+          this.produccionCalibradorExportarExcel.push(exportExcelProduccion);
           if(bandera == 0){
             this.nombre = element.nombre_usuario;
             this.apellido = element.apellido_usuario;
@@ -189,7 +189,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         
 
         if(this.produccionCalibrador.length==0){
-          this.produccionColaboradorExportarExcel=null;
+          this.produccionCalibradorExportarExcel=null;
         }
       },
       err=>{
@@ -318,20 +318,53 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   
   exportarArchivoExcel(){
     try {
-      // Se convierte el arreglo con los usuarios en linea 
-       var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-  
-       console.log(jsonArray);
-       //se convierte el Json a xlsx en formato workSheet
-       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-  
-       /* genera el workbook y agrega el worksheet */
-       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-       XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
-  
-       /* Guarda el archivo */
-       let dateDownload : string = new Date().toISOString();
-       XLSX.writeFile(wb, this.nombreExcel+ "_" +this.selectedCalibradorObject.nombre+ "_" +dateDownload.substring(0,10)+".xls");
+      if(this.produccionCalibradorExportarExcel.length > 50000){
+        let array: any [];
+        let i = 0;
+        let j = 50000;
+        let cont = 1;
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        while(i < this.produccionCalibradorExportarExcel.length){
+          array = this.produccionCalibradorExportarExcel.slice(i,j);
+          // Se convierte el arreglo con los usuarios en linea 
+          var jsonArray = JSON.parse(JSON.stringify(array));
+          //se convierte el Json a xlsx en formato workSheet
+          const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+          /* genera el workbook y agrega el worksheet */
+          XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador '+ cont);
+          i = j;
+          if(j+50000<this.produccionCalibradorExportarExcel.length){
+            j = j + 50000;
+          }else{
+            j = this.produccionCalibradorExportarExcel.length;
+            
+          }
+          cont ++;
+          console.log("ayuda !!! estoy iterando!! no puedo parar!!!")
+        }
+        console.log("sali del while");
+        /* Guarda el archivo */
+        let dateDownload : string = new Date().toISOString();
+        XLSX.writeFile(wb, this.nombreExcel+ "_" +this.selectedCalibradorObject.nombre+ "_" +dateDownload.substring(0,10)+".xls");
+        console.log("guarde recien la wea!!");
+      }else{
+        console.log("tamaño del array : "+ this.produccionCalibradorExportarExcel.size);
+        // Se convierte el arreglo con los usuarios en linea 
+         var jsonArray = JSON.parse(JSON.stringify(this.produccionCalibradorExportarExcel))
+          
+         console.log(jsonArray);
+         //se convierte el Json a xlsx en formato workSheet
+         const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+    
+         /* genera el workbook y agrega el worksheet */
+         const wb: XLSX.WorkBook = XLSX.utils.book_new();
+         XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+    
+         /* Guarda el archivo */
+         let dateDownload : string = new Date().toISOString();
+         XLSX.writeFile(wb, this.nombreExcel+ "_" +this.selectedCalibradorObject.nombre+ "_" +dateDownload.substring(0,10)+".xls");
+      }
+      
     
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-calibrador');

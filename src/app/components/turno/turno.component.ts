@@ -166,19 +166,61 @@ export class TurnoComponent implements OnInit {
 
   exportarArchivoExcel() {
     try {
+      if(this.exportTurnoArray.length > 50000){
+        let array: any [];
+        let i = 0;
+        let j = 50000;
+        let cont = 1;
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        while(i < this.exportTurnoArray.length){
+          array = this.exportTurnoArray.slice(i,j);
+          // Se convierte el arreglo con los usuarios en linea 
+          var jsonArray = JSON.parse(JSON.stringify(array));
+          //se convierte el Json a xlsx en formato workSheet
+          const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+          /* genera el workbook y agrega el worksheet */
+          XLSX.utils.book_append_sheet(wb, ws, 'Producción de linea '+ cont);
+          i = j;
+          if(j+50000<this.exportTurnoArray.length){
+            j = j + 50000;
+          }else{
+            j = this.exportTurnoArray.length;
+          }
+          cont ++; 
+        }
+        /* Guarda el archivo */
+        let fecha = (new Date()).toISOString();
+        XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
+      }else{
+        
+        // Se convierte el arreglo con los usuarios en linea 
+         var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
+          
+         console.log(jsonArray);
+         //se convierte el Json a xlsx en formato workSheet
+         const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+    
+         /* genera el workbook y agrega el worksheet */
+         const wb: XLSX.WorkBook = XLSX.utils.book_new();
+         XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+    
+         /* Guarda el archivo */
+         let fecha = (new Date()).toISOString();
+         XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
+      }
       // Se convierte el arreglo con los usuarios en linea 
-      var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
+      //var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
   
       //se convierte el Json a xlsx en formato workSheet
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+      //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
   
       /* genera el workbook y agrega el worksheet */
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'turnos');
+      //const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      //XLSX.utils.book_append_sheet(wb, ws, 'turnos');
   
       /* Guarda el archivo */
-      let fecha = (new Date()).toISOString();
-      XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
+      //let fecha = (new Date()).toISOString();
+      //XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar los turnos al archivo excel, método exportarArchivoExcel, component turno');
     }

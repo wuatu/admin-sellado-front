@@ -202,11 +202,66 @@ export class ProduccionColaboradorComponent implements OnInit {
 
   exportarArchivoExcel(){
     try {
+      if(this.produccionColaboradorExportarExcel.length > 50000){
+        let array: any [];
+        let i = 0;
+        let j = 50000;
+        let cont = 1;
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        while(i < this.produccionColaboradorExportarExcel.length){
+          array = this.produccionColaboradorExportarExcel.slice(i,j);
+          // Se convierte el arreglo con los usuarios en linea 
+          var jsonArray = JSON.parse(JSON.stringify(array));
+          //se convierte el Json a xlsx en formato workSheet
+          const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+          /* genera el workbook y agrega el worksheet */
+          XLSX.utils.book_append_sheet(wb, ws, 'Producción de linea '+ cont);
+          i = j;
+          if(j+50000<this.produccionColaboradorExportarExcel.length){
+            j = j + 50000;
+          }else{
+            j = this.produccionColaboradorExportarExcel.length;
+          }
+          cont ++; 
+        }
+        //página de cantidad de cajas por tipo de envase
+        let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
+        this.produccionNumberBoxByType.push(cajas);
+        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
+        const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
+        XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
+
+        /* Guarda el archivo */
+        let dateDownload : string = new Date().toISOString();
+        XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
+      }else{
+        
+        // Se convierte el arreglo con los usuarios en linea 
+         var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
+          
+         console.log(jsonArray);
+         //se convierte el Json a xlsx en formato workSheet
+         const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
+    
+         /* genera el workbook y agrega el worksheet */
+         const wb: XLSX.WorkBook = XLSX.utils.book_new();
+         XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+    
+         /* Guarda el archivo */
+         let dateDownload : string = new Date().toISOString();
+         XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
+      }
+    } catch (error) {
+      this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-linea');
+    }
+
+    /*try {
       let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
       this.produccionNumberBoxByType.push(cajas);
       console.log(cajas);
       
       // Se convierte el arreglo con los usuarios en linea 
+      console.log("tamaño de arreglo: "+this.produccionColaboradorExportarExcel.size);
        var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
        console.log(jsonArray);
@@ -215,18 +270,18 @@ export class ProduccionColaboradorComponent implements OnInit {
        const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
        const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
        /* genera el workbook y agrega el worksheet */
-       const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      /* const wb: XLSX.WorkBook = XLSX.utils.book_new();
        XLSX.utils.book_append_sheet(wb, ws, 'Registro de producción');
        XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
   
        /* Guarda el archivo */
-       let dateDownload : string = new Date().toISOString();
+       /*let dateDownload : string = new Date().toISOString();
        XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
     
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar la producción a excel, método exportarArchivoExcel, component produccion-colaborador');
-    }
-    }
+    }*/
+  }
   
   cajasTotales(cajas: any []){
     this.numBox = 0;

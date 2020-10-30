@@ -21,6 +21,7 @@ export class CalibradorComponent implements OnInit {
   currentCalibradorSelected: Calibrador
   nombreCalibrador;
   rol: number;
+  bandera: boolean = false;
 
   constructor(
     private modalService: NgbModal,
@@ -39,12 +40,14 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que trae todos los registros de calibradors desde la base de datos
   listarCalibradores() {
+    this.bandera = false;
     this.calibradorService.getCalibradores().subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista calibradors
         this.calibradores = res.body;
         if(res.status == 200){
           this.toastr.success('Calibradores obtenidos','Operación satisfactoria');
+          this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen calibradores actualmente para mostrar','Operación satisfactoria');
           return;

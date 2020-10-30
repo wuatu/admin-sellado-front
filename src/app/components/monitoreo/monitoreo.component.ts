@@ -142,7 +142,7 @@ export class MonitoreoComponent implements OnInit {
     // En el caso de que el turno se mantenga en el dia en que inicio
     if(this.fechaActual == this.turnoActual[0].fecha_apertura){
       //consulta para el calibrador 1
-      this.monitoreoService.getAverageforMinute(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getAverageforMinute( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.calibradores[0].id, '1', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador1Minuto = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -163,7 +163,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getAverageforMinute(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getAverageforMinute( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.calibradores[1].id, '1', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Minuto = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -185,7 +185,7 @@ export class MonitoreoComponent implements OnInit {
       //En el caso en que el turno se extienda de un dia a otro.
     }else if(this.fechaActual > this.turnoActual[0].fecha_apertura){
       //consulta para el calibrador 1
-      this.monitoreoService.getAverageforMinute(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getAverageforMinute( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id,'2',this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador1Minuto = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -204,7 +204,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getAverageforMinute(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getAverageforMinute( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[1].id,'2', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Minuto = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -232,7 +232,7 @@ export class MonitoreoComponent implements OnInit {
     //en el caso de que el turno se mantenga en el día que inicio
     if(this.fechaActual == this.turnoActual[0].fecha_apertura){
       //consulta para el calibrador 1
-      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getAverageforMinuteLastHour( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id,'1', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador1Hora = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -251,7 +251,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getAverageforMinuteLastHour( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[1].id,'1', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Hora = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -273,7 +273,7 @@ export class MonitoreoComponent implements OnInit {
     //En el caso en que el turno se extienda de un dia a otro.
     }else if(this.fechaActual > this.turnoActual[0].fecha_apertura){
       //consulta para el  calibrador 1
-      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getAverageforMinuteLastHour( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.calibradores[0].id, '2',this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador1Hora = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -292,7 +292,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getAverageforMinuteLastHour(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getAverageforMinuteLastHour( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.calibradores[1].id, '2', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Hora = res;
           if(this.cajasCalibrador2Hora[0].total == null){
@@ -322,7 +322,7 @@ export class MonitoreoComponent implements OnInit {
     //en el caso de que el turno se mantenga en el día que inicio
     if(this.fechaActual == this.turnoActual[0].fecha_apertura){
       //consulta calibrador 1
-      this.monitoreoService.getProduccionSearch(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getProduccionSearch(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '1', this.fechaActual).subscribe(
         (res) => {
           this.cajasCalibrador1Turno = res;
           //console.log(this.cajasCalibrador1Turno[0].total);
@@ -336,7 +336,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getProduccionSearch(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1').subscribe(
+      this.monitoreoService.getProduccionSearch( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[1].id,'1', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Turno = res;
           //console.log(this.cajasCalibrador2Turno[0].total);
@@ -352,7 +352,7 @@ export class MonitoreoComponent implements OnInit {
     //En el caso en que el turno se extienda de un dia a otro.
     }else if(this.fechaActual>this.turnoActual[0].fecha_apertura){
       //consulta para el calibrador 1
-      this.monitoreoService.getProduccionSearch(this.calibradores[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getProduccionSearch( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '2', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador1Turno = res;
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
@@ -365,7 +365,7 @@ export class MonitoreoComponent implements OnInit {
         }
       )
       //consulta para el calibrador 2
-      this.monitoreoService.getProduccionSearch(this.calibradores[1].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2').subscribe(
+      this.monitoreoService.getProduccionSearch( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[1].id,'2', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Turno = res;
           this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
@@ -562,7 +562,13 @@ export class MonitoreoComponent implements OnInit {
     this.turnoService.closeTurnCollaborators(fecha.substring(0,10),fecha.substring(11,19)).subscribe(
       res => {
         this.sesionCerrada();
-        this.toastr.success("Turno cerrado correctamente para colaboradores");
+        if(res.status == 200){
+          this.toastr.success('Turno cerrado a colaboradores','Operación satisfactoria');
+        }else if(res.status == 204){
+          this.toastr.success('No hay colaboradores agregados a linea para cerrar el turno','Operación satisfactoria');
+          return;
+        }
+        
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo cerrar turno a los colaboradores, método cerrarTurnoColaboradores, component monitoreo');

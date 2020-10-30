@@ -159,13 +159,16 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Rut">
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                 </div>
 
                 <!--Valida formulario nombre-->
                 <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
                     <div *ngIf="rut.errors.required">
                         Rut es obligatorio
+                    </div>
+                    <div *ngIf="rut.errors.rutValidation">
+                        {{rut.errors.rutValidation.message}}
                     </div>
                 </div>
 

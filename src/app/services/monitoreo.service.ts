@@ -9,19 +9,19 @@ export class MonitoreoService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
   
-  getProduccionSearch(id_caliper:number, date: string, time: string, option: string){
-    console.log("Service  getProduccionSearch");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_turno/${id_caliper}/${date}/${time}/${option}`);
+  getProduccionSearch( date: string, time: string,id_caliper:number, option: string,fecha_actual: string){
+    console.log("Service  getProduccionSearch: "+fecha_actual);
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_turno/${date}/${time}/${id_caliper}/${option}/${fecha_actual}`);
   }
   
-  getAverageforMinute(id_caliper:number, date: string, time: string, option: string){
+  getAverageforMinute( date: string, time: string,id_caliper:number, option: string,fecha_actual: string){
     console.log("Service  getAverageforMinute");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto/${id_caliper}/${date}/${time}/${option}`);
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto/${date}/${time}/${id_caliper}/${option}/${fecha_actual}`);
   }
   
-  getAverageforMinuteLastHour(id_caliper:number, date: string, time: string, option: string){
+  getAverageforMinuteLastHour( date: string, time: string, id_caliper:number,option: string,fecha_actual: string){
     console.log("Service  getAverageforMinuteLastHour");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto_ultima_hora/${id_caliper}/${date}/${time}/${option}`);
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto_ultima_hora/${date}/${time}/${id_caliper}/${option}/${fecha_actual}`);
   }
   
   getGetLastTurno(){

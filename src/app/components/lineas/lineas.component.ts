@@ -26,6 +26,7 @@ export class LineasComponent implements OnInit {
   selectedCalibradorObject:any;
   selectedCalibradorObjectModificar:any;
   rol:number;
+  bandera: boolean = false;
 
   constructor(
     //servicio del modal
@@ -65,6 +66,7 @@ export class LineasComponent implements OnInit {
 
   //metodo que trae todos los registros de lineas desde la base de datos
   listarLineas() {  
+    this.bandera = false;
     console.log(this.selectedCalibradorObject.id);
     this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res => {
@@ -72,6 +74,7 @@ export class LineasComponent implements OnInit {
         this.lineas = res.body;
         if(res.status == 200){
           this.toastr.success('Líneas obtenidas','Operación satisfactoria');
+          this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen registros de líneas actualmente para mostrar','Operación satisfactoria');
           return;
