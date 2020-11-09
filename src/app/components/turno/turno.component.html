@@ -11,7 +11,7 @@
                 <label for="Desde:">Desde:</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input #dpFromDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                        <input #dpFromDate class="form-control  ml-1" placeholder="yyyy-MM-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <label for="">Hasta:</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input #dpToDate class="form-control  ml-1" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+                        <input #dpToDate class="form-control  ml-1" placeholder="yyyy-MM-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
                     </div>
                 </div>
             </div>

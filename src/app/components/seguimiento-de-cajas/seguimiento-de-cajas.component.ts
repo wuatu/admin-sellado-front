@@ -27,7 +27,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
   p: number = 1;
 
-  nombreLinea: string ="lineaPrueba";
+  nombreLinea: string = "lineaPrueba";
   nombreCalibrador: string = "calibradorPrueba";
 
 
@@ -35,11 +35,11 @@ export class SeguimientoDeCajasComponent implements OnInit {
   currentLineaSelected: Linea;
 
 
-  selectedCalibradorText: string="Seleccionar calibrador";  
-  selectedCalibradorObject:any;
+  selectedCalibradorText: string = "Seleccionar calibrador";
+  selectedCalibradorObject: any;
 
-  selectedLineaText: string="Seleccionar linea";    
-  selectedLineaObject:any;
+  selectedLineaText: string = "Seleccionar linea";
+  selectedLineaObject: any;
 
   //calendar
   hoveredDate: NgbDate | null = null;
@@ -62,13 +62,13 @@ export class SeguimientoDeCajasComponent implements OnInit {
   dateFinishSearch: string;
 
   // Array para el dropdown del selector de atributos de busqueda de la caja
-  dropDownSearch: any [] = [{nombre:'Envase'}, {nombre:'Variedad'}, {nombre:'Categoria'}, {nombre:'Calibre'}];
-  SearchText: string="Seleccionar criterio";    
-  selectedSearch:any;
+  dropDownSearch: any[] = [{ nombre: 'Envase' }, { nombre: 'Variedad' }, { nombre: 'Categoria' }, { nombre: 'Calibre' }];
+  SearchText: string = "Seleccionar criterio";
+  selectedSearch: any;
 
-  numBox: number = 0; 
+  numBox: number = 0;
   bandera: number = 0;
-  nombreColaborador:any;
+  nombreColaborador: any;
 
   constructor(private toastr: ToastrService,
     private seguimientoDeCajasService: SeguimientoDeCajasService,
@@ -79,9 +79,13 @@ export class SeguimientoDeCajasComponent implements OnInit {
     private registroDevService: RegistroDevService) { }
 
   ngOnInit() {
-    //this.listarCalibradores();
-    
-    this.agregarRegistroDeCajas();
+    this.fromDate = this.calendar.getToday();
+    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
+    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+    console.log(this.desde);
+    this.listarCalibradores();
+
+    //this.agregarRegistroDeCajas();
   }
   //lista todos los registros que estan en la tabla de la base datos
   /*listarSeguimientoDeCajas(){
@@ -97,22 +101,22 @@ export class SeguimientoDeCajasComponent implements OnInit {
     );
   }*/
 
-  listarLineas(id:string){
+  listarLineas(id: string) {
     console.log("HOLA ESTOY LISTANDO !!!!");
     this.lineaService.getLineasId(id).subscribe(
-      res=>{
+      res => {
         console.log(res.body);
-        this.lineas=res.body;
-        if(res.status == 200){
-          this.toastr.success('Líneas obtenidos','Operación satisfactoria');
-        }else if(res.status == 204){
-          this.toastr.success('no existen líneas actualmente para mostrar','Operación satisfactoria');
+        this.lineas = res.body;
+        if (res.status == 200) {
+          this.toastr.success('Líneas obtenidos', 'Operación satisfactoria');
+        } else if (res.status == 204) {
+          this.toastr.success('no existen líneas actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
         //this.listarSeguimientoDeCajas();
-        
+
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método listarLineas, component seguimiento-de-cajas');
         console.log(err);
         this.toastr.error('No se pudo obtener lineas', 'Oops');
@@ -120,14 +124,14 @@ export class SeguimientoDeCajasComponent implements OnInit {
     );
   }
 
-  listarCalibradores(){
+  listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
-      res=>{
+      res => {
         console.log(res.body);
-        this.calibradores=res.body;
-        
+        this.calibradores = res.body;
+
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component seguimiento-de-cajas');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
@@ -135,41 +139,38 @@ export class SeguimientoDeCajasComponent implements OnInit {
     );
   }
 
-  buscarPorCriterio(){
-    console.log(this.selectedSearch + this.toSearch + this.desde + this.hasta);
+  buscarPorCriterio() {
+    console.log(this.selectedSearch + " " + this.toSearch + " " + this.desde + " " + this.hasta);
     this.seguimientoDeCajas = [];
-    if(!this.selectedLineaObject && !this.selectedCalibradorObject && this.selectedSearch){
+    if (!this.selectedLineaObject && !this.selectedCalibradorObject) {
       this.toastr.error('Se debe seleccionar calibrador y linea', 'Oops');
       return;
-    }else if(!this.selectedSearch){
-      this.toastr.error('Se debe seleccionar el criterio a buscar', 'Oops');
-      return;
-    }else if(this.desde == null || this.hasta == null){
+    } else if (this.desde == null) {
       this.toastr.error('Se debe seleccionar el rango de fecha de busqueda', 'Oops');
       return;
-    }else if(this.selectedLineaObject && this.selectedCalibradorObject && this.selectedSearch){
+    } else if (this.selectedLineaObject && this.selectedCalibradorObject) {
       console.log("busqueda de con caliper y line");
       this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
-        res=>{
+        res => {
           console.log(res.body);
-          this.seguimientoDeCajas=res.body;
-          if(res.status == 200){
-            this.toastr.success('Cajas selladas obtenidas','Operación satisfactoria');
-          }else if(res.status == 204){
-            this.toastr.success('no existen cajas selladas actualmente para mostrar','Operación satisfactoria');
+          this.seguimientoDeCajas = res.body;
+          if (res.status == 200) {
+            this.toastr.success('Cajas selladas obtenidas', 'Operación satisfactoria');
+          } else if (res.status == 204) {
+            this.toastr.success('no existen cajas selladas actualmente para mostrar', 'Operación satisfactoria');
             return;
           }
           this.numBox = this.seguimientoDeCajas.length;
-          if(this.bandera == 0){
+          if (this.bandera == 0) {
             this.nombreColaborador = this.seguimientoDeCajas[0].nombre_usuario;
-            console.log(this.seguimientoDeCajas.nombre_usuario+"!!!!!!!!!!!!!");
-            this.bandera ++;
+            console.log(this.seguimientoDeCajas.nombre_usuario + "!!!!!!!!!!!!!");
+            this.bandera++;
           }
           this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
           console.log(this.seguimientoDeCajas);
           //this.listarSeguimientoDeCajas();
         },
-        err=>{
+        err => {
           this.registroDevService.creaRegistroDev('No se pudieron obtener las cajas por el criterio seleccionado, método buscarPorCriterio, component seguimiento-de-cajas');
           console.log(err);
           this.toastr.error('No se pudo obtener la busqueda de seguimiento de cajas', 'Oops');
@@ -177,24 +178,24 @@ export class SeguimientoDeCajasComponent implements OnInit {
       );
     }
   }
-  
-  changeSelectedSearch(newSelected: any) { 
+
+  changeSelectedSearch(newSelected: any) {
     this.SearchText = newSelected.nombre;
     this.selectedSearch = newSelected.nombre;
-    console.log(this.selectedSearch);      
+    console.log(this.selectedSearch);
   }
 
-  changeSelectedLinea(newSelected: any) { 
+  changeSelectedLinea(newSelected: any) {
     console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected.nombre;
-    this.selectedLineaObject=newSelected;
-    
+    this.selectedLineaObject = newSelected;
+
   }
 
-  changeSelectedCalibrador(newSelected: any) { 
+  changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
-    this.listarLineas(this.selectedCalibradorObject.id); 
+    this.listarLineas(this.selectedCalibradorObject.id);
   }
 
   fecha() {
@@ -208,22 +209,22 @@ export class SeguimientoDeCajasComponent implements OnInit {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
       //const dateStringAux:string=(this.fromDate.year+"-"+(this.fromDate.month-1)+"-"+this.fromDate.day);
-      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      console.log("toDate "+ date);
-      this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month-1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
+      console.log("toDate " + date);
+      this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
 
-    
+
     } else {
       this.toDate = null;
       this.fromDate = date;
-      console.log("fromDate "+ date);
-      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
-      this.hasta=null;
+      console.log("fromDate " + date);
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+      this.hasta = null;
     }
-    
-    
+
+
 
   }
 
@@ -243,38 +244,38 @@ export class SeguimientoDeCajasComponent implements OnInit {
     const parsed = this.formatter.parse(input);
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
   }
-  dia:string;
-  hora:string;
-  minuto:string;
-  segundo:string;
-  agregarRegistroDeCajas(){
-    for(let d = 30; d <= 30 ; d++){
-      for(let h = 16; h <= 16; h++){
-        for(let m = 0; m < 60; m++){
-          for(let s = 0; s < 60; s = s + 10){
+  dia: string;
+  hora: string;
+  minuto: string;
+  segundo: string;
+  agregarRegistroDeCajas() {
+    for (let d = 30; d <= 30; d++) {
+      for (let h = 16; h <= 16; h++) {
+        for (let m = 0; m < 60; m++) {
+          for (let s = 0; s < 60; s = s + 10) {
             this.dia = d.toString();
-            if(d<10){
-              this.dia = "0"+d;
+            if (d < 10) {
+              this.dia = "0" + d;
             }
             this.hora = h.toString();
-            if(h<10){
-              this.hora = "0"+h;
+            if (h < 10) {
+              this.hora = "0" + h;
             }
             this.minuto = m.toString();
-            if(m<10){
-              this.minuto = "0"+m;
+            if (m < 10) {
+              this.minuto = "0" + m;
             }
             this.segundo = s.toString();
-            if(s<10){
-              this.segundo = "0"+s;
+            if (s < 10) {
+              this.segundo = "0" + s;
             }
-            let registroCaja = new SeguimientoDeCajas(null, 3, "Calibrador 2", 4, "Línea 2", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875", 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-"+this.dia, this.hora+":"+this.minuto+":"+this.segundo , "2020-10-30", "10:00:00" , 1,1, 0);
+            let registroCaja = new SeguimientoDeCajas(null, 3, "Calibrador 2", 4, "Línea 2", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875", 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-" + this.dia, this.hora + ":" + this.minuto + ":" + this.segundo, "2020-10-30", "10:00:00", 1, 1, 0);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
-              res=>{
+              res => {
                 console.log("agrege!!!!!!!!");
                 //this.toastr.success('Operación satisfactoria', 'Registro agregado');
               },
-              err=>{
+              err => {
                 //console.log(err);
                 //this.toastr.error('No se pudo obtener a los registros', 'Oops');
               }
@@ -282,7 +283,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
           }
         }
       }
-      console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :"+ d);
+      console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :" + d);
     }
 
     /*let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-08", "12:16:40" , "2020-09-24", "08:39:02" , 1,1, 0);
@@ -297,20 +298,20 @@ export class SeguimientoDeCajasComponent implements OnInit {
     ); */
 
     //for(let j=1; j<10 ; j++){
-      /*for(let i=30; i<59 ;i++){
-        let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-15", "15:"+i+":15" , "2020-10-16", "08:39:02" , 1,1, 0);
-        this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
-          res=>{
-            this.toastr.success('Operación satisfactoria', 'Registro agregado');
-          },
-          err=>{
-            console.log(err);
-            this.toastr.error('No se pudo obtener a los registros', 'Oops');
-          }
-        ); 
-      }*/
+    /*for(let i=30; i<59 ;i++){
+      let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-15", "15:"+i+":15" , "2020-10-16", "08:39:02" , 1,1, 0);
+      this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
+        res=>{
+          this.toastr.success('Operación satisfactoria', 'Registro agregado');
+        },
+        err=>{
+          console.log(err);
+          this.toastr.error('No se pudo obtener a los registros', 'Oops');
+        }
+      ); 
+    }*/
     //}
-    
+
 
     /*for (let i = 1100 ; i<=1200; i++){
       let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+i, 22, "linea_"+i, i+1100, "rfid_"+i, "192.168.0."+i, i, "lector_"+i, "192.168.10."+i, i, "rut_"+i, "nombre_"+i, "apellido_"+i, "5468"+i, i, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-09-01", "2020-09-05", 1,1 );
@@ -324,10 +325,6 @@ export class SeguimientoDeCajasComponent implements OnInit {
         }
       );
     }*/
-  }
-
-  onSubmitBuscarUsuarioForm(){
-
   }
 
 }

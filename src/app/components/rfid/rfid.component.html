@@ -9,22 +9,23 @@
         <br>
         <div class="row justify-content-center">
 
-            <div class="col-4 align-self-end text-left">
+            <div class="col-3 align-self-end text-left">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
                     </div>
                 </div>
             </div>
-            <div class="col-4 align-self-end text-left">
+            <div class="col-3 align-self-end text-left">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{selectedLineaText}}</button>
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedLineaText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
                         <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
                     </div>
                 </div>
             </div>
+            <div class="col-2"></div>
             <div class="col-4 align-self-end">
                 <div class="text-right" *ngIf="selectedCalibradorObject && selectedLineaObject">
                     <button class="btn btn-primary  text-right" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>

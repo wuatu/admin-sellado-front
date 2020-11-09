@@ -1,89 +1,103 @@
 <div class="row">
-    <div class="col-12 ">
-        <div class="row justify-content-center; no-printme">
-            <div class="col-12" style="margin-block-end: 20px; margin-top: 20px;">
-                <h1 class="text-center"><b>Producción por calibrador</b></h1>
+    <div class="col-12" style="margin-block-end: 20px; margin-top: 20px;">
+        <h1 class="text-center"><b>Producción por calibrador</b></h1>
+    </div>
+</div>
+
+<div class="col-12; no-printme">
+    <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+        <div class="form-row">
+            <div class="col-lg-3 col-sm-12 my-1">
+                <div ngbDropdown>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" style="width: -webkit-fill-available;"
+                        ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores"
+                            (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-sm-12 my-1">
+                <input #dpFromDate class="form-control " placeholder="yyyy-MM-dd" name="dpFromDate"
+                    [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+                    (click)="d.toggle()" placeholder="Desde">
+            </div>
+            <div class="col-lg-2 col-sm-12 my-1">
+                <input #dpToDate class="form-control " placeholder="yyyy-MM-dd" name="dpToDate"
+                    [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled
+                    placeholder="Hasta">
+            </div>
+            <div class="col-2 my-1">
+                <button class="btn btn-primary form-control" (click)="buscarRegistroCalibrador();contarCajasCalibradorPorFecha()"
+                    type="submit">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+            </div>
+            <hr>
+        </div>
+        <div class="col">
+            <div class="form-group hidden">
+                <div class="input-group">
+                    <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker"
+                        [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                        [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                    <ng-template #t let-date let-focused="focused">
+                        <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null">
+                            {{ date.day }}
+                        </span>
+                    </ng-template>
+                </div>
             </div>
         </div>
-        <div class="col-12; no-printme">
-            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
-                <div class="form-row">
-                    <div class="col-xs-2 my-1">
-                        <div ngbDropdown>
-                            <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle>{{selectedCalibradorText}}</button>
-                            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-2 my-1">
-                        <input #dpFromDate class="form-control " placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
-                    </div>
-                    <div class="col-sm-2 my-1">
-                        <input #dpToDate class="form-control " placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
-                    </div>
-                    <div class="col-auto my-1">
-                        <button class="ml-1 btn btn-primary btn-sm" (click)="buscarRegistroCalibrador();contarCajasCalibradorPorFecha()" type="submit " style="margin-top: 3px;">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
-                    </div>
-                    <hr>
-                </div>
-                <div class="col">
-                    <div class="form-group hidden">
-                        <div class="input-group">
-                            <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
-                            <ng-template #t let-date let-focused="focused">
-                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                                {{ date.day }}
-                            </span>
-                            </ng-template>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+    </form>
+</div>
+
+<div class="row" id="imprimirGraficoID" *ngIf="mostrarGrafico">
+    <div class="col-12; no-printme">
+        <h6 class="text-left">
+            <b>Resultado de busqueda: {{selectedCalibradorText}} {{desde}} {{hasta}}</b>
+        </h6>
     </div>
-    <div class="row justify-content-start" id="imprimirGraficoID" *ngIf="mostrarGrafico">
-        <div class="col-12; no-printme" style="margin-block-end: 20px; margin-left: 20px">
-            <h6 class="text-left">
-                <b>Resultado de busqueda: {{selectedCalibradorText}} {{desde}} {{hasta}}</b>
-            </h6>
-        </div>
-        <div class="col-md-12  align-self-end p-20" style="margin-bottom: 20px;">
-            <div class="text-right">
-                <button class="btn btn-info text-right"><i class="fas fa-box"></i>
+    <div class="col-12  align-self-end p-20" style="margin-bottom: 20px;">
+        <div class="text-right">
+            <button class="btn btn-info text-right"><i class="fas fa-box"></i>
                 Total de cajas selladas: {{numBox}}
             </button>
-            </div>
         </div>
-        <br>
-        <div class="col-10" style="margin-block-end: 20px">
-            <h5 class="text-center">
-                <b>Cajas selladas desde {{desde}} hasta {{hasta}} en {{selectedCalibradorText}}</b>
-            </h5>
-        </div>
-        <!--********************************** GRAFICO ************************************-->
+    </div>
+    <br>
+    <div class="col-12" style="margin-block-end: 20px">
+        <h5 class="text-center">
+            <b>Cajas selladas desde {{desde}} hasta {{hasta}} en {{selectedCalibradorText}}</b>
+        </h5>
+    </div>
+    <!--********************************** GRAFICO ************************************-->
 
-        <div class="col-10">
-            <div class="flex ">
-                <div class="flex-item justify-content-center">
-                    <div style="display: block;">
-                        <canvas baseChart width="900" height="600" [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
-                    </div>
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="flex ">
+            <div class="flex-item justify-content-center">
+                <div style="display: block;">
+                    <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [colors]="lineChartColors"
+                        [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)"
+                        (chartClick)="chartClicked($event)"></canvas>
                 </div>
-                <div class="flex-item; no-printme">
-                    <div class="col-md-12  align-self-end ">
-                        <div class="text-right">
-                            <button class="btn btn-primary  text-right" style="margin-top: 10px; margin-block-end: 30px;" (click)="imprimirGrafico()"><i class="fas fa-print"></i>
+            </div>
+            <div class="flex-item; no-printme">
+                <div class="col-md-12  align-self-end ">
+                    <div class="text-right">
+                        <button class="btn btn-primary  text-right" style="margin-top: 10px; margin-block-end: 30px;"
+                            (click)="imprimirGrafico()"><i class="fas fa-print"></i>
                             Imprimir gráfico
                         </button>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!--***********************************************************************************-->
     </div>
+    <div class="col-1"></div>
+
+    <!--***********************************************************************************-->
 </div>
 <div class="row justify-content-center; no-printme" *ngIf="nombre && apellido">
     <div class="col-10 " style="margin-top: 30px;">
@@ -113,7 +127,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let produccion of produccionCalibrador  | paginate: {itemsPerPage: 10, currentPage:p}; let i = index">
+            <tr
+                *ngFor="let produccion of produccionCalibrador  | paginate: {itemsPerPage: 10, currentPage:p}; let i = index">
                 <th scope="row">{{i+1}}</th>
                 <td>{{produccion.codigo_de_barra}}</td>
                 <td>{{produccion.envase_caja}}</td>
@@ -134,7 +149,8 @@
                     <ng-template #to_time> no</ng-template>
                 </td>
                 <td>
-                    <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(produccion);open(mymodaleditar)">
+                    <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2"
+                        (click)="onEditar(produccion);open(mymodaleditar)">
                         <i class="fa fa-edit"></i>
                     </button>
                 </td>
@@ -149,10 +165,17 @@
         </div>
         <hr>
     </div>
-    <div class="pagination justify-content-center ; no-printme " *ngIf="nombre && apellido">
-        <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="pagination justify-content-center ; no-printme " *ngIf="nombre && apellido">
+            <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event">
+            </pagination-controls>
+        </div>
     </div>
 </div>
+
+
 
 
 
@@ -175,9 +198,11 @@
                 <div class="col-md-4  align-self-end text-left ">
                     <div ngbDropdown>
                         <label for="patentelabel"><b>Verificado:</b></label>
-                        <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle style="width: 180px">{{SearchTextVerified}}</button>
+                        <button class="btn btn-outline-primary " id="dropdownBasic2" ngbDropdownToggle
+                            style="width: 180px">{{SearchTextVerified}}</button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic">
-                            <button class="dropdown-item" *ngFor="let option of dropDownVerified" (click)="changeSelectedVerified(option)">{{option.opcion}}</button>
+                            <button class="dropdown-item" *ngFor="let option of dropDownVerified"
+                                (click)="changeSelectedVerified(option)">{{option.opcion}}</button>
                         </div>
                     </div>
                 </div>
@@ -185,16 +210,19 @@
                 <div class="col-md-4  align-self-end text-left ">
                     <div ngbDropdown>
                         <label for="patentelabel"><b>a tiempo:</b></label>
-                        <button class="btn btn-outline-primary " id="dropdownBasic" ngbDropdownToggle style="width: 180px">{{SearchTextToTime}}</button>
+                        <button class="btn btn-outline-primary " id="dropdownBasic" ngbDropdownToggle
+                            style="width: 180px">{{SearchTextToTime}}</button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic">
-                            <button class="dropdown-item" *ngFor="let option of dropDownToTime" (click)="changeSelectedToTime(option)">{{option.opcion}}</button>
+                            <button class="dropdown-item" *ngFor="let option of dropDownToTime"
+                                (click)="changeSelectedToTime(option)">{{option.opcion}}</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" (click)="editarRegistroProduccion(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" class="btn btn-primary"
+                (click)="editarRegistroProduccion(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>

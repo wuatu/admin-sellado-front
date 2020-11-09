@@ -45,12 +45,14 @@
             <a #registros><i class="fa fa-list-ul"></i>Registros <i class="fa fa-caret-down"></i></a>
             <ul>
                 <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/turnos"><i class="fa fa-bars"></i>Turnos</a></li>
-                <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro-log</a></li>
+                <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/registro"><i class="fa fa-bars"></i>Registro-admin</a></li>
                 <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/registroProduccion"><i class="fa fa-bars"></i>Registro-prod</a></li>
                 <li *ngIf="expandItem == 3" (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/registroDev"><i class="fa fa-bars"></i>Registro-dev</a></li>
             </ul>
         </li>
+        <!--
         <li><a routerLink="/configuracion"><i class="fa fa-cog"></i>Configuración</a></li>
+        -->
 
 
         <!--

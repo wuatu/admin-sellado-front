@@ -53,10 +53,7 @@ export class TurnoComponent implements OnInit {
   captureDates() {
     const fromYear = this.fromDate.year;
     const fromMonth = this.fromDate.month;
-    const fromDay = this.fromDate.day;
-    const toYear = this.toDate.year;
-    const toMonth = this.toDate.month;
-    const toDay = this.toDate.day;
+    const fromDay = this.fromDate.day;      
 
     if ((fromMonth > 0 && fromMonth < 10) && (fromDay > 0 && fromDay < 10)) {
       this.selectedfromDate = fromYear + "-0" + fromMonth + "-0" + fromDay;
@@ -71,18 +68,26 @@ export class TurnoComponent implements OnInit {
       this.selectedfromDate = fromYear + "-" + fromMonth + "-" + fromDay;
     }
 
-    if ((toMonth > 0 && toMonth < 10) && (toDay > 0 && toDay < 10)) {
-      this.selectedToDate = toYear + "-0" + toMonth + "-0" + toDay;
+    if(this.toDate!=null){
+      const toYear = this.toDate.year;
+      const toMonth = this.toDate.month;
+      const toDay = this.toDate.day;
+
+      if ((toMonth > 0 && toMonth < 10) && (toDay > 0 && toDay < 10)) {
+        this.selectedToDate = toYear + "-0" + toMonth + "-0" + toDay;
+      }
+      else if (toMonth > 0 && toMonth < 10) {
+        this.selectedToDate = toYear + "-0" + toMonth + "-" + toDay;
+      }
+      else if (toDay > 0 && toDay < 10) {
+        this.selectedToDate = toYear + "-" + toMonth + "-0" + toDay;
+      }
+      else {
+        this.selectedToDate = toYear + "-" + toMonth + "-" + toDay;
+      }
     }
-    else if (toMonth > 0 && toMonth < 10) {
-      this.selectedToDate = toYear + "-0" + toMonth + "-" + toDay;
-    }
-    else if (toDay > 0 && toDay < 10) {
-      this.selectedToDate = toYear + "-" + toMonth + "-0" + toDay;
-    }
-    else {
-      this.selectedToDate = toYear + "-" + toMonth + "-" + toDay;
-    }
+
+    
   }
 
   //metodo que trae todos los registros de lineas desde la base de datos

@@ -78,8 +78,8 @@ export class MonitoreoComponent implements OnInit {
     private registroDevService: RegistroDevService
   ) {
     this.fromDate = calendar.getToday();
-    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 1);    
   }
 
   ngOnInit() {
@@ -506,7 +506,7 @@ export class MonitoreoComponent implements OnInit {
   }
 
   sesionIniciada() {
-    this.botonIniciarTurnoClass = "btn-danger"
+    this.botonIniciarTurnoClass = "btn-outline-danger"
     this.botonIniciarTurnoText = "Cerrar Turno";
     this.turnoIniciado = true;
     this.IniciarCerrar = "Cerrar";

@@ -317,19 +317,48 @@ export class MonitoreoCalibrador2Component implements OnInit {
   public barChartOptions: ChartOptions = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
+    title: {
+      display: true,
+      text: 'Producción por línea',
+      fontColor:"black",
+      fontSize:20
+    },   
+    legend: {
+      labels: {
+        fontSize: 20,
+        fontColor: 'red'
+      }
+    },
+    scales: {      
+      xAxes: [{
+        ticks: {
+          fontSize: 20,
+          fontColor: "black"
+        }
+      }], yAxes: [{
+        ticks: {
+          autoSkipPadding:20,
+          max:7,
+          fontSize: 20,
+          fontColor: "black"
+        }
+      }]
+    },
+    plugins: {    
       datalabels: {
         anchor: 'end',
         align: 'end',
-      }
-      
+        color:"black",
+        font:{
+          size:20,          
+        }
+      },      
     }
   };
 
   public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
+  public barChartLegend = false;
   public barChartPlugins = [pluginDataLabels];
 
   public barChartData: ChartDataSets[] = [

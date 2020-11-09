@@ -12,7 +12,7 @@ import { Linea } from '../../models/linea';
 import { ExportUsuarioEnLinea } from '../../models/export-usuario-en-linea';
 import { UsuarioEnLineaService } from '../../services/usuario-en-linea.service';
 import { formatDate } from '@angular/common';
-import * as XLSX from 'xlsx'; 
+import * as XLSX from 'xlsx';
 import { RegistroService } from '../../services/registro.service';
 import { MonitoreoService } from '../../services/monitoreo.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
@@ -31,18 +31,18 @@ export class UsuarioEnLineaComponent implements OnInit {
   pageOfItems: Array<any>;
 
   p: number = 1;
-  
-  rutUsuario:string;
-  nombreUsuario:string;
-  apellidoUsuario:string;
-  fechaInicio:string;
-  fechaTermino:string;
-  horaInicio:string;
-  horaTermino:string;
-  
-  currentUsuarioEnLineaSelected: UsuarioEnLinea;  
 
-  usuariosEnLinea:any = [];
+  rutUsuario: string;
+  nombreUsuario: string;
+  apellidoUsuario: string;
+  fechaInicio: string;
+  fechaTermino: string;
+  horaInicio: string;
+  horaTermino: string;
+
+  currentUsuarioEnLineaSelected: UsuarioEnLinea;
+
+  usuariosEnLinea: any = [];
 
   currentCalibradorSelected: Calibrador;
   currentLineaSelected: Linea;
@@ -52,16 +52,16 @@ export class UsuarioEnLineaComponent implements OnInit {
   lineas: any = [];
   usuarios: any = [];
 
-  selectedCalibradorText: string="Seleccionar calibrador";  
-  selectedCalibradorObject:any ;
+  selectedCalibradorText: string = "Seleccionar calibrador";
+  selectedCalibradorObject: any;
 
-  selectedLineaText: string="Seleccionar linea";    
-  selectedLineaObject:any ;
+  selectedLineaText: string = "Seleccionar linea";
+  selectedLineaObject: any;
 
 
-  selectedUsuarioText: string="Seleccionar usuario";   
-  selectedUsuarioObject:any;
-  
+  selectedUsuarioText: string = "Seleccionar usuario";
+  selectedUsuarioObject: any;
+
   //calendar
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
@@ -72,13 +72,13 @@ export class UsuarioEnLineaComponent implements OnInit {
   tituloBuscarPatente = "Búsqueda de patente";
   cantidadResultadoBusqueda = 0;
 
-  rutBusqueda: string=null;
+  rutBusqueda: string = null;
 
-  nombreLinea: string ="lineaPrueba";
+  nombreLinea: string = "lineaPrueba";
   nombreCalibrador: string = "calibradorPrueba";
 
   nombreExcel = 'ColaboradoresEnLinea';
-  
+
   exportUsuarioEnLineaArray: any = [];
   exportUsuarioEnLineaArrayAux: any = [];
   dateSave: string;
@@ -92,7 +92,7 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   turnoActual: any = [];
   bandera: boolean = false;
-  
+
 
   constructor(
     private modalService: NgbModal,
@@ -108,27 +108,31 @@ export class UsuarioEnLineaComponent implements OnInit {
     private registroDevService: RegistroDevService
 
   ) { }
-  
+
   ngOnInit() {
+    this.fromDate = this.calendar.getToday();
+    this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
+    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+    console.log(this.desde);
     this.listarCalibradores();
     this.getTurnoActual();
 
   }
 
-  onSubmitBuscarUsuarioForm(){
+  onSubmitBuscarUsuarioForm() {
 
   }
 
-  listarUsuarios(){
+  listarUsuarios() {
     this.usuarioService.getUsuarios().subscribe(
-      res=>{
+      res => {
         console.log(res);
-        this.usuarios=res.body;
-        
+        this.usuarios = res.body;
+
         //this.listarCalibradores();
-        
+
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario-en-linea');
         console.log(err);
         console.log('No se pudo obtener a los usuarios');
@@ -136,14 +140,14 @@ export class UsuarioEnLineaComponent implements OnInit {
     );
   }
 
-  listarLineas(id:string){
+  listarLineas(id: string) {
     console.log("HOLA ESTOY LISTANDO !!!!");
     this.lineaService.getLineasId(id).subscribe(
-      res=>{
+      res => {
         console.log(res.body);
-        this.lineas=res.body;
+        this.lineas = res.body;
       },
-      err=>{
+      err => {
         console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component usuario-en-linea');
         this.toastr.error('No se pudo obtener lineas', 'Oops');
@@ -151,35 +155,35 @@ export class UsuarioEnLineaComponent implements OnInit {
     );
   }
 
-  listarCalibradores(){
+  listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
-      res=>{
+      res => {
         console.log(res.body);
-        this.calibradores=res.body;
-        
+        this.calibradores = res.body;
+
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component usuario-en-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
   }
-  
-  listarUsuariosEnLinea(){
-    if(this.selectedLineaText == "Seleccionar linea" || this.selectedCalibradorText == "Seleccionar calibrador"){
-      this.toastr.error('Se debe seleccionar calibradora y linea ','Oops');
-      return;  
+
+  listarUsuariosEnLinea() {
+    if (this.selectedLineaText == "Seleccionar linea" || this.selectedCalibradorText == "Seleccionar calibrador") {
+      this.toastr.error('Se debe seleccionar calibradora y linea ', 'Oops');
+      return;
     }
     this.bandera = false;
-    this.exportUsuarioEnLineaArray = [];  
-    this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id,this.rutBusqueda,this.desde,this.hasta).subscribe(    
-      res=>{
+    this.exportUsuarioEnLineaArray = [];
+    this.usuarioEnLineaService.getUsuariosEnLinea(this.selectedLineaObject.id, this.selectedCalibradorObject.id, this.rutBusqueda, this.desde, this.hasta).subscribe(
+      res => {
         console.log(res.body);
-        if(res.status == 200){
-          this.toastr.success('Usuarios en linea obtenido','Operación satisfactoria');
-        }else if(res.status == 204){
-          this.toastr.success('no hay usuarios en linea actualmente para mostrar','Operación satisfactoria');
+        if (res.status == 200) {
+          this.toastr.success('Usuarios en linea obtenido', 'Operación satisfactoria');
+        } else if (res.status == 204) {
+          this.toastr.success('no hay usuarios en linea actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
         this.usuariosEnLinea = res.body;
@@ -188,28 +192,28 @@ export class UsuarioEnLineaComponent implements OnInit {
         this.bandera = true;
 
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
-        for (let element of this.usuariosEnLinea){
-            console.log(element);
-            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, element.hora_inicio, element.fecha_inicio, element.hora_termino, element.fecha_termino);
-            this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
-            console.log(this.rutBusqueda);
-            console.log(this.desde);
-            console.log(this.hasta);
-            if(this.selectedLineaObject.id && this.selectedCalibradorObject.id && this.rutBusqueda!=null && this.desde && this.hasta!=null){
-              this.exportUsuarioEnLineaArrayAux=this.exportUsuarioEnLineaArray;
-            }
+        for (let element of this.usuariosEnLinea) {
+          console.log(element);
+          let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, element.hora_inicio, element.fecha_inicio, element.hora_termino, element.fecha_termino);
+          this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
+          console.log(this.rutBusqueda);
+          console.log(this.desde);
+          console.log(this.hasta);
+          if (this.selectedLineaObject.id && this.selectedCalibradorObject.id && this.rutBusqueda != null && this.desde && this.hasta != null) {
+            this.exportUsuarioEnLineaArrayAux = this.exportUsuarioEnLineaArray;
+          }
         }
-        if(this.usuariosEnLinea.length==0){
-          this.exportUsuarioEnLineaArray=null;
+        if (this.usuariosEnLinea.length == 0) {
+          this.exportUsuarioEnLineaArray = null;
         }
-        if(this.toDate != null || this.hasta != null || this.rutUsuario != null){
+        if (this.toDate != null || this.hasta != null || this.rutUsuario != null) {
           this.toDate = null;
-          this.hasta=null;
-          this.rutUsuario=null;
+          this.hasta = null;
+          this.rutUsuario = null;
         }
         console.log(this.exportUsuarioEnLineaArray);
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios en línea, método listarUsuariosEnLinea, component usuario-en-linea');
         console.log(err);
         this.toastr.error('No se pudo obtener los colaboradores en linea', 'Oops');
@@ -217,28 +221,28 @@ export class UsuarioEnLineaComponent implements OnInit {
     );
   }
 
-  validarColaboradorEnLinea(){
-    
+  validarColaboradorEnLinea() {
+
     this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
       res => {
-        console.log("La respuesta de la consulta fue : "+ res[0].enTurno)
-        if(res[0].enTurno == 0){
+        console.log("La respuesta de la consulta fue : " + res[0].enTurno)
+        if (res[0].enTurno == 0) {
           this.agregarUsuarioEnLinea();
-        }else if(res[0].enTurno > 0){
+        } else if (res[0].enTurno > 0) {
           this.toastr.error('No se pudo agregar, ya esta en la linea', 'Oops');
         }
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo validar si el usuario esta en la línea, método validarColaboradorEnLinea, component usuario-en-linea');
         console.log(err);
-        console.log("No se pudo obtener la validación"); 
+        console.log("No se pudo obtener la validación");
       }
     );
   }
 
-  closeTurnColaboratorChangeLine(){
+  closeTurnColaboratorChangeLine() {
     let fecha = this.fecha();
-    this.usuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id,fecha.substring(0,10),fecha.substring(11,19)).subscribe(
+    this.usuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id, fecha.substring(0, 10), fecha.substring(11, 19)).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'turno cerrado en la linea anterior');
         console.log("turno cerrado al colaborador en la linea anterior");
@@ -246,35 +250,35 @@ export class UsuarioEnLineaComponent implements OnInit {
       err => {
         this.registroDevService.creaRegistroDev('No se pudo cerrar el turno del colaborador en la línea que se encontraba, método closeTurnCollaboratorChangeLine, component usuario-en-linea');
         console.log(err);
-        console.log("No se pudo cerrar turno en la linea anterior"); 
+        console.log("No se pudo cerrar turno en la linea anterior");
       }
     );
   }
 
-  exportarArchivoExcel(){
+  exportarArchivoExcel() {
     try {
       // Se convierte el arreglo con los usuarios en linea 
-       var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
-  
-       console.log(jsonArray);
-       //se convierte el Json a xlsx en formato workSheet
-       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-  
-       /* genera el workbook y agrega el worksheet */
-       const wb: XLSX.WorkBook = XLSX.utils.book_new();
-       XLSX.utils.book_append_sheet(wb, ws, 'colaboradores en línea');
-  
-       /* Guarda el archivo */
-       let fecha = (new Date()).toISOString();
-       XLSX.writeFile(wb, this.nombreExcel+"_"+ fecha.substring(0,10)+".xls");
+      var jsonArray = JSON.parse(JSON.stringify(this.exportUsuarioEnLineaArray))
+
+      console.log(jsonArray);
+      //se convierte el Json a xlsx en formato workSheet
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+
+      /* genera el workbook y agrega el worksheet */
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'colaboradores en línea');
+
+      /* Guarda el archivo */
+      let fecha = (new Date()).toISOString();
+      XLSX.writeFile(wb, this.nombreExcel + "_" + fecha.substring(0, 10) + ".xls");
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar los usuarios en linea al archivo excel, método exportarArchivoExcel, component usuario-en-linea');
     }
-    
+
   }
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
-  getTurnoActual(){
+  getTurnoActual() {
     this.monitoreoService.getGetLastTurno().subscribe(
       res => {
         console.log("turno cargado");
@@ -288,33 +292,33 @@ export class UsuarioEnLineaComponent implements OnInit {
     )
   }
 
-  agregarUsuarioEnLinea(){
+  agregarUsuarioEnLinea() {
     //se guarda la fecha actual y se crea un substring para dar formato hh:mm yyyy:mm:dd
-    this.dateSave = this.fecha().substring(0,10);
-    this.HourSave = this.fecha().substring(11,19);
+    this.dateSave = this.fecha().substring(0, 10);
+    this.HourSave = this.fecha().substring(11, 19);
     //this.dateSave = this.dateSave.substring(11,16)+" "+this.dateSave.substring(0,10);
     //se crea un usuario en linea para exportar
-    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0,"", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid,this.dateSave, this.HourSave, "","" , this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre, this.turnoActual[0].id);
+    let usuarioEnLinea = new UsuarioEnLinea(null, this.selectedLineaObject.id, this.selectedLineaObject.nombre, 0, "", "", this.selectedUsuarioObject.id, this.selectedUsuarioObject.rut, this.selectedUsuarioObject.nombre, this.selectedUsuarioObject.apellido, this.selectedUsuarioObject.rfid, this.dateSave, this.HourSave, "", "", this.selectedCalibradorObject.id, this.selectedCalibradorObject.nombre, this.turnoActual[0].id);
     console.log(usuarioEnLinea);
     this.usuarioEnLineaService.saveUsuarioEnLinea(usuarioEnLinea).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Colaborador en línea agregado');
         this.closeTurnColaboratorChangeLine();
-        this.registroService.creaRegistro("Se ha agregado el usuario con rut: "+this.selectedUsuarioObject.rut+", nombre: "+ this.selectedUsuarioObject.nombre+" en la linea "+ this.selectedLineaObject.nombre+" del calibrador "+ this.selectedCalibradorObject.nombre);
+        this.registroService.creaRegistro("Se ha agregado el usuario con rut: " + this.selectedUsuarioObject.rut + ", nombre: " + this.selectedUsuarioObject.nombre + " en la linea " + this.selectedLineaObject.nombre + " del calibrador " + this.selectedCalibradorObject.nombre);
         this.listarUsuariosEnLinea();
 
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo agregar al usuario en línea, método agregarUsuarioEnLinea, component usuario-en-linea');
         console.log(err);
-        this.toastr.error('No se pudo agregar al colaborador en línea', 'Oops'); 
+        this.toastr.error('No se pudo agregar al colaborador en línea', 'Oops');
       }
     );
   }
 
-  buscarUsuarioPorRut(){
-    if(this.rutBusqueda==''){
-      this.rutBusqueda=null;
+  buscarUsuarioPorRut() {
+    if (this.rutBusqueda == '') {
+      this.rutBusqueda = null;
     }
     this.listarUsuariosEnLinea();
     /*
@@ -348,29 +352,29 @@ export class UsuarioEnLineaComponent implements OnInit {
     */
 
   }
-  
-  changeSelectedLinea(newSelected: any) { 
+
+  changeSelectedLinea(newSelected: any) {
     console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected.nombre;
-    this.selectedLineaObject=newSelected;
+    this.selectedLineaObject = newSelected;
     this.listarUsuariosEnLinea();
-    this.listarUsuarios(); 
+    this.listarUsuarios();
   }
 
-  changeSelectedCalibrador(newSelected: any) { 
+  changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     this.listarLineas(this.selectedCalibradorObject.id);
   }
 
-  changeSelectedUsuario(newSelected: any) { 
+  changeSelectedUsuario(newSelected: any) {
     console.log("CHANGESELECTEDUSUARIO");
     this.selectedUsuarioText = newSelected.nombre + ' ' + newSelected.rut;
-    this.selectedUsuarioObject=newSelected;      
+    this.selectedUsuarioObject = newSelected;
   }
 
   //metodo que abre un modal
-  open(modal) {     
+  open(modal) {
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -406,16 +410,16 @@ export class UsuarioEnLineaComponent implements OnInit {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
       //const dateStringAux:string=(this.fromDate.year+"-"+(this.fromDate.month-1)+"-"+this.fromDate.day);
-      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
     } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
       this.toDate = date;
-      this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month-1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
+      this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day), "yyyy-MM-dd", 'es-CL');
 
     } else {
       this.toDate = null;
       this.fromDate = date;
-      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month-1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
-      this.hasta=null;
+      this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'es-CL');
+      this.hasta = null;
     }
   }
 
