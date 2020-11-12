@@ -92,6 +92,7 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   turnoActual: any = [];
   bandera: boolean = false;
+  turno : boolean = false;
 
 
   constructor(
@@ -222,7 +223,10 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   validarColaboradorEnLinea() {
-
+    if(this.turno == false){
+      this.toastr.error('Se debe iniciar turno antes de agregar un colaborador a la línea','Operación Fallida');
+      return;
+    }
     this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
       res => {
         console.log("La respuesta de la consulta fue : " + res[0].enTurno)
@@ -283,6 +287,14 @@ export class UsuarioEnLineaComponent implements OnInit {
       res => {
         console.log("turno cargado");
         this.turnoActual = res.body;
+        if(res.status == 200){
+          console.log("Si existe un turno abierto");
+          this.turno = true;
+        }
+        else if(res.status == 204){
+          console.log("no existe un turno abierto")
+          this.turno = false;
+        }
         console.log(this.turnoActual);
       },
       err => {

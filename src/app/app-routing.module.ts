@@ -24,6 +24,7 @@ import { MonitoreoCalibrador2Component } from './components/monitoreo-calibrador
 import { LectorValidadorComponent } from './components/lector-validador/lector-validador.component';
 import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
 import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
+import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
 
 
 
@@ -57,6 +58,7 @@ const routes: Routes = [
   { path: 'lectorValidador', component:LectorValidadorComponent, canActivate: [AuthGuard] },
   { path: 'registroDev', component:RegistroDevComponent, canActivate: [AuthGuard] },
   { path: 'registroProduccion', component:RegistroProduccionComponent, canActivate: [AuthGuard] },
+  { path: 'codigoUnitec', component:CodigoUnitecComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

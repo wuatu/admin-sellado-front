@@ -43,6 +43,7 @@ import { RutValidationDirective } from './directive/rut-validation-directive.dir
 import { ipValidationDirective } from './directive/ip-validation-directive.directive';
 import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
 import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
+import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { RegistroProduccionComponent } from './components/registro-produccion/re
     RutValidationDirective,
     ipValidationDirective,
     RegistroDevComponent,
-    RegistroProduccionComponent
+    RegistroProduccionComponent,
+    CodigoUnitecComponent
   ],
   imports: [
     BrowserModule,

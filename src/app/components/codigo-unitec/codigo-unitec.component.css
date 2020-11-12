@@ -1,0 +1,16 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.ngx-pagination {
+    padding-left: 0;
+}
+
+p.ex1 {
+    max-width: 50%;
+}
+
+.table {
+    width: auto;
+}

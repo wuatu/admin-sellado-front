@@ -21,6 +21,10 @@ export class SeguimientoDeCajasService {
   getSearchLineAndCaliper(criterionSearch:string, toSearch:string, fromDateSearch: string, toDateSearch: string, id_line:string, id_caliper:string){
     return this.httpClient.get(`${this.API_URL}/caja_sellada_search_line_caliper/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}`,{observe: 'response'});
   }
+
+  countBox(criterionSearch:string, toSearch:string, fromDateSearch: string, toDateSearch: string, id_line:string, id_caliper:string){
+    return this.httpClient.get(`${this.API_URL}/caja_sellada_count_box/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}`,{observe: 'response'});
+  }
     saveSeguimientoDeCajas(seguimientoDeCajas:SeguimientoDeCajas){
     return this.httpClient.post(`${this.API_URL}/caja_sellada/`,seguimientoDeCajas);
   }

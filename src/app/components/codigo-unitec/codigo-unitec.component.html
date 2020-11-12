@@ -1,0 +1,76 @@
+<div class="row" style="padding-top: 25px;">
+    <div class="col-12">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1 class="text-center"><b>Seguimiento de cajas Unitec</b></h1>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-6 align-self-start">
+                <div class="form-row">
+                    <div class="col-sm-6 my-1" *ngIf="bandera == true">
+                        <label for="">Buscar</label>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control  ml-1" placeholder="Código Caja" id="criterio" name="criterio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto my-1" *ngIf="bandera == true">
+                        <button class="ml-1 btn btn-primary" (click)="searchCodigoUnitec()" type="submit " style="margin-top: 33px;">Buscar
+                          <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="bandera == true">
+            <div class="col-12">
+                <h4 class="text-left">Lista de cajas unitec</h4>
+            </div>
+        </div>
+        <!--Tabla de contenido-->
+        <table class="table table-striped w-auto; table" *ngIf="bandera == true">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Cod_Caja</th>
+                    <th scope="col">Codigo_Confection </th>
+                    <th scope="col">Confection</th>
+                    <th scope="col">Codigo_Embalaje</th>
+                    <th scope="col">Embalaje</th>
+                    <th scope="col">Codigo_Envase</th>
+                    <th scope="col">Envase</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Categoria_Timbrada</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let codigo of codigosUnitec | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                    <th scope="row">{{i+1}}</th>
+                    <td>{{codigo.cod_caja}}</td>
+                    <td>{{codigo.codigo_confection}}</td>
+                    <td>{{codigo.confection}}</td>
+                    <td>{{codigo.codigo_embalaje}}</td>
+                    <td>{{codigo.embalaje}}</td>
+                    <td>{{codigo.codigo_envase}}</td>
+                    <td>{{codigo.envase}}</td>
+                    <td>{{codigo.categoria}}</td>
+                    <td>{{codigo.categoria_timbrada}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-md-12  align-self-end ; no-printme">
+            <div class="text-right" *ngIf="bandera == true">
+                <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fas fa-download"></i>
+                        Exportar a excel
+                    </button>
+            </div>
+            <hr>
+        </div>
+
+    </div>
+</div>
+<div class="pagination" *ngIf="bandera == true">
+    <pagination-controls previousLabel="Anterior" nextLabel="Siguiente" (pageChange)="p = $event"></pagination-controls>
+</div>
