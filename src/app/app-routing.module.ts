@@ -26,6 +26,7 @@ import { RegistroDevComponent } from './components/registro-dev/registro-dev.com
 import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
 import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
 import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
+import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 
 
 
@@ -61,6 +62,7 @@ const routes: Routes = [
   { path: 'registroProduccion', component:RegistroProduccionComponent, canActivate: [AuthGuard] },
   { path: 'codigoUnitec', component:CodigoUnitecComponent, canActivate: [AuthGuard] },
   { path: 'monitoreousuarioenlinea', component:MonitoreoUsuarioEnLineaComponent, canActivate: [AuthGuard] },
+  { path: 'rfidSalida', component:RfidSalidaComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({
