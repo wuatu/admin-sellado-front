@@ -25,6 +25,7 @@ import { LectorValidadorComponent } from './components/lector-validador/lector-v
 import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
 import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
 import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
+import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
 
 
 
@@ -59,6 +60,7 @@ const routes: Routes = [
   { path: 'registroDev', component:RegistroDevComponent, canActivate: [AuthGuard] },
   { path: 'registroProduccion', component:RegistroProduccionComponent, canActivate: [AuthGuard] },
   { path: 'codigoUnitec', component:CodigoUnitecComponent, canActivate: [AuthGuard] },
+  { path: 'monitoreousuarioenlinea', component:MonitoreoUsuarioEnLineaComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

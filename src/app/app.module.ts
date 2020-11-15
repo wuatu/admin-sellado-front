@@ -44,6 +44,7 @@ import { ipValidationDirective } from './directive/ip-validation-directive.direc
 import { RegistroDevComponent } from './components/registro-dev/registro-dev.component';
 import { RegistroProduccionComponent } from './components/registro-produccion/registro-produccion.component';
 import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
+import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
 
 
 @NgModule({
@@ -75,7 +76,8 @@ import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.
     ipValidationDirective,
     RegistroDevComponent,
     RegistroProduccionComponent,
-    CodigoUnitecComponent
+    CodigoUnitecComponent,
+    MonitoreoUsuarioEnLineaComponent
   ],
   imports: [
     BrowserModule,

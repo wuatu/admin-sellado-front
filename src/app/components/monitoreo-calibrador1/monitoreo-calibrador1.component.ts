@@ -20,7 +20,7 @@ import { Label, Color } from 'ng2-charts';
 
 
 //*****/
-
+import { timer,interval, Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-monitoreo-calibrador1',
@@ -42,10 +42,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
   totalMinuto1: number = 0;
 
   fechaActual: string;
-
+  arrayAux: any = [];
   turnoActual: any = [];
-  productionByLine: any = [];
-
+  productionByLine =  new Array();
+  a : any = []; 
   //calendar
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
@@ -54,8 +54,11 @@ export class MonitoreoCalibrador1Component implements OnInit {
   desde: string = "";
   hasta: string = "";
   nombreCalibrador: string = "";
-
-
+  isDataAvailable: boolean = false;
+  constanteDivision = 0;
+  
+  subscriptionTimerTask: Subscription;
+  subscriptionTimer: Subscription;
 
 
   constructor(
@@ -81,11 +84,54 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
     //Lista los calibradores que estan registrados en la base de datos.
     this.getTurnoActual();
-
-
-    setInterval(() => {
+    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
+      this.monitoreoService.getGetLastTurno().subscribe(
+        res => {
+          if(res.status == 200){
+            console.log(res.body[0]);
+            if(res.body[0].fecha_cierre == ""){
+              this.getProduccionTurno();
+              this.getAverageforMinute();
+              this.getAverageLastHour();
+              this.getProductionLine();
+              //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
+              
+            }//else{
+              //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
+            //}
+            
+          }
+        },
+        err => {
+          console.log(err.status); 
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
+        }
+      )
+    });
+    
+    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
-    }, 1000);
+    });
+
+
+    /*setInterval(() => {
+      this.time = new Date();
+      //this.toastr.success('time','time');
+    }, 1000)*/
+  }
+
+  ngOnDestroy() {
+    if(this.subscriptionTimerTask != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimerTask.unsubscribe();
+    }
+
+    if (this.subscriptionTimer != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimer.unsubscribe();
+    }
+
+    
   }
 
 
@@ -95,9 +141,9 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
-
+        console.log(this.calibradores[0].cajas_por_minuto);
+        this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
         this.getLineOfCaliper();
-
       },
       err => {
         console.log(err);
@@ -128,16 +174,40 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   //Método que obtiene la cantidad de cajas selladas por minuto de las lineas del calibrador 
   getProductionLine() {
+    console.log("getProductionLineInMethodo");
+    this.productionByLine = [];
     //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
     this.fechaActual = this.fecha().substring(0, 10);
+    let i = 0;
+    for (let linea of this.lineas) {
+      this.monitoreoCalibradorService.getProductionLine(this.calibradores[0].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.fechaActual).subscribe(
+        res => {
+          //console.log(res.body);
+          this.productionByLine.push(res.body);
+          if(i == this.lineas.length-1){
+            this.ordenarArray(this.productionByLine);
+          }
+          i++;
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProductionLinea, component monitoreo-calibrador1');
+          console.log("no se obtuvo la producción de la linea ");
+        }
+      )
+      
+    }
+    //console.log("getproductionLine");
+    //console.log(this.productionByLine.length);
+    //this.ordenarLineas(this.productionByLine);
+    
     //En el caso de que el turno se mantenga en el dia que inicio
-    if (this.fechaActual == this.turnoActual[0].fecha_apertura) {
+    /*if (this.fechaActual == this.turnoActual[0].fecha_apertura) {
       for (let linea of this.lineas) {
         this.monitoreoCalibradorService.getProductionLine(this.calibradores[0].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1', this.fechaActual).subscribe(
           res => {
             this.productionByLine.push(res);
-            console.log("se obtuvo la producción de la linea");
-            console.log(this.productionByLine);
+            //console.log("se obtuvo la producción de la linea");
+            //console.log(this.productionByLine);
             this.pushData(this.productionByLine);
           },
           err => {
@@ -145,26 +215,42 @@ export class MonitoreoCalibrador1Component implements OnInit {
             console.log("no se obtuvo la producción de la linea ");
           }
         )
-      }
-      console.log("resultado despues del for => ");
-      console.log(this.productionByLine);
+      }*/
+     // console.log("resultado despues del for => ");
+      //console.log(this.productionByLine);
       //En el caso de que el turno se extienda de un día a otro.
-    } else if (this.fechaActual != this.turnoActual[0].fecha_apertura) {
+    /*} else if (this.fechaActual != this.turnoActual[0].fecha_apertura) {
       for (let linea of this.lineas) {
         this.monitoreoCalibradorService.getProductionLine(this.calibradores[0].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2', this.fechaActual).subscribe(
           res => {
             this.productionByLine.push(res);
-            console.log("se obtuvo la producción de la linea");
+            //console.log("se obtuvo la producción de la linea");
             this.pushData(this.productionByLine);
           },
           err => {
             this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProductionLinea, component monitoreo-calibrador1');
-            console.log("no se obtuvo la producción de la linea ");
+            //console.log("no se obtuvo la producción de la linea ");
           }
         )
       }
-    }
+    }*/
   }
+  
+  ordenarArray(array =  new Array()){
+    this.arrayAux = [];
+    for(let linea of this.lineas){
+      for(let arr of array){
+        //console.log("linea: "+linea.nombre+" linea: "+ collaborator[0].nombre_linea)
+        if(linea.nombre == arr[0].nombre_linea){
+          this.arrayAux.push(arr);
+          break;
+        }
+      }
+    }
+    this.pushData(this.arrayAux);
+    
+  }
+
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual() {
     this.monitoreoService.getGetLastTurno().subscribe(
@@ -333,16 +419,16 @@ export class MonitoreoCalibrador1Component implements OnInit {
     title: {
       display: true,
       text: 'Producción por línea',
-      fontColor:"black",
-      fontSize:20
-    },    
+      fontColor: "black",
+      fontSize: 20
+    },
     legend: {
       labels: {
         fontSize: 20,
         fontColor: 'red'
       }
     },
-    scales: {      
+    scales: {
       xAxes: [{
         ticks: {
           fontSize: 20,
@@ -350,22 +436,22 @@ export class MonitoreoCalibrador1Component implements OnInit {
         }
       }], yAxes: [{
         ticks: {
-          autoSkipPadding:20,
-          max:7,
+          autoSkipPadding: 20,
+          
           fontSize: 20,
           fontColor: "black"
         }
       }]
     },
-    plugins: {    
+    plugins: {
       datalabels: {
         anchor: 'end',
         align: 'end',
-        color:"black",
-        font:{
-          size:20,          
+        color: "black",
+        font: {
+          size: 20,
         }
-      },      
+      },
     }
   };
 
@@ -375,7 +461,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   public barChartPlugins = [pluginDataLabels];
 
   public barChartData: ChartDataSets[] = [
-    { data: [], label: 'Producción' + this.nombreCalibrador }//,
+    { data: [], label: 'Producción' + this.nombreCalibrador }
     //{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
   ];
 
@@ -387,12 +473,25 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   pushData(dataNumberBox: any[]) {
     this.barChartData[0].data = [];
+    this.barChartData[0].backgroundColor =[];
     this.barChartLabels = [];
     let i = 0;
     for (let data of dataNumberBox) {
-      this.barChartData[0].data.push(data[0].total);
+      //console.log(data);
+      if (data.total <= this.constanteDivision) {        
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("red");
+      } else if (data[0].total > this.constanteDivision && data.total <= this.constanteDivision * 2) {
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("yellow");
+      } else {
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("green");
+      }
       this.barChartLabels.push(`${data[0].nombre_linea}`);
+      i++;
     }
+    //this.barChartOptions.scales.yAxes[1].ticks.max=30;
   }
 
 
@@ -451,18 +550,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
-  }
-
-  public randomize(): void {
-    // Only Change 3 values
-    this.barChartData[0].data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      (Math.random() * 100),
-      56,
-      (Math.random() * 100),
-      40];
   }
   /********************************/
 

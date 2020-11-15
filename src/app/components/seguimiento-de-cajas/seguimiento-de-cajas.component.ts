@@ -276,25 +276,28 @@ export class SeguimientoDeCajasComponent implements OnInit {
   segundo: string;
   agregarRegistroDeCajas() {
 
-    let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5465455486", 1, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-11",  "15:15:10", "2020-11-11", "15:16:35", 0, 1, 0);
-            this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
-              res => {
-                console.log("agrege!!!!!!!!");
-                this.toastr.success('Operación satisfactoria', 'Registro agregado');
-              },
-              err => {
-                //console.log(err);
-                //this.toastr.error('No se pudo obtener a los registros', 'Oops');
-              }
-            );
-    /*for (let d = 30; d <= 30; d++) {
-      for (let h = 16; h <= 16; h++) {
+    /*let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "546545544486", 1, "caja grande", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-13",  "15:15:10", "2020-11-13", "15:16:35", 0, 1, 0);
+    this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
+      res => {
+        console.log("agrege!!!!!!!!");
+        this.toastr.success('Operación satisfactoria', 'Registro agregado');
+      },
+      err => {
+        //console.log(err);
+        //this.toastr.error('No se pudo obtener a los registros', 'Oops');
+      }
+    ); */
+
+    //for (let d = 30; d <= 30; d++) {
+      let count = 0;
+      for (let h = 14; h <= 14; h++) {
         for (let m = 0; m < 60; m++) {
-          for (let s = 0; s < 60; s = s + 10) {
-            this.dia = d.toString();
-            if (d < 10) {
-              this.dia = "0" + d;
-            }
+          for (let s = 0; s < 60; s = s + 5) {
+            count++;
+            //this.dia = d.toString();
+            //if (d < 10) {
+            //  this.dia = "0" + d;
+            //}
             this.hora = h.toString();
             if (h < 10) {
               this.hora = "0" + h;
@@ -307,22 +310,23 @@ export class SeguimientoDeCajasComponent implements OnInit {
             if (s < 10) {
               this.segundo = "0" + s;
             }
-            let registroCaja = new SeguimientoDeCajas(null, 3, "Calibrador 2", 4, "Línea 2", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875", 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-" + this.dia, this.hora + ":" + this.minuto + ":" + this.segundo, "2020-10-30", "10:00:00", 1, 1, 0);
+            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-13", this.hora + ":" + this.minuto + ":" + this.segundo, "2020-11-13", "13:59:59", 1, 1, 0);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");
-                //this.toastr.success('Operación satisfactoria', 'Registro agregado');
+                this.toastr.success('Operación satisfactoria', 'Registro agregado');
               },
               err => {
                 //console.log(err);
-                //this.toastr.error('No se pudo obtener a los registros', 'Oops');
+                this.toastr.error('No se pudo obtener a los registros', 'Oops');
               }
             );
+            count ++;
           }
         }
       }
-      console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :" + d);
-    }*/
+      //console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :" + d);
+    //}
 
     /*let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-08", "12:16:40" , "2020-09-24", "08:39:02" , 1,1, 0);
     this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(

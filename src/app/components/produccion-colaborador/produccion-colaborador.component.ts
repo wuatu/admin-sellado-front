@@ -35,6 +35,7 @@ export class ProduccionColaboradorComponent implements OnInit {
 
   produccionColaborador: any = [];
   produccionNumberBoxByType: any = [];
+  produccionNumberBoxByTypeExport: any = [];
   produccionColaboradorNumberBox: any = [];
   produccionColaboradorExportarExcel: any = [];
   //calendar
@@ -207,6 +208,8 @@ export class ProduccionColaboradorComponent implements OnInit {
 
   exportarArchivoExcel() {
     try {
+      console.log(this.produccionNumberBoxByType);
+      this.produccionNumberBoxByTypeExport = this.produccionNumberBoxByType.slice();
       if (this.produccionColaboradorExportarExcel.length > 50000) {
         let array: any[];
         let i = 0;
@@ -230,12 +233,12 @@ export class ProduccionColaboradorComponent implements OnInit {
           cont++;
         }
         //página de cantidad de cajas por tipo de envase
-        let cajas: any = { "ENVASE": "Cajas Totales", "CANTIDAD": this.numBox };
-        this.produccionNumberBoxByType.push(cajas);
-        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
+        //let cajas: any = { "ENVASE": "Cajas Totales", "CANTIDAD": this.numBox };
+        //this.produccionNumberBoxByTypeExport.push(cajas);
+        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByTypeExport));
         const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray2);
         XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
-
+        
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, this.nombreExcel + "_" + this.rutBusqueda + "_" + dateDownload.substring(0, 10) + ".xls");
@@ -252,9 +255,17 @@ export class ProduccionColaboradorComponent implements OnInit {
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
 
+        //página de cantidad de cajas por tipo de envase
+        let cajas: any = { "ENVASE": "Cajas Totales", "CANTIDAD": this.numBox };
+        this.produccionNumberBoxByTypeExport.push(cajas);
+        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByTypeExport));
+        const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray2);
+        XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
+        
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, this.nombreExcel + "_" + this.rutBusqueda + "_" + dateDownload.substring(0, 10) + ".xls");
+      
       }
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-linea');

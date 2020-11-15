@@ -9,9 +9,9 @@ export class MonitoreoCalibradoresService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
   
-  getProductionLine(id_caliper:number, id_line:number, name_line: string, date: string, time: string, option: string, fecha_actual: string){
+  getProductionLine(id_caliper:number, id_line:number, name_line: string, date: string, time: string, fecha_actual: string){
     console.log("Service  getProduccionLine");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_production_line/${id_caliper}/${id_line}/${name_line}/${date}/${time}/${option}/${fecha_actual}`);
+    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_production_line/${id_caliper}/${id_line}/${name_line}/${date}/${time}/${fecha_actual}`,{observe: 'response'});
   }
 
   getProduccionSearch( date: string, time: string, id_caliper:number,option: string, fecha_actual:string){

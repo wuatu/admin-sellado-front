@@ -19,6 +19,7 @@ import { LineaService } from 'src/app/services/linea.service';
 
 
 //*****/
+import { timer,interval, Subscription, Observable } from 'rxjs';
 
 
 @Component({
@@ -41,7 +42,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
   totalMinuto2: number = 0;
 
   fechaActual: string;
-  
+  arrayAux: any = [];
   turnoActual: any = [];
   productionByLine: any = [];
   
@@ -53,6 +54,9 @@ export class MonitoreoCalibrador2Component implements OnInit {
   desde: string = "";
   hasta: string = "";
   nombreCalibrador: string="";
+
+  subscriptionTimerTask: Subscription;
+  subscriptionTimer: Subscription;
 
   constructor(
     private toastr: ToastrService,
@@ -76,10 +80,57 @@ export class MonitoreoCalibrador2Component implements OnInit {
   ngOnInit() {
     //Lista los calibradores que estan registrados en la base de datos.
     this.getTurnoActual();
-    setInterval(() => {
+
+
+    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
+      this.monitoreoService.getGetLastTurno().subscribe(
+        res => {
+          if(res.status == 200){
+            console.log(res.body[0]);
+            if(res.body[0].fecha_cierre == ""){
+              this.getProduccionTurno();
+              this.getAverageforMinute();
+              this.getAverageLastHour();
+              this.getProductionLine();
+              //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
+            }//else{
+              //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
+            //}
+            
+          }
+        },
+        err => {
+          console.log(err.status); 
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
+        }
+      )
+    });
+    
+    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
-    }, 1000);
+    });
+
+
+    /*setInterval(() => {
+      this.time = new Date();
+      //this.toastr.success('time','time');
+    }, 1000)*/
   }
+
+  ngOnDestroy() {
+    if (this.subscriptionTimerTask != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimerTask.unsubscribe();
+    }
+
+    if (this.subscriptionTimer != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimer.unsubscribe();
+    }
+
+    
+  }
+
   
   //metodo que lista las calibradores
   listarCalibradores(){
@@ -119,12 +170,33 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   //Método que obtiene la cantidad de cajas selladas por minuto de las lineas del calibrador 
   getProductionLine(){
+    console.log("getProductionLineInMehtodo");
+    this.productionByLine = [];
     //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
-    this.fechaActual = this.fecha().substring(0,10);
+    this.fechaActual = this.fecha().substring(0, 10);
+    let i = 0;
+    for (let linea of this.lineas) {
+      this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.fechaActual).subscribe(
+        res => {
+           //console.log(res.body);
+           this.productionByLine.push(res.body);
+           if(i == this.lineas.length-1){
+             this.ordenarArray(this.productionByLine);
+           }
+           i++;
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProductionLinea, component monitoreo-calibrador1');
+          console.log("no se obtuvo la producción de la linea ");
+        }
+      )
+    }
+    //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
+    //this.fechaActual = this.fecha().substring(0,10);
     //En el caso de que el turno se mantenga en el dia que inicio
-    if(this.fechaActual == this.turnoActual[0].fecha_apertura){
+    /*if(this.fechaActual == this.turnoActual[0].fecha_apertura){
       for(let linea of this.lineas){
-        this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '1',this.fechaActual).subscribe(
+        this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.fechaActual).subscribe(
           res =>{
             this.productionByLine.push(res);
             console.log("se obtuvo la producción de la linea");
@@ -138,11 +210,11 @@ export class MonitoreoCalibrador2Component implements OnInit {
         )
       }
       console.log("resultado despues del for => ");
-      console.log(this.productionByLine);
+      console.log(this.productionByLine);*/
     //En el caso de que el turno se extienda de un día a otro.
-    }else if(this.fechaActual != this.turnoActual[0].fecha_apertura){
+    /*}else if(this.fechaActual != this.turnoActual[0].fecha_apertura){
       for(let linea of this.lineas){
-        this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id,linea.id, linea.nombre,this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, '2',this.fechaActual).subscribe(
+        this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id,linea.id, linea.nombre,this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura,this.fechaActual).subscribe(
           res =>{
             this.productionByLine.push(res);
             console.log("se obtuvo la producción de la linea");
@@ -154,7 +226,22 @@ export class MonitoreoCalibrador2Component implements OnInit {
           }
         )
       }
+    }*/
+  }
+
+  ordenarArray(array =  new Array()){
+    this.arrayAux = [];
+    for(let linea of this.lineas){
+      for(let arr of array){
+        //console.log("linea: "+linea.nombre+" linea: "+ collaborator[0].nombre_linea)
+        if(linea.nombre == arr[0].nombre_linea){
+          this.arrayAux.push(arr);
+          break;
+        }
+      }
     }
+    this.pushData(this.arrayAux);
+    
   }
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual(){
@@ -338,7 +425,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
       }], yAxes: [{
         ticks: {
           autoSkipPadding:20,
-          max:7,
           fontSize: 20,
           fontColor: "black"
         }

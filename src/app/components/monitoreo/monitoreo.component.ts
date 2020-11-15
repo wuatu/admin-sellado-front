@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy,ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,7 +10,7 @@ import { RegistroService } from '../../services/registro.service';
 import { CalibradorService } from '../../services/calibrador.service';
 import { MonitoreoService } from '../../services/monitoreo.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
-
+import { timer,interval, Subscription, Observable } from 'rxjs';
 
 
 @Component({
@@ -62,6 +62,8 @@ export class MonitoreoComponent implements OnInit {
   horaInicioTurno: string = null;
 
   turnoActual: any = [];
+  subscriptionTimerTask: Subscription;
+  subscriptionTimer: Subscription;
   
 
   constructor(
@@ -90,13 +92,58 @@ export class MonitoreoComponent implements OnInit {
 
     //get registro
     this.getRegistro();
-
-
-    setInterval(() => {
+    
+    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
+      this.monitoreoService.getGetLastTurno().subscribe(
+        res => {
+          if(res.status == 200){
+            console.log(res.body[0]);
+            if(res.body[0].fecha_cierre == ""){
+              this.toastr.success('llame a los metodos ','Operación Satisfactoria');
+              this.getAverageLastHour();
+              this.getProduccionTurno();
+              this.getAverageforMinute();
+              
+            }//else{
+              //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
+            //}
+            
+          }
+        },
+        err => {
+          console.log(err.status); 
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
+        }
+      )
+    });
+    
+    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
-    }, 1000);
+    });
+
+
+    /*setInterval(() => {
+      this.time = new Date();
+      //this.toastr.success('time','time');
+    }, 1000)*/
+    
 
   }
+
+  ngOnDestroy() {
+    if (this.subscriptionTimerTask != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimerTask.unsubscribe();
+    }
+
+    if (this.subscriptionTimer != null) {
+      console.log("te destruyes observable timetask");
+      this.subscriptionTimer.unsubscribe();
+    }
+
+    
+  }
+
   onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm:string){
 
   }
@@ -104,7 +151,10 @@ export class MonitoreoComponent implements OnInit {
   /*************************************************************************************************/
   /**************************************** PRODUCCION DEL TURNO ***********************************/
   /*************************************************************************************************/
+  
 
+
+  
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
   getTurnoActual(){
@@ -119,11 +169,9 @@ export class MonitoreoComponent implements OnInit {
         }
         console.log("turno cargado");
         this.turnoActual = res.body;
-              
+        
         console.log(this.turnoActual);
-        this.getProduccionTurno();
-        this.getAverageforMinute();
-        this.getAverageLastHour();
+        
       },
       err => {
         console.log(err.status); 
@@ -134,6 +182,7 @@ export class MonitoreoComponent implements OnInit {
       }
     )
   }
+  
   // Método que realiza la ejecución para saber el promedio de cajas selladas por minuto  durante el turno
   //a la consulta de la base de datos se le pasa el calibrador, la fecha de inicio del turno, la hora de inicio del turno y si el turno esta en el mismo dia que inicio o se extendio a otro
   getAverageforMinute(){

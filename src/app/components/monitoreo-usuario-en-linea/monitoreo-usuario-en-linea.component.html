@@ -1,0 +1,92 @@
+<div class="row justify-content-center">
+    <div class="col-12 text-right">
+
+    </div>
+
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-12 my-1" style="margin-top: 20px;">
+        <div class="col-12 my-1 text-center">
+            <h1><b>Monitoreo Colaboradores en Línea</b></h1>
+        </div>
+        <div class="col-3 align-self-end text-left" style="margin-top: 20px;">
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-data" style="margin-top: 30px;">
+            <div *ngFor="let collaboratorsInLine of collaboratorsInLineAux">
+                <div class="card">
+                    <h4>{{collaboratorsInLine[0].nombre_linea}}</h4>
+                    <div *ngFor="let collaborator of collaboratorsInLine">
+                        <tr>
+                            <td>
+                                <button style="margin: 5px;" class="btn btn-outline-danger btn-sm button button5 " *ngIf="collaborator.nombre_usuario != 'undefine'" (click)="onCerrarTurno(collaborator,mymodalconfirmar)">
+                                  <i class=" fa fa-window-close fa-align-center fa-2x " style="margin-left: 0;margin-right: 0;"></i>
+                                </button>
+                            </td>
+                            <td *ngIf="collaborator.nombre_usuario != 'undefine'">
+                                <h6>{{collaborator.nombre_usuario+" "+collaborator.apellido_usuario}}</h6>
+
+                            </td>
+                        </tr>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--<div class="card w-100" style="margin-top: 30px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 my-1">
+                        <tr *ngFor="let linea of lineas | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center"><b>linea.nombre</b></h5>
+                                    <table class="table table-hover" *ngIf="bandera == true">
+                                        <tbody>
+                                            <tr *ngFor="let collaboratorInLine of collaboratorsInLine | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+                                                <td>
+                                                    <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(caja,mymodalconfirmar)">
+                                                  <i class="fa fa-trash-alt"></i>
+                                                </button>
+                                                </td>
+                                                <td>{{collaboratorsInLine.nombre_usuario+' '+collaboratorsInLine.apellido_usuario}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </tr>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</div>
+
+<!--Modal confirmación-->
+<ng-template #mymodalconfirmar let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Cerrar Turno</h4>
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <p>¿Seguro que quieres cerrar el turno a {{currentCollaboratorSelected.nombre_usuario}}?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
+    </div>
+</ng-template>
+<!--fin modal confirmacion-->
