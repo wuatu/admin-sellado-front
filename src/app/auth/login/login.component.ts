@@ -4,6 +4,7 @@ import{AuthService} from '../../services/auth.service';
 import {User} from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,7 +16,7 @@ export class LoginComponent implements OnInit {
     private authService:AuthService,
     private router:Router,
     //servicio toast ventana emergente que sirve para mostrar información al usuario
-    private toastr: ToastrService
+    private toastr: ToastrService,
     ) { }
 
   ngOnInit() {
