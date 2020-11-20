@@ -10,8 +10,8 @@ export class RfidSalidaService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getRfids(id_calibrador:string,id_linea:string){
-    return this.httpClient.get(`${this.API_URL}/rfids_salida/${id_calibrador}/${id_linea}`,{observe: 'response'});
+  getRfids(id_calibrador:string){
+    return this.httpClient.get(`${this.API_URL}/rfids_salida/${id_calibrador}`,{observe: 'response'});
   }
 
   getRfid(id:number){

@@ -83,10 +83,10 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-    console.log(this.desde);
-    //this.listarCalibradores();
+  
+    this.listarCalibradores();
 
-    this.agregarRegistroDeCajas();
+    //this.agregarRegistroDeCajas();
   }
 
 

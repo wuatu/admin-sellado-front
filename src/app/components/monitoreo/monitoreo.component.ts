@@ -63,6 +63,8 @@ export class MonitoreoComponent implements OnInit {
 
   turnoActual: any = [];
   subscriptionTimerTask: Subscription;
+  subscriptionTimerTask1: Subscription;
+  subscriptionTimerTask2: Subscription;
   subscriptionTimer: Subscription;
   
 
@@ -93,12 +95,12 @@ export class MonitoreoComponent implements OnInit {
     //get registro
     this.getRegistro();
     
-    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
+    this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
       this.monitoreoService.getGetLastTurno().subscribe(
         res => {
           if(res.status == 200){
             console.log(res.body[0]);
-            if(res.body[0].fecha_cierre == ""){
+            if(res.body[0].fecha_apertura == ""){
               this.toastr.success('llame a los metodos ','Operación Satisfactoria');
               this.getAverageLastHour();
               this.getProduccionTurno();
@@ -117,17 +119,11 @@ export class MonitoreoComponent implements OnInit {
       )
     });
     
+    
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
     });
-
-
-    /*setInterval(() => {
-      this.time = new Date();
-      //this.toastr.success('time','time');
-    }, 1000)*/
-    
-
+  
   }
 
   ngOnDestroy() {

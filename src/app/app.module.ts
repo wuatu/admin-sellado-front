@@ -46,6 +46,8 @@ import { RegistroProduccionComponent } from './components/registro-produccion/re
 import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.component';
 import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
+import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
+
 
 
 @NgModule({
@@ -79,7 +81,8 @@ import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.compon
     RegistroProduccionComponent,
     CodigoUnitecComponent,
     MonitoreoUsuarioEnLineaComponent,
-    RfidSalidaComponent
+    RfidSalidaComponent,
+    MonitoreoSistemaComponent
   ],
   imports: [
     BrowserModule,

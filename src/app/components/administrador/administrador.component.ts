@@ -25,7 +25,7 @@ export class AdministradorComponent implements OnInit {
   addNombre: string;
   addApellido: string;
   addPassword: string;
-  addRol:number = 0;
+  addRol:number = 1;
   rol:number;
 
   constructor(

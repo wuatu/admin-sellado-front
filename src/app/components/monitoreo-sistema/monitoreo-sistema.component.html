@@ -1,0 +1,228 @@
+<div class="row justify-content-center">
+    <div class="col-12 my-1" style="margin-top: 20px;">
+        <div class="col-12 my-1 text-center">
+            <h1><b>Monitoreo Sistema</b></h1>
+        </div>
+        <div class="col-3 align-self-end text-left" style="margin-top: 20px;">
+            <div ngbDropdown>
+                <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                </div>
+            </div>
+        </div>
+        <div class="card w-100" *ngIf="selectedCalibradorObject" style="margin-top: 30px;">
+            <div class="card">
+                <h4 class="card-title text-center"><b>{{selectedCalibradorObject.nombre}}</b></h4>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 my-1">
+                        <div class="card" style="margin-top: 10px; " *ngIf="bandera2 == true">
+                            <div class="card-body">
+                                <h5><b>Rfid salida</b></h5>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].nombre_rfid_salida != 'undefine' ">
+                                        <h6 class="card-title text-left">{{bigArray3[0].nombre_rfid_salida}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].puerto_rfid_salida != 'undefine'">
+                                        <h6 class="card-title text-left">Puerto: {{bigArray3[0].puerto_rfid_salida}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].baudRate_rfid_salida != 'undefine'">
+                                        <h6 class="card-title text-left">BaudRate: {{bigArray3[0].baudRate_rfid_salida}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].ultima_lectura_rfid != 'undefine'">
+                                        <h6 class="card-title text-left">Ultima lectura: {{bigArray3[0].ultima_lectura_rfid}}</h6>
+                                    </td>
+                                </tr>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 my-1">
+                        <div class="card" style="margin-top: 10px;" *ngIf="bandera2 == true">
+                            <div class="card-body">
+                                <h5><b>Lector validador</b></h5>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].nombre_lector_validador != 'undefine'">
+                                        <h6 class="card-title text-left">{{bigArray3[0].nombre_lector_validador}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].puerto_lector_validador != 'undefine'">
+                                        <h6 class="card-title text-left">IP: {{bigArray3[0].puerto_lector_validador}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].max_time_wait != 'undefine'">
+                                        <h6 class="card-title text-left">Máximo tiempo de espera: {{bigArray3[0].max_time_wait}}</h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td *ngIf="bigArray3[0].ultima_lectura_lector != 'undefine'">
+                                        <h6 class="card-title text-left">Ultima lectura: {{bigArray3[0].ultima_lectura_lector}}</h6>
+                                    </td>
+                                </tr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div let count *ngFor="let bigArray of bigArray2">
+                <div class="card">
+                    <h4 class="card-title text-center" *ngIf="bandera == true"><b>{{bigArray[0][0].nombre_linea}}</b></h4>
+                    <div class="row">
+
+                        <div class="col-lg-4 col-md-4 my-1">
+                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+                                <div class="card-body">
+                                    <h5><b>Colaboradores</b></h5>
+                                    <div *ngFor="let collaborator of bigArray[0]">
+                                        <tr>
+                                            <td *ngIf="collaborator.nombre_usuario != 'undefine'">
+                                                <h6 class="card-title text-left">{{collaborator.nombre_usuario+" "+collaborator.apellido_usuario}}</h6>
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 my-1">
+                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+                                <div class="card-body">
+                                    <h5><b>Rfid</b></h5>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].nombre_rfid != 'undefine'">
+                                            <h6 class="card-title text-left">{{bigArray[1].nombre_rfid}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].puerto_rfid != 'undefine'">
+                                            <h6 class="card-title text-left">Puerto: {{bigArray[1].puerto_rfid}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].baudRate_rfid != 'undefine'">
+                                            <h6 class="card-title text-left">BaudRate: {{bigArray[1].baudRate_rfid}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].codigo_rfid != 'undefine'">
+                                            <h6 class="card-title text-left">Ultima lectura: {{bigArray[1].codigo_rfid}}</h6>
+                                        </td>
+                                    </tr>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 my-1">
+                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+
+                                <div class="card-body">
+                                    <h5><b>Lector</b></h5>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].nombre_lector != 'undefine'">
+                                            <h6 class="card-title text-left">{{bigArray[1].nombre_lector}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].puerto_lector != 'undefine'">
+                                            <h6 class="card-title text-left">Puerto: {{bigArray[1].puerto_lector}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].baudRate_lector != 'undefine'">
+                                            <h6 class="card-title text-left">BaudRate: {{bigArray[1].baudRate_lector}}</h6>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td *ngIf="bigArray[1].codigo_lector != 'undefine'">
+                                            <h6 class="card-title text-left">Ultima lectura: {{bigArray[1].codigo_lector}}</h6>
+                                        </td>
+                                    </tr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<div class="card-data" style="margin-top: 30px;">
+            <div let count *ngFor="let bigArray of bigArray2">
+                <div class="card">
+                    <h4><b>{{bigArray[0][0].nombre_linea}}</b></h4>
+                    <div class="card-data" style="margin-top: 10px;">
+                        <div class="card">
+                            <h5><b>Colaboradores</b></h5>
+                            <div *ngFor="let collaborator of bigArray[0]">
+                                <tr>
+                                    <td *ngIf="collaborator.nombre_usuario != 'undefine'">
+                                        <h6 class="card-title text-center">{{collaborator.nombre_usuario+" "+collaborator.apellido_usuario}}</h6>
+                                    </td>
+                                </tr>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-data" style="margin-top: 10px;">
+                        <div class="card">
+                            <h5><b>Rfid</b></h5>
+                            <tr>
+                                <td *ngIf="bigArray[1].nombre_rfid != 'undefine'">
+                                    <h6 class="card-title text-center">{{bigArray[1].nombre_rfid}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].puerto_rfid != 'undefine'">
+                                    <h6 class="card-title text-center">Puerto: {{bigArray[1].puerto_rfid}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].baudRate_rfid != 'undefine'">
+                                    <h6 class="card-title text-center">BaudRate: {{bigArray[1].baudRate_rfid}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].codigo_rfid != 'undefine'">
+                                    <h6 class="card-title text-center">Ultima lectura {{bigArray[1].codigo_rfid}}</h6>
+                                </td>
+                            </tr>
+                        </div>
+                    </div>
+                    <div class="card-data" style="margin-top: 10px;">
+
+                        <div class="card">
+                            <h5><b>Lector</b></h5>
+                            <tr>
+                                <td *ngIf="bigArray[1].nombre_lector != 'undefine'">
+                                    <h6 class="card-title text-center">{{bigArray[1].nombre_lector}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].puerto_lector != 'undefine'">
+                                    <h6 class="card-title text-center">Puerto: {{bigArray[1].puerto_lector}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].baudRate_lector != 'undefine'">
+                                    <h6 class="card-title text-center">BaudRate: {{bigArray[1].baudRate_lector}}</h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="bigArray[1].codigo_lector != 'undefine'">
+                                    <h6 class="card-title text-center">Ultima lectura {{bigArray[1].codigo_lector}}</h6>
+                                </td>
+                            </tr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->

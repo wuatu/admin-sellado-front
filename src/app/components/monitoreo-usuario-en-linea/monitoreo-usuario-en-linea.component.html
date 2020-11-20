@@ -1,11 +1,4 @@
 <div class="row justify-content-center">
-    <div class="col-12 text-right">
-
-    </div>
-
-</div>
-
-<div class="row justify-content-center">
     <div class="col-12 my-1" style="margin-top: 20px;">
         <div class="col-12 my-1 text-center">
             <h1><b>Monitoreo Colaboradores en Línea</b></h1>
@@ -25,7 +18,7 @@
                     <div *ngFor="let collaborator of collaboratorsInLine">
                         <tr>
                             <td>
-                                <button style="margin: 5px;" class="btn btn-outline-danger btn-sm button button5 " *ngIf="collaborator.nombre_usuario != 'undefine'" (click)="onCerrarTurno(collaborator,mymodalconfirmar)">
+                                <button style="margin: 5px;" class="btn btn-outline-danger btn-sm button button5 " *ngIf="collaborator.nombre_usuario != 'undefine' && rol != 2" (click)="onCerrarTurno(collaborator,mymodalconfirmar)">
                                   <i class=" fa fa-window-close fa-align-center fa-2x " style="margin-left: 0;margin-right: 0;"></i>
                                 </button>
                             </td>

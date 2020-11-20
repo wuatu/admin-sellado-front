@@ -26,6 +26,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   selectedCalibradorObject: any;
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
+  rol:number;
   
   constructor(
     private toastr: ToastrService,
@@ -40,7 +41,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   ngOnInit() {
     
     this.getTurnoActual();
-
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
       console.log("subscriptionTimerTask");
       if(this.lineas != null && this.selectedCalibradorObject != null){

@@ -21,6 +21,7 @@ export class LectorValidadorComponent implements OnInit {
   nombreValidador:string = null;
   ipValidador:string = null;
   max_wait_time	: string = null;
+  registro_inicial_lectura: string = null;
   bandera:any = null;
     
   currentCalibradorSelected: Calibrador;
@@ -133,12 +134,12 @@ export class LectorValidadorComponent implements OnInit {
 
   //metodo que crea un nuevo lector
   agregarLector(form: NgForm) {  
-    if (this.nombreValidador == null || this.ipValidador == null || this.max_wait_time == null) {
+    if (this.nombreValidador == null || this.ipValidador == null || this.max_wait_time == null || this.registro_inicial_lectura == null) {
       this.toastr.error('No se pudo guardar el Lector validador, por favor complete todos los campos.', 'Oops');
       return;
     }
     
-    let lectorValidador = new LectorValidador(null, this.nombreValidador, this.ipValidador, this.max_wait_time, this.selectedCalibradorObject.id);
+    let lectorValidador = new LectorValidador(null, this.nombreValidador, this.ipValidador, this.max_wait_time, this.selectedCalibradorObject.id,this.registro_inicial_lectura);
     
     this.lectorValidadorService.saveLectorValidador(lectorValidador).subscribe(
       res => {
@@ -147,6 +148,7 @@ export class LectorValidadorComponent implements OnInit {
         this.nombreValidador = null;
         this.ipValidador = null;
         this.max_wait_time = null;
+        this.registro_inicial_lectura = null;
         this.listarLectoresValidador();
         
       },
@@ -188,6 +190,7 @@ export class LectorValidadorComponent implements OnInit {
     this.nombreValidador = this.currentLectorValidadorSelected.nombre;
     this.ipValidador = this.currentLectorValidadorSelected.ip;
     this.max_wait_time = this.currentLectorValidadorSelected.max_wait_time;
+    this.registro_inicial_lectura = this.currentLectorValidadorSelected.registro_inicial_lectura;
     console.log("nombre: "+this.nombreValidador);
     console.log("ip: "+this.ipValidador);
     console.log("max: "+this.max_wait_time);
@@ -197,14 +200,14 @@ export class LectorValidadorComponent implements OnInit {
   //metodo que sirve para editar un lector
   editarLector(form: NgForm) {
     
-    if (this.nombreValidador == null || this.ipValidador == null || this.max_wait_time == null ) {
+    if (this.nombreValidador == null || this.ipValidador == null || this.max_wait_time == null || this.registro_inicial_lectura == null) {
       
       this.toastr.error('No se pudo editar el lector, se deben llenar todos los campos', 'Oops',);
       return;
     }
     let lectorValidador: LectorValidador;
     if(this.selectedCalibradorObject){
-      lectorValidador = new LectorValidador(this.currentLectorValidadorSelected.id, this.nombreValidador, this.ipValidador, this.max_wait_time,  this.selectedCalibradorObject.id);
+      lectorValidador = new LectorValidador(this.currentLectorValidadorSelected.id, this.nombreValidador, this.ipValidador, this.max_wait_time,  this.selectedCalibradorObject.id, this.registro_inicial_lectura);
       this.lectorValidadorService.updateLectorValidador(lectorValidador.id, lectorValidador).subscribe(
         res => {
           this.toastr.success('Operación satisfactoria', 'Lector Validador editado');
@@ -216,6 +219,7 @@ export class LectorValidadorComponent implements OnInit {
           this.nombreValidador = null;
           this.ipValidador = null;
           this.max_wait_time = null;
+          this.registro_inicial_lectura = null;
         },
         err => {
           console.log(err);

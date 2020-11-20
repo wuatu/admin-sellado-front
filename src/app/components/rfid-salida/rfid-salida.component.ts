@@ -34,12 +34,7 @@ export class RfidSalidaComponent implements OnInit {
   selectedCalibradorId:string;
   selectedCalibradorObjectModificar:any;
 
-  lineas: any = [];
-  selectedLineaText: string="Selecciona una línea";  
-  selectedLineaTextModificar: string="Selecciona una línea";  
-  selectedLineaObject:any = null;
-  selectedLineaId:string = null;
-  selectedLineaObjectModificar:any = null;
+  
 
   selectedRfidSalidaObject:any = null;
   
@@ -114,34 +109,19 @@ export class RfidSalidaComponent implements OnInit {
     );
   }
 
-  listarLineas(){
-    this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
-      res=>{
-        console.log(res.body);
-        this.lineas=res.body;
-      },
-      err=>{
-        this.registroDevService.creaRegistroDev('No se pudieron obtener las lineas del calibrador, método listarLineas, component rfid-salida');
-        console.log(err);
-        this.toastr.error('No se pudo obtener lineas', 'Oops');
-      }
-    );
-  }
+  
 
   //metodo que trae todos los registros de rfids desde la base de datos
   listarRfids() {
-    console.log(this.selectedCalibradorObject);  
-    if(this.selectedCalibradorObject!=null && this.selectedLineaObject==null){
+    
+    if(this.selectedCalibradorObject!=null ){
       this.selectedCalibradorId=this.selectedCalibradorObject.id;
-      this.selectedLineaId="0";
+    
     }
-    else if(this.selectedCalibradorObject!=null && this.selectedLineaObject!=null){      
-      this.selectedCalibradorId=this.selectedCalibradorObject.id;
-      this.selectedLineaId=this.selectedLineaObject.id;
-    }
+    
     console.log(this.selectedCalibradorId);
-    console.log(this.selectedLineaId);
-    this.rfidSalidaService.getRfids(this.selectedCalibradorId,this.selectedLineaId).subscribe(
+
+    this.rfidSalidaService.getRfids(this.selectedCalibradorId).subscribe(
       res => {
         //los registros se almacena en array rfids que sirve para llenar la tabla de vista rfids
         this.rfidsSalida = res.body;
@@ -171,16 +151,16 @@ export class RfidSalidaComponent implements OnInit {
     this.nombreRfidSalidaAdded=form.value.nombre;
     this.ipRfidSalidaAdded=form.value.ip;
     console.log(this.nombreRfidSalidaAdded);
-    console.log( this.selectedLineaObject);
-    if (this.nombreRfidSalidaAdded == null || this.selectedPort == null || this.selectedBaudRate == null || this.selectedParityBit == null || this.selectedStopBits == null || this.selectedDataBits == null || this.selectedLineaObject.id == null) {
+    
+    if (this.nombreRfidSalidaAdded == null || this.selectedPort == null || this.selectedBaudRate == null || this.selectedParityBit == null || this.selectedStopBits == null || this.selectedDataBits == null || this.selectedCalibradorObject.id == null) {
       this.toastr.error('No se pudo guardar Rfid salida, por favor complete todos los campos.', 'Oops');
       return;
     }
-    let rfidSalida = new RfidSalida(null, this.nombreRfidSalidaAdded,this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits,this.selectedLineaObject.id);
+    let rfidSalida = new RfidSalida(null, this.nombreRfidSalidaAdded,this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits,this.selectedCalibradorObject.id);
     this.rfidSalidaService.saveRfid(rfidSalida).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'rfid salida agregado');
-        this.registroService.creaRegistro("Se ha creado un rfid salida, nombre: "+this.nombreRfidSalidaAdded+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrado);
+        this.registroService.creaRegistro("Se ha creado un rfid salida, nombre: "+this.nombreRfidSalidaAdded+", Calibrador: "+this.selectedCalibradorObject.nombre);
         this.listarRfids();
         this.clearDate();
         this.nombreRfidSalidaAdded=null;
@@ -217,17 +197,7 @@ export class RfidSalidaComponent implements OnInit {
     this.selectedPort = this.currentRfidSalidaSelected.ip;
     this.portText = this.currentRfidSalidaSelected.ip;
 
-    this.lineaService.getLinea(rfidSalida.fk_linea).subscribe(
-      res=>{
-        this.selectedRfidSalidaObject = res.body;
-        this.selectedLineaText = this.selectedLineaObject.nombre;
-      },
-      err=>{
-        this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método onEditar, component rfid-salida');
-        console.log(err);
-        this.toastr.error('No se pudo obtener Rfid salida id', 'Oops',);
-      }
-    )
+    
   }
 
   //metodo que sirve para editar una rfid
@@ -237,13 +207,13 @@ export class RfidSalidaComponent implements OnInit {
       return;
     }
     let rfidSalida: RfidSalida;
-    if(this.selectedLineaObject){
-      rfidSalida = new RfidSalida(this.currentRfidSalidaSelected.id, this.currentRfidSalidaSelected.nombre, this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits, this.selectedLineaObject.id);
+    if(this.selectedCalibradorObject){
+      rfidSalida = new RfidSalida(this.currentRfidSalidaSelected.id, this.currentRfidSalidaSelected.nombre, this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits, this.selectedCalibradorObject.id);
     }    
     this.rfidSalidaService.updateRfid(rfidSalida.id, rfidSalida).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'rfid salida editado');
-        this.registroService.creaRegistro("Se ha editado un rfid salida, id: "+rfidSalida.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
+        this.registroService.creaRegistro("Se ha editado un rfid salida, id: "+rfidSalida.id+", Calibrador: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarRfids();
         this.clearDate();
@@ -270,7 +240,7 @@ export class RfidSalidaComponent implements OnInit {
     this.rfidSalidaService.deleteRfid(rfidSalida.id).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'rfid salida eliminado');
-        this.registroService.creaRegistro("Se ha eliminado un rfid salida, id: "+rfidSalida.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
+        this.registroService.creaRegistro("Se ha eliminado un rfid salida, id: "+rfidSalida.id+", Calibrador: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarRfids();
       },
@@ -337,7 +307,7 @@ export class RfidSalidaComponent implements OnInit {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject=newSelected;
     console.log(this.selectedCalibradorObject);
-    this.listarLineas();
+    this.listarRfids();
      
   }
 
@@ -346,16 +316,6 @@ export class RfidSalidaComponent implements OnInit {
     this.selectedCalibradorObject=newSelected;
   }
 
-  changeSelectedLinea(newSelected: any) { 
-    this.selectedLineaText = newSelected.nombre;
-    this.selectedLineaObject=newSelected;
-    this.listarRfids();   
-  }
-
-  changeSelectedCalibradorLinea(newSelected: any) { 
-    this.selectedLineaText = newSelected.nombre;
-    this.selectedLineaObject=newSelected;
-  }
 
   clearDate(){
     this.nombreRfidSalidaAdded = null;
