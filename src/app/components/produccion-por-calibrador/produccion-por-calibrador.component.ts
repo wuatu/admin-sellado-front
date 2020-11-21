@@ -98,14 +98,12 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   ngOnInit() {
     this.listarCalibradores();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: " + this.rol);
   }
 
   //metodo que lista las calibradores
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
       res => {
-        console.log(res.body);
         this.calibradores = res.body;
       },
       err => {
@@ -117,7 +115,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   }
 
   imprimirGrafico() {
-    console.log("imprimir");
     window.print();
   }
 
@@ -127,7 +124,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     this.cajasCalibrador = [];
     this.produccionPorCalibradorService.getboxInCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
       res => {
-        //console.log(res);
         this.cajasCalibrador = res;
         this.mostrarGrafico = "true";
         console.log(this.cajasCalibrador);
@@ -136,7 +132,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
         if (this.selectedCalibradorText != "Seleccionar calibrador" && this.desde != " " && this.hasta != " ") {
           this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
@@ -162,7 +157,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         this.produccionCalibrador = res.body;
         //console.log(this.produccionColaborador);
         if (res.status == 200) {
-          this.toastr.success('Producción de calibrador obtenida', 'Operación satisfactoria');
         } else if (res.status == 204) {
           this.toastr.success('No hay producción para este calibrador actualmente para mostrar', 'Operación satisfactoria');
           return;
@@ -187,7 +181,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
             this.nombre = element.nombre_usuario;
             this.apellido = element.apellido_usuario;
             bandera = 1;
-            // console.log("CAMBIE BANDERA");
           }
 
         }
@@ -199,7 +192,6 @@ export class ProduccionPorCalibradorComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener la producción del calibrador, método buscarRegistroCalibrador, component monitoreo-por-calibrador2');
-        //console.log(err);
         this.toastr.error('No se pudo obtener la busqueda de produccion del calibrador', 'Oops');
       }
     );
@@ -223,16 +215,12 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     } else {
       this.a_tiempo = 0;
     }
-    //this.SearchTextVerified = "Seleccionar opción";  
-    //this.SearchTextToTime = "Seleccionar opción";
+
     if (this.verificado != this.currentSeguimientoSelected.is_verificado || this.a_tiempo != this.currentSeguimientoSelected.is_before_time) {
       let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador, this.currentSeguimientoSelected.nombre_calibrador, this.currentSeguimientoSelected.id_linea, this.currentSeguimientoSelected.nombre_linea, this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja, this.currentSeguimientoSelected.variedad_caja, this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_sellado, this.currentSeguimientoSelected.fecha_validacion, this.currentSeguimientoSelected.hora_validacion, this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
-      console.log(registroProduccionColaborador);
       this.produccionPorCalibradorService.updateRegistroProduccionCaliper(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Registro editado');
           this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: " + registroProduccionColaborador.id);
-          console.log(res);
           this.buscarRegistroCalibrador();
           this.currentSeguimientoSelected = null;
         },
@@ -304,20 +292,16 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
-    console.log(this.selectedCalibradorObject.nombre);
-    console.log(this.desde + this.hasta);
   }
 
   changeSelectedVerified(newSelected: any) {
     this.SearchTextVerified = newSelected.opcion;
     this.selectedOptionVerified = this.SearchTextVerified;
-    console.log(this.selectedOptionVerified);
   }
 
   changeSelectedToTime(newSelected: any) {
     this.SearchTextToTime = newSelected.opcion;
     this.selectedOptionToTime = this.SearchTextToTime;
-    console.log(this.selectedOptionToTime);
   }
 
 
@@ -345,13 +329,10 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
           }
           cont++;
-          console.log("ayuda !!! estoy iterando!! no puedo parar!!!")
         }
-        console.log("sali del while");
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, this.nombreExcel + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
-        console.log("guarde recien la wea!!");
       } else {
         console.log("tamaño del array : " + this.produccionCalibradorExportarExcel.size);
         // Se convierte el arreglo con los usuarios en linea 

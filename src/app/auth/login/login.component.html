@@ -6,8 +6,17 @@
                     <div class="login">
                         <div class="login-triangle"></div>
                         <h2 class="login-header">Log in</h2>
+
                         <form #formLogin="ngForm" class="login-container" (ngSubmit)=onLogin(formLogin)>
-                            <p><input type="rut" #rut='ngModel' name="rut" ngModel placeholder="Ej: 9605009-7" required maxlength="10"></p>
+                            <p><input type="rut" #rut='ngModel' name="rut" ngModel placeholder="Ej: 9605009-7" required maxlength="10" rutValidationAuth></p>
+                            <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
+                                <div *ngIf="rut.errors.required">
+                                    Rut es obligatorio
+                                </div>
+                                <div *ngIf="rut.errors.rutValidation">
+                                    {{rut.errors.rutValidation.message}}
+                                </div>
+                            </div>
                             <p><input type="password" name=password ngModel placeholder="Password" required></p>
                             <p><input type="submit" value="Log in"></p>
                         </form>

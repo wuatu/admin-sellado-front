@@ -8,41 +8,33 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-3 my-1">
+            <div class="col-lg-3  col-sm-12 my-1">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic1" style="width:-webkit-fill-available;"
-                        ngbDropdownToggle>{{selectedCalibradorText}}</button>
+                    <button class="btn btn-outline-primary " id="dropdownBasic1" style="width:-webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores"
-                            (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
+                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
                     </div>
                 </div>
             </div>
-            <div class="col-3 my-1">
+            <div class="col-lg-3 col-sm-12  my-1">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic2" style="width:-webkit-fill-available;"
-                        ngbDropdownToggle>{{selectedLineaText}}</button>
+                    <button class="btn btn-outline-primary " id="dropdownBasic2" style="width:-webkit-fill-available;" ngbDropdownToggle>{{selectedLineaText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button class="dropdown-item" *ngFor="let linea of lineas"
-                            (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
+                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
                     </div>
                 </div>
             </div>
-            <div class="col-2 my-1">
-                <input #dpFromDate class="form-control " placeholder="yyyy-MM-dd" name="dpFromDate"
-                    [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
-                    (click)="d.toggle()" placeholder="Desde">
+            <div class="col-lg-2 col-md-6 col-sm-12 my-1">
+                <input #dpFromDate class="form-control " placeholder="yyyy-MM-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()" placeholder="Desde">
             </div>
-            <div class="col-2 my-1">
-                <input #dpToDate class="form-control " placeholder="yyyy-MM-dd" name="dpToDate"
-                    [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled
-                    placeholder="Hasta">
+            <div class="col-lg-2 col-md-6 col-sm-12 my-1">
+                <input #dpToDate class="form-control " placeholder="yyyy-MM-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
             </div>
-            <div class="col-2 my-1 ">
+            <div class="col-lg-2 col-md-6 col-sm-12 my-1">
                 <button class="btn btn-primary form-control" (click)="buscarPorCriterio()" type="submit">Buscar
                     <i class="fas fa-search" aria-hidden="true"></i></button>
-            </div>   
-            <div class="col-6"></div>         
+            </div>
+
             <div class="col-1">
                 <div class="form-group hidden">
                     <div class="input-group">
@@ -58,23 +50,17 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-3 my-1">
+            <div class="col-lg-4 col-sm-12  my-1">
                 <div ngbDropdown>
-                    <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle
-                        style="width:-webkit-fill-available;">{{SearchText}}</button>
+                    <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width:-webkit-fill-available;">{{SearchText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let search of dropDownSearch"
-                            (click)="changeSelectedSearch(search)">{{search.nombre}}</button>
+                        <button class="dropdown-item" *ngFor="let search of dropDownSearch" (click)="changeSelectedSearch(search)">{{search.nombre}}</button>
                     </div>
                 </div>
             </div>
-            <div class="col-3 my-1">
-                <input type="text" #envase='ngModel' [(ngModel)]="toSearch" name="rut" id="rut" class="form-control"
-                    placeholder="Criterio">
+            <div class="col-lg-4 col-sm-12  my-1">
+                <input type="text" #envase='ngModel' [(ngModel)]="toSearch" name="rut" id="rut" class="form-control" placeholder="Criterio">
             </div>
-            <div class="col-2 my-1"></div>
-            <div class="col-2 my-1"></div>
-            <div class="col-2 my-1"></div>
         </div>
 
     </div>
@@ -112,8 +98,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr
-                *ngFor="let seguimiento of seguimientoDeCajas  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
+            <tr *ngFor="let seguimiento of seguimientoDeCajas  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                 <th scope="row">{{i+1}}</th>
                 <td>{{seguimiento.id_caja}}</td>
                 <td>{{seguimiento.envase_caja}}</td>

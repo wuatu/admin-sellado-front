@@ -27,7 +27,6 @@ export class RegistroDevComponent implements OnInit {
 
   ngOnInit() {
     this.listarRegistrosDev();
-    //this.agregarRegistroDev();
   }
 
   listarRegistrosDev(){
@@ -36,7 +35,6 @@ export class RegistroDevComponent implements OnInit {
       res=>{
         this.registrosDev=res.body;
         if(res.status == 200){
-          this.toastr.success('registros obtenidos','Operación satisfactoria');
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('no existen registros actualmente para mostrar','Operación satisfactoria');
@@ -44,7 +42,6 @@ export class RegistroDevComponent implements OnInit {
         }
       },
       err=>{
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener los registros-dev, método listarRegistrosDev, component registro-dev');
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }

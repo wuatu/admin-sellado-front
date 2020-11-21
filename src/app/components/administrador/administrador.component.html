@@ -11,7 +11,8 @@
             <div class="col-12 align-self-end">
                 <div class="text-right">
                     <button class="btn btn-primary  text-right" *ngIf="rol != 2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
-            Agregar administrador</button>
+                        Agregar administrador
+                    </button>
                 </div>
             </div>
             <br>
@@ -145,12 +146,15 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Rut:</b></label>
                     <div class="input-group">
-                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required rutValidation>
                     </div>
                     <!--Valida formulario rut-->
                     <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
                         <div *ngIf="rut.errors.required">
                             Rut es obligatorio
+                        </div>
+                        <div *ngIf="rut.errors.rutValidation">
+                            {{rut.errors.rutValidation.message}}
                         </div>
                     </div>
                 </div>

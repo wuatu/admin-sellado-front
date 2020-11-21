@@ -41,14 +41,12 @@ export class RegistroComponent implements OnInit {
       res=>{
         this.registros=res.body;
         if(res.status == 200){
-          this.toastr.success('registros obtenidos','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('no existen registros actualmente para mostrar','Operación satisfactoria');
           return;
         }
       },
       err=>{
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener los registros, método listarRegistros, component registro');
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }

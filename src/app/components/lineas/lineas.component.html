@@ -8,7 +8,7 @@
         </div>
         <br>
         <div class="row">
-            <div class="col-3 align-self-end text-left">
+            <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-start text-left">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -16,10 +16,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3"></div>
-            <div class="col-6 text-righ">
+
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 text-righ">
                 <div class="text-right" *ngIf="selectedCalibradorObject">
-                    <button class="btn btn-primary  text-right" *ngIf="rol != 2" (click)="open(mymodalagregar)"><i
+                    <button class="btn btn-primary float-rigth btn-block text-center" *ngIf="rol != 2" (click)="open(mymodalagregar)"><i
                             class="fa fa-plus-circle"></i>
                         Agregar línea</button>
                 </div>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuario';
 import { NgbModal, ModalDismissReasons, NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { CalibradorService } from '../../services/calibrador.service';
 import { LineaService } from '../../services/linea.service';
@@ -129,27 +128,20 @@ export class UsuarioEnLineaComponent implements OnInit {
       res => {
         console.log(res);
         this.usuarios = res.body;
-
-        //this.listarCalibradores();
-
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario-en-linea');
-        console.log(err);
         console.log('No se pudo obtener a los usuarios');
       }
     );
   }
 
   listarLineas(id: string) {
-    console.log("HOLA ESTOY LISTANDO !!!!");
     this.lineaService.getLineasId(id).subscribe(
       res => {
-        console.log(res.body);
         this.lineas = res.body;
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component usuario-en-linea');
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
@@ -159,13 +151,10 @@ export class UsuarioEnLineaComponent implements OnInit {
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
       res => {
-        console.log(res.body);
         this.calibradores = res.body;
-
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component usuario-en-linea');
-        console.log(err);
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
     );
@@ -182,24 +171,17 @@ export class UsuarioEnLineaComponent implements OnInit {
       res => {
         console.log(res.body);
         if (res.status == 200) {
-          this.toastr.success('Usuarios en linea obtenido', 'Operación satisfactoria');
         } else if (res.status == 204) {
           this.toastr.success('no hay usuarios en linea actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
         this.usuariosEnLinea = res.body;
-        console.log(this.usuariosEnLinea);
-        console.log("entro");
         this.bandera = true;
 
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
         for (let element of this.usuariosEnLinea) {
-          console.log(element);
           let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, element.hora_inicio, element.fecha_inicio, element.hora_termino, element.fecha_termino);
           this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea);
-          console.log(this.rutBusqueda);
-          console.log(this.desde);
-          console.log(this.hasta);
           if (this.selectedLineaObject.id && this.selectedCalibradorObject.id && this.rutBusqueda != null && this.desde && this.hasta != null) {
             this.exportUsuarioEnLineaArrayAux = this.exportUsuarioEnLineaArray;
           }
@@ -212,11 +194,9 @@ export class UsuarioEnLineaComponent implements OnInit {
           this.hasta = null;
           this.rutUsuario = null;
         }
-        console.log(this.exportUsuarioEnLineaArray);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios en línea, método listarUsuariosEnLinea, component usuario-en-linea');
-        console.log(err);
         this.toastr.error('No se pudo obtener los colaboradores en linea', 'Oops');
       }
     );
@@ -229,7 +209,6 @@ export class UsuarioEnLineaComponent implements OnInit {
     }
     this.usuarioEnLineaService.getValidationCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id).subscribe(
       res => {
-        console.log("La respuesta de la consulta fue : " + res[0].enTurno)
         if (res[0].enTurno == 0) {
           this.agregarUsuarioEnLinea();
         } else if (res[0].enTurno > 0) {
@@ -238,7 +217,6 @@ export class UsuarioEnLineaComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo validar si el usuario esta en la línea, método validarColaboradorEnLinea, component usuario-en-linea');
-        console.log(err);
         console.log("No se pudo obtener la validación");
       }
     );
@@ -248,12 +226,9 @@ export class UsuarioEnLineaComponent implements OnInit {
     let fecha = this.fecha();
     this.usuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, this.selectedUsuarioObject.id, this.selectedLineaObject.id, fecha.substring(0, 10), fecha.substring(11, 19)).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'turno cerrado en la linea anterior');
-        console.log("turno cerrado al colaborador en la linea anterior");
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo cerrar el turno del colaborador en la línea que se encontraba, método closeTurnCollaboratorChangeLine, component usuario-en-linea');
-        console.log(err);
         console.log("No se pudo cerrar turno en la linea anterior");
       }
     );
@@ -285,21 +260,17 @@ export class UsuarioEnLineaComponent implements OnInit {
   getTurnoActual() {
     this.monitoreoService.getGetLastTurno().subscribe(
       res => {
-        console.log("turno cargado");
         this.turnoActual = res.body;
         if(res.status == 200){
-          console.log("Si existe un turno abierto");
           this.turno = true;
         }
         else if(res.status == 204){
-          console.log("no existe un turno abierto")
           this.turno = false;
         }
         console.log(this.turnoActual);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component usuario-en-linea');
-        console.log("el turno no se pudo cargar!!!!");
       }
     )
   }
@@ -333,40 +304,9 @@ export class UsuarioEnLineaComponent implements OnInit {
       this.rutBusqueda = null;
     }
     this.listarUsuariosEnLinea();
-    /*
-    console.log(this.rutBusqueda);
-    console.log(this.dateStartSearch);
-    console.log(this.dateFinishSearch);
-    this.exportUsuarioEnLineaArray = [];
-    this.usuarioEnLineaService.searchUsuarioEnLinea(this.rutBusqueda, this.dateStartSearch).subscribe(
-      res=>{
-        console.log(res);
-        this.usuariosEnLinea=res;
-        console.log(this.usuariosEnLinea);
-        //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
-        for (let element of this.usuariosEnLinea){
-            this.timeStart = element.fecha_inicio;
-            this.timeStart = this.timeStart.substring(0,5);
-            this.dateStart = element.fecha_inicio;
-            this.dateStart = this.dateStart.substring(6,16);
-            let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador,this.timeStart, this.dateStart, this.timeFinish, this.dateFinish);
-            this.exportUsuarioEnLineaArray.push(exportUsuarioEnLinea) ;  
-        }
-        console.log(this.exportUsuarioEnLineaArray);
-      },
-      err=>{
-        console.log(err);
-        this.toastr.error('No se pudo obtener los usuarios en linea', 'Oops');
-      }
-      
-    );
-
-    */
-
   }
 
   changeSelectedLinea(newSelected: any) {
-    console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected.nombre;
     this.selectedLineaObject = newSelected;
     this.listarUsuariosEnLinea();
@@ -380,7 +320,6 @@ export class UsuarioEnLineaComponent implements OnInit {
   }
 
   changeSelectedUsuario(newSelected: any) {
-    console.log("CHANGESELECTEDUSUARIO");
     this.selectedUsuarioText = newSelected.nombre + ' ' + newSelected.rut;
     this.selectedUsuarioObject = newSelected;
   }

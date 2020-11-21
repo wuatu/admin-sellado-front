@@ -50,6 +50,9 @@ import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monito
 
 
 
+
+
+
 @NgModule({
   declarations: [
     AppComponent,

@@ -30,12 +30,10 @@ export class ConfiguracionComponent implements OnInit {
     if(this.minute == 0){
       this.toastr.error('Ingresar un tiempo mayor a 0', 'Oops');
     }
-    console.log("getMinute");
     this.configuracionService.getMaxWaitTime().subscribe(
       res=>{
         console.log(res);
         this.maxWaitTime=res;
-        this.toastr.success('Operación satisfactoria', 'Tiempo de espera obtenido');
         this.registroDevService.creaRegistroDev('No se pudo obtener el tiempo en minutos de configuración, método getMinute, component configuración');
       },
       err=>{
@@ -51,7 +49,6 @@ export class ConfiguracionComponent implements OnInit {
     console.log(configuracion);
     this.configuracionService.updateMaxWaitTime(configuracion.id, configuracion).subscribe(
       res=>{
-        this.toastr.success('Operación satisfactoria', 'Tiempo de espera editado');
         this.registroService.creaRegistro('Se realizo la edición del tiempo de espera a '+this.minute+' minutos');
         
       },

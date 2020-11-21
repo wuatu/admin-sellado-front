@@ -7,70 +7,69 @@
             </div>
         </div>
         <br>
-        <div class="row justify-content-center">
-
-            <div class="col-md-3  align-self-end text-left ">
+        <div class="row ">
+            <div class="col--lg-4 col-md-4 col-sm-12 my-1 align-self-start text-left ">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary " id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
                     </div>
                 </div>
-
             </div>
-            <div class="col-5"></div>
-            <div class="col-md-4  align-self-end ">
-                <div class="text-right" *ngIf="selectedCalibradorObject">
-                    <button class="btn btn-primary  text-right" *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
-                    Agregar lector validador
-                  </button>
+            <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-end">
+                <div class="text-left align-self-end" *ngIf="selectedCalibradorObject">
+                    <button class="btn btn-primary float-right btn-block text-center " *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
+                        Agregar lector validador
+                      </button>
                 </div>
             </div>
+
         </div>
-        <br>
-        <div class="row" *ngIf="selectedCalibradorObject && bandera">
-            <div class="col-12 ">
-                <h4>Lista de lectores Validadores</h4>
-            </div>
+    </div>
+    <br>
+    <div class="row" *ngIf="selectedCalibradorObject && bandera">
+        <div class="col-12 ">
+            <h4>Lista de lectores Validadores</h4>
         </div>
-        <!--Tabla de contenido-->
-        <table class="table table-hover" *ngIf="selectedCalibradorObject && bandera">
-            <thead>
-                <tr>
-                    <th scope="col">N°</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Ip</th>
-                    <th scope="col">Máximo tiempo de espera </th>
-                    <th scope="col">Registro inicial lectura</th>
-                    <th *ngIf="rol != 2" scope="col">Editar</th>
-                    <th *ngIf="rol != 2" scope="col">Eliminar</th>
-                    <th *ngIf="rol == 2" scope="col"> </th>
-                    <th *ngIf="rol == 2" scope="col"> </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let lector of lectoresValidador; let i = index">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{lector.nombre}}</td>
-                    <td>{{lector.ip}}</td>
-                    <td>{{lector.max_wait_time}}</td>
-                    <td>{{lector.registro_inicial_lectura}}</td>
-                    <td>
-                        <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(lector);open(modal_editar_lector)">
+    </div>
+    <!--Tabla de contenido-->
+    <table class="table table-hover" *ngIf="selectedCalibradorObject && bandera">
+        <thead>
+            <tr>
+                <th scope="col">N°</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Ip</th>
+                <th scope="col">Máximo tiempo de espera </th>
+                <th scope="col">Registro inicial lectura</th>
+                <th *ngIf="rol != 2" scope="col">Editar</th>
+                <th *ngIf="rol != 2" scope="col">Eliminar</th>
+                <th *ngIf="rol == 2" scope="col"> </th>
+                <th *ngIf="rol == 2" scope="col"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let lector of lectoresValidador; let i = index">
+                <th scope="row">{{i+1}}</th>
+                <td>{{lector.nombre}}</td>
+                <td>{{lector.ip}}</td>
+                <td>{{lector.max_wait_time}}</td>
+                <td>{{lector.registro_inicial_lectura}}</td>
+                <td>
+                    <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(lector);open(modal_editar_lector)">
                         <i class="fa fa-edit" ></i>
                       </button>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(lector);open(modal_confirmar_eliminacion)">
+                </td>
+                <td>
+                    <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(lector);open(modal_confirmar_eliminacion)">
                         <i class="fa fa-trash-alt" ></i>
                       </button>
-                    </td>
-                </tr>
+                </td>
+            </tr>
 
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
 </div>
+
 
 <!--modal agregar-->
 <ng-template #modal_agregar_lector let-modal>

@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import{AuthService} from '../../services/auth.service';
-import {User} from '../../models/user';
 import { ToastrService } from 'ngx-toastr';
-
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  addRut: string;
+  addRut:string;
   constructor(
     private authService:AuthService,
     private router:Router,

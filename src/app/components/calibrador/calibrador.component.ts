@@ -35,7 +35,7 @@ export class CalibradorComponent implements OnInit {
   ngOnInit() {
     this.listarCalibradores();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);
+  
   }
 
   //metodo que trae todos los registros de calibradors desde la base de datos
@@ -46,7 +46,6 @@ export class CalibradorComponent implements OnInit {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista calibradors
         this.calibradores = res.body;
         if(res.status == 200){
-          this.toastr.success('Calibradores obtenidos','Operación satisfactoria');
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen calibradores actualmente para mostrar','Operación satisfactoria');
@@ -77,8 +76,6 @@ export class CalibradorComponent implements OnInit {
         //crea registro        
         let mensajeRegistro="Se ha creado un nuevo calibrador, nombre: "+ this.nombreCalibrador;        
         this.registoService.creaRegistro(mensajeRegistro);
-        //toatsr
-        this.toastr.success('Operación satisfactoria', 'Calibrador agregada');
         this.listarCalibradores();
         this.nombreCalibrador = null;        
       },
@@ -110,9 +107,6 @@ export class CalibradorComponent implements OnInit {
         //crea registro        
         let mensajeRegistro="Se ha editado un calibrador, id: "+ calibrador.id;        
         this.registoService.creaRegistro(mensajeRegistro);
-
-        this.toastr.success('Operación satisfactoria', 'Calibrador editada');
-        console.log(res);
         this.listarCalibradores();
         this.currentCalibradorSelected = null;
       },
@@ -137,9 +131,6 @@ export class CalibradorComponent implements OnInit {
         //crea registro        
         let mensajeRegistro="Se ha eliminado un calibrador, nombre: "+ calibrador.nombre;        
         this.registoService.creaRegistro(mensajeRegistro);
-
-        this.toastr.success('Operación satisfactoria', 'Calibrador eliminado');
-        console.log(res);
         this.listarCalibradores();
       },
       err => {

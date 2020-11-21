@@ -43,10 +43,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     this.getTurnoActual();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
-      console.log("subscriptionTimerTask");
+
       if(this.lineas != null && this.selectedCalibradorObject != null){
-        console.log("dentro del if");
-        this.toastr.success('llamada','Operación Satisfactoria')
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
       }
     });
@@ -55,7 +53,6 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscriptionTimerTask != null) {
-      console.log("te destruyes observable timetask");
       this.subscriptionTimerTask.unsubscribe();
     }
   }
@@ -121,10 +118,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
         res =>{
             if(res.status == 200){
               this.collaboratorsInLine.push(res.body);
-              console.log("carga de colaboradores en las lineas satisfactoria");
             }else if(res.status == 204){
               this.collaboratorsInLine.push(res.body);
-              console.log("no hay colaboradores en la linea");
             }
             if(i == lineas.length-1){
               this.ordenarArray()
@@ -143,12 +138,9 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
 
   ordenarArray(){
     this.collaboratorsInLineAux = [];
-    console.log("Ordenar Array");
     for(let linea of this.lineas){
       
       for(let collaborator of this.collaboratorsInLine){
-        
-        //console.log("linea: "+linea.nombre+" linea: "+ collaborator[0].nombre_linea)
         if(linea.nombre == collaborator[0].nombre_linea){
           this.collaboratorsInLineAux.push(collaborator);
           break;
@@ -158,27 +150,18 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   }
 
   onCerrarTurno(collaborator: any, modal) {
-    console.log("onCerrarTurno");
-    console.log(collaborator)
-    console.log("*************************");
     this.currentCollaboratorSelected = collaborator;
-    console.log(this.currentCollaboratorSelected);
     this.open(modal);
   }
 
   closeTurnColaborator(collaborator: any) {
-    console.log("Entre a close TurnColaborator");
     let fecha = this.fecha();
     this.monitoreoUsuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, collaborator.id_usuario, collaborator.id_linea, fecha.substring(0, 10), fecha.substring(11, 19)).subscribe(
       res => {
-        this.toastr.success('turno cerrado al colaborador','Operación satisfactoria' );
-        console.log("turno cerrado al colaborador en la linea anterior");
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo cerrar el turno del colaborador en la línea que se encontraba, método closeTurnCollaboratorChangeLine, component usuario-en-linea');
-        console.log(err);
-        console.log("No se pudo cerrar turno en la linea anterior");
       }
     );
   }

@@ -54,16 +54,12 @@ export class CajaComponent implements OnInit {
       return;
     }
     this.bandera = false;
-    console.log("el criterio de busqueda es :"+this.criterio);
     this.cajaService.searchBox(this.criterio).subscribe(
       res =>{
         if(res.status == 200){
-          console.log("resultado busqueda : "+ res.body);
           this.cajas = null;
           this.cajas = res.body;
           this.bandera = true;
-          
-          this.toastr.success('Cajas obtenidas','Búsqueda satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen registros para mostrar en la búsqueda','Búsqueda satisfactoria');
           return;  
@@ -84,7 +80,6 @@ export class CajaComponent implements OnInit {
         this.cajas = res.body;
         if(res.status == 200){
           this.bandera = true;
-          this.toastr.success('Cajas obtenidas','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen registros de cajas actualmente para mostrar','Operación satisfactoria');
           return;
@@ -113,7 +108,6 @@ export class CajaComponent implements OnInit {
     console.log(caja);
     this.cajaService.saveCaja(caja).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Caja agregada');
         this.registroService.creaRegistro("Se ha creado una caja, envase: "+this.envaseCaja+", variedad: "+this.variedadCaja+", calibre: "+this.calibreCaja+", correlativo: "+this.correlativoCaja+" y ponderación: "+this.ponderacionCaja);
         this.listarCajas();
         this.envaseCaja=null;  
@@ -148,7 +142,6 @@ export class CajaComponent implements OnInit {
      
       this.cajaService.updateCaja(caja.id, caja).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Caja editada');
           this.registroService.creaRegistro("Se ha editado una caja, id: "+caja.id);
           console.log(res);
           this.listarCajas();
@@ -172,7 +165,6 @@ export class CajaComponent implements OnInit {
     eliminarCaja(caja: Caja) {
       this.cajaService.deleteCaja(caja.id).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Caja eliminado');
           this.registroService.creaRegistro("Se ha eliminado una cada, id: "+caja.id);
           console.log(res);
           this.listarCajas();

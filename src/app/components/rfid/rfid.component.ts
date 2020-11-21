@@ -89,8 +89,7 @@ export class RfidComponent implements OnInit {
   ngOnInit() {      
     this.listarCalibradores();    
     this.completeDropDownPort();
-    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);   
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol; 
   }
 
   completeDropDownPort(){
@@ -107,7 +106,6 @@ export class RfidComponent implements OnInit {
       res=>{
         console.log(res.body);
         this.calibradores=res.body;
-        
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component rfid');
@@ -120,7 +118,6 @@ export class RfidComponent implements OnInit {
   listarLineas(){
     this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res=>{
-        console.log(res.body);
         this.lineas=res.body;
       },
       err=>{
@@ -133,7 +130,6 @@ export class RfidComponent implements OnInit {
 
   //metodo que trae todos los registros de rfids desde la base de datos
   listarRfids() {
-    console.log(this.selectedCalibradorObject);  
     if(this.selectedCalibradorObject!=null && this.selectedLineaObject==null){
       this.selectedCalibradorId=this.selectedCalibradorObject.id;
       this.selectedLineaId="0";
@@ -142,25 +138,19 @@ export class RfidComponent implements OnInit {
       this.selectedCalibradorId=this.selectedCalibradorObject.id;
       this.selectedLineaId=this.selectedLineaObject.id;
     }
-    console.log(this.selectedCalibradorId);
-    console.log(this.selectedLineaId);
     this.rfidService.getRfids(this.selectedCalibradorId,this.selectedLineaId).subscribe(
       res => {
         //los registros se almacena en array rfids que sirve para llenar la tabla de vista rfids
         this.rfids = res.body;
         if(res.status == 200){
-          this.toastr.success('Rfid obtenidos','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('no existen rfid actualmente para mostrar','Operación satisfactoria');
           return;
         }
-        console.log("Rfids");
-        console.log(this.rfids);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los rfids, método listarRfids, component rfid');
         if (err.status != 404) {
-          console.log(err.status);
           this.toastr.error('No se pudo listar Rfid', 'Oops');
         } else{
           this.rfids=null;
@@ -182,7 +172,6 @@ export class RfidComponent implements OnInit {
     let rfid = new Rfid(null, this.nombreRfidAdded,this.selectedPort, this.selectedBaudRate, this.selectedParityBit, this.selectedStopBits, this.selectedDataBits,this.selectedLineaObject.id);
     this.rfidService.saveRfid(rfid).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'rfid agregado');
         this.registroService.creaRegistro("Se ha creado un rfid, nombre: "+this.nombreRfidAdded+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrado);
         this.listarRfids();
         this.clearDate();
@@ -191,7 +180,6 @@ export class RfidComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo agregar el rfid, método agregarRfid, component rfid');
-        console.log(err);
         this.toastr.error('No se pudo guardar Rfid', 'Oops');
       }
     );
@@ -227,7 +215,6 @@ export class RfidComponent implements OnInit {
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método onEditar, component rfid');
-        console.log(err);
         this.toastr.error('No se pudo obtener Rfid id', 'Oops',);
       }
     )
@@ -236,7 +223,6 @@ export class RfidComponent implements OnInit {
   //metodo que sirve para editar una rfid
   editarRfid(form: NgForm) {
     if (!form.value.nombre) {
-      this.toastr.error('No se pudo editar Rfid', 'Oops',);
       return;
     }
     let rfid: Rfid;
@@ -245,9 +231,7 @@ export class RfidComponent implements OnInit {
     }    
     this.rfidService.updateRfid(rfid.id, rfid).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'rfid editado');
         this.registroService.creaRegistro("Se ha editado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
-        console.log(res);
         this.listarRfids();
         this.clearDate();
         this.currentRfidSelected = null;
@@ -255,7 +239,6 @@ export class RfidComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo editar el rfid, método editarRfid, component rfid');
-        console.log(err);
         this.toastr.error('No se pudo editar Rfid', 'Oops',);
       }
     );
@@ -264,7 +247,6 @@ export class RfidComponent implements OnInit {
   //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto rfid clickeado a variable global currentRfidSelected y abrir el modal
   onEliminar(rfid: Rfid, modal) {
     this.currentRfidSelected = rfid;
-    console.log(this.currentRfidSelected);
     this.open(modal);
   }
 
@@ -272,13 +254,10 @@ export class RfidComponent implements OnInit {
   eliminarRfid(rfid: Rfid) {
     this.rfidService.deleteRfid(rfid.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'rfid eliminado');
         this.registroService.creaRegistro("Se ha eliminado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
-        console.log(res);
         this.listarRfids();
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo eliminar el rfid, método eliminarRfid, component rfid');
         this.toastr.error('No se pudo eliminar el Rfid', 'Oops');
       }
@@ -327,19 +306,19 @@ export class RfidComponent implements OnInit {
   changeSelectedDataBits(newSelected: any) { 
     this.dataBitsText = newSelected.nombre;
     this.selectedDataBits = newSelected.nombre;
-    console.log(this.selectedDataBits);      
+  
   }
 
   changeSelectedPort(newSelected: any) { 
     this.portText = newSelected.nombre;
     this.selectedPort = newSelected.nombre;
-    console.log(this.selectedPort);      
+     
   }
 
   changeSelectedCalibrador(newSelected: any) { 
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject=newSelected;
-    console.log(this.selectedCalibradorObject);
+
     this.listarLineas();
      
   }

@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { RegistroService } from '../../services/registro.service';
-//import { RutValidationDirective } from '../../Directive/rut-validation-directive.directive';
 import { RegistroDevService } from '../../services/registro-dev.service';
 
 
@@ -44,19 +43,15 @@ export class UsuarioComponent implements OnInit {
   ngOnInit() {
     this.listarUsuarios();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);
   }
   
   //metodo que lista los usuarios registrados en el sistema.
   listarUsuarios(){
-    console.log("HOLA ESTOY LISTANDO LOS COLABORADORES!!!!");
-    
     this.usuarioService.getUsuarios().subscribe(
       res=>{
         console.log(res);
         this.usuarios=res.body;
         if(res.status == 200){
-          this.toastr.success('Colaboradores obtenidos','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('no hay colaboradores actualmente para mostrar','Operación satisfactoria');
           return;
@@ -64,7 +59,6 @@ export class UsuarioComponent implements OnInit {
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario');
-        console.log(err);
         this.toastr.error('No se pudo obtener a los colaboradores', 'Oops');
       }
     );
@@ -82,7 +76,6 @@ export class UsuarioComponent implements OnInit {
     }
     
     let usuario = new Usuario(null, this.rutUsuario, this. nombreUsuario, this.apellidoUsuario, this.rfidUsuario);
-    console.log(usuario);
     this.usuarioService.saveUsuario(usuario).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Colaborador agregado');
@@ -96,7 +89,6 @@ export class UsuarioComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo agregar al usuario, método agregarUsuario, component usuario');
-        console.log(err);
         this.toastr.error('No se pudo agregar al colaborador', 'Oops');
         this.rutUsuario = null;
         this.nombreUsuario = null;
@@ -115,12 +107,9 @@ export class UsuarioComponent implements OnInit {
       res=>{
         this.selectedUsuarioObject=res.body;
         this.selectedUsuarioText=this.selectedUsuarioObject.nombre;
-        console.log("HOLA HOLA");
-        console.log(this.selectedUsuarioObject);
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudo obtener al usuario, método onEditar, component usuario');
-        console.log(err);
         this.toastr.error('No se pudo obtener el colaborador id', 'Oops',);
       }
     )
@@ -142,15 +131,12 @@ export class UsuarioComponent implements OnInit {
     }    
     this.usuarioService.updateUsuario(usuario.id, usuario).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Colaborador editado');
         this.RegistroService.creaRegistro("Se ha editado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
-        console.log(res);
         this.listarUsuarios();
         this.currentUsuarioSelected = null;
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo editar al usuario, método editarUsuario, component usuario');
-        console.log(err);
         this.listarUsuarios();
         this.toastr.error('No se pudo editar el Colaborador', 'Oops',);
       }
@@ -160,19 +146,16 @@ export class UsuarioComponent implements OnInit {
   //Metodo que se utiliza para abrir el modal para eliminar un usuario.
   onEliminar(usuario: Usuario, modal) {
     this.currentUsuarioSelected = usuario;
-    console.log(this.currentUsuarioSelected);
   }
   //Metodo que sirve para eliminar el registro de un usuario en la base de datos.
   eliminarUsuario(usuario: Usuario){
     this.usuarioService.deleteUsuario(usuario.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Colaborador eliminado');
         this.RegistroService.creaRegistro("Se ha eliminado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
         this.listarUsuarios();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar al usuario, método eliminarUsuario, component usuario');
-        console.log(err);
         this.toastr.error('No se pudo eliminar el colaborador', 'Oops');
       }
     );

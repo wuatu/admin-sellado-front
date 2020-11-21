@@ -101,7 +101,6 @@ export class MonitoreoComponent implements OnInit {
           if(res.status == 200){
             console.log(res.body[0]);
             if(res.body[0].fecha_apertura == ""){
-              this.toastr.success('llame a los metodos ','Operación Satisfactoria');
               this.getAverageLastHour();
               this.getProduccionTurno();
               this.getAverageforMinute();
@@ -128,12 +127,10 @@ export class MonitoreoComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscriptionTimerTask != null) {
-      console.log("te destruyes observable timetask");
       this.subscriptionTimerTask.unsubscribe();
     }
 
     if (this.subscriptionTimer != null) {
-      console.log("te destruyes observable timetask");
       this.subscriptionTimer.unsubscribe();
     }
 
@@ -156,23 +153,15 @@ export class MonitoreoComponent implements OnInit {
   getTurnoActual(){
     this.monitoreoService.getGetLastTurno().subscribe(
       res => {
-        console.log("status: "+res.status);
         console.log(res);
         if(res.status == 200){
-          this.toastr.success('turno obtenido','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('no hay turnos actualmente para mostrar','Operación satisfactoria');
         }
-        console.log("turno cargado");
-        this.turnoActual = res.body;
-        
-        console.log(this.turnoActual);
-        
+        this.turnoActual = res.body; 
       },
       err => {
-        console.log(err.status); 
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
-              
         this.toastr.error('error al cargar el turno.');
         
       }
@@ -197,9 +186,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
           }
-          
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por minuto");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
@@ -218,9 +204,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
           }
-          
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por minuto");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 2, método getAverageForMinute, component monitoreo');
@@ -240,8 +223,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
           }
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por minuto : "+ this.totalMinuto1);
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
@@ -259,9 +240,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
           }
-          
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por minuto: "+ this.totalMinuto1);
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del calibrador 1, método getAverageForMinute, component monitoreo');
@@ -287,8 +265,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora1 = this.cajasCalibrador1Hora[0].total;
           }
-          //this.toastr.success('obtenido','obtenido');
-          console.log("ultima hora success : "+ this.cajasCalibrador1Hora[0].total);
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 1, método getAverageLastHour, component monitoreo');
@@ -306,9 +282,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora2 = this.cajasCalibrador2Hora[0].total;
           }
-          
-          //this.toastr.success('obtenido','obtenido');
-          console.log("ultima hora success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 2, método getAverageLastHour, component monitoreo');
@@ -328,8 +301,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora1 = this.cajasCalibrador1Hora[0].total;
           }
-          //this.toastr.success('obtenido','obtenido');
-          console.log("ultima hora success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 1, método getAverageLastHour, component monitoreo');
@@ -346,9 +317,6 @@ export class MonitoreoComponent implements OnInit {
           else{
             this.totalHora2 = this.cajasCalibrador2Hora[0].total;
           }
-          
-          //this.toastr.success('obtenido','obtenido');
-          console.log("ultima hora success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto de la ultima hora del calibrador 2, método getAverageLastHour, component monitoreo');
@@ -370,10 +338,7 @@ export class MonitoreoComponent implements OnInit {
       this.monitoreoService.getProduccionSearch(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '1', this.fechaActual).subscribe(
         (res) => {
           this.cajasCalibrador1Turno = res;
-          //console.log(this.cajasCalibrador1Turno[0].total);
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por turno success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 1, método getProduccionTurno, component monitoreo');
@@ -386,8 +351,6 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador2Turno = res;
           //console.log(this.cajasCalibrador2Turno[0].total);
           this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por turno success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 2, método getProduccionTurno, component monitoreo');
@@ -401,8 +364,6 @@ export class MonitoreoComponent implements OnInit {
         res => {
           this.cajasCalibrador1Turno = res;
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por turno success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 1, método getProduccionTurno, component monitoreo');
@@ -413,9 +374,6 @@ export class MonitoreoComponent implements OnInit {
       this.monitoreoService.getProduccionSearch( this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[1].id,'2', this.fechaActual).subscribe(
         res => {
           this.cajasCalibrador2Turno = res;
-          this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
-          //this.toastr.success('obtenido','obtenido');
-          console.log("produccion por turno success");
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto del turno del calibrador 2, método getProduccionTurno, component monitoreo');
@@ -580,7 +538,6 @@ export class MonitoreoComponent implements OnInit {
         this.turnoService.updateTurno(this.turno.id, turno).subscribe(
           res => {
             this.sesionCerrada();
-            this.toastr.success("Turno cerrado correctamente");
             this.cerrarTurnoColaboradores();
             this.registroService.creaRegistro("Turno cerrado");
             //se borran los datos del turno que estaba abierto
@@ -608,7 +565,6 @@ export class MonitoreoComponent implements OnInit {
       res => {
         this.sesionCerrada();
         if(res.status == 200){
-          this.toastr.success('Turno cerrado a colaboradores','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No hay colaboradores agregados a linea para cerrar el turno','Operación satisfactoria');
           return;

@@ -65,10 +65,10 @@ export class ProduccionPorLineaComponent implements OnInit {
   produccionLinea: any = [];
   produccionLineaExportarExcel: any = [];
 
-  selectedCalibradorText: string = "Selecciona una calibrador";
+  selectedCalibradorText: string = "Seleccionar calibrador";
   selectedCalibradorObject: any;
 
-  selectedLineaText: string = "Selecciona una linea";
+  selectedLineaText: string = "Seleccionar linea";
   selectedLineaObject: any;
 
   //******************************************/
@@ -120,9 +120,7 @@ export class ProduccionPorLineaComponent implements OnInit {
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
       res => {
-        console.log(res.body);
         this.calibradores = res.body;
-
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-por-linea');
@@ -134,13 +132,10 @@ export class ProduccionPorLineaComponent implements OnInit {
 
   listarLineas(id: string) {
     this.lineaService.getLineasId(id).subscribe(
-      //this.calibradorService.getCalibradores().subscribe(
       res => {
-        console.log(res.body);
         this.lineas = res.body;
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component monitoreo-por-linea');
         this.toastr.error('No se pudo obtener lineas', 'Oops');
       }
@@ -148,7 +143,6 @@ export class ProduccionPorLineaComponent implements OnInit {
   }
 
   imprimirGrafico() {
-    console.log("imprimir");
     window.print();
   }
 
@@ -157,19 +151,14 @@ export class ProduccionPorLineaComponent implements OnInit {
       this.toastr.error('se debe seleccionar calibrador y fecha.', 'Oops');
       return;
     }
-
-    console.log(this.selectedCalibradorObject.id + this.desde + this.hasta);
     this.produccionLinea = [];
     this.produccionLineaExportarExcel = [];
     this.produccionPorLineaService.getProduccionSearch(this.selectedCalibradorObject.id, this.selectedLineaObject.id, this.desde, this.hasta).subscribe(
       res => {
-        //console.log(res);
         this.produccionLinea = res.body;
-        console.log(this.produccionLinea);
         if (res.status == 200) {
-          this.toastr.success('Producción de línea obtenida', 'Operación satisfactoria');
         } else if (res.status == 204) {
-          this.toastr.success('No hay producción para esta línea actualmente para mostrar', 'Operación satisfactoria');
+          this.toastr.success('No hay producción para mostrar', 'Operación satisfactoria');
           return;
         }
         var bandera = 0;
@@ -192,7 +181,6 @@ export class ProduccionPorLineaComponent implements OnInit {
             this.nombre = element.nombre_usuario;
             this.apellido = element.apellido_usuario;
             bandera = 1;
-            // console.log("CAMBIE BANDERA");
           }
         }
 
@@ -214,22 +202,18 @@ export class ProduccionPorLineaComponent implements OnInit {
       this.toastr.error('se debe seleccionar calibrador, línea y fecha.', 'Oops');
       return;
     }
-    console.log(this.selectedCalibradorObject.id + this.selectedLineaObject.id + "  " + this.desde + " " + this.hasta);
     this.cajasLinea = [];
     this.produccionPorLineaService.getCountBoxOfLine(this.selectedCalibradorObject.id, this.selectedLineaObject.id, this.desde, this.hasta).subscribe(
       res => {
-        //console.log(res);
+
         this.cajasLinea = res;
         this.mostrarGrafico = "true";
-        console.log(this.cajasLinea);
         this.cajasTotales(this.cajasLinea);
         this.pushData(this.cajasLinea);
 
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener la produccion de la linea en la fecha indicada, método contarCajasLineaPorFecha, component monitoreo-por-linea');
-        console.log(err);
-        this.toastr.error('No se pudo obtener las cajas de la linea', 'Oops');
       }
     );
 
@@ -243,7 +227,6 @@ export class ProduccionPorLineaComponent implements OnInit {
       this.toastr.error('Valores incorrectos', 'registro no editado');
       return;
     }
-    //console.log("Verificado nuevo : "+ this.verificado + " a tiempo : "+ this.a_tiempo);
     if (this.selectedOptionVerified == "si") {
       this.verificado = 1;
     } else {
@@ -254,21 +237,16 @@ export class ProduccionPorLineaComponent implements OnInit {
     } else {
       this.a_tiempo = 0;
     }
-    //this.SearchTextVerified = "Seleccionar opción";  
-    //this.SearchTextToTime = "Seleccionar opción";
     if (this.verificado != this.currentSeguimientoSelected.is_verificado || this.a_tiempo != this.currentSeguimientoSelected.is_before_time) {
       let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador, this.currentSeguimientoSelected.nombre_calibrador, this.currentSeguimientoSelected.id_linea, this.currentSeguimientoSelected.nombre_linea, this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja, this.currentSeguimientoSelected.variedad_caja, this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_sellado, this.currentSeguimientoSelected.fecha_validacion, this.currentSeguimientoSelected.hora_validacion, this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
       console.log(registroProduccionColaborador);
       this.produccionPorLineaService.updateRegistroProduccionLinea(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Registro editado');
           this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: " + registroProduccionColaborador.id + ", calibradora: " + this.currentSeguimientoSelected.nombre_calibrador);
-          console.log(res);
           this.buscarRegistroCalibradorLinea();
           this.currentSeguimientoSelected = null;
         },
         err => {
-          console.log(err);
           this.registroDevService.creaRegistroDev('No se pudo editar el registro producción, método editarRegistroProduccion, component monitoreo-por-linea');
           this.toastr.error('No se pudo editar registro', 'Oops',);
         }
@@ -283,8 +261,6 @@ export class ProduccionPorLineaComponent implements OnInit {
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto calibrador clickeado a variable global currentLineaSelected
   onEditar(seguimientoDeCajas: SeguimientoDeCajas) {
     this.currentSeguimientoSelected = seguimientoDeCajas;
-    //console.log(this.currentSeguimientoSelected.is_verificado);
-    //console.log(this.currentSeguimientoSelected.is_before_time);
     if (this.currentSeguimientoSelected.is_verificado) {
       this.SearchTextVerified = "si";
       this.selectedOptionVerified = "si";
@@ -341,7 +317,6 @@ export class ProduccionPorLineaComponent implements OnInit {
     console.log(this.desde + this.hasta);
   }
   changeSelectedLinea(newSelected2: any) {
-    console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected2.nombre;
     this.selectedLineaObject = newSelected2;
   }
@@ -349,13 +324,11 @@ export class ProduccionPorLineaComponent implements OnInit {
   changeSelectedVerified(newSelected: any) {
     this.SearchTextVerified = newSelected.opcion;
     this.selectedOptionVerified = this.SearchTextVerified;
-    console.log(this.selectedOptionVerified);
   }
 
   changeSelectedToTime(newSelected: any) {
     this.SearchTextToTime = newSelected.opcion;
     this.selectedOptionToTime = this.SearchTextToTime;
-    console.log(this.selectedOptionToTime);
   }
 
   exportarArchivoExcel() {

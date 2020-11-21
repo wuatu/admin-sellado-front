@@ -105,15 +105,6 @@ export class ProduccionColaboradorComponent implements OnInit {
   }
 
   imprimirGrafico() {
-    /*let printContents = document.getElementById(cmpName).innerHTML;
-    let originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    document.body.innerHTML = originalContents;*/
-    console.log("imprimir");
     window.print();
   }
   buscarUsuarioPorRut() {
@@ -130,7 +121,6 @@ export class ProduccionColaboradorComponent implements OnInit {
         //console.log(res);
         this.produccionColaborador = res.body;
         if (res.status == 200) {
-          this.toastr.success('Producción obtenida', 'Operación satisfactoria');
         } else if (res.status == 204) {
           this.toastr.success('no hay producción actualmente para mostrar', 'Operación satisfactoria');
           return;
@@ -176,17 +166,12 @@ export class ProduccionColaboradorComponent implements OnInit {
     this.produccionColaboradorNumberBox = [];
     this.produccionColaboradorService.getProduccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res => {
-        console.log(res);
         this.produccionColaboradorNumberBox = res;
-        console.log("backend!!!!");
-        console.log(this.produccionColaboradorNumberBox);
         this.pushData(this.produccionColaboradorNumberBox);
         this.cajasTotales(this.produccionColaboradorNumberBox);
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo obtener la producción del colaborador, método produccionSearchNumberBox, component produccion-colaborador');
-        //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
       }
     );
   }
@@ -194,21 +179,17 @@ export class ProduccionColaboradorComponent implements OnInit {
     this.produccionNumberBoxByType = [];
     this.produccionColaboradorService.getNumberBoxByType(this.rutBusqueda, this.desde, this.hasta).subscribe(
       res => {
-        console.log(res);
         this.produccionNumberBoxByType = res;
-
       },
       err => {
         console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo obtener la producción del usuario por tipo de caja, método searchNumberBoxByType, component produccion-colaborador');
-        //this.toastr.error('No se pudo obtener la información para el Gráfico', 'Oops');
       }
     );
   }
 
   exportarArchivoExcel() {
     try {
-      console.log(this.produccionNumberBoxByType);
       this.produccionNumberBoxByTypeExport = this.produccionNumberBoxByType.slice();
       if (this.produccionColaboradorExportarExcel.length > 50000) {
         let array: any[];
@@ -270,33 +251,6 @@ export class ProduccionColaboradorComponent implements OnInit {
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-linea');
     }
-
-    /*try {
-      let cajas : any = {"ENVASE": "Cajas Totales","CANTIDAD": this.numBox};
-      this.produccionNumberBoxByType.push(cajas);
-      console.log(cajas);
-      
-      // Se convierte el arreglo con los usuarios en linea 
-      console.log("tamaño de arreglo: "+this.produccionColaboradorExportarExcel.size);
-       var jsonArray = JSON.parse(JSON.stringify(this.produccionColaboradorExportarExcel))
-       var jsonArray2 = JSON.parse(JSON.stringify(this.produccionNumberBoxByType))
-       console.log(jsonArray);
-       console.log(jsonArray2);
-       //se convierte el Json a xlsx en formato workSheet
-       const ws: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray);
-       const ws2: XLSX.WorkSheet =XLSX.utils.json_to_sheet(jsonArray2);
-       /* genera el workbook y agrega el worksheet */
-    /* const wb: XLSX.WorkBook = XLSX.utils.book_new();
-     XLSX.utils.book_append_sheet(wb, ws, 'Registro de producción');
-     XLSX.utils.book_append_sheet(wb, ws2, 'Producción por tipos de envases');
- 
-     /* Guarda el archivo */
-    /*let dateDownload : string = new Date().toISOString();
-    XLSX.writeFile(wb, this.nombreExcel+"_"+ this.rutBusqueda + "_" + dateDownload.substring(0,10)+".xls");
- 
- } catch (error) {
-   this.registroDevService.creaRegistroDev('No se pudo exportar la producción a excel, método exportarArchivoExcel, component produccion-colaborador');
- }*/
   }
 
   cajasTotales(cajas: any[]) {
@@ -361,8 +315,6 @@ export class ProduccionColaboradorComponent implements OnInit {
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto calibrador clickeado a variable global currentLineaSelected
   onEditar(seguimientoDeCajas: SeguimientoDeCajas) {
     this.currentSeguimientoSelected = seguimientoDeCajas;
-    //console.log(this.currentSeguimientoSelected.is_verificado);
-    //console.log(this.currentSeguimientoSelected.is_before_time);
     if (this.currentSeguimientoSelected.is_verificado) {
       this.SearchTextVerified = "si";
       this.selectedOptionVerified = "si";
@@ -384,7 +336,6 @@ export class ProduccionColaboradorComponent implements OnInit {
 
     this.SearchTextToTime = "Seleccionar opción";
     if (this.selectedOptionVerified == null || this.selectedOptionToTime == null) {
-      this.toastr.error('Valores incorrectos', 'registro no editado');
       return;
     }
     //console.log("Verificado nuevo : "+ this.verificado + " a tiempo : "+ this.a_tiempo);
@@ -402,12 +353,9 @@ export class ProduccionColaboradorComponent implements OnInit {
     //this.SearchTextToTime = "Seleccionar opción";
     if (this.verificado != this.currentSeguimientoSelected.is_verificado || this.a_tiempo != this.currentSeguimientoSelected.is_before_time) {
       let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador, this.currentSeguimientoSelected.nombre_calibrador, this.currentSeguimientoSelected.id_linea, this.currentSeguimientoSelected.nombre_linea, this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja, this.currentSeguimientoSelected.variedad_caja, this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_sellado, this.currentSeguimientoSelected.fecha_validacion, this.currentSeguimientoSelected.hora_validacion, this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
-      console.log(registroProduccionColaborador);
       this.produccionColaboradorService.updateRegistroProduccionUsuario(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Registro editado');
           this.registroService.creaRegistro("Se ha editado un registro de caja sellada, id registro: " + registroProduccionColaborador.id);
-          console.log(res);
           this.buscarUsuarioPorRut();
           this.currentSeguimientoSelected = null;
         },

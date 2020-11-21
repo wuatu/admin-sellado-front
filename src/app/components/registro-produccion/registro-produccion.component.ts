@@ -42,7 +42,6 @@ export class RegistroProduccionComponent implements OnInit {
       res=>{
         this.registrosProduccion=res.body;
         if(res.status == 200){
-          this.toastr.success('registros obtenidos','Operación satisfactoria');
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('no existen registros actualmente para mostrar','Operación satisfactoria');
@@ -50,7 +49,6 @@ export class RegistroProduccionComponent implements OnInit {
         }
       },
       err=>{
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron Obtener los registros-produccion, método listarRegistroProduccion, component registro-produccion');
         this.toastr.error('No se pudo obtener a los registros', 'Oops');
       }

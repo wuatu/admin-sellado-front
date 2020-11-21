@@ -45,18 +45,15 @@ export class LineasComponent implements OnInit {
   ngOnInit() {      
     this.listarCalibradores(); 
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);   
   }
 
   //metodo que lista las calibradores
   listarCalibradores(){
     this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res.body);
         this.calibradores=res.body;
       },
       err=>{
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component calibradores');
         
         this.toastr.error('No se pudo obtener calibradores', 'Oops');
@@ -73,7 +70,6 @@ export class LineasComponent implements OnInit {
         //los registros se almacena en array lineas que sirve para llenar la tabla de vista lineas
         this.lineas = res.body;
         if(res.status == 200){
-          this.toastr.success('Líneas obtenidas','Operación satisfactoria');
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen registros de líneas actualmente para mostrar','Operación satisfactoria');
@@ -82,9 +78,7 @@ export class LineasComponent implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método listarLineas, component linea');
-        
         if (err.status != 404) {
-          console.log(err.status);
           this.toastr.error('No se pudo listar líneas', 'Oops');
         } else{
           this.lineas=null;
@@ -104,15 +98,12 @@ export class LineasComponent implements OnInit {
     linea.nombre_calibrador=this.selectedCalibradorObject.nombre;
     this.lineaService.saveLinea(linea).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea agregada');
         this.registroService.creaRegistro("Se ha creado una línea, nombre: "+ this.nombreLineaAdded+", calibradora: "+this.selectedCalibradorObject.nombre);
         this.listarLineas();
         this.nombreLineaAdded=null;
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo agregar la línea, método agregarLinea, component linea');
-        
         this.toastr.error('No se pudo guardar línea', 'Oops');
         this.lineas=null;
       }
@@ -152,16 +143,12 @@ export class LineasComponent implements OnInit {
     }    
     this.lineaService.updateLinea(linea.id, linea).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea editada');
         this.registroService.creaRegistro("Se ha editado una linea, id: "+ linea.id+", calibradora: "+this.selectedCalibradorObject.nombre);
-        console.log(res);
         this.listarLineas();
         this.currentLineaSelected = null;
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo editar la linea, método editarLinea, component linea');
-        
-        console.log(err);
         this.toastr.error('No se pudo editar línea', 'Oops',);
       }
     );
@@ -178,13 +165,11 @@ export class LineasComponent implements OnInit {
   eliminarLinea(linea: Linea) {
     this.lineaService.deleteLinea(linea.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea eliminada');
         this.registroService.creaRegistro("Se ha eliminado una linea, id: "+ linea.id+", calibradora: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarLineas();
       },
       err => {
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudo eliminar la línea, método eliminarLinea, component linea');
         
         this.toastr.error('No se pudo eliminar línea', 'Oops');

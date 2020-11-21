@@ -70,10 +70,6 @@ export class MonitoreoSistemaComponent implements OnInit {
 
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
       if(this.lineas != null && this.selectedCalibradorObject != null){
-        //this.toastr.success('llamada','Operación Satisfactoria')
-        this.toastr.success('recarge','Operacion satisfactoria');
-        //this.bandera = false;
-        //this.bandera = true;
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
         this.getRfidOutByCaliper()
       }
@@ -83,7 +79,6 @@ export class MonitoreoSistemaComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscriptionTimerTask != null) {
-      console.log("te destruyes observable timetask");
       this.subscriptionTimerTask.unsubscribe();
     }
   }
@@ -107,10 +102,8 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         this.calibradores=res.body;
-        
       },
       err=>{
-        console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-sistema');
         //this.toastr.error('No se pudo obtener calibradores', 'Oops');
       }
@@ -148,12 +141,9 @@ export class MonitoreoSistemaComponent implements OnInit {
          res =>{
             if(res.status == 200){
               this.collaboratorsInLine.push(res.body);
-              //console.log("carga de colaboradores en las lineas satisfactoria");
-              
             }
             if(i == lineas.length-1){
               this.collaboratorsInLine = this.ordenarArrayCollabordators(this.collaboratorsInLine);
-              //this.collaboratorsInLine.push(res.body);
               this.getRfidByLine(this.lineas);
             }
             i++;
@@ -179,11 +169,8 @@ export class MonitoreoSistemaComponent implements OnInit {
         res =>{
             if(res.status == 200){
               this.rfidInLine.push(res.body);
-              //console.log("carga de rfid en las lineas satisfactoria");
             }
             if(i == lineas.length-1){
-              //console.log(this.rfidInLine);
-              //this.ordenarArrayRfid();
               this.rfidInLine = this.ordenarArray(this.rfidInLine);
               this.getLectorByLine(this.lineas);
               this.getLastRfidEnLinea(this.lineas);
@@ -251,7 +238,6 @@ export class MonitoreoSistemaComponent implements OnInit {
           this.lastLectorEnLinea.push(res.body);
           if(i == lineas.length-1){
             this.lastLectorEnLinea = this.ordenarArray(this.lastLectorEnLinea);
-            //console.log("largo: "+ this.lastLectorEnLinea.length);
             this.joinArrays();
           }
           i++;
@@ -288,7 +274,6 @@ export class MonitoreoSistemaComponent implements OnInit {
   
   ordenarArray(array: any []){
     let arrayAux: any = [];
-    //console.log("Ordenar Array");
     for(let linea of this.lineas){
       
       for(let arr of array){
@@ -303,7 +288,6 @@ export class MonitoreoSistemaComponent implements OnInit {
 
   ordenarArrayCollabordators(array: any []){
     let arrayAux: any = [];
-    //console.log("Ordenar Array");
     for(let linea of this.lineas){
       
       for(let arr of array){
@@ -314,7 +298,6 @@ export class MonitoreoSistemaComponent implements OnInit {
       }
     }
     return arrayAux;
-    //console.log(this.rfidInLineAux);
   }
 
 
@@ -325,8 +308,6 @@ export class MonitoreoSistemaComponent implements OnInit {
       res =>{
           if(res.status == 200){
             this.rfidOutInCaliper = res.body;
-            //console.log("rfidOutInCaliper");
-            //console.log(this.rfidOutInCaliper);
             this.getLectorValidatorByCaliper();
           }
       },
@@ -344,8 +325,6 @@ export class MonitoreoSistemaComponent implements OnInit {
       res =>{
           if(res.status == 200){
             this.lectorValidatorInCaliper = res.body;
-            //console.log("lectorValidatorInCaliper");
-            //console.log(this.lectorValidatorInCaliper);
             this.getLastRfidOutInCaliper();
           }
           
@@ -366,12 +345,10 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.monitoreoSistemaService.getLastRfidOutInCaliper(this.selectedCalibradorObject.id).subscribe(
       res => {
         this.lastRfidOutInCaliper = res.body;   
-        //console.log("lastRfidOutInCaliper");
-        //console.log(this.lastRfidOutInCaliper);
         this.getLastLectorValidatorInCaliper();
       },
       err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener la ultima delctura del rfid salida del calibrador, método getLastRfidOutInCalipe, component monitoreo-sistema')
+        this.registroDevService.creaRegistroDev('No se pudo obtener la ultima lectura del rfid salida del calibrador, método getLastRfidOutInCalipe, component monitoreo-sistema')
         
       }
     )
@@ -384,8 +361,6 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.monitoreoSistemaService.getLastLectorInCaliper(this.selectedCalibradorObject.id).subscribe(
       res => {
         this.lastLectorValidatorInCaliper = res.body;
-        //console.log("lastLectorValidatorInCaliper");
-        //console.log(this.lastLectorValidatorInCaliper);
         this.joinArray3();
       },
       err => {
@@ -398,25 +373,9 @@ export class MonitoreoSistemaComponent implements OnInit {
   }
 
   joinArray3(){
-   
-    //console.log("estoy en el join array 3");
-
     this.bigArray3[0] = ({nombre_lector_validador:this.lectorValidatorInCaliper[0].nombre_lector_validador, puerto_lector_validador: this.lectorValidatorInCaliper[0].ip_lector_validador, max_time_wait: this.lectorValidatorInCaliper[0].max_wait_time, ultima_lectura_lector: this.lastLectorValidatorInCaliper[0].codigo_last_lector_validador,
       nombre_rfid_salida:this.rfidOutInCaliper[0].nombre_rfid_salida, puerto_rfid_salida: this.rfidOutInCaliper[0].puerto_rfid_salida, baudRate_rfid_salida: this.rfidOutInCaliper[0].baudRate_rfid_salida, ultima_lectura_rfid: this.lastRfidOutInCaliper[0].codigo_last_rfid_salida});
-    //console.log("estoy en el join array 3");
-    //console.log(this.bigArray3);
     this.bandera = true;
-
-    /*this.subscriptionTimerTask = timer(0, 3000).subscribe(() => {
-      if(this.lineas != null && this.selectedCalibradorObject != null){
-        //this.toastr.success('llamada','Operación Satisfactoria')
-        this.toastr.success('recarge','Operacion satisfactoria');
-        //this.bandera = false;
-        //this.bandera = true;
-        this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
-        this.getRfidOutByCaliper()
-      }
-    });*/
   }
 
   /*****************************************************************************************/

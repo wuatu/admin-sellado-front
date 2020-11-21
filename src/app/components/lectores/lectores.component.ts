@@ -86,7 +86,6 @@ export class LectoresComponent implements OnInit {
     this.completeDropDownPort();
     //this.listarLineas();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);
   }
 
 
@@ -118,13 +117,9 @@ export class LectoresComponent implements OnInit {
   
   //metodo que lista las lineas
   listarLineas(id:string){
-    console.log("LISTARLINEAS");
     this.lineaService.getLineasId(id).subscribe(
-    //this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res.body);
         this.lineas=res.body;
-        
       },
       err=>{
         console.log(err);
@@ -136,15 +131,11 @@ export class LectoresComponent implements OnInit {
   }
 
   listarLectores(){
-    console.log("LISTARLECTORES");
     console.log(this.selectedCalibradorObject.id,"  ", this.selectedLineaObject.id);
     this.lectorService.getLectoresId(this.selectedCalibradorObject.id, this.selectedLineaObject.id).subscribe(
-    //this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res.body);
         this.lectores=res.body;
         if(res.status == 200){
-          this.toastr.success('Lectores obtenidos','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen registros de lectores actualmente para mostrar','Operación satisfactoria');
           return;
@@ -189,7 +180,6 @@ export class LectoresComponent implements OnInit {
   }
   
   changeSelectedCalibrador(newSelected: any) { 
-    console.log("CHANGESELECTEDSELLADORA");
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     this.listarLineas(this.selectedCalibradorObject.id);
@@ -197,7 +187,6 @@ export class LectoresComponent implements OnInit {
   }
 
   changeSelectedLinea(newSelected2: any) { 
-    console.log("CHANGESELECTEDLINEA");
     this.selectedLineaText = newSelected2.nombre;
     this.selectedLineaObject=newSelected2;
     this.listarLectores();
@@ -241,7 +230,6 @@ export class LectoresComponent implements OnInit {
     
     this.lectorService.saveLector(lector).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Lector agregado');
         this.registroService.creaRegistro("Se ha creado un lector, nombre: "+this.nombreLector);
         this.nombreLector = null;
         this.ipLector = null;
@@ -269,9 +257,7 @@ export class LectoresComponent implements OnInit {
   eliminarLector(lector: Lector) {
     this.lectorService.deleteLector(lector.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Lector eliminado');
         this.registroService.creaRegistro("Se ha eliminado un lector, id: "+ lector.id);
-        console.log(res);
         this.listarLectores();
       },
       err => {
@@ -338,7 +324,6 @@ export class LectoresComponent implements OnInit {
     }    
     this.lectorService.updateLector(lector.id, lector).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Lector editado');
         this.registroService.creaRegistro("Se ha editado un lector, id: "+lector.id+" y nombre: "+lector.nombre);
         console.log(res);
         this.clearDate();
@@ -346,7 +331,6 @@ export class LectoresComponent implements OnInit {
         this.currentLectorSelected = null;
       },
       err => {
-        console.log(err);
         this.clearDate();
         this.registroDevService.creaRegistroDev('No se pudo editar el lector, método editarLector, component lectores');
         this.toastr.error('No se pudo editar el lector', 'Oops',);

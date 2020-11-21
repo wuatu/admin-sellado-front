@@ -55,7 +55,7 @@ export class AdministradorComponent implements OnInit {
         console.log(res);
         console.log(res.status);
         if(res.status == 200){
-          this.toastr.success('Administradores obtenidos','Operación satisfactoria');
+          //this.toastr.success('Administradores obtenidos','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('no existen registros de administradores para mostrar','Operación satisfactoria');
           return;
@@ -84,7 +84,7 @@ export class AdministradorComponent implements OnInit {
     let administrador = new Administrador(null, this.addRut, this.addNombre, this.addApellido, this.addPassword,this.addRol);
     this.administradorService.saveAdministrador(administrador).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Línea agregada');
+        //this.toastr.success('Operación satisfactoria', 'Línea agregada');
         this.registroService.creaRegistro("Se ha creado un administrador, rut "+administrador.rut+" y nombre: "+administrador.nombre+" "+administrador.apellido);
         this.listarAdministradores();
         this.addRut = null;
@@ -103,7 +103,6 @@ export class AdministradorComponent implements OnInit {
 
   //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto administrador clickeado a variable global currentAdministradorSelected
   onEditar(administrador: Administrador) {
-    console.log("id: "+administrador.id);
     this.administradorService.getAdministrador(administrador.id).subscribe(
       res => {
         this.currentAdministradorSelected = res;
@@ -131,7 +130,7 @@ export class AdministradorComponent implements OnInit {
     administrador = new Administrador(this.addId, this.addRut,this.addNombre, this.addApellido, this.addPassword,this.addRol);  
     this.administradorService.updateAdministrador(administrador.id, administrador).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Administrador editado');
+        
         this.registroService.creaRegistro("Se ha editado un administrador, id: "+administrador.id+", rut: "+administrador.rut+" y nombre "+administrador.nombre+" "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
@@ -163,7 +162,6 @@ export class AdministradorComponent implements OnInit {
   eliminarAdministrador(administrador: Administrador) {
     this.administradorService.deleteAdministrador(administrador.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Administrador eliminado');
         this.registroService.creaRegistro("Se ha elimidado un administrador, id:  "+administrador.id+", rut; "+administrador.rut+" y nombre: "+administrador.nombre + " "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();

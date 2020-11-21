@@ -6,22 +6,17 @@
             </div>
         </div>
         <div class="row ">
-            <div class="col-6 align-self-start">
-                <div class="form-row">
-                    <div class="col-sm-6 my-1" *ngIf="bandera == true">
-                        <label for="">Buscar</label>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control  ml-1" placeholder="Código Caja" id="criterio" name="criterio">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-auto my-1" *ngIf="bandera == true">
-                        <button class="ml-1 btn btn-primary" (click)="searchCodigoUnitec()" type="submit " style="margin-top: 33px;">Buscar
-                          <i class="fas fa-search" aria-hidden="true"></i>
-                        </button>
+            <div class="col-md-4 col-sm-12 my-1" *ngIf="bandera == true">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input #crit='ngModel' [(ngModel)]="criterio" class="form-control  ml-1" placeholder="Buscar código Caja" id="criterio" name="criterio">
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-12 my-1" *ngIf="bandera == true">
+                <button class="ml-1 btn btn-primary btn-block" (click)="searchCodigoUnitec()" type="submit ">Buscar
+                          <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
             </div>
         </div>
         <div class="row" *ngIf="bandera == true">

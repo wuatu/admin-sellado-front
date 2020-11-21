@@ -52,8 +52,6 @@ export class LectorValidadorComponent implements OnInit {
   ngOnInit() {
     this.listarCalibradores(); 
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);
-
   }
 
   //metodo que lista las calibradores
@@ -73,7 +71,6 @@ export class LectorValidadorComponent implements OnInit {
   }
 
   listarLectoresValidador(){
-    console.log("LISTARLECTORESVALIDADOR");
     console.log(this.selectedCalibradorObject.id);
     this.lectorValidadorService.getLectoresValidadorId(this.selectedCalibradorObject.id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
@@ -82,7 +79,6 @@ export class LectorValidadorComponent implements OnInit {
         this.lectoresValidador=res.body;
         this.bandera = "mostrar";
         if(res.status == 200){
-          this.toastr.success('Lectores validadores obtenido','Operación satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen lectores validadores actualmente para mostrar','Operación satisfactoria');
           return;
@@ -98,7 +94,6 @@ export class LectorValidadorComponent implements OnInit {
   }
 
   changeSelectedCalibrador(newSelected: any) { 
-    console.log("CHANGESELECTEDSELLADORA");
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     this.listarLectoresValidador();
@@ -143,7 +138,6 @@ export class LectorValidadorComponent implements OnInit {
     
     this.lectorValidadorService.saveLectorValidador(lectorValidador).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Lector agregado');
         this.registroService.creaRegistro("Se ha creado un lector validador, nombre: "+this.nombreValidador);
         this.nombreValidador = null;
         this.ipValidador = null;
@@ -172,7 +166,6 @@ export class LectorValidadorComponent implements OnInit {
   eliminarLector(lectorValidador: LectorValidador) {
     this.lectorValidadorService.deleteLectorValidador(lectorValidador.id).subscribe(
       res => {
-        this.toastr.success('Operación satisfactoria', 'Lector Validador eliminado');
         this.registroService.creaRegistro("Se ha eliminado un lector validador, id: "+ lectorValidador.id);
         console.log(res);
         this.listarLectoresValidador();
@@ -191,10 +184,6 @@ export class LectorValidadorComponent implements OnInit {
     this.ipValidador = this.currentLectorValidadorSelected.ip;
     this.max_wait_time = this.currentLectorValidadorSelected.max_wait_time;
     this.registro_inicial_lectura = this.currentLectorValidadorSelected.registro_inicial_lectura;
-    console.log("nombre: "+this.nombreValidador);
-    console.log("ip: "+this.ipValidador);
-    console.log("max: "+this.max_wait_time);
-
   }
 
   //metodo que sirve para editar un lector
@@ -210,10 +199,7 @@ export class LectorValidadorComponent implements OnInit {
       lectorValidador = new LectorValidador(this.currentLectorValidadorSelected.id, this.nombreValidador, this.ipValidador, this.max_wait_time,  this.selectedCalibradorObject.id, this.registro_inicial_lectura);
       this.lectorValidadorService.updateLectorValidador(lectorValidador.id, lectorValidador).subscribe(
         res => {
-          this.toastr.success('Operación satisfactoria', 'Lector Validador editado');
           this.registroService.creaRegistro("Se ha editado un lector Validador, id: "+lectorValidador.id+" y nombre: "+lectorValidador.nombre);
-          console.log(res);
-          
           this.listarLectoresValidador();
           this.currentLectorValidadorSelected = null;
           this.nombreValidador = null;
@@ -222,7 +208,6 @@ export class LectorValidadorComponent implements OnInit {
           this.registro_inicial_lectura = null;
         },
         err => {
-          console.log(err);
           this.registroDevService.creaRegistroDev('No se pudo editar el lector-validador, método editarLector, component lector-validador');
         
           this.toastr.error('No se pudo editar el lector Validador', 'Oops',);

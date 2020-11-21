@@ -52,16 +52,12 @@ export class CodigoUnitecComponent implements OnInit {
       return;
     }
     this.bandera = false;
-    console.log("el criterio de búsqueda es :"+this.criterio);
     this.codigoUnitecService.searchCodeUnitec(this.criterio).subscribe(
       res =>{
         if(res.status == 200){
-          console.log("resultado búsqueda : "+ res.body);
           this.codigosUnitec = null;
           this.codigosUnitec = res.body;
           this.bandera = true;
-          
-          this.toastr.success('Codigos unitec obtenidos','Búsqueda satisfactoria');
         }else if(res.status == 204){
           this.toastr.success('No existen registros para mostrar en la búsqueda','Búsqueda satisfactoria');
           return;  
@@ -82,8 +78,6 @@ export class CodigoUnitecComponent implements OnInit {
         this.codigosUnitec = res.body;
         if(res.status == 200){
           this.bandera = true;
-          this.toastr.success('Cajas unitec obtenidas','Operación satisfactoria');
-
           for (let element of this.codigosUnitec) {
             
             let codigoUnitecExcel = new CodigoUnitecExcel(element.cod_caja, element.codigo_confection, element.confection, element.codigo_embalaje, element.embalaje, element.codigo_envase, element.envase, element.categoria, element.categoria_timbrada);
@@ -134,13 +128,10 @@ export class CodigoUnitecComponent implements OnInit {
 
           }
           cont++;
-          console.log("ayuda !!! estoy iterando!! no puedo parar!!!")
         }
-        console.log("sali del while");
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, "cajas_unitec" + "_" + dateDownload.substring(0, 10) + ".xls");
-        console.log("guarde recien la wea!!");
       } else {
         console.log("tamaño del array : " + this.codigosUnitecExportarExcel.size);
         // Se convierte el arreglo con los usuarios en linea 

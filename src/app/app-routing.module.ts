@@ -29,9 +29,6 @@ import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
 
-
-
-
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },

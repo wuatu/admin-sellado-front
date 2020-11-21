@@ -95,14 +95,12 @@ export class TurnoComponent implements OnInit {
     
     this.exportTurnoArray = [];
     this.captureDates();
-    console.log("this.selectedfromDate: " + this.selectedfromDate);
-    console.log("this.selectedToDate: " + this.selectedToDate);
     this.turnoService.getTurnos(this.selectedfromDate, this.selectedToDate).subscribe(
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista lineas
         this.turnos = res.body;
         if(res.status == 200){
-          this.toastr.success('Turnos  obtenidos','Operación satisfactoria');
+
         }else if(res.status == 204){
           this.toastr.success('No existen registros de turnos actualmente para mostrar','Operación satisfactoria');
           return;
@@ -130,7 +128,6 @@ export class TurnoComponent implements OnInit {
       err => {
         
         if (err.status != 404) {
-          console.log(err.status);
           this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos, método listarTurnos, component turno');
           this.toastr.error('No se pudo listar turnos', 'Oops');
         } else {
@@ -213,19 +210,6 @@ export class TurnoComponent implements OnInit {
          let fecha = (new Date()).toISOString();
          XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
       }
-      // Se convierte el arreglo con los usuarios en linea 
-      //var jsonArray = JSON.parse(JSON.stringify(this.exportTurnoArray))
-  
-      //se convierte el Json a xlsx en formato workSheet
-      //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
-  
-      /* genera el workbook y agrega el worksheet */
-      //const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      //XLSX.utils.book_append_sheet(wb, ws, 'turnos');
-  
-      /* Guarda el archivo */
-      //let fecha = (new Date()).toISOString();
-      //XLSX.writeFile(wb, this.nombreExcel +"_"+fecha.substring(0,10) + ".xls");
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar los turnos al archivo excel, método exportarArchivoExcel, component turno');
     }
