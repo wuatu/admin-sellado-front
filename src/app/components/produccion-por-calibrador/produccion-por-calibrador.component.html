@@ -22,7 +22,7 @@
                 <input #dpToDate class="form-control " placeholder="yyyy-MM-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled placeholder="Hasta">
             </div>
             <div class="col-auto my-1">
-                <button class="btn btn-primary form-control" (click)="buscarRegistroCalibrador();contarCajasCalibradorPorFecha()" type="submit">Buscar <i class="fas fa-search" aria-hidden="true"></i></button>
+                <button class="btn btn-primary form-control" (click)="buscarRegistroCalibrador();contarCajasCalibradorPorFecha()" type="submit">Buscar <i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
             <hr>
         </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="col-12  align-self-end p-20" style="margin-bottom: 20px;">
         <div class="text-right">
-            <button class="btn btn-info text-right"><i class="fas fa-box"></i>
+            <button class="btn btn-info text-right"><i class="fa fa-box"></i>
                 Total de cajas selladas: {{numBox}}
             </button>
         </div>
@@ -73,7 +73,7 @@
             <div class="flex-item; no-printme">
                 <div class="col-md-12  align-self-end ">
                     <div class="text-right">
-                        <button class="btn btn-primary  text-right" style="margin-top: 10px; margin-block-end: 30px;" (click)="imprimirGrafico()"><i class="fas fa-print"></i>
+                        <button class="btn btn-primary  text-right" style="margin-top: 10px; margin-block-end: 30px;" (click)="imprimirGrafico()"><i class="fa fa-print"></i>
                             Imprimir gráfico
                         </button>
                     </div>
@@ -143,7 +143,7 @@
     </table>
     <div class="col-md-12  align-self-end ; no-printme">
         <div class="text-right">
-            <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fas fa-download"></i>
+            <button class="btn btn-primary  text-right" (click)="exportarArchivoExcel()"><i class="fa fa-download"></i>
                 Exportar a excel
             </button>
         </div>

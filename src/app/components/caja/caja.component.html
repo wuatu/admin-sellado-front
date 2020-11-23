@@ -17,10 +17,10 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-12 my-1" *ngIf="bandera == true">
                         <button class="ml-1 btn btn-primary" (click)="searchBox()" type="submit ">Buscar
-              <i class="fas fa-search" aria-hidden="true"></i></button>
+              <i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
                     <div class="col-lg-4  col-md-4 col-sm-12 my-1  ">
-                        <button class="ml-1 btn btn-primary" *ngIf="rol != 2" (click)="open(mymodalagregar)"> <i class="fas fa-plus-circle"></i> Agregar
+                        <button class="ml-1 btn btn-primary" *ngIf="rol != 2" (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
                   caja</button>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         </td>
                         <td>
                             <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(caja,mymodalconfirmar)">
-                <i class="fa fa-trash-alt"></i>
+                <i class="fa fa-trash"></i>
               </button>
                         </td>
                     </tr>

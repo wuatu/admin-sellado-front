@@ -47,6 +47,7 @@ import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.
 import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -98,7 +99,8 @@ import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monito
     ToastrModule.forRoot(), // ToastrModule added
     NgbModule,
     NgxPaginationModule,
-    ChartsModule
+    ChartsModule,
+    FontAwesomeModule
   ],
   providers: [
     AuthService,

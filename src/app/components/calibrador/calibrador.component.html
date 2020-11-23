@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(calibrador,mymodalconfirmar)">
-              <i class="fa fa-trash-alt"></i>
+              <i class="fa fa-trash"></i>
             </button>
                     </td>
                 </tr>
@@ -78,7 +78,7 @@
                     <div *ngIf="nombre.errors.required">
                         Nombre de calibrador es obligatorio
                     </div>
-                </div>                
+                </div>
             </div>
             <div class="form-group">
                 <label for="lineaLabel"><b>Cantidad de cajas por minuto:</b></label>
@@ -91,7 +91,7 @@
                     <div *ngIf="cantidadCajas.errors.required">
                         Cantidad de cajas por minuto es obligatorio
                     </div>
-                </div>                
+                </div>
             </div>
         </form>
         <div class="modal-footer">

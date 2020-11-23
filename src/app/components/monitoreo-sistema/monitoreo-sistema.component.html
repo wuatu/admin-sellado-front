@@ -12,15 +12,15 @@
             </div>
         </div>
         <div class="card w-100" *ngIf="selectedCalibradorObject" style="margin-top: 30px;">
-            <div class="card">
+            <div class="card" style="margin: 10px;">
                 <h4 class="card-title text-center"><b>{{selectedCalibradorObject.nombre}}</b></h4>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 my-1">
-                        <div class="card" style="margin-top: 10px; " *ngIf="bandera2 == true">
+                        <div class="card" style="margin: 10px; " *ngIf="bandera2 == true">
                             <div class="card-body">
                                 <h5><b>Rfid salida</b></h5>
                                 <tr>
-                                    <td *ngIf="bigArray3[0].nombre_rfid_salida != 'undefine' ">
+                                    <td *ngIf="bigArray3[0].nombre_rfid_salida != 'undefine' && bigArray3[0].nombre_rfid_salida != '' ">
                                         <h6 class="card-title text-left">{{bigArray3[0].nombre_rfid_salida}}</h6>
                                     </td>
                                 </tr>
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 my-1">
-                        <div class="card" style="margin-top: 10px;" *ngIf="bandera2 == true">
+                        <div class="card" style="margin: 10px;" *ngIf="bandera2 == true">
                             <div class="card-body">
                                 <h5><b>Lector validador</b></h5>
                                 <tr>
@@ -73,12 +73,12 @@
                 </div>
             </div>
             <div let count *ngFor="let bigArray of bigArray2">
-                <div class="card">
+                <div class="card" style="margin: 10px;">
                     <h4 class="card-title text-center" *ngIf="bandera == true"><b>{{bigArray[0][0].nombre_linea}}</b></h4>
                     <div class="row">
 
                         <div class="col-lg-4 col-md-4 my-1">
-                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+                            <div class="card" style="margin: 10px;" *ngIf="bandera == true">
                                 <div class="card-body">
                                     <h5><b>Colaboradores</b></h5>
                                     <div *ngFor="let collaborator of bigArray[0]">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 my-1">
-                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+                            <div class="card" style="margin: 10px;" *ngIf="bandera == true">
                                 <div class="card-body">
                                     <h5><b>Rfid</b></h5>
                                     <tr>
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 my-1">
-                            <div class="card" style="margin-top: 10px;" *ngIf="bandera == true">
+                            <div class="card" style="margin: 10px;" *ngIf="bandera == true">
 
                                 <div class="card-body">
                                     <h5><b>Lector</b></h5>
