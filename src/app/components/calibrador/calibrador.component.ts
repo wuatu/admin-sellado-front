@@ -20,6 +20,7 @@ export class CalibradorComponent implements OnInit {
   calibradores: any;
   currentCalibradorSelected: Calibrador
   nombreCalibrador;
+  cantidadCajasCalibrador;
   rol: number;
   bandera: boolean = false;
 
@@ -28,14 +29,14 @@ export class CalibradorComponent implements OnInit {
     private toastr: ToastrService,
     //servicio de calibrador, contiene los metodos CRUD de calibradors
     private calibradorService: CalibradorService,
-    private registoService:RegistroService,
+    private registoService: RegistroService,
     private registroDevService: RegistroDevService
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.listarCalibradores();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-  
+    console.log("rol: " + this.rol);
   }
 
   //metodo que trae todos los registros de calibradors desde la base de datos
@@ -45,10 +46,12 @@ export class CalibradorComponent implements OnInit {
       res => {
         //los registros se almacena en array calibradores que sirve para llenar la tabla de vista calibradors
         this.calibradores = res.body;
-        if(res.status == 200){
+        console.log(this.calibradores);
+        if (res.status == 200) {
+          //this.toastr.success('Calibradores obtenidos', 'Operación satisfactoria');
           this.bandera = true;
-        }else if(res.status == 204){
-          this.toastr.success('No existen calibradores actualmente para mostrar','Operación satisfactoria');
+        } else if (res.status == 204) {
+          this.toastr.success('No existen calibradores actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
       },
@@ -66,18 +69,21 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que crea un nuevo calibrador
   agregarCalibrador(form: NgForm) {
-    if (!this.nombreCalibrador) {
+    if (!this.nombreCalibrador || !this.cantidadCajasCalibrador) {
       this.toastr.error('No se pudo guardar calibrador', 'Oops');
       return;
     }
-    let calibrador = new Calibrador(null, this.nombreCalibrador);
+    let calibrador = new Calibrador(null, this.nombreCalibrador, this.cantidadCajasCalibrador);
     this.calibradorService.saveCalibrador(calibrador).subscribe(
       res => {
         //crea registro        
-        let mensajeRegistro="Se ha creado un nuevo calibrador, nombre: "+ this.nombreCalibrador;        
+        let mensajeRegistro = "Se ha creado un nuevo calibrador, nombre: " + this.nombreCalibrador;
         this.registoService.creaRegistro(mensajeRegistro);
+        //toatsr
+        //this.toastr.success('Operación satisfactoria', 'Calibrador agregada');
         this.listarCalibradores();
-        this.nombreCalibrador = null;        
+        this.nombreCalibrador = null;
+        this.cantidadCajasCalibrador = null;
       },
       err => {
         console.log(err);
@@ -95,18 +101,21 @@ export class CalibradorComponent implements OnInit {
 
   //metodo que sirve para editar una calibrador
   editarCalibrador(form: NgForm) {
-    if (!form.value.nombre) {
+    if (!form.value.nombre || !form.value.cantidadCajas) {
       this.toastr.error('No se pudo editar calibrador, por favor ingrese un nombre para el calibrador', 'Oops',);
       return;
     }
 
-    let calibrador = new Calibrador(form.value.id, form.value.nombre);
+    let calibrador = new Calibrador(form.value.id, form.value.nombre, form.value.cantidadCajas);
 
     this.calibradorService.updateCalibrador(calibrador.id, calibrador).subscribe(
       res => {
         //crea registro        
-        let mensajeRegistro="Se ha editado un calibrador, id: "+ calibrador.id;        
+        let mensajeRegistro = "Se ha editado un calibrador, id: " + calibrador.id;
         this.registoService.creaRegistro(mensajeRegistro);
+
+        //this.toastr.success('Operación satisfactoria', 'Calibrador editada');
+        console.log(res);
         this.listarCalibradores();
         this.currentCalibradorSelected = null;
       },
@@ -129,8 +138,11 @@ export class CalibradorComponent implements OnInit {
     this.calibradorService.deleteCalibrador(calibrador.id).subscribe(
       res => {
         //crea registro        
-        let mensajeRegistro="Se ha eliminado un calibrador, nombre: "+ calibrador.nombre;        
+        let mensajeRegistro = "Se ha eliminado un calibrador, nombre: " + calibrador.nombre;
         this.registoService.creaRegistro(mensajeRegistro);
+
+        //this.toastr.success('Operación satisfactoria', 'Calibrador eliminado');
+        console.log(res);
         this.listarCalibradores();
       },
       err => {
