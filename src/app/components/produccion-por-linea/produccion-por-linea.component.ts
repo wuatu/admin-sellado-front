@@ -423,9 +423,7 @@ export class ProduccionPorLineaComponent implements OnInit {
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
   }
 
-  onSubmitBuscarUsuarioForm() {
 
-  }
   /***************************************************************************************************************************************************/
 
   /************************** GRAFICO ******************************************************************************************************************/

@@ -119,10 +119,6 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   }
 
-  onSubmitBuscarUsuarioForm() {
-
-  }
-
   listarUsuarios() {
     this.usuarioService.getUsuarios().subscribe(
       res => {

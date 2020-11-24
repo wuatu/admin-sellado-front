@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="col-12; no-printme">
-            <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+            <form #buscarUsuario="ngForm">
                 <div class="form-row">
                     <div class="col-sm-3 my-1">
                         <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Rut Colaborador">

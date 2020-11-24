@@ -52,7 +52,7 @@
         <hr>
         <div class="row">
             <div class="col-md-4 col-sm-12 my-1">
-                <form #buscarUsuario="ngForm" (ngSubmit)="onSubmitBuscarUsuarioForm(buscarUsuario)">
+                <form #buscarUsuario="ngForm">
                     <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Rut colaborador">
                 </form>
             </div>

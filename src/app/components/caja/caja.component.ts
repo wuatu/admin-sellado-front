@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
-
+import {faCoffee} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-caja',
@@ -32,7 +32,8 @@ export class CajaComponent implements OnInit {
   rol: number;
   criterio:string = null;
   bandera:boolean = false;
-
+  
+  faCoffee = faCoffee;
   constructor(
     private cajaService: CajaService,
     private toastr: ToastrService,

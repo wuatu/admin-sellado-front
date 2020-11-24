@@ -33,7 +33,7 @@ export class MenubarComponent implements OnInit {
     }
   }
 
-  showMenu(isVisible: boolean) {
+  showMenu() {
     this.menubar.visibleToggleAction();
   }
 

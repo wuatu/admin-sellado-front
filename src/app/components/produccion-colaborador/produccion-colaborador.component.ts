@@ -302,9 +302,6 @@ export class ProduccionColaboradorComponent implements OnInit {
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
   }
 
-  onSubmitBuscarUsuarioForm() {
-
-  }
 
   /*****************************************************************/
   /************************** MODAL EDITAR *************************/
