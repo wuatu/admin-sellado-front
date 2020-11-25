@@ -173,6 +173,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
           //console.log(res.body);
           this.productionByLine.push(res.body);
           if(i == this.lineas.length-1){
+            console.log(this.productionByLine);
             this.ordenarArray(this.productionByLine);
           }
           i++;
@@ -195,6 +196,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
         }
       }
     }
+    //console.log("ordenar array");
+    //console.log(this.arrayAux)
     this.pushData(this.arrayAux);
     
   }

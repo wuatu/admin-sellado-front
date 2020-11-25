@@ -83,7 +83,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-  
+    this.agregarRegistroDeCajas();
     this.listarCalibradores();
   }
 
@@ -253,9 +253,9 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
     //for (let d = 30; d <= 30; d++) {
       let count = 0;
-      for (let h = 14; h <= 14; h++) {
+      for (let h = 17; h <= 18; h++) {
         for (let m = 0; m < 60; m++) {
-          for (let s = 0; s < 60; s = s + 5) {
+          for (let s = 0; s < 60; s = s + 8) {
             count++;
             //this.dia = d.toString();
             //if (d < 10) {
@@ -273,7 +273,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
             if (s < 10) {
               this.segundo = "0" + s;
             }
-            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-13", this.hora + ":" + this.minuto + ":" + this.segundo, "2020-11-13", "13:59:59", 1, 1, 0);
+            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 24, "Línea 2", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-25", this.hora + ":" + this.minuto + ":" + this.segundo, "2020-11-25", "17:45:00", 1, 1, 0);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");

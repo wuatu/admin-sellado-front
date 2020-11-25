@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
-
+import { timer,interval, Subscription, Observable } from 'rxjs';
 
 
 @Component({
@@ -29,9 +29,10 @@ export class UsuarioComponent implements OnInit {
   selectedUsuarioObject:any;
   selectedUsuarioObjectModificar:any;
   selectedUsuarioText:string="Nombre";
-  
+  aux:any;
   rol: number;
-
+  registerRfid:any = ({id:'undifine', codigo:'RFID'});
+  subscriptionTimerTask: Subscription;
   constructor(
     private modalService: NgbModal,
     private toastr: ToastrService,
@@ -85,6 +86,11 @@ export class UsuarioComponent implements OnInit {
         this.apellidoUsuario = null;
         this.rfidUsuario = null;
         this.listarUsuarios();
+        if (this.subscriptionTimerTask != null) {
+          this.subscriptionTimerTask.unsubscribe();
+        }
+        this.eliminarRegistroRfid();
+    
         
       },
       err => {
@@ -94,6 +100,10 @@ export class UsuarioComponent implements OnInit {
         this.nombreUsuario = null;
         this.apellidoUsuario = null;
         this.rfidUsuario = null;
+        if (this.subscriptionTimerTask != null) {
+          this.subscriptionTimerTask.unsubscribe();
+        }
+        this.eliminarRegistroRfid();
       }
     );
 
@@ -160,13 +170,55 @@ export class UsuarioComponent implements OnInit {
       }
     );
   }
+  //método que elimina los registros de rfid
+  eliminarRegistroRfid(){
+    this.usuarioService.deleteRegisterRfid().subscribe(
+      res => {
+        this.registerRfid = ({id:'undifine', codigo:'Rfid'});
+        this.RegistroService.creaRegistro("Se ha eliminado el registro rfid");
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo eliminar el registro rfid');
+      }
+    );
+  }
+
+  //metodo que obtiene el codigo del rfid a vincular con el colaborador.
+  getRegistroRfid(){
+    this.usuarioService.getRegisterRfid().subscribe(
+      res=>{
+        console.log(res.body);
+        if(res.status == 200){
+          this.aux = res.body;
+          if(this.registerRfid.codigo != this.aux.codigo){
+            this.registerRfid = this.aux;
+          }
+        }
+      },
+      err=>{
+        this.registroDevService.creaRegistroDev('No se pudo obtener el refistro del rfid a vincular con el colaborador, método getRegisterRfid, component usuario');
+       
+      }
+    );
+  }
 
   //metodo que abre un modal
-  open(modal) {    
+  open(modal,is_add:string) { 
+    if(is_add == '1'){
+      this.subscriptionTimerTask = timer(0, 2000).subscribe(() => {
+        console.log("me ejecuto");
+        this.getRegistroRfid();
+      });
+      
+    }
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      if (this.subscriptionTimerTask != null) {
+        this.subscriptionTimerTask.unsubscribe();
+      }
+      this.eliminarRegistroRfid();
     });
   }
 
@@ -174,16 +226,24 @@ export class UsuarioComponent implements OnInit {
   private getDismissReason(reason: any): string {
     console.log(reason);
     if (reason === ModalDismissReasons.ESC) {
+      if (this.subscriptionTimerTask != null) {
+        this.subscriptionTimerTask.unsubscribe();
+      }
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       console.log("sera");
+      if (this.subscriptionTimerTask != null) {
+        this.subscriptionTimerTask.unsubscribe();
+      }
       return 'by clicking on a backdrop';
     } else {
       if (reason == 'ok') {
         console.log("hola");
         console.log(this.currentUsuarioSelected);
+        if (this.subscriptionTimerTask != null) {
+          this.subscriptionTimerTask.unsubscribe();
+        }
         this.eliminarUsuario(this.currentUsuarioSelected);
-        
       }
       return `with: ${reason}`;
     }

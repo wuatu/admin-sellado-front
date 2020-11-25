@@ -18,6 +18,14 @@ export class UsuarioService {
     return this.httpClient.get(`${this.API_URL}/usuario/${id}`,{observe: 'response'});
   }
 
+  getRegisterRfid(){
+    return this.httpClient.get(`${this.API_URL}/registro_rfid/`,{observe: 'response'});
+  }
+
+  deleteRegisterRfid(){
+    return this.httpClient.delete(`${this.API_URL}/registro_rfid/`);
+  }
+
   deleteUsuario(id:string){
     return this.httpClient.delete(`${this.API_URL}/usuario/${id}`);
   }

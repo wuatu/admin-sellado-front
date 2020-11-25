@@ -11,7 +11,7 @@
             <div class="col-12 align-self-end">
 
                 <div class="text-left">
-                    <button class="ml-1 btn btn-primary float-right " *ngIf="rol!=2" (click)="open(modal_agregar_usuario)"><i class="fa fa-plus-circle"></i>
+                    <button class="ml-1 btn btn-primary float-right " *ngIf="rol!=2" (click)="open(modal_agregar_usuario,'1')"><i class="fa fa-plus-circle"></i>
                             Agregar colaborador
                           </button>
                 </div>
@@ -48,12 +48,12 @@
                 <td>{{usuario.apellido}}</td>
                 <td>{{usuario.rfid}}</td>
                 <td>
-                    <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(usuario);open(modal_editar_usuario)">
+                    <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(usuario);open(modal_editar_usuario,'0')">
                         <i class="fa fa-edit" ></i>
                       </button>
                 </td>
                 <td>
-                    <button class="btn btn-danger text-white mr-1" *ngIf="rol!=2" (click)="onEliminar(usuario);open(modal_confirmar_eliminacion_usuario)">
+                    <button class="btn btn-danger text-white mr-1" *ngIf="rol!=2" (click)="onEliminar(usuario);open(modal_confirmar_eliminacion_usuario,'0')">
                         <i class="fa fa-trash" ></i>
                       </button>
                 </td>
@@ -118,7 +118,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rfid:</b></label>
                 <div class="input-group">
-                    <input type="text" #rfid='ngModel' [(ngModel)]="rfidUsuario" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rfid='ngModel' [(ngModel)]="registerRfid.codigo" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rfid.invalid && (rfid.dirty || rfid.touched)" class="alert alert-danger">

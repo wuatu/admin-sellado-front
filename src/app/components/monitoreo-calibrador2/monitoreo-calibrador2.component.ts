@@ -57,7 +57,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
-
+  constanteDivision = 0;
   constructor(
     private toastr: ToastrService,
     private administradorService: AdministradorService,
@@ -129,7 +129,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         this.calibradores=res.body;
-        
+        this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
         this.getLineOfCaliper();
         
       },
@@ -393,7 +393,30 @@ export class MonitoreoCalibrador2Component implements OnInit {
     
   ]
 
-  pushData(dataNumberBox: any []){
+  pushData(dataNumberBox: any[]) {
+    this.barChartData[0].data = [];
+    this.barChartData[0].backgroundColor =[];
+    this.barChartLabels = [];
+    let i = 0;
+    for (let data of dataNumberBox) {
+      //console.log(data);
+      if (data.total <= this.constanteDivision) {        
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("red");
+      } else if (data[0].total > this.constanteDivision && data.total <= this.constanteDivision * 2) {
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("yellow");
+      } else {
+        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].backgroundColor.push("green");
+      }
+      this.barChartLabels.push(`${data[0].nombre_linea}`);
+      i++;
+    }
+ 
+  }
+
+  /*pushData(dataNumberBox: any []){
     this.barChartData[0].data = [];
     this.barChartLabels= [];
     let i = 0;
@@ -402,7 +425,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
       this.barChartLabels.push(`${data[0].nombre_linea}`);
     
     }
-  }
+  }*/
   /*****************************************************************************/
 
 
