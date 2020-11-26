@@ -71,6 +71,9 @@ export class SeguimientoDeCajasComponent implements OnInit {
   bandera: number = 0;
   nombreColaborador: any;
 
+  marked = true;
+  theCheckbox = true;
+
   constructor(private toastr: ToastrService,
     private seguimientoDeCajasService: SeguimientoDeCajasService,
     private calibradorService: CalibradorService,
@@ -83,10 +86,14 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-    this.agregarRegistroDeCajas();
+    //this.agregarRegistroDeCajas();
     this.listarCalibradores();
   }
 
+  toggleVisibility(e){
+    this.marked= e.target.checked;
+    console.log("marked: ",this.marked);
+  }
 
   listarLineas(id: string) {
     this.lineaService.getLineasId(id).subscribe(
@@ -106,6 +113,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
       }
     );
   }
+
+  
 
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
@@ -253,9 +262,9 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
     //for (let d = 30; d <= 30; d++) {
       let count = 0;
-      for (let h = 11; h <= 11; h++) {
-        for (let m = 0; m < 30; m++) {
-          for (let s = 0; s < 60; s = s + 5) {
+      for (let h = 19; h < 20; h++) {
+        for (let m = 30; m < 60; m++) {
+          for (let s = 0; s < 60; s = s + 2) {
             count++;
             //this.dia = d.toString();
             //if (d < 10) {
@@ -273,7 +282,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
             if (s < 10) {
               this.segundo = "0" + s;
             }
-            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 28, "Línea 3", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "2020-11-26", "17:45:00", 1, 1, 0);
+            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "", "", 0, 1, 71);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");

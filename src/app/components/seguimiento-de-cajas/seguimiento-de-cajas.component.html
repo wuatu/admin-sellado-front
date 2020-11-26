@@ -61,6 +61,12 @@
             <div class="col-lg-4 col-sm-12  my-1">
                 <input type="text" #envase='ngModel' [(ngModel)]="toSearch" name="rut" id="rut" class="form-control" placeholder="Criterio">
             </div>
+            <div class="form-check" style="margin-top: 10px;">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" [(ngModel)]="theCheckbox" data-md-icheck (change)="toggleVisibility($event)" checked>
+                <label class="form-check-label" for="defaultCheck1">
+                  Cajas Validadas
+                </label>
+            </div>
         </div>
 
     </div>
@@ -99,17 +105,19 @@
         </thead>
         <tbody>
             <tr *ngFor="let seguimiento of seguimientoDeCajas  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
-                <th scope="row">{{i+1}}</th>
-                <td>{{seguimiento.id_caja}}</td>
-                <td>{{seguimiento.envase_caja}}</td>
-                <td>{{seguimiento.nombre_calibrador}}</td>
-                <td>{{seguimiento.nombre_linea}}</td>
-                <td>{{seguimiento.rut_usuario}}</td>
-                <td>{{seguimiento.nombre_usuario}}</td>
-                <td>{{seguimiento.apellido_usuario}}</td>
-                <td>{{seguimiento.fecha_sellado}}</td>
-                <td>{{seguimiento.hora_sellado}}</td>
-                <td>{{seguimiento.is_verificado}}</td>
+
+                <th scope="row" *ngIf="marked == true && seguimiento.is_verificado == 1">{{i+1}}</th>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.id_caja}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.envase_caja}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.nombre_calibrador}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.nombre_linea}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.rut_usuario}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.nombre_usuario}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.apellido_usuario}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.fecha_sellado}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.hora_sellado}}</td>
+                <td *ngIf="marked == true && seguimiento.is_verificado == 1">{{seguimiento.is_verificado}}</td>
+
             </tr>
         </tbody>
     </table>
