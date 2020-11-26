@@ -409,10 +409,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
     let i = 0;
     for (let data of dataNumberBox) {
       //console.log(data);
-      if (data.total <= this.constanteDivision) {        
+      if (data[0].total <= this.constanteDivision) {        
         this.barChartData[0].data.push(data[0].total);
         this.barChartData[0].backgroundColor.push("red");
-      } else if (data[0].total > this.constanteDivision && data.total <= this.constanteDivision * 2) {
+      } else if (data[0].total > this.constanteDivision && data[0].total <= this.constanteDivision * 2) {
         this.barChartData[0].data.push(data[0].total);
         this.barChartData[0].backgroundColor.push("yellow");
       } else {

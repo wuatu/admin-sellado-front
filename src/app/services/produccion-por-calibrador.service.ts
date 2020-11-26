@@ -10,7 +10,6 @@ export class ProduccionPorCalibradorService {
   constructor(private httpClient: HttpClient) { }
   
   getboxInCaliper(id_calibrador: number, fecha_desde: string, fecha_hasta: string ){
-    console.log(id_calibrador + fecha_desde + fecha_hasta + "servicio");
     return this.httpClient.get(`${this.API_URL}/numero_cajas_calibrador/${id_calibrador}/${fecha_desde}/${fecha_hasta}`);
   }
 

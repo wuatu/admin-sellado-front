@@ -5,11 +5,10 @@
                 <h3><b>{{ time | date: 'HH:mm:ss a'}} </b></h3>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 my-1 text-right">
-                <button class="btn {{botonIniciarTurnoClass}} form-control"
-                    (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
+                <button class="btn {{botonIniciarTurnoClass}} form-control" (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
                 </button>
             </div>
-            
+
         </div>
     </div>
     <div class="col-12 my-1 text-center">
@@ -19,7 +18,7 @@
 
 <div class="row justify-content-center">
     <div class="col-12 my-1">
-        <form #buscarPatenteRobadaForm="ngForm" (ngSubmit)="onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm)">
+        <form #buscarPatenteRobadaForm="ngForm">
             <!--<div class="form-row">
 
                 <div class="col-lg-3 col-sm-12 my-1">
@@ -39,13 +38,9 @@
             <div class="col">
                 <div class="form-group hidden">
                     <div class="input-group">
-                        <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker"
-                            [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
-                            [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
+                        <input name="d" type="hidden" class="form-control" ngbDatepicker #d="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!">
                         <ng-template #t let-date let-focused="focused">
-                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
-                                [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
-                                (mouseleave)="hoveredDate = null">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
                                 {{ date.day }}
                             </span>
                         </ng-template>
@@ -145,8 +140,7 @@
         <p>¿Seguro que quieres {{iniciarCerrar}} turno?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary"
-            (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>
@@ -165,8 +159,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control"
-                        placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                 </div>
 
                 <!--Valida formulario nombre-->
@@ -181,8 +174,7 @@
 
                 <label for="lineaLabel"><b>Contraseña:</b></label>
                 <div class="input-group">
-                    <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password"
-                        class="form-control" placeholder="Contraseña">
+                    <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password" class="form-control" placeholder="Contraseña">
                 </div>
 
                 <!--Valida formulario contraseña-->
@@ -194,10 +186,8 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary"
-                (click)="modal.dismiss('cancel click')">Cancelar</button>
-            <button type="submit" class="btn btn-primary"
-                (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="submit" class="btn btn-primary" (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
         </div>
     </div>
 </ng-template>
@@ -216,10 +206,8 @@
         <h5 class="mt-3">¿Quieres iniciar turno?</h5>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary"
-            (click)="modal.dismiss('cancel click')">Cancelar</button>
-        <button type="button" class="btn btn-primary"
-            (click)="open(myModalAutenticar);modal.dismiss('aceptar click')">Aceptar</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="open(myModalAutenticar);modal.dismiss('aceptar click')">Aceptar</button>
     </div>
 </ng-template>
 <!--fin modal autenticacion-->

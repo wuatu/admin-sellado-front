@@ -17,7 +17,7 @@ export class RegistroDevService {
     return this.httpClient.get(`${this.API_URL}/registros_dev`,{observe: 'response'});    
   }
   postRegistroDev(registroDev:RegistroDev){
-    console.log("registro Dev"+ registroDev);
+
     return this.httpClient.post(`${this.API_URL}/registro_dev`,registroDev);    
   }
 

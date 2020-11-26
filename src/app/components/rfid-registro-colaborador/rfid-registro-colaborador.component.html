@@ -3,43 +3,27 @@
         <br>
         <div class="row justify-content-center">
             <div class="col-12">
-                <h1 class="text-center"><b>RFID</b></h1>
+                <h1 class="text-center"><b>Rfid Registro Colaborador</b></h1>
             </div>
         </div>
         <br>
-        <div class="row justify-content-center">
+        <div class="row justify-content-end">
 
-            <div class="col-md-4 col-sm-12 my-1 align-self-end text-left">
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-12 my-1 align-self-end text-left">
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedLineaText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
-                    </div>
-                </div>
-            </div>
             <div class="col-md-3 col-sm-12 align-self-end">
-                <div class="text-right" *ngIf="selectedCalibradorObject && selectedLineaObject">
-                    <button class="btn btn-primary btn-block text-center" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
-            Agregar RFID</button>
+                <div class="text-right">
+                    <button class="btn btn-primary  btn-block text-center" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+          Agregar Rfid </button>
                 </div>
             </div>
         </div>
         <br>
-        <div class="row" *ngIf="rfids">
+        <div class="row" *ngIf="rfidsRegistroColaborador">
             <div class="col-12">
-                <h4>Lista de RFID</h4>
+                <h4>Lista de Rfid Registro Colaborador</h4>
             </div>
         </div>
         <!--Tabla de contenido-->
-        <table class="table table-hover" *ngIf="rfids">
+        <table class="table table-hover" *ngIf="rfidsRegistroColaborador">
             <thead>
                 <tr>
                     <th scope="col">N°</th>
@@ -56,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let rfid of rfids; let i = index">
+                <tr *ngFor="let rfid of rfidsRegistroColaborador; let i = index">
                     <th scope="row">{{i+1}}</th>
                     <td>{{rfid.nombre}}</td>
                     <td>{{rfid.ip}}</td>
@@ -66,13 +50,13 @@
                     <td>{{rfid.dataBits}}</td>
                     <td>
                         <button class="btn btn-primary text-white mr-1" *ngIf="rol!=2" (click)="onEditar(rfid);open(mymodaleditar)">
-              <i class="fa fa-edit"></i>
-            </button>
+            <i class="fa fa-edit"></i>
+          </button>
                     </td>
                     <td>
                         <button class="btn btn-danger text-white mr-1" *ngIf="rol!=2" (click)="onEliminar(rfid,mymodalconfirmar)">
-              <i class="fa fa-trash"></i>
-            </button>
+            <i class="fa fa-trash"></i>
+          </button>
                     </td>
                 </tr>
             </tbody>
@@ -83,39 +67,26 @@
 <!--modal agregar-->
 <ng-template #mymodalagregar let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Agregar RFID</h4>
+        <h4 class="modal-title" id="modal-basic-title">Agregar Rfid Registro Colaborador</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+    <span aria-hidden="true">×</span>
+  </button>
     </div>
     <div class="modal-body">
         <form #myform="ngForm">
             <div class="form-group">
-                <label for="rfidLabel"><b>Nombre RFID:</b></label>
+                <label for="rfidLabel"><b>Nombre Rfid Registro Colaborador:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreRfidAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="nombreRfidRegistroColaboradorAdded" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
 
                 <!--Valida formulario nombre-->
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
                     <div *ngIf="nombre.errors.required">
-                        Nombre de RFID es obligatorio
+                        Nombre de Rfid Registro Colaborador es obligatorio
                     </div>
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label for="rfidLabel"><b>Ip RFID:</b></label>
-                <div class="input-group">
-                    <input type="text" #ip='ngModel' [(ngModel)]="ipRfidAdded" name="ip" id="ip" class="form-control" placeholder="ip" required [ngClass]="{ 'is-invalid': submitted && rfid.errors }">
-                </div>-->
-
-            <!--Valida formulario nombre
-                <div *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="alert alert-danger">
-                    <div *ngIf="ip.errors.required">
-                        Ip es obligatorio
-                    </div>
-                </div>
-            </div>-->
             <label for="lineaLabel"><b>Port:</b></label>
             <div ngbDropdown>
 
@@ -155,7 +126,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="agregarRfid(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="agregarRfidRegistroColaborador(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -164,21 +135,21 @@
 <!--modal editar-->
 <ng-template #mymodaleditar let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Editar RFID</h4>
+        <h4 class="modal-title" id="modal-basic-title">Editar Rfid Registro Colaborador</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+    <span aria-hidden="true">×</span>
+  </button>
     </div>
     <div class="modal-body">
         <form #myform="ngForm">
             <!--Id de rfid clickeada se almacena en un input hidden-->
             <div class="form-group">
-                <input type="hidden" ngModel [(ngModel)]="currentRfidSelected.id" name="id" id="id">
+                <input type="hidden" ngModel [(ngModel)]="currentRfidRegistroColaboradorSelected.id" name="id" id="id">
             </div>
             <div class="form-group">
-                <label for="patentelabel"><b>Nombre Rfid:</b></label>
+                <label for="patentelabel"><b>Nombre Rfid Registro Colaborador:</b></label>
                 <div class="input-group">
-                    <input type="text" #nombre='ngModel' [(ngModel)]="currentRfidSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
+                    <input type="text" #nombre='ngModel' [(ngModel)]="currentRfidRegistroColaboradorSelected.nombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && nombre.errors }">
                 </div>
                 <!--Valida formulario nombre-->
                 <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -187,19 +158,6 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="form-group">
-                <label for="rfidLabel"><b>Ip RFID:</b></label>
-                <div class="input-group">
-                    <input type="text" #ip='ngModel' [(ngModel)]="currentRfidSelected.ip" name="ip" id="ip" class="form-control" placeholder="ip" required [ngClass]="{ 'is-invalid': submitted && rfid.errors }">
-                </div>-->
-
-            <!--Valida formulario nombre
-                <div *ngIf="ip.invalid && (ip.dirty || ip.touched)" class="alert alert-danger">
-                    <div *ngIf="ip.errors.required">
-                        Ip es obligatorio
-                    </div>
-                </div>
-            </div>-->
             <label for="lineaLabel"><b>Port:</b></label>
             <div ngbDropdown>
                 <button class="btn btn-outline-primary  " id="dropdownBasic1" ngbDropdownToggle style="width: 190px">{{portText}}</button>
@@ -237,7 +195,7 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="editarRfid(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid || !selectedBaudRate || !selectedParityBit || !selectedStopBits || !selectedDataBits || !selectedPort" class="btn btn-primary" (click)="editarRfidRegistroColaborador(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -246,13 +204,13 @@
 <!--Modal confirmación-->
 <ng-template #mymodalconfirmar let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-title">Eliminar rfid</h4>
+        <h4 class="modal-title" id="modal-title">Eliminar Rfid Registro Colaborador</h4>
         <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <span aria-hidden="true">&times;</span>
+  </button>
     </div>
     <div class="modal-body">
-        <p>¿Seguro que quieres eliminar el rfid?</p>
+        <p>¿Seguro que quieres eliminar el Rfid Registro Colaborador?</p>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>

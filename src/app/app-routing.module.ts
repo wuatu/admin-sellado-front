@@ -28,6 +28,7 @@ import { CodigoUnitecComponent } from './components/codigo-unitec/codigo-unitec.
 import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario-en-linea/monitoreo-usuario-en-linea.component';
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
+import { RfidRegistroColaboradorComponent } from './components/rfid-registro-colaborador/rfid-registro-colaborador.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -63,6 +64,7 @@ const routes: Routes = [
   { path: 'monitoreousuarioenlinea', component:MonitoreoUsuarioEnLineaComponent, canActivate: [AuthGuard] },
   { path: 'rfidSalida', component:RfidSalidaComponent, canActivate: [AuthGuard] },
   { path: 'monitoreoSistema', component:MonitoreoSistemaComponent, canActivate: [AuthGuard] },
+  { path: 'rfidRegistroColaborador', component:RfidRegistroColaboradorComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

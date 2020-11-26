@@ -48,6 +48,7 @@ import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RfidRegistroColaboradorComponent } from './components/rfid-registro-colaborador/rfid-registro-colaborador.component';
 
 
 
@@ -86,7 +87,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CodigoUnitecComponent,
     MonitoreoUsuarioEnLineaComponent,
     RfidSalidaComponent,
-    MonitoreoSistemaComponent
+    MonitoreoSistemaComponent,
+    RfidRegistroColaboradorComponent
   ],
   imports: [
     BrowserModule,

@@ -95,19 +95,15 @@ export class MonitoreoComponent implements OnInit {
     //get registro
     this.getRegistro();
     
-    this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
+    
+    /*this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
       this.monitoreoService.getGetLastTurno().subscribe(
         res => {
           if(res.status == 200){
             console.log(res.body[0]);
-            if(res.body[0].fecha_apertura == ""){
-              this.getAverageLastHour();
-              this.getProduccionTurno();
-              this.getAverageforMinute();
-              
-            }//else{
-              //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
-            //}
+            this.getProduccionTurno();
+            this.getAverageforMinute();
+            this.getAverageLastHour();
             
           }
         },
@@ -116,8 +112,7 @@ export class MonitoreoComponent implements OnInit {
           this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
         }
       )
-    });
-    
+    });*/
     
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
@@ -137,15 +132,30 @@ export class MonitoreoComponent implements OnInit {
     
   }
 
-  onSubmitBuscarPatenteRobadaForm(buscarPatenteRobadaForm:string){
-
-  }
 
   /*************************************************************************************************/
   /**************************************** PRODUCCION DEL TURNO ***********************************/
   /*************************************************************************************************/
   
-
+  getProduccion(){
+    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
+      this.monitoreoService.getGetLastTurno().subscribe(
+        res => {
+          if(res.status == 200){
+            console.log(res.body[0]);
+            this.getProduccionTurno();
+            this.getAverageforMinute();
+            this.getAverageLastHour();
+            
+          }
+        },
+        err => {
+          console.log(err.status); 
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
+        }
+      )
+    });
+  }
 
   
 
@@ -155,10 +165,12 @@ export class MonitoreoComponent implements OnInit {
       res => {
         console.log(res);
         if(res.status == 200){
+          this.turnoActual = res.body; 
+          this.getProduccion();
         }else if(res.status == 204){
           this.toastr.success('no hay turnos actualmente para mostrar','Operación satisfactoria');
         }
-        this.turnoActual = res.body; 
+        
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
@@ -171,6 +183,7 @@ export class MonitoreoComponent implements OnInit {
   // Método que realiza la ejecución para saber el promedio de cajas selladas por minuto  durante el turno
   //a la consulta de la base de datos se le pasa el calibrador, la fecha de inicio del turno, la hora de inicio del turno y si el turno esta en el mismo dia que inicio o se extendio a otro
   getAverageforMinute(){
+    
     //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
     this.fechaActual = this.fecha().substring(0,10);
     // En el caso de que el turno se mantenga en el dia en que inicio
