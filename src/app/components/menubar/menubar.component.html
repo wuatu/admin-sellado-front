@@ -25,7 +25,7 @@
         <li (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)">
             <a #administrar><i class="fa fa-plus-circle"></i>Administrar <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li *ngIf="expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/caja"><i class="fa fa-dropbox"></i>Cajas</a></li>
+                <li *ngIf="expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/caja"><i class="fa fa-dropbox"></i>Caja sellado</a></li>
                 <li *ngIf="expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/usuario"><i class="fa fa-users"></i>Colaborador</a></li>
                 <li *ngIf="rol == 0 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/administrador"><i class="fa fa-user"></i>Administrador</a></li>
                 <li *ngIf="rol == 0 && expandItem == 2" (click)="setCurrentItem(2,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/usuarioadmin"><i class="fa fa-user"></i>Usuario</a></li>
