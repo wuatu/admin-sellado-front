@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
-import {faCoffee} from '@fortawesome/free-solid-svg-icons';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-caja',
@@ -14,7 +14,7 @@ import {faCoffee} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./caja.component.css']
 })
 export class CajaComponent implements OnInit {
-  registrosDev:any = [];
+  registrosDev: any = [];
   pageOfItems: Array<any>;
   p: number = 1;
 
@@ -23,16 +23,15 @@ export class CajaComponent implements OnInit {
   cajas: any = [];
   resultSearch: any;
   id: string;
+  codigoCaja: string;
   envaseCaja: string;
-  variedadCaja: string;
-  categoriaCaja: string;
-  calibreCaja: string;
-  correlativoCaja: string;
+  descripcionCaja: string;
   ponderacionCaja: number;
+
   rol: number;
-  criterio:string = null;
-  bandera:boolean = false;
-  
+  criterio: string = null;
+  bandera: boolean = false;
+
   faCoffee = faCoffee;
   constructor(
     private cajaService: CajaService,
@@ -45,30 +44,30 @@ export class CajaComponent implements OnInit {
   ngOnInit() {
     this.listarCajas();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
-    console.log("rol: "+this.rol);
+    console.log("rol: " + this.rol);
   }
 
-  searchBox(){
-   
-    if(this.criterio == null){
-      this.toastr.error('Ingrese un id o envase a buscar','Oops');
+  searchBox() {
+
+    if (this.criterio == null) {
+      this.toastr.error('Ingrese un id o envase a buscar', 'Oops');
       return;
     }
     this.bandera = false;
     this.cajaService.searchBox(this.criterio).subscribe(
-      res =>{
-        if(res.status == 200){
+      res => {
+        if (res.status == 200) {
           this.cajas = null;
           this.cajas = res.body;
           this.bandera = true;
-        }else if(res.status == 204){
-          this.toastr.success('No existen registros para mostrar en la búsqueda','Búsqueda satisfactoria');
-          return;  
+        } else if (res.status == 204) {
+          this.toastr.success('No existen registros para mostrar en la búsqueda', 'Búsqueda satisfactoria');
+          return;
         }
       },
-    err =>{
-      this.registroDevService.creaRegistroDev('No se pudo realizar la búsqueda de cajas, método searchBox, component caja');
-    }
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo realizar la búsqueda de cajas, método searchBox, component caja');
+      }
     )
   }
 
@@ -79,10 +78,10 @@ export class CajaComponent implements OnInit {
       res => {
         //los registros se almacena en array cajas que sirve para llenar la tabla de vista cajas
         this.cajas = res.body;
-        if(res.status == 200){
+        if (res.status == 200) {
           this.bandera = true;
-        }else if(res.status == 204){
-          this.toastr.success('No existen registros de cajas actualmente para mostrar','Operación satisfactoria');
+        } else if (res.status == 204) {
+          this.toastr.success('No existen registros de cajas actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
       },
@@ -99,24 +98,22 @@ export class CajaComponent implements OnInit {
   }
 
   //metodo que crea un nuevo caja
-  agregarCaja() {    
+  agregarCaja() {
     console.log(this.envaseCaja);
-    if (!this.envaseCaja || !this.variedadCaja || !this.categoriaCaja || !this.calibreCaja || !this.correlativoCaja || !this.ponderacionCaja) {
+    if (!this.envaseCaja || !this.codigoCaja || !this.descripcionCaja || !this.ponderacionCaja) {
       this.toastr.error('No se pudo guardar caja', 'Oops');
       return;
     }
-    let caja = new Caja(null, this.envaseCaja, this.variedadCaja, this.categoriaCaja, this.calibreCaja, this.correlativoCaja, this.ponderacionCaja);
+    let caja = new Caja(null, this.codigoCaja, this.envaseCaja, this.descripcionCaja, this.ponderacionCaja);
     console.log(caja);
     this.cajaService.saveCaja(caja).subscribe(
       res => {
-        this.registroService.creaRegistro("Se ha creado una caja, envase: "+this.envaseCaja+", variedad: "+this.variedadCaja+", calibre: "+this.calibreCaja+", correlativo: "+this.correlativoCaja+" y ponderación: "+this.ponderacionCaja);
+        this.registroService.creaRegistro("Se ha creado una caja, codigo envase: " + this.codigoCaja + ",envase: " + this.envaseCaja + " y ponderación: " + this.ponderacionCaja);
         this.listarCajas();
-        this.envaseCaja=null;  
-        this.variedadCaja=null;  
-        this.categoriaCaja=null;  
-        this.calibreCaja=null;  
-        this.correlativoCaja=null;  
-        this.ponderacionCaja=null;  
+        this.envaseCaja = null;
+        this.codigoCaja = null;
+        this.descripcionCaja = null;
+        this.ponderacionCaja = null;
       },
       err => {
         console.log(err);
@@ -126,82 +123,82 @@ export class CajaComponent implements OnInit {
     );
   }
 
-    //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto caja clickeado a variable global currentCajaSelected
-    onEditar(caja: Caja) {      
-      this.currentCajaSelected = caja;      
+  //metodo que se ejecuta al presionar boton editar, sirve para asignar objeto caja clickeado a variable global currentCajaSelected
+  onEditar(caja: Caja) {
+    this.currentCajaSelected = caja;
+  }
+
+  //metodo que sirve para editar una caja
+  editarCaja(form: NgForm) {
+    console.log(this.currentCajaSelected.envase);
+    if (!this.currentCajaSelected.envase || !this.currentCajaSelected.codigo_envase || !this.currentCajaSelected.descripcion || !this.currentCajaSelected.ponderacion) {
+      this.toastr.error('No se pudo editar la caja', 'Oops');
+      return;
     }
-  
-    //metodo que sirve para editar una caja
-    editarCaja(form: NgForm) {
-      console.log(this.currentCajaSelected.envase);
-      if (!this.currentCajaSelected.envase || !this.currentCajaSelected.variedad || !this.currentCajaSelected.categoria || !this.currentCajaSelected.calibre || !this.currentCajaSelected.correlativo || !this.currentCajaSelected.ponderacion) {
-        this.toastr.error('No se pudo editar la caja', 'Oops');
-        return;
+
+    let caja = new Caja(this.currentCajaSelected.id, this.currentCajaSelected.codigo_envase, this.currentCajaSelected.envase, this.currentCajaSelected.descripcion, this.currentCajaSelected.ponderacion);
+
+    this.cajaService.updateCaja(caja.id, caja).subscribe(
+      res => {
+        this.registroService.creaRegistro("Se ha editado una caja, id: " + caja.id);
+        console.log(res);
+        this.listarCajas();
+        this.currentCajaSelected = null;
+      },
+      err => {
+        console.log(err);
+        this.toastr.error('No se pudo editar caja', 'Oops',);
+        this.registroDevService.creaRegistroDev('No se pudo editar caja, método editarCaja, component caja');
       }
-  
-      let caja = new Caja(this.currentCajaSelected.id, this.currentCajaSelected.envase, this.currentCajaSelected.variedad, this.currentCajaSelected.categoria, this.currentCajaSelected.categoria, this.currentCajaSelected.correlativo, this.currentCajaSelected.ponderacion);
-     
-      this.cajaService.updateCaja(caja.id, caja).subscribe(
-        res => {
-          this.registroService.creaRegistro("Se ha editado una caja, id: "+caja.id);
-          console.log(res);
-          this.listarCajas();
-          this.currentCajaSelected = null;
-        },
-        err => {
-          console.log(err);
-          this.toastr.error('No se pudo editar caja', 'Oops',);
-          this.registroDevService.creaRegistroDev('No se pudo editar caja, método editarCaja, component caja');
-        }
-      );
-    }
-  
-    //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto caja clickeado a variable global currentCajaSelected y abrir el modal
-    onEliminar(caja: Caja, modal) {
-      this.currentCajaSelected = caja;
-      this.open(modal);
-    }
-  
-    //metodo que elimina una caja
-    eliminarCaja(caja: Caja) {
-      this.cajaService.deleteCaja(caja.id).subscribe(
-        res => {
-          this.registroService.creaRegistro("Se ha eliminado una cada, id: "+caja.id);
-          console.log(res);
-          this.listarCajas();
-        },
-        err => {
-          console.log(err);
-          this.toastr.error('No se pudo eliminar caja', 'Oops');
-          this.registroDevService.creaRegistroDev('No se pudo eliminar caja, método eliminarCaja, component caja');
-        }
-      );
-    } 
-  
-    //metodo que abre un modal
-    open(modal) {    
-      this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-        this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
-    }
-  
-    //metodo que sirve para saber la razon por la cual un modal fue cerrado
-    private getDismissReason(reason: any): string {
-      console.log(reason);
-      if (reason === ModalDismissReasons.ESC) {
-        return 'by pressing ESC';
-      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-        console.log("sera");
-        return 'by clicking on a backdrop';
-      } else {
-        if (reason == 'ok') {
-          console.log("hola");
-          this.eliminarCaja(this.currentCajaSelected);
-        }
-        return `with: ${reason}`;
+    );
+  }
+
+  //metodo que se ejecuta al presionar boton eliminar, sirve para asignar objeto caja clickeado a variable global currentCajaSelected y abrir el modal
+  onEliminar(caja: Caja, modal) {
+    this.currentCajaSelected = caja;
+    this.open(modal);
+  }
+
+  //metodo que elimina una caja
+  eliminarCaja(caja: Caja) {
+    this.cajaService.deleteCaja(caja.id).subscribe(
+      res => {
+        this.registroService.creaRegistro("Se ha eliminado una cada, id: " + caja.id);
+        console.log(res);
+        this.listarCajas();
+      },
+      err => {
+        console.log(err);
+        this.toastr.error('No se pudo eliminar caja', 'Oops');
+        this.registroDevService.creaRegistroDev('No se pudo eliminar caja, método eliminarCaja, component caja');
       }
+    );
+  }
+
+  //metodo que abre un modal
+  open(modal) {
+    this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  //metodo que sirve para saber la razon por la cual un modal fue cerrado
+  private getDismissReason(reason: any): string {
+    console.log(reason);
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      console.log("sera");
+      return 'by clicking on a backdrop';
+    } else {
+      if (reason == 'ok') {
+        console.log("hola");
+        this.eliminarCaja(this.currentCajaSelected);
+      }
+      return `with: ${reason}`;
     }
+  }
 
 }

@@ -18,9 +18,9 @@
         <thead>
             <tr>
                 <th scope="col">N°</th>
-                <th scope="col">Id colaborador </th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
+           
+                <th scope="col">Tipo</th>
+
                 <th scope="col">Registro</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Hora</th>
@@ -30,9 +30,9 @@
         <tbody>
             <tr *ngFor="let registroProduccion of registrosProduccion  | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                 <th scope="row">{{i+1}}</th>
-                <td>{{registroProduccion.id_colaborador}}</td>
+      
                 <td>{{registroProduccion.nombre_colaborador}}</td>
-                <td>{{registroProduccion.apellido_colaborador}}</td>
+   
                 <td>{{registroProduccion.registro}}</td>
                 <td>{{registroProduccion.fecha}}</td>
                 <td>{{registroProduccion.hora}}</td>

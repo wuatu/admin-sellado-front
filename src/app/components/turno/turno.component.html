@@ -7,26 +7,26 @@
         </div>
         <div class="form-row">
 
-            <div class="col-sm-2 my-1">
+            <div class="col-lg-4 col-md-6 col-sm-12 my-1">
                 <label for="Desde:">Desde:</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input #dpFromDate class="form-control  ml-1" placeholder="yyyy-MM-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
+                        <input #dpFromDate class="form-control" placeholder="yyyy-MM-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)" (click)="d.toggle()">
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-2 my-1">
+            <div class="col-lg-4 col-md-6 col-sm-12 my-1">
                 <label for="">Hasta:</label>
                 <div class="form-group">
                     <div class="input-group">
-                        <input #dpToDate class="form-control  ml-1" placeholder="yyyy-MM-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
+                        <input #dpToDate class="form-control" placeholder="yyyy-MM-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)" disabled>
                     </div>
                 </div>
             </div>
 
             <div class="col-auto my-1">
-                <button class="ml-1 btn btn-primary" (click)="buscarPorFecha()" type="submit " style="margin-top: 33px;">Buscar <i class="fa fa-search" aria-hidden="true"></i></button>
+                <button class="btn btn-primary" (click)="buscarPorFecha()" type="submit ">Buscar <i class="fa fa-search" aria-hidden="true"></i></button>
             </div>
 
         </div>

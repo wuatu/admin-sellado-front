@@ -40,9 +40,9 @@
         <li (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)">
             <a #seguimiento><i class="fa fa-search"></i>Buscar <i class="fa fa-caret-down"></i></a>
             <ul>
-                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/seguimientodecajas"><i class="fas fa-box "></i>Cajas</a></li>
+                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/seguimientodecajas"><i class="fas fa-box "></i>Seguimiento de cajas selladas</a></li>
+                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/codigoUnitec"><i class="fa fa-dropbox"></i>Seguimiento de cajas UNITEC</a></li>
                 <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/usuarioenlinea"><i class="fa fa-users"></i>Usuario en línea</a></li>
-                <li *ngIf="expandItem == 4" (click)="setCurrentItem(4,produccion,administrar,registros,seguimiento,monitoreo)"><a routerLink="/codigoUnitec"><i class="fa fa-dropbox"></i>Cajas Unitec</a></li>
             </ul>
         </li>
         <li (click)="setCurrentItem(3,produccion,administrar,registros,seguimiento,monitoreo)">

@@ -6,22 +6,28 @@
             </div>
         </div>
         <div class="row ">
-            <div class="col-12 align-self-start">
+            <div class="col-12">
                 <div class="form-row">
-                    <div class="col-lg-5 col-md-3 col-sm-12 my-1" *ngIf="bandera == true">
+                    <div class="col-lg-5 col-md-6 col-sm-12 my-1" *ngIf="bandera == true">
                         <div class="form-group">
                             <div class="input-group">
-                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control  ml-1" placeholder="Buscar id o envase" id="criterio" name="criterio">
+                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control"
+                                    placeholder="Buscar id o envase" id="criterio" name="criterio">
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-12 my-1" *ngIf="bandera == true">
-                        <button class="ml-1 btn btn-primary" (click)="searchBox()" type="submit ">Buscar
-              <i class="fa fa-search" aria-hidden="true"></i></button>
+                    <div class="col-lg-2 col-md-3 col-sm-12 my-1" *ngIf="bandera == true">
+                        <button class="btn btn-primary form-control" (click)="searchBox()" type="submit ">Buscar
+                            <i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
-                    <div class="col-lg-4  col-md-4 col-sm-12 my-1  ">
-                        <button class="ml-1 btn btn-primary" *ngIf="rol != 2" (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
-                  caja</button>
+                    <div class="col-lg-5 col-md-3 col-sm-12 my-1">
+                        <div class="row justify-content-end">
+                            <div class="col-lg-6  col-md-12 col-sm-12  text-right">
+                                <button class="btn btn-primary form-control" *ngIf="rol != 2"
+                                    (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
+                                    caja</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,11 +43,9 @@
                 <thead>
                     <tr>
                         <th scope="col">N°</th>
+                        <th scope="col">Código de envase</th>
                         <th scope="col">Envase</th>
-                        <th scope="col">Variedad</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Calibre</th>
-                        <th scope="col">Correlativo</th>
+                        <th scope="col">Descripción</th>
                         <th scope="col">Ponderación</th>
                         <th *ngIf="rol != 2" scope="col">Editar</th>
                         <th *ngIf="rol != 2" scope="col">Eliminar</th>
@@ -52,21 +56,21 @@
                 <tbody>
                     <tr *ngFor="let caja of cajas | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                         <th scope="row">{{i+1}}</th>
-                        <td>{{caja.envase }}</td>
-                        <td>{{caja.variedad}}</td>
-                        <td>{{caja.categoria}}</td>
-                        <td>{{caja.calibre}}</td>
-                        <td>{{caja.correlativo}}</td>
+                        <td>{{caja.codigo_envase }}</td>
+                        <td>{{caja.envsae}}</td>
+                        <td>{{caja.descripcion}}</td>
                         <td>{{caja.ponderacion}}</td>
                         <td>
-                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(caja);open(mymodaleditar)">
-                <i class="fa fa-edit"></i>
-              </button>
+                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2"
+                                (click)="onEditar(caja);open(mymodaleditar)">
+                                <i class="fa fa-edit"></i>
+                            </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(caja,mymodalconfirmar)">
-                <i class="fa fa-trash"></i>
-              </button>
+                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2"
+                                (click)="onEliminar(caja,mymodalconfirmar)">
+                                <i class="fa fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -84,15 +88,31 @@
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Agregar caja</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+            <span aria-hidden="true">×</span>
+        </button>
     </div>
     <div class="modal-body">
         <form #myform="ngForm">
             <div class="form-group">
-                <label for="lineaLabel"><b>Envase Caja:</b></label>
+                <label for="lineaLabel"><b>Código envabse:</b></label>
                 <div class="input-group">
-                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase" class="form-control" placeholder="Envase" required [ngClass]="{ 'is-invalid': submitted && envase.errors }">
+                    <input type="text" #codigo='ngModel' [(ngModel)]="codigoCaja" name="codigo" id="codigo"
+                        class="form-control" placeholder="Código" required
+                        [ngClass]="{ 'is-invalid': submitted && codigo.errors }">
+                </div>
+                <!--Valida formulario codigo-->
+                <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" class="alert alert-danger">
+                    <div *ngIf="codigo.errors.required">
+                        Código de envabse de caja es obligatorio
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lineaLabel"><b>Envase:</b></label>
+                <div class="input-group">
+                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase"
+                        class="form-control" placeholder="Envase" required
+                        [ngClass]="{ 'is-invalid': submitted && envase.errors }">
                 </div>
                 <!--Valida formulario envase-->
                 <div *ngIf="envase.invalid && (envase.dirty || envase.touched)" class="alert alert-danger">
@@ -101,77 +121,43 @@
                     </div>
                 </div>
             </div>
+
             <div class="form-group">
-                <label for="lineaLabel"><b>Variedad Caja:</b></label>
+                <label for="lineaLabel"><b>Descripción:</b></label>
                 <div class="input-group">
-                    <input type="text" #variedad='ngModel' [(ngModel)]="variedadCaja" name="variedad" id="variedad" class="form-control" placeholder="Variedad" required [ngClass]="{ 'is-invalid': submitted && variedad.errors }">
+                    <input type="text" #descripcion='ngModel' [(ngModel)]="descripcionCaja" name="descripcion"
+                        id="descripcion" class="form-control" placeholder="Descripción" required
+                        [ngClass]="{ 'is-invalid': submitted && descripcion.errors }">
                 </div>
-                <!--Valida formulario variedad-->
-                <div *ngIf="variedad.invalid && (variedad.dirty || variedad.touched)" class="alert alert-danger">
-                    <div *ngIf="variedad.errors.required">
-                        Variedad de caja es obligatorio
+                <!--Valida formulario descripcion-->
+                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="descripcion.errors.required">
+                        Descripción de caja es obligatorio
                     </div>
                 </div>
             </div>
 
-
             <div class="form-group">
-                <label for="lineaLabel"><b>Categoria Caja:</b></label>
+                <label for="lineaLabel"><b>Ponderación:</b></label>
                 <div class="input-group">
-                    <input type="text" #categoria='ngModel' [(ngModel)]="categoriaCaja" name="categoria" id="categoria" class="form-control" placeholder="Categoria" required [ngClass]="{ 'is-invalid': submitted && categoria.errors }">
-                </div>
-                <!--Valida formulario categoria-->
-                <div *ngIf="categoria.invalid && (categoria.dirty || categoria.touched)" class="alert alert-danger">
-                    <div *ngIf="categoria.errors.required">
-                        Categoria de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="lineaLabel"><b>Calibre Caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #calibre='ngModel' [(ngModel)]="calibreCaja" name="calibre" id="calibre" class="form-control" placeholder="Calibre" required [ngClass]="{ 'is-invalid': submitted && calibre.errors }">
-                </div>
-                <!--Valida formulario calibre-->
-                <div *ngIf="calibre.invalid && (calibre.dirty || calibre.touched)" class="alert alert-danger">
-                    <div *ngIf="calibre.errors.required">
-                        Calibre de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="lineaLabel"><b>Correlativo Caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #correlativo='ngModel' [(ngModel)]="correlativoCaja" name="correlativo" id="correlativo" class="form-control" placeholder="Correlativo" required [ngClass]="{ 'is-invalid': submitted && correlativo.errors }">
-                </div>
-                <!--Valida formulario correlativo-->
-                <div *ngIf="correlativo.invalid && (correlativo.dirty || correlativo.touched)" class="alert alert-danger">
-                    <div *ngIf="correlativo.errors.required">
-                        Correlativo de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="lineaLabel"><b>Ponderacion Caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderacion" required [ngClass]="{ 'is-invalid': submitted && ponderacion.errors }">
+                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion"
+                        id="ponderacion" class="form-control" placeholder="Ponderación" required
+                        [ngClass]="{ 'is-invalid': submitted && ponderacion.errors }">
                 </div>
                 <!--Valida formulario ponderacion-->
-                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)" class="alert alert-danger">
+                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)"
+                    class="alert alert-danger">
                     <div *ngIf="ponderacion.errors.required">
                         Ponderacion de caja es obligatorio
                     </div>
                 </div>
             </div>
+
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
+                (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -182,8 +168,8 @@
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Editar Caja</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">×</span>
-    </button>
+            <span aria-hidden="true">×</span>
+        </button>
     </div>
     <div class="modal-body">
         <form #myform="ngForm">
@@ -191,10 +177,26 @@
             <div class="form-group">
                 <input type="hidden" ngModel [(ngModel)]="currentCajaSelected.id" name="id" id="id">
             </div>
+
             <div class="form-group">
-                <label for="patentelabel"><b>Envase caja:</b></label>
+                <label for="patentelabel"><b>Código envase:</b></label>
                 <div class="input-group">
-                    <input type="text" #envase='ngModel' [(ngModel)]="currentCajaSelected.envase" name="envase" id="envase" class="form-control" placeholder="Envase" required>
+                    <input type="text" #codigo='ngModel' [(ngModel)]="currentCajaSelected.codigo_envase" name="codigo"
+                        id="codigo" class="form-control" placeholder="Código" required>
+                </div>
+                <!--Valida formulario codigo-->
+                <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" class="alert alert-danger">
+                    <div *ngIf="codigo.errors.required">
+                        Código de envase de caja es obligatorio
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="patentelabel"><b>Envase:</b></label>
+                <div class="input-group">
+                    <input type="text" #envase='ngModel' [(ngModel)]="currentCajaSelected.envase" name="envase"
+                        id="envase" class="form-control" placeholder="Envase" required>
                 </div>
                 <!--Valida formulario envase-->
                 <div *ngIf="envase.invalid && (envase.dirty || envase.touched)" class="alert alert-danger">
@@ -204,65 +206,29 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="patentelabel"><b>Variedad caja:</b></label>
+                <label for="patentelabel"><b>Descripción:</b></label>
                 <div class="input-group">
-                    <input type="text" #variedad='ngModel' [(ngModel)]="currentCajaSelected.variedad" name="variedad" id="variedad" class="form-control" placeholder="Variedad" required>
+                    <input type="text" #descripcion='ngModel' [(ngModel)]="currentCajaSelected.descripcion"
+                        name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" required>
                 </div>
-                <!--Valida formulario variedad-->
-                <div *ngIf="variedad.invalid && (variedad.dirty || variedad.touched)" class="alert alert-danger">
-                    <div *ngIf="variedad.errors.required">
-                        Variedad de caja es obligatorio
+                <!--Valida formulario descripcion-->
+                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
+                    class="alert alert-danger">
+                    <div *ngIf="descripcion.errors.required">
+                        Descripción de caja es obligatorio
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="patentelabel"><b>Categoria caja:</b></label>
+                <label for="patentelabel"><b>Ponderación:</b></label>
                 <div class="input-group">
-                    <input type="text" #categoria='ngModel' [(ngModel)]="currentCajaSelected.categoria" name="categoria" id="categoria" class="form-control" placeholder="Categoria" required>
-                </div>
-                <!--Valida formulario categoria-->
-                <div *ngIf="categoria.invalid && (categoria.dirty || categoria.touched)" class="alert alert-danger">
-                    <div *ngIf="categoria.errors.required">
-                        Categoria de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="patentelabel"><b>Calibre caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #calibre='ngModel' [(ngModel)]="currentCajaSelected.calibre" name="calibre" id="calibre" class="form-control" placeholder="Calibre" required>
-                </div>
-                <!--Valida formulario calibre-->
-                <div *ngIf="calibre.invalid && (calibre.dirty || calibre.touched)" class="alert alert-danger">
-                    <div *ngIf="calibre.errors.required">
-                        Calibre de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label for="patentelabel"><b>Correlativo caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #correlativo='ngModel' [(ngModel)]="currentCajaSelected.correlativo" name="correlativo" id="correlativo" class="form-control" placeholder="Correlativo" required>
-                </div>
-                <!--Valida formulario correlativo-->
-                <div *ngIf="correlativo.invalid && (correlativo.dirty || correlativo.touched)" class="alert alert-danger">
-                    <div *ngIf="correlativo.errors.required">
-                        Correlativo de caja es obligatorio
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="patentelabel"><b>Ponderacion caja:</b></label>
-                <div class="input-group">
-                    <input type="text" #ponderacion='ngModel' [(ngModel)]="currentCajaSelected.ponderacion" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderacion" required>
+                    <input type="text" #ponderacion='ngModel' [(ngModel)]="currentCajaSelected.ponderacion"
+                        name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderación" required>
                 </div>
                 <!--Valida formulario ponderacion-->
-                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)" class="alert alert-danger">
+                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)"
+                    class="alert alert-danger">
                     <div *ngIf="ponderacion.errors.required">
                         Ponderacion de caja es obligatorio
                     </div>
@@ -271,7 +237,8 @@
 
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
+                (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -282,14 +249,15 @@
     <div class="modal-header">
         <h4 class="modal-title" id="modal-title">Eliminar caja</h4>
         <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="modal-body">
         <p>¿Seguro que quieres eliminar el caja?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modal.dismiss('cancel click')">Cancelar</button>
         <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>

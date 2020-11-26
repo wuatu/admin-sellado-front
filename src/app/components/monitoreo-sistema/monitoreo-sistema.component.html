@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 my-1">
                         <div class="card" style="margin: 10px; " *ngIf="bandera2 == true">
-                            <div class="card-body">
+                            <div class="card-body" *ngIf="bigArray3[0]">
                                 <h5><b>Rfid salida</b></h5>
                                 <tr>
                                     <td *ngIf="bigArray3[0].nombre_rfid_salida != 'undefine' && bigArray3[0].nombre_rfid_salida != '' ">
@@ -45,7 +45,7 @@
 
                     <div class="col-lg-6 col-md-6 my-1">
                         <div class="card" style="margin: 10px;" *ngIf="bandera2 == true">
-                            <div class="card-body">
+                            <div class="card-body" *ngIf="bigArray3[0]">
                                 <h5><b>Lector validador</b></h5>
                                 <tr>
                                     <td *ngIf="bigArray3[0].nombre_lector_validador != 'undefine'">
