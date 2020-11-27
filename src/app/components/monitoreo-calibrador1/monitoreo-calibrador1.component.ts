@@ -160,6 +160,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
               }
             }], yAxes: [{
               ticks: {
+                beginAtZero:true,
                 autoSkipPadding: 20,
                 max: this.calibradores[0].cajas_por_minuto+3,
                 fontSize: 20,
