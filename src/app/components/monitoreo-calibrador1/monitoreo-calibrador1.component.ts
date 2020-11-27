@@ -20,7 +20,7 @@ import { Label, Color } from 'ng2-charts';
 
 
 //*****/
-import { timer,interval, Subscription, Observable } from 'rxjs';
+import { timer, interval, Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-monitoreo-calibrador1',
@@ -44,8 +44,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
   fechaActual: string;
   arrayAux: any = [];
   turnoActual: any = [];
-  productionByLine =  new Array();
-  a : any = []; 
+  productionByLine = new Array();
+  a: any = [];
   //calendar
   hoveredDate: NgbDate | null = null;
   fromDate: NgbDate;
@@ -56,10 +56,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
   nombreCalibrador: string = "";
   isDataAvailable: boolean = false;
   constanteDivision = 0;
-  
+
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
-
+  barChartOptions: ChartOptions;
 
   constructor(
     private toastr: ToastrService,
@@ -87,35 +87,35 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
       this.monitoreoService.getGetLastTurno().subscribe(
         res => {
-          if(res.status == 200){
+          if (res.status == 200) {
             console.log(res.body[0]);
-            if(res.body[0].fecha_cierre == ""){
+            if (res.body[0].fecha_cierre == "") {
               this.getProduccionTurno();
               this.getAverageforMinute();
               this.getAverageLastHour();
               this.getProductionLine();
               //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
-              
+
             }//else{
-              //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
+            //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
             //}
-            
+
           }
         },
         err => {
-          console.log(err.status); 
-          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');  
+          console.log(err.status);
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
         }
       )
     });
-    
+
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
     });
   }
 
   ngOnDestroy() {
-    if(this.subscriptionTimerTask != null) {
+    if (this.subscriptionTimerTask != null) {
 
       this.subscriptionTimerTask.unsubscribe();
     }
@@ -124,7 +124,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
       this.subscriptionTimer.unsubscribe();
     }
 
-    
+
   }
 
 
@@ -136,6 +136,48 @@ export class MonitoreoCalibrador1Component implements OnInit {
         this.calibradores = res.body;
         this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
         this.getLineOfCaliper();
+        /******************************** GRAFICO ************************************/
+        this.barChartOptions = {
+          responsive: true,
+          // We use these empty structures as placeholders for dynamic theming.
+          title: {
+            display: true,
+            text: 'Producción por línea',
+            fontColor: "black",
+            fontSize: 20
+          },
+          legend: {
+            labels: {
+              fontSize: 20,
+              fontColor: 'red'
+            }
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontSize: 20,
+                fontColor: "black"
+              }
+            }], yAxes: [{
+              ticks: {
+                autoSkipPadding: 20,
+                max: this.calibradores[0].cajas_por_minuto+3,
+                fontSize: 20,
+                fontColor: "black"
+              }
+            }]
+          },
+          plugins: {
+            datalabels: {
+              anchor: 'end',
+              align: 'end',
+              color: "black",
+              font: {
+                size: 20,
+              }
+            },
+          }
+        };
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-calibrador1');
@@ -172,7 +214,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
         res => {
           //console.log(res.body);
           this.productionByLine.push(res.body);
-          if(i == this.lineas.length-1){
+          if (i == this.lineas.length - 1) {
             console.log(this.productionByLine);
             this.ordenarArray(this.productionByLine);
           }
@@ -182,15 +224,15 @@ export class MonitoreoCalibrador1Component implements OnInit {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProductionLinea, component monitoreo-calibrador1');
         }
       )
-      
+
     }
   }
-  
-  ordenarArray(array =  new Array()){
+
+  ordenarArray(array = new Array()) {
     this.arrayAux = [];
-    for(let linea of this.lineas){
-      for(let arr of array){
-        if(linea.nombre == arr[0].nombre_linea){
+    for (let linea of this.lineas) {
+      for (let arr of array) {
+        if (linea.nombre == arr[0].nombre_linea) {
           this.arrayAux.push(arr);
           break;
         }
@@ -199,7 +241,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     //console.log("ordenar array");
     //console.log(this.arrayAux)
     this.pushData(this.arrayAux);
-    
+
   }
 
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
@@ -343,48 +385,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
     }
   }
 
-  /******************************** GRAFICO ************************************/
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    title: {
-      display: true,
-      text: 'Producción por línea',
-      fontColor: "black",
-      fontSize: 20
-    },
-    legend: {
-      labels: {
-        fontSize: 20,
-        fontColor: 'red'
-      }
-    },
-    scales: {
-      xAxes: [{
-        ticks: {
-          fontSize: 20,
-          fontColor: "black"
-        }
-      }], yAxes: [{
-        ticks: {
-          autoSkipPadding: 20,
-          
-          fontSize: 20,
-          fontColor: "black"
-        }
-      }]
-    },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-        color: "black",
-        font: {
-          size: 20,
-        }
-      },
-    }
-  };
 
   public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
@@ -404,12 +404,12 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   pushData(dataNumberBox: any[]) {
     this.barChartData[0].data = [];
-    this.barChartData[0].backgroundColor =[];
+    this.barChartData[0].backgroundColor = [];
     this.barChartLabels = [];
     let i = 0;
     for (let data of dataNumberBox) {
       //console.log(data);
-      if (data[0].total <= this.constanteDivision) {        
+      if (data[0].total <= this.constanteDivision) {
         this.barChartData[0].data.push(data[0].total);
         this.barChartData[0].backgroundColor.push("red");
       } else if (data[0].total > this.constanteDivision && data[0].total <= this.constanteDivision * 2) {
@@ -421,8 +421,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
       }
       this.barChartLabels.push(`${data[0].nombre_linea}`);
       i++;
+      this.barChartOptions.scales.yAxes[0].ticks.max = this.calibradores[0].cajas_por_minuto + 1;
     }
- 
+
+    console.log(this.calibradores[0].cajas_por_minuto + 1);
   }
 
 

@@ -21,6 +21,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   closeResult = '';
 
   seguimientoDeCajas: any = [];
+  seguimientoDeCajasAux: any = [];
   cantidadDeCajas: any = [];
   lineas: any = [];
   calibradores: any = [];
@@ -90,9 +91,26 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.listarCalibradores();
   }
 
-  toggleVisibility(e){
-    this.marked= e.target.checked;
-    console.log("marked: ",this.marked);
+  toggleVisibility(e) {
+    this.marked = e.target.checked;
+    console.log("marked: ", this.marked);
+    this.setBusquedaCheckBox(this.marked);
+  }
+
+  setBusquedaCheckBox(isChecked: boolean) {
+    this.seguimientoDeCajas = [];
+    for (let i = 0; i < this.seguimientoDeCajasAux.length; i++) {
+      if (isChecked && this.seguimientoDeCajasAux[i].is_verificado == '1') {
+        console.log("entre añl primer if");
+        this.seguimientoDeCajas.push(this.seguimientoDeCajasAux[i]);
+      } else if (!isChecked && this.seguimientoDeCajasAux[i].is_verificado == '0') {
+        console.log("entre al segundo if");
+        this.seguimientoDeCajas.push(this.seguimientoDeCajasAux[i]);
+      }
+    }
+    console.log("aaaa number"+this.seguimientoDeCajasAux[0].is_verificado);
+    console.log("aaaa lenght"+this.numBox);
+    this.numBox = this.seguimientoDeCajas.length;
   }
 
   listarLineas(id: string) {
@@ -114,7 +132,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
     );
   }
 
-  
+
 
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
@@ -130,7 +148,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
   buscarPorCriterio() {
     console.log(this.selectedSearch + " " + this.toSearch + " " + this.desde + " " + this.hasta);
-    this.seguimientoDeCajas = [];
+    //this.seguimientoDeCajas = [];
+    this.seguimientoDeCajasAux = [];
     if (!this.selectedLineaObject && !this.selectedCalibradorObject) {
       this.toastr.error('Se debe seleccionar calibrador y linea', 'Oops');
       return;
@@ -138,23 +157,26 @@ export class SeguimientoDeCajasComponent implements OnInit {
       this.toastr.error('Se debe seleccionar el rango de fecha de busqueda', 'Oops');
       return;
     } else if (this.selectedLineaObject && this.selectedCalibradorObject) {
+      console.log(this.theCheckbox);
       this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
         res => {
-          this.seguimientoDeCajas = res.body;
+          this.seguimientoDeCajasAux = res.body;
+
           if (res.status == 200) {
-            this.countBoxSearch();
+            //this.countBoxSearch();
             this.toastr.success('Cajas selladas obtenidas', 'Operación satisfactoria');
           } else if (res.status == 204) {
             this.toastr.success('no existen cajas selladas actualmente para mostrar', 'Operación satisfactoria');
             return;
-          }
-          this.numBox = this.seguimientoDeCajas.length;
+          }          
           if (this.bandera == 0) {
-            this.nombreColaborador = this.seguimientoDeCajas[0].nombre_usuario;
-            console.log(this.seguimientoDeCajas.nombre_usuario + "!!!!!!!!!!!!!");
+            this.nombreColaborador = this.seguimientoDeCajasAux[0].nombre_usuario;
+            console.log(this.seguimientoDeCajasAux.nombre_usuario + "!!!!!!!!!!!!!");
             this.bandera++;
           }
           this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
+          console.log(this.marked);
+          this.setBusquedaCheckBox(this.marked);
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudieron obtener las cajas por el criterio seleccionado, método buscarPorCriterio, component seguimiento-de-cajas');
@@ -261,43 +283,43 @@ export class SeguimientoDeCajasComponent implements OnInit {
     ); */
 
     //for (let d = 30; d <= 30; d++) {
-      let count = 0;
-      for (let h = 19; h < 20; h++) {
-        for (let m = 30; m < 60; m++) {
-          for (let s = 0; s < 60; s = s + 2) {
-            count++;
-            //this.dia = d.toString();
-            //if (d < 10) {
-            //  this.dia = "0" + d;
-            //}
-            this.hora = h.toString();
-            if (h < 10) {
-              this.hora = "0" + h;
-            }
-            this.minuto = m.toString();
-            if (m < 10) {
-              this.minuto = "0" + m;
-            }
-            this.segundo = s.toString();
-            if (s < 10) {
-              this.segundo = "0" + s;
-            }
-            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875"+count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "", "", 0, 1, 71);
-            this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
-              res => {
-                console.log("agrege!!!!!!!!");
-                //this.toastr.success('Operación satisfactoria', 'Registro agregado');
-              },
-              err => {
-                //console.log(err);
-                this.toastr.error('No se pudo obtener a los registros', 'Oops');
-              }
-            );
-            count ++;
+    let count = 0;
+    for (let h = 19; h < 20; h++) {
+      for (let m = 30; m < 60; m++) {
+        for (let s = 0; s < 60; s = s + 2) {
+          count++;
+          //this.dia = d.toString();
+          //if (d < 10) {
+          //  this.dia = "0" + d;
+          //}
+          this.hora = h.toString();
+          if (h < 10) {
+            this.hora = "0" + h;
           }
+          this.minuto = m.toString();
+          if (m < 10) {
+            this.minuto = "0" + m;
+          }
+          this.segundo = s.toString();
+          if (s < 10) {
+            this.segundo = "0" + s;
+          }
+          let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "", "", 0, 1, 71);
+          this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
+            res => {
+              console.log("agrege!!!!!!!!");
+              //this.toastr.success('Operación satisfactoria', 'Registro agregado');
+            },
+            err => {
+              //console.log(err);
+              this.toastr.error('No se pudo obtener a los registros', 'Oops');
+            }
+          );
+          count++;
         }
       }
-      //console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :" + d);
+    }
+    //console.log("TERMINE DE AGREGAR LOS DATOS DEL DIA :" + d);
     //}
 
     /*let registroCaja = new SeguimientoDeCajas(null, 1, "calibrador_"+1, 22, "linea_"+2, 2000+1100, "rfid_"+1213, "192.168.0."+2, 2, "lector_"+1, "192.168.10."+2, 2, "13954687-7", "Ignacio", "Correa", "5468"+2000, 2000, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-10-08", "12:16:40" , "2020-09-24", "08:39:02" , 1,1, 0);
