@@ -59,7 +59,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual(){
-    this.monitoreoService.getGetLastTurno().subscribe(
+    this.monitoreoService.getLastTurno().subscribe(
       res => {
         this.turnoActual = res.body;
         this.listarCalibradores();

@@ -87,7 +87,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-    //this.agregarRegistroDeCajas();
+    this.agregarRegistroDeCajas();
     this.listarCalibradores();
   }
 
@@ -283,10 +283,10 @@ export class SeguimientoDeCajasComponent implements OnInit {
     ); */
 
     //for (let d = 30; d <= 30; d++) {
-    let count = 0;
-    for (let h = 19; h < 20; h++) {
-      for (let m = 30; m < 60; m++) {
-        for (let s = 0; s < 60; s = s + 2) {
+    let count = 3300;
+    for (let h = 19; h <= 19; h++) {
+      for (let m = 0; m < 30; m++) {
+        for (let s = 0; s < 60; s = s + 10) {
           count++;
           //this.dia = d.toString();
           //if (d < 10) {
@@ -304,7 +304,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
           if (s < 10) {
             this.segundo = "0" + s;
           }
-          let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "", "", 0, 1, 71);
+          let date = new Date();
+          let registroCaja = new SeguimientoDeCajas(null, 2, "Calibrador 2", 29, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, 1, "caja mediana", "variedad caja", "categoria de caja", "calibre de caja", "correlativo caja", "ponderación caja", "2020-11-26", this.hora + ":" + this.minuto + ":" + this.segundo, "", "","1606515300000", 1, 1, 71);
           this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
             res => {
               console.log("agrege!!!!!!!!");

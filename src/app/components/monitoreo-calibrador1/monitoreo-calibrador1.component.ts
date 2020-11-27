@@ -86,15 +86,15 @@ export class MonitoreoCalibrador1Component implements OnInit {
     //Lista los calibradores que estan registrados en la base de datos.
     this.getTurnoActual();
     this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
-      this.monitoreoService.getGetLastTurno().subscribe(
+      this.monitoreoService.getLastTurno().subscribe(
         res => {
           if (res.status == 200) {
             console.log(res.body[0]);
             if (res.body[0].fecha_cierre == "") {
-              //this.getProduccionTurno();
-              //this.getAverageforMinute();
+              this.getAverageforMinute2()
+              this.getProduccionTurno2();
               this.getAverageLastHour2();
-              //this.getProductionLine();
+              this.getProductionLine();
               //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
 
             }//else{
@@ -191,11 +191,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.lineaService.getLineasId(this.calibradores[0].id).subscribe(
       res => {
         this.lineas = res.body;
-        //this.getProduccionTurno();
-        //this.getAverageforMinute();
+        this.getAverageforMinute2()
+        this.getProduccionTurno2();
         this.getAverageLastHour2();
-        //this.getProductionLine();
-
+        this.getProductionLine();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método getLineOfCaliper, component monitoreo-calibrador1');
@@ -203,6 +202,46 @@ export class MonitoreoCalibrador1Component implements OnInit {
       }
     )
   }
+
+  
+
+  ordenarArray(array = new Array()) {
+    this.arrayAux = [];
+    for (let linea of this.lineas) {
+      for (let arr of array) {
+        /*
+        if (this.max < arr[0].total) {
+          this.max = arr[0].total;
+        }*/
+        if (linea.nombre == arr[0].nombre_linea) {
+          this.arrayAux.push(arr);
+          break;
+        }
+      }
+    }
+    this.pushData(this.arrayAux);
+    /*this.max = this.max + 10;
+    this.barChartOptions.scales.yAxes[0].ticks.max = this.max;
+    console.log(this.max);
+    */
+  }
+
+  //Método que obtiene desde la base de datos el turno que se encuentra iniciado
+  getTurnoActual() {
+    this.monitoreoService.getLastTurno().subscribe(
+      res => {
+        this.turnoActual = res.body;
+        this.listarCalibradores();
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador1');
+        console.log("el turno no se pudo cargar!!!!");
+      }
+    )
+  }
+/******************************************************************************************************/
+/*******************************************   PRODUCCIÓN   *******************************************/
+/******************************************************************************************************/
 
   //Método que obtiene la cantidad de cajas selladas por minuto de las lineas del calibrador 
   getProductionLine() {
@@ -225,92 +264,28 @@ export class MonitoreoCalibrador1Component implements OnInit {
           this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProductionLinea, component monitoreo-calibrador1');
         }
       )
-
+  
     }
   }
-
-  ordenarArray(array = new Array()) {
-    this.arrayAux = [];
-    for (let linea of this.lineas) {
-      for (let arr of array) {
-        /*
-        if (this.max < arr[0].total) {
-          this.max = arr[0].total;
-        }*/
-        if (linea.nombre == arr[0].nombre_linea) {
-          this.arrayAux.push(arr);
-          break;
-        }
-      }
-    }
-    //console.log("ordenar array");
-    //console.log(this.arrayAux)
-    this.pushData(this.arrayAux);
-    /*this.max = this.max + 10;
-    this.barChartOptions.scales.yAxes[0].ticks.max = this.max;
-    console.log(this.max);
-    */
-  }
-
-  //Método que obtiene desde la base de datos el turno que se encuentra iniciado
-  getTurnoActual() {
-    this.monitoreoService.getGetLastTurno().subscribe(
+  getAverageforMinute2() {
+    this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
-        this.turnoActual = res.body;
-        this.listarCalibradores();
+        this.cajasCalibrador1Minuto = res;
+        //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
+        if (this.cajasCalibrador1Minuto[0].total == null) {
+          this.totalMinuto1 = 0;
+        }
+        else {
+          this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
+        }
 
+        console.log("La produccion del turno es : "+ this.totalMinuto1);
       },
       err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador1');
-        console.log("el turno no se pudo cargar!!!!");
+        this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');
+        this.toastr.error('NO obtenido', 'NO obtenido');
       }
     )
-  }
-  // Método que realiza la ejecución para saber el promedio de cajas selladas por minuto  durante el turno
-  //a la consulta de la base de datos se le pasa el calibrador, la fecha de inicio del turno, la hora de inicio del turno y si el turno esta en el mismo dia que inicio o se extendio a otro
-  getAverageforMinute() {
-    //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
-    this.fechaActual = this.fecha().substring(0, 10);
-    //En el caso en que el turno se mantenga en el dia en que se inicio
-    if (this.fechaActual == this.turnoActual[0].fecha_apertura) {
-      //consulta para el calibrador 1
-      this.monitoreoCalibradorService.getAverageforMinute(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '1', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Minuto = res;
-          //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador1Minuto[0].total == null) {
-            this.totalMinuto1 = 0;
-          }
-          else {
-            this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
-          }
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenido', 'NO obtenido');
-        }
-      )
-      //En el caso en que el turno se extienda de un dia a otro. 
-    } else if (this.fechaActual > this.turnoActual[0].fecha_apertura) {
-      //consulta para el calibrador 1
-      this.monitoreoCalibradorService.getAverageforMinute(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '2', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Minuto = res;
-          //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador1Minuto[0].total == null) {
-            this.totalMinuto1 = 0;
-          }
-          else {
-            this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
-          }
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenido', 'NO obtenido');
-        }
-      )
-
-    }
   }
 
   getAverageLastHour2() {
@@ -331,87 +306,26 @@ export class MonitoreoCalibrador1Component implements OnInit {
         this.toastr.error('Promedio de la ultima hora por minuto NO obtenido', 'NO obtenido');
       });
   }
-
-  //Método que ejecuta los servicios para consultar el promedio de cajas selladas en la útima hora del turno.
-  getAverageLastHour() {
-    //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
-    this.fechaActual = this.fecha().substring(0, 10);
-    //en el caso de que el turno se mantenga en el día que inicio
-    if (this.fechaActual == this.turnoActual[0].fecha_apertura) {
-      //consulta para el calibrador 1
-      this.monitoreoCalibradorService.getAverageforMinuteLastHour(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '1', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Hora = res;
-          //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador1Hora[0].total == null) {
-            this.totalHora1 = 0;
-          }
-          else {
-            this.totalHora1 = this.cajasCalibrador1Hora[0].total;
-          }
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en la última hora en el turno del calibrador 1, método getAverageLastHour, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenido', 'NO obtenido');
-        }
-      )
-      //En el caso en que el turno se extienda de un dia a otro.  
-    } else if (this.fechaActual > this.turnoActual[0].fecha_apertura) {
-      //consulta para el calibrador 1
-      this.monitoreoCalibradorService.getAverageforMinuteLastHour(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '2', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Hora = res;
-          if (this.cajasCalibrador1Hora[0].total == null) {
-            this.totalHora1 = 0;
-          }
-          else {
-            this.totalHora1 = this.cajasCalibrador1Hora[0].total;
-          }
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en la última hora en el turno del calibrador 1, método getAverageLastHour, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenido ultima hor', 'NO obtenido');
-        }
-      )
-
-    }
-
-  }
-
+  
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
-  getProduccionTurno() {
-    //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
-    this.fechaActual = this.fecha().substring(0, 10);
-    //en el caso de que el turno se mantenga en el día que inicio
-    if (this.fechaActual == this.turnoActual[0].fecha_apertura) {
-      //consulta para el calibrador 1
-      this.monitoreoCalibradorService.getProduccionSearch(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '1', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Turno = res;
-          this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenidoaaa', 'NO obtenido');
-        }
-      )
-      //En el caso en que el turno se extienda de un dia a otro.
-    } else if (this.fechaActual > this.turnoActual[0].fecha_apertura) {
-      //consulta para calibrador 1
-      this.monitoreoCalibradorService.getProduccionSearch(this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.calibradores[0].id, '2', this.fechaActual).subscribe(
-        res => {
-          this.cajasCalibrador1Turno = res;
-          this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
-          console.log("produccion por turno success");
-        },
-        err => {
-          this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
-          this.toastr.error('NO obtenidooooooooooo', 'NO obtenido');
-        }
-      )
-
-    }
+  getProduccionTurno2() {
+    //consulta para el calibrador 1
+    this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
+      res => {
+        this.cajasCalibrador1Turno = res;
+        this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
+        this.toastr.error('NO obtenidoaaa', 'NO obtenido');
+      }
+    )
+      
   }
+/******************************************************************************************************/
+/******************************************************************************************************/
+/******************************************************************************************************/
+
 
 
   public barChartLabels: Label[] = [];

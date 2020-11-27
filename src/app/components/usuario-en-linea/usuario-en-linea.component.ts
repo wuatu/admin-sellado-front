@@ -254,7 +254,7 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
   getTurnoActual() {
-    this.monitoreoService.getGetLastTurno().subscribe(
+    this.monitoreoService.getLastTurno().subscribe(
       res => {
         this.turnoActual = res.body;
         if(res.status == 200){
