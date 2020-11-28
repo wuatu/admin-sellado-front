@@ -221,6 +221,7 @@ export class RfidSalidaComponent implements OnInit {
       res => {
         this.registroService.creaRegistro("Se ha eliminado un rfid salida, id: "+rfidSalida.id+", Calibrador: "+this.selectedCalibradorObject.nombre);
         this.listarRfids();
+        this.rfidsSalida=[];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar el rfid salida, método eliminarRfidSalida, component rfid-salida');

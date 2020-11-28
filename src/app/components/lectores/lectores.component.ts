@@ -259,6 +259,7 @@ export class LectoresComponent implements OnInit {
       res => {
         this.registroService.creaRegistro("Se ha eliminado un lector, id: "+ lector.id);
         this.listarLectores();
+        this.lectores=[];
       },
       err => {
         console.log(err);

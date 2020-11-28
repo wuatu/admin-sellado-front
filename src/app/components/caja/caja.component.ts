@@ -166,6 +166,7 @@ export class CajaComponent implements OnInit {
         this.registroService.creaRegistro("Se ha eliminado una cada, id: " + caja.id);
         console.log(res);
         this.listarCajas();
+        this.cajas=[];
       },
       err => {
         console.log(err);

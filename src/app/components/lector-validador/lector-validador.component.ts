@@ -169,6 +169,7 @@ export class LectorValidadorComponent implements OnInit {
         this.registroService.creaRegistro("Se ha eliminado un lector validador, id: "+ lectorValidador.id);
         console.log(res);
         this.listarLectoresValidador();
+        this.lectoresValidador=[];
       },
       err => {
         console.log(err);

@@ -122,7 +122,7 @@ export class ProduccionColaboradorComponent implements OnInit {
         this.produccionColaborador = res.body;
         if (res.status == 200) {
         } else if (res.status == 204) {
-          this.toastr.success('no hay producción actualmente para mostrar', 'Operación satisfactoria');
+          this.toastr.success('Colaborador no existe o no hay producción para mostrar', 'Operación satisfactoria');
           return;
         }
         //console.log(this.produccionColaborador);

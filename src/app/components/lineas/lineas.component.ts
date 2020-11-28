@@ -168,6 +168,7 @@ export class LineasComponent implements OnInit {
         this.registroService.creaRegistro("Se ha eliminado una linea, id: "+ linea.id+", calibradora: "+this.selectedCalibradorObject.nombre);
         console.log(res);
         this.listarLineas();
+        this.lineas=[];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar la línea, método eliminarLinea, component linea');

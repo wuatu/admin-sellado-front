@@ -18,17 +18,17 @@ export class SeguimientoDeCajasService {
     return this.httpClient.get(`${this.API_URL}/caja_sellada_search/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}`, { observe: 'response' });
   }
 
-  getSearchLineAndCaliper(criterionSearch: string, toSearch: string, fromDateSearch: string, toDateSearch: string, id_line: string, id_caliper: string) {
-    return this.httpClient.get(`${this.API_URL}/caja_sellada_search_line_caliper/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}`, { observe: 'response' });
+  getSearchLineAndCaliper(criterionSearch: string, toSearch: string, fromDateSearch: string, toDateSearch: string, id_line: string, id_caliper: string, validadas: boolean) {
+    return this.httpClient.get(`${this.API_URL}/caja_sellada_search_line_caliper/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}/${validadas}`, { observe: 'response' });
   }
 
-  countBox(criterionSearch: string, toSearch: string, fromDateSearch: string, toDateSearch: string, id_line: string, id_caliper: string) {
-    return this.httpClient.get(`${this.API_URL}/caja_sellada_count_box/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}`, { observe: 'response' });
+  countBox(criterionSearch: string, toSearch: string, fromDateSearch: string, toDateSearch: string, id_line: string, id_caliper: string, validadas: boolean) {
+    return this.httpClient.get(`${this.API_URL}/caja_sellada_count_box/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}/${id_line}/${id_caliper}/${validadas}`, { observe: 'response' });
   }
   saveSeguimientoDeCajas(seguimientoDeCajas: SeguimientoDeCajas) {
     return this.httpClient.post(`${this.API_URL}/caja_sellada/`, seguimientoDeCajas);
   }
-  getCajasPorIdTurno(idTurno:number){
+  getCajasPorIdTurno(idTurno: number) {
     return this.httpClient.post(`${this.API_URL}/caja_sellada_por_id_turno/`, idTurno);
   }
 

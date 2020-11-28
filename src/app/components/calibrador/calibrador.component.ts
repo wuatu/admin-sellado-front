@@ -144,6 +144,7 @@ export class CalibradorComponent implements OnInit {
         //this.toastr.success('Operación satisfactoria', 'Calibrador eliminado');
         console.log(res);
         this.listarCalibradores();
+        this.calibradores=[];
       },
       err => {
         console.log(err);

@@ -165,6 +165,7 @@ export class AdministradorComponent implements OnInit {
         this.registroService.creaRegistro("Se ha elimidado un administrador, id:  "+administrador.id+", rut; "+administrador.rut+" y nombre: "+administrador.nombre + " "+administrador.apellido);
         console.log(res);
         this.listarAdministradores();
+        this.administradores=[];
       },
       err => {
         console.log(err);

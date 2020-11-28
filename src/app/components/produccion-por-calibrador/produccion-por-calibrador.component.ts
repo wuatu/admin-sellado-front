@@ -132,9 +132,9 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
       },
       err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
+        //this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
         if (this.selectedCalibradorText != "Seleccionar calibrador" && this.desde != " " && this.hasta != " ") {
-          this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
+          //this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
         }
 
       }

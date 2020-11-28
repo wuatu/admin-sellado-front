@@ -256,6 +256,7 @@ export class RfidComponent implements OnInit {
       res => {
         this.registroService.creaRegistro("Se ha eliminado un rfid, id: "+rfid.id+", linea: "+this.selectedLineaObject.nombre+", y calibrador: "+this.selectedLineaObject.nombre_calibrador);
         this.listarRfids();
+        this.rfids=[];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar el rfid, método eliminarRfid, component rfid');

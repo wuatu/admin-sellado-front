@@ -72,11 +72,12 @@ export class UsuarioComponent implements OnInit {
       this.rutUsuario = null;
       this.nombreUsuario = null;
       this.apellidoUsuario = null;
-      this.rfidUsuario = null;
+      this.registerRfid.codigo = null;
       return;
     }
     
-    let usuario = new Usuario(null, this.rutUsuario, this. nombreUsuario, this.apellidoUsuario, this.rfidUsuario);
+    let usuario = new Usuario(null, this.rutUsuario, this. nombreUsuario, this.apellidoUsuario, this.registerRfid.codigo);
+    console.log(usuario);
     this.usuarioService.saveUsuario(usuario).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Colaborador agregado');
@@ -84,7 +85,7 @@ export class UsuarioComponent implements OnInit {
         this.rutUsuario = null;
         this.nombreUsuario = null;
         this.apellidoUsuario = null;
-        this.rfidUsuario = null;
+        this.registerRfid.codigo = null;
         this.listarUsuarios();
         if (this.subscriptionTimerTask != null) {
           this.subscriptionTimerTask.unsubscribe();
@@ -99,7 +100,7 @@ export class UsuarioComponent implements OnInit {
         this.rutUsuario = null;
         this.nombreUsuario = null;
         this.apellidoUsuario = null;
-        this.rfidUsuario = null;
+        this.registerRfid.codigo = null;
         if (this.subscriptionTimerTask != null) {
           this.subscriptionTimerTask.unsubscribe();
         }
@@ -163,6 +164,7 @@ export class UsuarioComponent implements OnInit {
       res => {
         this.RegistroService.creaRegistro("Se ha eliminado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
         this.listarUsuarios();
+        this.usuarios=[];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar al usuario, método eliminarUsuario, component usuario');

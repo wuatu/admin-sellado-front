@@ -87,14 +87,14 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-    this.agregarRegistroDeCajas();
+    //this.agregarRegistroDeCajas();
     this.listarCalibradores();
   }
 
   toggleVisibility(e) {
     this.marked = e.target.checked;
     console.log("marked: ", this.marked);
-    this.setBusquedaCheckBox(this.marked);
+    //this.setBusquedaCheckBox(this.marked);
   }
 
   setBusquedaCheckBox(isChecked: boolean) {
@@ -148,7 +148,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
 
   buscarPorCriterio() {
     console.log(this.selectedSearch + " " + this.toSearch + " " + this.desde + " " + this.hasta);
-    //this.seguimientoDeCajas = [];
+    this.seguimientoDeCajas = [];
     this.seguimientoDeCajasAux = [];
     if (!this.selectedLineaObject && !this.selectedCalibradorObject) {
       this.toastr.error('Se debe seleccionar calibrador y linea', 'Oops');
@@ -158,13 +158,14 @@ export class SeguimientoDeCajasComponent implements OnInit {
       return;
     } else if (this.selectedLineaObject && this.selectedCalibradorObject) {
       console.log(this.theCheckbox);
-      this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
+      this.seguimientoDeCajasService.getSearchLineAndCaliper(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id,this.marked).subscribe(
         res => {
           this.seguimientoDeCajasAux = res.body;
+          this.seguimientoDeCajas= res.body;
 
-          if (res.status == 200) {
-            //this.countBoxSearch();
-            this.toastr.success('Cajas selladas obtenidas', 'Operación satisfactoria');
+          if (res.status == 200) {            
+            this.countBoxSearch();
+            //this.toastr.success('Cajas selladas obtenidas', 'Operación satisfactoria');
           } else if (res.status == 204) {
             this.toastr.success('no existen cajas selladas actualmente para mostrar', 'Operación satisfactoria');
             return;
@@ -174,9 +175,9 @@ export class SeguimientoDeCajasComponent implements OnInit {
             console.log(this.seguimientoDeCajasAux.nombre_usuario + "!!!!!!!!!!!!!");
             this.bandera++;
           }
-          this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
+          //this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
           console.log(this.marked);
-          this.setBusquedaCheckBox(this.marked);
+          //this.setBusquedaCheckBox(this.marked);
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudieron obtener las cajas por el criterio seleccionado, método buscarPorCriterio, component seguimiento-de-cajas');
@@ -187,7 +188,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   }
 
   countBoxSearch() {
-    this.seguimientoDeCajasService.countBox(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id).subscribe(
+    this.seguimientoDeCajasService.countBox(this.selectedSearch, this.toSearch, this.desde, this.hasta, this.selectedLineaObject.id, this.selectedCalibradorObject.id, this.marked).subscribe(
       res => {
         this.numBox = 0;
         this.cantidadDeCajas = res.body;

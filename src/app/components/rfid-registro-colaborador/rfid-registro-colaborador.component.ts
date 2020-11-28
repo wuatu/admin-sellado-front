@@ -177,6 +177,7 @@ export class RfidRegistroColaboradorComponent implements OnInit {
       res => {
         this.registroService.creaRegistro("Se ha eliminado un rfid registro colaborador, id: "+rfidRegistroColaborador.id);
         this.listarRfidsRegistroColaborador();
+        this.rfidsRegistroColaborador=[];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar el rfid registro colaborado, método eliminarRfidRegistroColaborador, component rfid-registro-colaborador');

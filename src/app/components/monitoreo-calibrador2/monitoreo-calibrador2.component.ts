@@ -93,7 +93,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
               this.getAverageforMinute2()
               this.getProduccionTurno2();
               this.getAverageLastHour2();
-              this.getProductionLine();
+              this.getProductionLine2();
               //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
             }//else{
             //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
@@ -192,7 +192,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.getAverageforMinute2()
         this.getProduccionTurno2();
         this.getAverageLastHour2();
-        this.getProductionLine();
+        this.getProductionLine2();
 
       },
       err => {
@@ -235,13 +235,13 @@ export class MonitoreoCalibrador2Component implements OnInit {
 /*******************************************   PRODUCCIÓN   *******************************************/
 /******************************************************************************************************/
   //Método que obtiene la cantidad de cajas selladas por minuto de las lineas del calibrador 
-  getProductionLine() {
+  getProductionLine2() {
     this.productionByLine = [];
     //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
     this.fechaActual = this.fecha().substring(0, 10);
     let i = 0;
     for (let linea of this.lineas) {
-      this.monitoreoCalibradorService.getProductionLine(this.calibradores[1].id, linea.id, linea.nombre, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, this.fechaActual).subscribe(
+      this.monitoreoCalibradorService.getProductionLine2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, linea.id, linea.nombre).subscribe(
         res => {
           this.productionByLine.push(res.body);
           if (i == this.lineas.length - 1) {
