@@ -136,8 +136,9 @@ export class MonitoreoSistemaComponent implements OnInit {
   getCollaboratorsByLine(lineas: any = [], id:string){
     this.collaboratorsInLine = [];
     let i = 0;
+    
     for(let linea of lineas ){
-       this.monitoreoSistemaService.getCollaboratorsInLine(linea.id, id, this.turnoActual[0].id, linea.nombre).subscribe(
+       this.monitoreoSistemaService.getCollaboratorsInLine(linea.id, id, linea.nombre).subscribe(
          res =>{
             if(res.status == 200){
               this.collaboratorsInLine.push(res.body);

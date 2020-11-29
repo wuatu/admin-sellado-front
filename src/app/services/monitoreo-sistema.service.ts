@@ -9,12 +9,12 @@ export class MonitoreoSistemaService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
-  getUsuariosEnLinea(idLinea:string, idCalibrador:string, id_turno:number, nombre_linea: string){
+  getUsuariosEnLinea(idLinea:string, idCalibrador:string, nombre_linea: string){
     console.log("getUsuariosEnLinea");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_list/${idLinea}/${idCalibrador}/${id_turno}/${nombre_linea}`,{observe: 'response'});    
+    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_list/${idLinea}/${idCalibrador}/${nombre_linea}`,{observe: 'response'});    
   }
-  getCollaboratorsInLine(idLinea:string, idCalibrador:string, id_turno:number, nombre_linea: string){
-    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_collaborators/${idLinea}/${idCalibrador}/${id_turno}/${nombre_linea}`,{observe: 'response'});    
+  getCollaboratorsInLine(idLinea:string, idCalibrador:string, nombre_linea: string){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_collaborators/${idLinea}/${idCalibrador}/${nombre_linea}`,{observe: 'response'});    
   }
   getRfidInLine(idLinea:string){
     return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_rfid/${idLinea}`,{observe: 'response'});    

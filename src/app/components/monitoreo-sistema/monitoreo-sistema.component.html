@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4 my-1">
                             <div class="card" style="margin: 10px;" *ngIf="bandera == true">
-                                <div class="card-body">
+                                <div class="card-body" *ngIf="bigArray[1]">
                                     <h5><b>Rfid</b></h5>
                                     <tr>
                                         <td *ngIf="bigArray[1].nombre_rfid != 'undefine'">
@@ -121,7 +121,7 @@
                         <div class="col-lg-4 col-md-4 my-1">
                             <div class="card" style="margin: 10px;" *ngIf="bandera == true">
 
-                                <div class="card-body">
+                                <div class="card-body" *ngIf="bigArray[1]">
                                     <h5><b>Lector</b></h5>
                                     <tr>
                                         <td *ngIf="bigArray[1].nombre_lector != 'undefine'">

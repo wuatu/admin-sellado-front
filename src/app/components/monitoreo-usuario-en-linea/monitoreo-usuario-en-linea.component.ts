@@ -6,7 +6,7 @@ import { MonitoreoUsuarioEnLineaService } from '../../services/monitoreo-usuario
 import { RegistroDevService } from '../../services/registro-dev.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { timer,interval, Subscription, Observable } from 'rxjs';
+import { timer, interval, Subscription, Observable } from 'rxjs';
 
 
 @Component({
@@ -26,8 +26,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   selectedCalibradorObject: any;
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
-  rol:number;
-  
+  rol: number;
+
   constructor(
     private toastr: ToastrService,
     private calibradorService: CalibradorService,
@@ -36,19 +36,19 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     private monitoreoUsuarioEnLineaService: MonitoreoUsuarioEnLineaService,
     private registroDevService: RegistroDevService,
     private modalService: NgbModal
-    ) { }
+  ) { }
 
   ngOnInit() {
-    
+
     this.getTurnoActual();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
 
-      if(this.lineas != null && this.selectedCalibradorObject != null){
+      if (this.lineas != null && this.selectedCalibradorObject != null) {
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
       }
     });
-    
+
   }
 
   ngOnDestroy() {
@@ -56,14 +56,14 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
       this.subscriptionTimerTask.unsubscribe();
     }
   }
-  
+
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
-  getTurnoActual(){
+  getTurnoActual() {
     this.monitoreoService.getLastTurno().subscribe(
       res => {
         this.turnoActual = res.body;
         this.listarCalibradores();
-        
+
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador2')
@@ -73,12 +73,12 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   }
 
   //metodo que lista las calibradores
-  listarCalibradores(){
+  listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
-      res=>{
-        this.calibradores=res.body;
+      res => {
+        this.calibradores = res.body;
       },
-      err=>{
+      err => {
         console.log(err);
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-calibrador2');
         //this.toastr.error('No se pudo obtener calibradores', 'Oops');
@@ -90,17 +90,17 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     this.getLineOfCaliper(this.selectedCalibradorObject.id);
-    
+
   }
 
   //Este método obtiene desde la base de datos todas las lineas que tiene el calibrador y ejecuta los métodos paras obtener la producción 
-  getLineOfCaliper(id:string){
+  getLineOfCaliper(id: string) {
     this.lineaService.getLineasId(id).subscribe(
-      res =>{
+      res => {
         this.lineas = res.body;
-        this.getCollaboratorsByLine(this.lineas,id);
+        this.getCollaboratorsByLine(this.lineas, id);
       },
-      err =>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método getLineOfCaliper, component monitoreo-calibrador2');
         console.log("No se pudieron cargar las lineas del calibrador!!!!");
       }
@@ -108,40 +108,44 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   }
 
 
-  
 
-  getCollaboratorsByLine(lineas: any = [], id:string){
+
+  getCollaboratorsByLine(lineas: any = [], id: string) {
     this.collaboratorsInLine = [];
-    let i =0;
-    for(let linea of lineas ){
-      this.monitoreoUsuarioEnLineaService.getUsuariosEnLinea(linea.id, id, this.turnoActual[0].id, linea.nombre).subscribe(
-        res =>{
-            if(res.status == 200){
+    let i = 0;
+    if (this.turnoActual != null) {
+      for (let linea of lineas) {
+        this.monitoreoUsuarioEnLineaService.getUsuariosEnLinea(linea.id, id, this.turnoActual[0].id, linea.nombre).subscribe(
+          res => {
+            if (res.status == 200) {
               this.collaboratorsInLine.push(res.body);
-            }else if(res.status == 204){
+            } else if (res.status == 204) {
               this.collaboratorsInLine.push(res.body);
             }
-            if(i == lineas.length-1){
+            if (i == lineas.length - 1) {
               this.ordenarArray()
             }
             i++;
-        },
-        err =>{
-          this.registroDevService.creaRegistroDev('No se pudieron obtener los colaboradores en las líneas, método getLineOfCaliper, component monitoreo-usuario-en-linea');
-          
-        }
-       
-      )
+          },
+          err => {
+            this.registroDevService.creaRegistroDev('No se pudieron obtener los colaboradores en las líneas, método getLineOfCaliper, component monitoreo-usuario-en-linea');
+
+          }
+
+        )
+      }
+    } else {
+      this.toastr.error('Inicie turno para ver colaboradores en línea', 'Oops');
     }
-   
+
   }
 
-  ordenarArray(){
+  ordenarArray() {
     this.collaboratorsInLineAux = [];
-    for(let linea of this.lineas){
-      
-      for(let collaborator of this.collaboratorsInLine){
-        if(linea.nombre == collaborator[0].nombre_linea){
+    for (let linea of this.lineas) {
+
+      for (let collaborator of this.collaboratorsInLine) {
+        if (linea.nombre == collaborator[0].nombre_linea) {
           this.collaboratorsInLineAux.push(collaborator);
           break;
         }
@@ -166,8 +170,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     );
   }
 
-   //metodo que abre un modal
-   open(modal) {    
+  //metodo que abre un modal
+  open(modal) {
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
