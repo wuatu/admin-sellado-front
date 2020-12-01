@@ -305,7 +305,7 @@ export class UsuarioEnLineaComponent implements OnInit {
   changeSelectedLinea(newSelected: any) {
     this.selectedLineaText = newSelected.nombre;
     this.selectedLineaObject = newSelected;
-    this.listarUsuariosEnLinea();
+    //this.listarUsuariosEnLinea();
     this.listarUsuarios();
   }
 

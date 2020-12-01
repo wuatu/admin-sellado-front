@@ -55,6 +55,7 @@ import { RfidRegistroColaboradorComponent } from './components/rfid-registro-col
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -88,7 +89,8 @@ import { RfidRegistroColaboradorComponent } from './components/rfid-registro-col
     MonitoreoUsuarioEnLineaComponent,
     RfidSalidaComponent,
     MonitoreoSistemaComponent,
-    RfidRegistroColaboradorComponent
+    RfidRegistroColaboradorComponent,
+ 
   ],
   imports: [
     BrowserModule,

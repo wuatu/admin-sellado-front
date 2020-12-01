@@ -3,7 +3,7 @@
         <br>
         <div class="row justify-content-center">
             <div class="col-12">
-                <h1 class="text-center"><b>Usuario en línea de sellado</b></h1>
+                <h1 class="text-center"><b>Colaborador en línea de sellado</b></h1>
             </div>
         </div>
         <hr>
@@ -53,8 +53,12 @@
         <div class="row">
             <div class="col-md-4 col-sm-12 my-1">
                 <form #buscarUsuario="ngForm">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="Rut colaborador">
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutBusqueda" name="rut" id="rut" class="form-control" placeholder="RUT Ej: 9605009-7" required maxlength="10" rutValidation>
                 </form>
+            </div>
+            <!--Valida formulario rut, aqui no es obligatorio el rut -->
+            <div *ngIf="rut.invalid && rut.errors.rutValidation" class="alert alert-danger">
+                {{rut.errors.rutValidation.message}}
             </div>
         </div>
     </div>
@@ -126,21 +130,6 @@
     <div class="modal-body">
         <form #myform="ngForm">
             <div class="form-group">
-                <!--<label for="lineaLabel"><b>Calibrador:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary " id="dropdownBasic1" ngbDropdownToggle style="width: 250px; margin: 10px">{{selectedCalibradorText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let calibrador of calibradores" (click)="changeSelectedCalibrador(calibrador)">{{calibrador.nombre}}</button>
-                    </div>
-                </div>
-                <br>
-                <label for="lineaLabel"><b>Linea:</b></label>
-                <div ngbDropdown>
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle style="width: 250px; margin: 10px">{{selectedLineaText}}</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" *ngFor="let linea of lineas" (click)="changeSelectedLinea(linea)">{{linea.nombre}}</button>
-                    </div>
-                </div>-->
                 <br>
                 <label for="lineaLabel"><b>Colaborador:</b></label>
                 <div ngbDropdown>

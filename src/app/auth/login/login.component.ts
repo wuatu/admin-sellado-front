@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import{AuthService} from '../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { ExportTurno } from '../../models/export-turno';
 
 @Component({
   selector: 'app-login',
@@ -22,11 +23,13 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+
   }
 
   onLogin(form):void{
     this.authService.login(form.value).subscribe(
       res=>{
+        console.log("llegamos bien!!!!!");
         this.router.navigateByUrl('/monitoreo')
       err=>{
         console.log("I AM IN THE ERR!!!!");
@@ -37,13 +40,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  open(modal) {
+  public open(modal) {
     
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+
   }
   private getDismissReason(reason: any): string {
     console.log(reason);

@@ -8,7 +8,6 @@ import { TurnoService } from 'src/app/services/turno.service';
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from 'xlsx';
 import { ExportTurno } from 'src/app/models/export-turno';
-import { FormsModule } from '@angular/forms';
 import { RegistroDevService } from '../../services/registro-dev.service';
 
 @Component({
