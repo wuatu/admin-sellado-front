@@ -41,29 +41,15 @@ export class AuthService {
       user).pipe(tap(
         (res: JwtResponse) => {
           if (res) {
-            /*console.log(res);
-           
-            this.administradorService.getAdmin(user.rut).subscribe(
-              res2 => {
-                this.admin = res2;
-                res.dataUser.rol = this.admin.rol;
-                //guardar token
-                localStorage.setItem('USER', JSON.stringify(res.dataUser));
-                this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-
-              },
-              err => {
-                
-              }
-            )*/
-            
-
-            
+            console.log("sera aqui ?????");
             console.log(res);
             //guardar token
             localStorage.setItem('USER', JSON.stringify(res.dataUser));
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
           }
+        },
+        err=>{
+          
         }
       )
     );    

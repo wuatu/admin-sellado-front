@@ -89,7 +89,7 @@ export class ProduccionPorLineaComponent implements OnInit {
   dateStartSearch: string;
   dateFinishSearch: string;
   mostrarGrafico: any;
-
+ 
   rol: number;
 
   constructor(
@@ -229,8 +229,12 @@ export class ProduccionPorLineaComponent implements OnInit {
     }
     if (this.selectedOptionVerified == "si") {
       this.verificado = 1;
+      this.currentSeguimientoSelected.fecha_validacion_time = new Date().getTime().toString();
+      console.log(new Date().getTime().toString());
+      console.log(this.currentSeguimientoSelected.fecha_validacion_time);
     } else {
       this.verificado = 0;
+      this.currentSeguimientoSelected.fecha_validacion_time = "";
     }
     if (this.selectedOptionToTime == "si") {
       this.a_tiempo = 1;
@@ -238,7 +242,7 @@ export class ProduccionPorLineaComponent implements OnInit {
       this.a_tiempo = 0;
     }
     if (this.verificado != this.currentSeguimientoSelected.is_verificado || this.a_tiempo != this.currentSeguimientoSelected.is_before_time) {
-      let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador, this.currentSeguimientoSelected.nombre_calibrador, this.currentSeguimientoSelected.id_linea, this.currentSeguimientoSelected.nombre_linea, this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.id_caja, this.currentSeguimientoSelected.envase_caja, this.currentSeguimientoSelected.variedad_caja, this.currentSeguimientoSelected.categoria_caja, this.currentSeguimientoSelected.calibre_caja, this.currentSeguimientoSelected.correlativo_caja, this.currentSeguimientoSelected.ponderacion_caja, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_sellado, this.currentSeguimientoSelected.fecha_validacion, this.currentSeguimientoSelected.hora_validacion, this.currentSeguimientoSelected.fecha_validacion_time,this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
+      let registroProduccionColaborador = new SeguimientoDeCajas(form.value.id, this.currentSeguimientoSelected.id_calibrador, this.currentSeguimientoSelected.nombre_calibrador, this.currentSeguimientoSelected.id_linea, this.currentSeguimientoSelected.nombre_linea, this.currentSeguimientoSelected.id_rfid, this.currentSeguimientoSelected.nombre_rfid, this.currentSeguimientoSelected.ip_rfid, this.currentSeguimientoSelected.id_lector, this.currentSeguimientoSelected.nombre_lector, this.currentSeguimientoSelected.ip_lector, this.currentSeguimientoSelected.id_usuario, this.currentSeguimientoSelected.rut_usuario, this.currentSeguimientoSelected.nombre_usuario, this.currentSeguimientoSelected.apellido_usuario, this.currentSeguimientoSelected.codigo_de_barra, this.currentSeguimientoSelected.Cod_Caja_Unitec, this.currentSeguimientoSelected.Codigo_Confection_Unitec, this.currentSeguimientoSelected.Confection_Unitec,this.currentSeguimientoSelected.Codigo_Embalaje_Unitec ,this.currentSeguimientoSelected.Embalaje_Unitec,this.currentSeguimientoSelected.Codigo_Envase_Unitec,this.currentSeguimientoSelected.Envase_Unitec, this.currentSeguimientoSelected.Categoria_Unitec, this.currentSeguimientoSelected.Categoria_Timbrada_Unitec,this.currentSeguimientoSelected.Codigo_Calibre_Unitec, this.currentSeguimientoSelected.Calibre_Unitec, this.currentSeguimientoSelected.id_caja_sellada, this.currentSeguimientoSelected.ponderacion_caja_sellada, this.currentSeguimientoSelected.fecha_sellado, this.currentSeguimientoSelected.hora_validacion, this.currentSeguimientoSelected.fecha_sellado_time,this.currentSeguimientoSelected.fecha_validacion,this.currentSeguimientoSelected.hora_validacion,this.currentSeguimientoSelected.fecha_validacion_time ,this.verificado, this.a_tiempo, this.currentSeguimientoSelected.id_apertura_cierre_de_turno);
       console.log(registroProduccionColaborador);
       this.produccionPorLineaService.updateRegistroProduccionLinea(registroProduccionColaborador.id, registroProduccionColaborador).subscribe(
         res => {
@@ -247,7 +251,7 @@ export class ProduccionPorLineaComponent implements OnInit {
           this.currentSeguimientoSelected = null;
         },
         err => {
-          this.registroDevService.creaRegistroDev('No se pudo editar el registro producción, método editarRegistroProduccion, component monitoreo-por-linea');
+          this.registroDevService.creaRegistroDev('No se pudo editar el registro producción, método editarRegistroProduccion, component produccion-por-linea');
           this.toastr.error('No se pudo editar registro', 'Oops',);
         }
       );
