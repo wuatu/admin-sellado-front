@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
+import { Toast, ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { AdministradorService } from 'src/app/services/administrador.service';
 import { TurnoService } from 'src/app/services/turno.service';
@@ -66,7 +66,7 @@ export class MonitoreoComponent implements OnInit {
   subscriptionTimerTask1: Subscription;
   subscriptionTimerTask2: Subscription;
   subscriptionTimer: Subscription;
-
+  timeOut: any;
 
   constructor(
     private modalService: NgbModal,
@@ -100,8 +100,9 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionTimerTask != null) {
-      this.subscriptionTimerTask.unsubscribe();
+
+    if (this.timeOut != null) {
+      clearTimeout(this.timeOut);
     }
 
     if (this.subscriptionTimer != null) {
@@ -113,26 +114,22 @@ export class MonitoreoComponent implements OnInit {
 
   getProduccion() {
     if (this.calibradores != null) {
-      this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
-        this.monitoreoService.getLastTurno().subscribe(
-          res => {
-            if (res.status == 200) {
-              console.log(res.body[0]);
-              this.getProduccionTurno();
-              this.getAverageforMinute();
-              this.getAverageLastHour();
-
-            }
-          },
-          err => {
-            console.log(err.status);
-            this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+      this.monitoreoService.getLastTurno().subscribe(
+        res => {
+          if (res.status == 200) {
+            console.log("ejecuto monitoreo");
+            this.getProduccionTurno();
           }
-        )
-      });
+        },
+        err => {
+          console.log(err.status);
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+        }
+      )
     } else{
       this.toastr.success('Debe agregar un calibrador', 'Oops');
     }
+    
   }
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
@@ -167,9 +164,11 @@ export class MonitoreoComponent implements OnInit {
     this.monitoreoService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
+        this.getAverageLastHour();
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Minuto[0].total == null) {
           this.totalMinuto1 = 0;
+          
         }
         else {
           this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
@@ -207,9 +206,16 @@ export class MonitoreoComponent implements OnInit {
     this.monitoreoService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Hora = res;
+        this.timeOut = setTimeout(() => 
+          {
+            this.getProduccion();
+           
+          },
+          10000);
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Hora[0].total == null) {
           this.totalHora1 = 0;
+
         }
         else {
           this.totalHora1 = this.cajasCalibrador1Hora[0].total;
@@ -251,6 +257,8 @@ export class MonitoreoComponent implements OnInit {
         (res) => {
           this.cajasCalibrador1Turno = res;
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
+          this.getAverageforMinute();
+            
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener la cantidad de cajas del turno del calibrador 1, método getProduccionTurno, component monitoreo');

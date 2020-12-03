@@ -29,13 +29,10 @@ export class LoginComponent implements OnInit {
   onLogin(form):void{
     this.authService.login(form.value).subscribe(
       res=>{
-        console.log("llegamos bien!!!!!");
+      
         this.router.navigateByUrl('/monitoreo')
       err=>{
-        console.log("I AM IN THE ERR!!!!");
-        this.bandera = true;
-        this.open("mymodalError12Credentials");
-        this.toastr.error('Credenciales inválidas', 'Error');
+       
       }
     });
   }

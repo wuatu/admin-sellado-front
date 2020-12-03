@@ -269,47 +269,46 @@ export class SeguimientoDeCajasComponent implements OnInit {
   hora: string;
   minuto: string;
   segundo: string;
+
   agregarRegistroDeCajas() {
     let count = 100;
- 
-    for (let h = 9; h <= 10; h++) {
-      for (let m = 0; m < 55; m++) {
-        for (let s = 0; s < 60; s = s + 20) {
-          count++;
-          //this.dia = d.toString();
-          //if (d < 10) {
-          //  this.dia = "0" + d;
-          //}
-        
-          this.hora = h.toString();
-          if (h < 10) {
-            this.hora = "0" + h;
-          }
-          this.minuto = m.toString();
-          if (m < 10) {
-            this.minuto = "0" + m;
-          }
-          this.segundo = s.toString();
-          if (s < 10) {
-            this.segundo = "0" + s;
-          }
-          let date = new Date();
-          let datew  = new Date("2020-11-30" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
-          let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", 22, "Línea 1", 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-01", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-01", "22:00:00",datew.getTime().toString(), 1, 1, 75);
-          this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
-            res => {
-              console.log("agrege!!!!!!!!");
-              //this.toastr.success('Operación satisfactoria', 'Registro agregado');
-            },
-            err => {
-              //console.log(err);
-              this.toastr.error('No se pudo agregar', 'Oops');
+    let x = 1;
+    for(let b = 11; b<=20 ; b++){
+      for (let h = 18; h <= 18; h++) {
+        for (let m = 20; m < 35; m++) {
+          x =  Math.random() * (21 - 10) + 10;
+          for (let s = 0; s < 60; s = s + x) {
+            count++;
+            this.hora = h.toString();
+            if (h < 10) {
+              this.hora = "0" + h;
             }
-          );
-          count++;
+            this.minuto = m.toString();
+            if (m < 10) {
+              this.minuto = "0" + m;
+            }
+            this.segundo = s.toString();
+            if (s < 10) {
+              this.segundo = "0" + s;
+            }
+            let date = new Date();
+            let datew  = new Date("2020-12-03" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
+            let registroCaja = new SeguimientoDeCajas(null, 2, "Calibrador 2", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-03", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-03", "12:00:00",datew.getTime().toString(), 1, 1, 3);
+            this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
+              res => {
+                console.log("agrege!!!!!!!!");
+                //this.toastr.success('Operación satisfactoria', 'Registro agregado');
+              },
+              err => {
+                //console.log(err);
+                this.toastr.error('No se pudo agregar', 'Oops');
+              }
+            );
+            count++;
+          }
         }
       }
-    }
+    };
     
   }
 

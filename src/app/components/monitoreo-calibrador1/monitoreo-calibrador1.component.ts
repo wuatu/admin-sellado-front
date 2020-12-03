@@ -61,6 +61,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
   barChartOptions: ChartOptions;
+  timeOut: any;
 
   constructor(
     private toastr: ToastrService,
@@ -85,30 +86,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
     //Lista los calibradores que estan registrados en la base de datos.
     this.getTurnoActual();
-    this.subscriptionTimerTask = timer(0, 10000).subscribe(() => {
-      this.monitoreoService.getLastTurno().subscribe(
-        res => {
-          if (res.status == 200) {
-            console.log(res.body[0]);
-            if (res.body[0].fecha_cierre == "") {
-              this.getAverageforMinute2()
-              this.getProduccionTurno2();
-              this.getAverageLastHour2();
-              this.getProductionLine2();
-              //this.toastr.success('llame a los metodos ','Operación Satisfactoria');
-
-            }//else{
-            //this.toastr.success('No hay turno iniciado','Operación satisfactoria');
-            //}
-
-          }
-        },
-        err => {
-          console.log(err.status);
-          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
-        }
-      )
-    });
 
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       this.time = new Date();
@@ -116,16 +93,32 @@ export class MonitoreoCalibrador1Component implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.subscriptionTimerTask != null) {
-
-      this.subscriptionTimerTask.unsubscribe();
+ 
+    if (this.timeOut != null) {
+      clearTimeout(this.timeOut);
     }
 
     if (this.subscriptionTimer != null) {
       this.subscriptionTimer.unsubscribe();
     }
+  }
 
+  getProduccion(){
+    this.monitoreoService.getLastTurno().subscribe(
+      res => {
+        if (res.status == 200) {
+          console.log("ejecuto monitoreo calibrador 1");
+          if (res.body[0].fecha_cierre == "") {
+            this.getAverageforMinute2()
+          }
 
+        }
+      },
+      err => {
+        console.log(err.status);
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+      }
+    )
   }
 
 
@@ -142,7 +135,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
           // We use these empty structures as placeholders for dynamic theming.
           title: {
             display: true,
-            text: 'Producción por línea',
+            text: '    ',
             fontColor: "black",
             fontSize: 20
           },
@@ -161,7 +154,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
             }], yAxes: [{
               ticks: {
                 beginAtZero: true,
-                max: this.calibradores[0].cajas_por_minuto + 3,
+               // max: auto /*this.calibradores[0].cajas_por_minuto + 3*/,
                 fontSize: 20,
                 fontColor: "black"
               }
@@ -192,9 +185,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
       res => {
         this.lineas = res.body;
         this.getAverageforMinute2()
-        this.getProduccionTurno2();
-        this.getAverageLastHour2();
-        this.getProductionLine2();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método getLineOfCaliper, component monitoreo-calibrador1');
@@ -252,11 +242,17 @@ export class MonitoreoCalibrador1Component implements OnInit {
     for (let linea of this.lineas) {
       this.monitoreoCalibradorService.getProductionLine2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, linea.id, linea.nombre).subscribe(
         res => {
-          //console.log(res.body);
           this.productionByLine.push(res.body);
+
           if (i == this.lineas.length - 1) {
-            console.log(this.productionByLine);
             this.ordenarArray(this.productionByLine);
+          
+            this.timeOut = setTimeout(() => 
+            {
+              this.getProduccion();
+              console.log("esperando !!!!!");
+            },
+              10000);
           }
           i++;
         },
@@ -271,6 +267,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
+        this.getProduccionTurno2();
+            
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Minuto[0].total == null) {
           this.totalMinuto1 = 0;
@@ -278,8 +276,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
         else {
           this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
         }
-
-        console.log("La produccion del turno es : " + this.totalMinuto1);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');
@@ -293,6 +289,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Hora = res;
+        this.getProductionLine2();
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Hora[0].total == null) {
           this.totalHora1 = 0;
@@ -312,6 +309,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
     //consulta para el calibrador 1
     this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
+        this.getAverageLastHour2();
+            
         this.cajasCalibrador1Turno = res;
         this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
       },

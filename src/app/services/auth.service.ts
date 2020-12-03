@@ -53,6 +53,7 @@ export class AuthService {
         },
         err=>{
           console.log();
+          //alert("Rut o Contraseña invalida");
           this.toastr.error('Rut o Contraseña invalida','Oops');
           console.log("AQUI ENTRO AL ERROR !!!!")
         }
