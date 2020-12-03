@@ -8,7 +8,7 @@
         </div>
         <br>
         <div class="row ">
-            <div class="col--lg-4 col-md-4 col-sm-12 my-1 align-self-start text-left ">
+            <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-start text-left ">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary " id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -16,24 +16,26 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-end">
-                <div class="text-left align-self-end" *ngIf="selectedCalibradorObject">
-                    <button class="btn btn-primary float-right btn-block text-center " *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
+                <div class="text-right" *ngIf="selectedCalibradorObject">
+                    <button class="btn btn-primary form-control text-center " *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
                         Agregar lector validador
                       </button>
                 </div>
             </div>
-
         </div>
+
     </div>
     <br>
-    <div class="row" *ngIf="selectedCalibradorObject && bandera">
+    <div class="row" *ngIf="bandera == true">
         <div class="col-12 ">
             <h4>Lista de lectores Validadores</h4>
         </div>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover" *ngIf="selectedCalibradorObject && bandera">
+    <table class="table table-hover" *ngIf="bandera == true ">
         <thead>
             <tr>
                 <th scope="col">N°</th>
@@ -111,7 +113,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Máximo tiempo de espera:</b></label>
                 <div class="input-group">
-                    <input type="text" #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }" placeholder="Máximo tiempo de espera">
+                    <input type="number" #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }" placeholder="Máximo tiempo de espera">
                 </div>
 
                 <div *ngIf="max.invalid && (max.dirty || max.touched)" class="alert alert-danger">
@@ -189,7 +191,7 @@
 
                 <label for="lineaLabel "><b>Máximo tiempo de espera:</b></label>
                 <div class="input-group ">
-                    <input type="text " #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control " placeholder="Máximo tiempo de espera" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                    <input type="number" #max='ngModel' [(ngModel)]="max_wait_time" name="max" id="max" class="form-control " placeholder="Máximo tiempo de espera" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                 </div>
 
                 <div *ngIf="max.invalid && (max.dirty || max.touched) " class="alert alert-danger ">

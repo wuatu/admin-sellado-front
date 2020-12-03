@@ -7,9 +7,8 @@
             </div>
         </div>
         <br>
-        <div class="row justify-content-center">
-
-            <div class="col-md-4 col-sm-12 my-1 align-self-end text-left">
+        <div class="row justify-content-start">
+            <div class="col-md-4 col-sm-12 my-1 align-self-start text-left">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -17,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-12 my-1 align-self-end text-left">
+            <div class="col-md-4 col-sm-12 my-1 align-self-start text-left">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedLineaText}}</button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
@@ -25,10 +24,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-12 align-self-end">
+
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
                 <div class="text-right" *ngIf="selectedCalibradorObject && selectedLineaObject">
-                    <button class="btn btn-primary btn-block text-center" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
-            Agregar RFID</button>
+                    <button class="btn btn-primary form-control" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+        Agregar RFID</button>
                 </div>
             </div>
         </div>

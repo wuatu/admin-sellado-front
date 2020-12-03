@@ -7,7 +7,7 @@
             </div>
         </div>
         <br>
-        <div class="row ">
+        <div class="row justify-content-start">
             <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-start text-left">
                 <div ngbDropdown>
                     <button class="btn btn-outline-primary" id="dropdownBasic1" style="width: -webkit-fill-available;" ngbDropdownToggle>{{selectedCalibradorText}}</button>
@@ -16,10 +16,14 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+        <div class="row justify-content-end">
             <div class="col-lg-4 col-md-4 col-sm-12 my-1 align-self-end">
                 <div class="text-right" *ngIf="selectedCalibradorObject ">
-                    <button class="btn btn-primary float-right btn-block text-center" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
-          Agregar RFID Salida</button>
+                    <button class="btn btn-primary form-control" *ngIf="rol!=2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+                         Agregar RFID Salida
+                    </button>
                 </div>
             </div>
         </div>

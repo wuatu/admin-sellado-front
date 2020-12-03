@@ -22,7 +22,7 @@ export class LectorValidadorComponent implements OnInit {
   ipValidador:string = null;
   max_wait_time	: string = null;
   registro_inicial_lectura: string = null;
-  bandera:any = null;
+  bandera:boolean = false;
     
   currentCalibradorSelected: Calibrador;
   currentLectorValidadorSelected: LectorValidador;
@@ -75,10 +75,9 @@ export class LectorValidadorComponent implements OnInit {
     this.lectorValidadorService.getLectoresValidadorId(this.selectedCalibradorObject.id).subscribe(
     //this.calibradorService.getCalibradores().subscribe(
       res=>{
-        console.log(res.body);
-        this.lectoresValidador=res.body;
-        this.bandera = "mostrar";
         if(res.status == 200){
+          this.lectoresValidador=res.body;
+          this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen lectores validadores actualmente para mostrar','Operación satisfactoria');
           return;

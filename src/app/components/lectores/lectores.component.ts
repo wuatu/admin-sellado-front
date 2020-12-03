@@ -31,6 +31,7 @@ export class LectoresComponent implements OnInit {
   calibradores: any = [];
   lineas: any = [];
   lectores: any = [];
+  bandera: boolean = false;
 
   selectedCalibradorText: string="Seleccionar calibrador";  
   selectedCalibradorTextModificar: string="Seleccionar calibrador";  
@@ -134,8 +135,11 @@ export class LectoresComponent implements OnInit {
     console.log(this.selectedCalibradorObject.id,"  ", this.selectedLineaObject.id);
     this.lectorService.getLectoresId(this.selectedCalibradorObject.id, this.selectedLineaObject.id).subscribe(
       res=>{
-        this.lectores=res.body;
+        
         if(res.status == 200){
+          console.log("200 !!!!!");
+          this.lectores=res.body;
+          this.bandera=true;
         }else if(res.status == 204){
           this.toastr.success('No existen registros de lectores actualmente para mostrar','Operación satisfactoria');
           return;

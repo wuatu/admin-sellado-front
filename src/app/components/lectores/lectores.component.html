@@ -27,24 +27,25 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-4 col-md-4  col-sm-12 my-1  align-self-end ">
-                    <div class="text-right" *ngIf="selectedCalibradorObject && selectedLineaObject">
-                        <button class="ml-1 btn btn-primary  form-control" *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
-                          Agregar lector
-                        </button>
-                    </div>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-12 col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
+                <div class="text-right" *ngIf="selectedCalibradorObject && selectedLineaObject">
+                    <button class="btn btn-primary  form-control" *ngIf="rol != 2" (click)="open(modal_agregar_lector)"><i class="fa fa-plus-circle"></i>
+                  Agregar lector
+                </button>
                 </div>
             </div>
         </div>
         <br>
-        <div class="row" *ngIf="selectedCalibradorObject && selectedLineaObject">
+        <div class="row" *ngIf="bandera == true">
             <div class="col-12 ">
                 <h4>Lista de lectores</h4>
             </div>
         </div>
         <!--Tabla de contenido-->
-        <table class="table table-hover" *ngIf="selectedCalibradorObject && selectedLineaObject">
+        <table class="table table-hover" *ngIf="bandera == true">
             <thead>
                 <tr>
                     <th scope="col">N°</th>

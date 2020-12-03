@@ -9,17 +9,16 @@
         <br>
 
         <div class="row justify-content-end">
-            <div class="col-12 align-self-end">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
                 <div class="text-right">
-                    <button class="btn btn-primary" *ngIf="rol != 2"
-                        (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
+                    <button class="btn btn-primary form-control" *ngIf="rol != 2" (click)="open(mymodalagregar)"><i class="fa fa-plus-circle"></i>
                         Agregar administrador
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="row">            
+        <div class="row">
             <div class="row text-left" *ngIf="administradores">
                 <div class="col-12">
                     <h4>Lista de administradores</h4>
@@ -46,14 +45,12 @@
                         <td>{{administrador.nombre}}</td>
                         <td>{{administrador.apellido}}</td>
                         <td>
-                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2"
-                                (click)="onEditar(administrador);open(mymodaleditar)">
+                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(administrador);open(mymodaleditar)">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2"
-                                (click)="onEliminar(administrador,mymodalconfirmar)">
+                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(administrador,mymodalconfirmar)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
@@ -76,8 +73,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Rut:</b></label>
                     <div class="input-group">
-                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control"
-                            placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
+                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                     </div>
                     <!--Valida formulario rut-->
                     <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
@@ -93,9 +89,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Nombre:</b></label>
                     <div class="input-group">
-                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre"
-                            class="form-control" placeholder="Nombre" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario nombre-->
                     <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -108,9 +102,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Apellido:</b></label>
                     <div class="input-group">
-                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido"
-                            class="form-control" placeholder="Apellido" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario apellido-->
                     <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
@@ -123,9 +115,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Contraseña:</b></label>
                     <div class="input-group">
-                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password"
-                            id="password" class="form-control" placeholder="Contraseña" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password" class="form-control" placeholder="Contraseña" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario password-->
                     <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
@@ -136,8 +126,7 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
-                    (click)="agregarAdministrador(myform);modal.close('Save click')">Guardar</button>
+                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarAdministrador(myform);modal.close('Save click')">Guardar</button>
             </div>
         </div>
     </ng-template>
@@ -160,8 +149,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Rut:</b></label>
                     <div class="input-group">
-                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control"
-                            placeholder="Rut" required rutValidation>
+                        <input type="text" #rut='ngModel' [(ngModel)]="addRut" name="rut" id="rut" class="form-control" placeholder="Rut" required rutValidation>
                     </div>
                     <!--Valida formulario rut-->
                     <div *ngIf="rut.invalid && (rut.dirty || rut.touched)" class="alert alert-danger">
@@ -177,9 +165,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Nombre:</b></label>
                     <div class="input-group">
-                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre"
-                            class="form-control" placeholder="Nombre" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" #nombre='ngModel' [(ngModel)]="addNombre" name="nombre" id="nombre" class="form-control" placeholder="Nombre" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario nombre-->
                     <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="alert alert-danger">
@@ -192,9 +178,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Apellido:</b></label>
                     <div class="input-group">
-                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido"
-                            class="form-control" placeholder="Apellido" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="text" #apellido='ngModel' [(ngModel)]="addApellido" name="apellido" id="apellido" class="form-control" placeholder="Apellido" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario apellido-->
                     <div *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)" class="alert alert-danger">
@@ -207,9 +191,7 @@
                 <div class="form-group">
                     <label for="administradorLabel"><b>Contraseña:</b></label>
                     <div class="input-group">
-                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password"
-                            id="password" class="form-control" placeholder="Contraseña" required
-                            [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
+                        <input type="password" #password='ngModel' [(ngModel)]="addPassword" name="password" id="password" class="form-control" placeholder="Contraseña" required [ngClass]="{ 'is-invalid': submitted && administrador.errors }">
                     </div>
                     <!--Valida formulario password-->
                     <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
@@ -220,8 +202,7 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
-                    (click)="editarAdministrador(myform);modal.close('Save click')">Guardar</button>
+                <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarAdministrador(myform);modal.close('Save click')">Guardar</button>
             </div>
         </div>
     </ng-template>
@@ -239,8 +220,7 @@
             <p>¿Seguro que quieres eliminar un administrador?</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary"
-                (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
             <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
         </div>
     </ng-template>

@@ -8,10 +8,10 @@
         </div>
         <br>
         <div class="row justify-content-end">
-            <div class="col-12 align-self-end">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
 
                 <div class="text-right">
-                    <button class="btn btn-primary" *ngIf="rol!=2" (click)="open(modal_agregar_usuario,'1')"><i class="fa fa-plus-circle"></i>
+                    <button class="btn btn-primary form-control" style="margin-block-end: 20px;" *ngIf="rol!=2" (click)="open(modal_agregar_usuario,'1')"><i class="fa fa-plus-circle"></i>
                             Agregar colaborador
                           </button>
                 </div>
@@ -26,7 +26,7 @@
         </div>
     </div>
     <!--Tabla de contenido-->
-    <table class="table table-hover">
+    <table class="table table-hover" *ngIf="usuarios">
         <thead>
             <tr>
                 <th scope="col">N°</th>

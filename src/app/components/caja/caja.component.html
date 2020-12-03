@@ -11,8 +11,7 @@
                     <div class="col-lg-5 col-md-6 col-sm-12 my-1" *ngIf="bandera == true">
                         <div class="form-group">
                             <div class="input-group">
-                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control"
-                                    placeholder="Buscar id o envase" id="criterio" name="criterio">
+                                <input #crit='ngModel' [(ngModel)]="criterio" class="form-control" placeholder="Buscar id o envase" id="criterio" name="criterio">
                             </div>
                         </div>
                     </div>
@@ -20,15 +19,22 @@
                         <button class="btn btn-primary form-control" (click)="searchBox()" type="submit ">Buscar
                             <i class="fa fa-search" aria-hidden="true"></i></button>
                     </div>
-                    <div class="col-lg-5 col-md-3 col-sm-12 my-1">
+                    <!--<div class="col-lg-5 col-md-3 col-sm-12 my-1">
                         <div class="row justify-content-end">
-                            <div class="col-lg-6  col-md-12 col-sm-12  text-right">
-                                <button class="btn btn-primary form-control" *ngIf="rol != 2"
-                                    (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
+                            <div class="col-12 align-self-end">
+                                <button class="btn btn-primary form-control" *ngIf="rol != 2" (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
                                     caja</button>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
+                <div class="text-right">
+                    <button class="btn btn-primary form-control" *ngIf="rol != 2" (click)="open(mymodalagregar)"> <i class="fa fa-plus-circle"></i> Agregar
+                        caja</button>
                 </div>
             </div>
         </div>
@@ -61,14 +67,12 @@
                         <td>{{caja.descripcion}}</td>
                         <td>{{caja.ponderacion}}</td>
                         <td>
-                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2"
-                                (click)="onEditar(caja);open(mymodaleditar)">
+                            <button class="btn btn-primary text-white mr-1" *ngIf="rol != 2" (click)="onEditar(caja);open(mymodaleditar)">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2"
-                                (click)="onEliminar(caja,mymodalconfirmar)">
+                            <button class="btn btn-danger text-white mr-1" *ngIf="rol != 2" (click)="onEliminar(caja,mymodalconfirmar)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
@@ -96,9 +100,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Código envabse:</b></label>
                 <div class="input-group">
-                    <input type="text" #codigo='ngModel' [(ngModel)]="codigoCaja" name="codigo" id="codigo"
-                        class="form-control" placeholder="Código" required
-                        [ngClass]="{ 'is-invalid': submitted && codigo.errors }">
+                    <input type="text" #codigo='ngModel' [(ngModel)]="codigoCaja" name="codigo" id="codigo" class="form-control" placeholder="Código" required [ngClass]="{ 'is-invalid': submitted && codigo.errors }">
                 </div>
                 <!--Valida formulario codigo-->
                 <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" class="alert alert-danger">
@@ -110,9 +112,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Envase:</b></label>
                 <div class="input-group">
-                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase"
-                        class="form-control" placeholder="Envase" required
-                        [ngClass]="{ 'is-invalid': submitted && envase.errors }">
+                    <input type="text" #envase='ngModel' [(ngModel)]="envaseCaja" name="envase" id="envase" class="form-control" placeholder="Envase" required [ngClass]="{ 'is-invalid': submitted && envase.errors }">
                 </div>
                 <!--Valida formulario envase-->
                 <div *ngIf="envase.invalid && (envase.dirty || envase.touched)" class="alert alert-danger">
@@ -125,13 +125,10 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Descripción:</b></label>
                 <div class="input-group">
-                    <input type="text" #descripcion='ngModel' [(ngModel)]="descripcionCaja" name="descripcion"
-                        id="descripcion" class="form-control" placeholder="Descripción" required
-                        [ngClass]="{ 'is-invalid': submitted && descripcion.errors }">
+                    <input type="text" #descripcion='ngModel' [(ngModel)]="descripcionCaja" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" required [ngClass]="{ 'is-invalid': submitted && descripcion.errors }">
                 </div>
                 <!--Valida formulario descripcion-->
-                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
-                    class="alert alert-danger">
+                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="alert alert-danger">
                     <div *ngIf="descripcion.errors.required">
                         Descripción de caja es obligatorio
                     </div>
@@ -141,13 +138,10 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Ponderación:</b></label>
                 <div class="input-group">
-                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion"
-                        id="ponderacion" class="form-control" placeholder="Ponderación" required
-                        [ngClass]="{ 'is-invalid': submitted && ponderacion.errors }">
+                    <input type="text" #ponderacion='ngModel' [(ngModel)]="ponderacionCaja" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderación" required [ngClass]="{ 'is-invalid': submitted && ponderacion.errors }">
                 </div>
                 <!--Valida formulario ponderacion-->
-                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)"
-                    class="alert alert-danger">
+                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)" class="alert alert-danger">
                     <div *ngIf="ponderacion.errors.required">
                         Ponderacion de caja es obligatorio
                     </div>
@@ -156,8 +150,7 @@
 
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
-                (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="agregarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -181,8 +174,7 @@
             <div class="form-group">
                 <label for="patentelabel"><b>Código envase:</b></label>
                 <div class="input-group">
-                    <input type="text" #codigo='ngModel' [(ngModel)]="currentCajaSelected.codigo_envase" name="codigo"
-                        id="codigo" class="form-control" placeholder="Código" required>
+                    <input type="text" #codigo='ngModel' [(ngModel)]="currentCajaSelected.codigo_envase" name="codigo" id="codigo" class="form-control" placeholder="Código" required>
                 </div>
                 <!--Valida formulario codigo-->
                 <div *ngIf="codigo.invalid && (codigo.dirty || codigo.touched)" class="alert alert-danger">
@@ -195,8 +187,7 @@
             <div class="form-group">
                 <label for="patentelabel"><b>Envase:</b></label>
                 <div class="input-group">
-                    <input type="text" #envase='ngModel' [(ngModel)]="currentCajaSelected.envase" name="envase"
-                        id="envase" class="form-control" placeholder="Envase" required>
+                    <input type="text" #envase='ngModel' [(ngModel)]="currentCajaSelected.envase" name="envase" id="envase" class="form-control" placeholder="Envase" required>
                 </div>
                 <!--Valida formulario envase-->
                 <div *ngIf="envase.invalid && (envase.dirty || envase.touched)" class="alert alert-danger">
@@ -208,12 +199,10 @@
             <div class="form-group">
                 <label for="patentelabel"><b>Descripción:</b></label>
                 <div class="input-group">
-                    <input type="text" #descripcion='ngModel' [(ngModel)]="currentCajaSelected.descripcion"
-                        name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" required>
+                    <input type="text" #descripcion='ngModel' [(ngModel)]="currentCajaSelected.descripcion" name="descripcion" id="descripcion" class="form-control" placeholder="Descripción" required>
                 </div>
                 <!--Valida formulario descripcion-->
-                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)"
-                    class="alert alert-danger">
+                <div *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)" class="alert alert-danger">
                     <div *ngIf="descripcion.errors.required">
                         Descripción de caja es obligatorio
                     </div>
@@ -223,12 +212,10 @@
             <div class="form-group">
                 <label for="patentelabel"><b>Ponderación:</b></label>
                 <div class="input-group">
-                    <input type="text" #ponderacion='ngModel' [(ngModel)]="currentCajaSelected.ponderacion"
-                        name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderación" required>
+                    <input type="text" #ponderacion='ngModel' [(ngModel)]="currentCajaSelected.ponderacion" name="ponderacion" id="ponderacion" class="form-control" placeholder="Ponderación" required>
                 </div>
                 <!--Valida formulario ponderacion-->
-                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)"
-                    class="alert alert-danger">
+                <div *ngIf="ponderacion.invalid && (ponderacion.dirty || ponderacion.touched)" class="alert alert-danger">
                     <div *ngIf="ponderacion.errors.required">
                         Ponderacion de caja es obligatorio
                     </div>
@@ -237,8 +224,7 @@
 
         </form>
         <div class="modal-footer">
-            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary"
-                (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
+            <button type="submit" [disabled]="!myform.valid" class="btn btn-primary" (click)="editarCaja(myform);modal.close('Save click')">Guardar</button>
         </div>
     </div>
 </ng-template>
@@ -256,8 +242,7 @@
         <p>¿Seguro que quieres eliminar el caja?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary"
-            (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
         <button type="button" class="btn btn-danger" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>
