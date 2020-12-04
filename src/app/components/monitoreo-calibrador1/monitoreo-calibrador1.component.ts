@@ -84,7 +84,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   ngOnInit() {
 
-    //Lista los calibradores que estan registrados en la base de datos.
+    
     this.getTurnoActual();
 
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
@@ -107,7 +107,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.monitoreoService.getLastTurno().subscribe(
       res => {
         if (res.status == 200) {
-          console.log("ejecuto monitoreo calibrador 1");
+
           if (res.body[0].fecha_cierre == "") {
             this.getAverageforMinute2()
           }
@@ -128,7 +128,11 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
-        this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
+        if(this.calibradores.length > 0){
+          this.getLineOfCaliper();
+          this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
+        }
+        
         /******************************** GRAFICO ************************************/
         this.barChartOptions = {
           responsive: true,
@@ -171,7 +175,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
             },
           }
         };
-        this.getLineOfCaliper();
+        
+        
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-calibrador1');
@@ -184,7 +189,9 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.lineaService.getLineasId(this.calibradores[0].id).subscribe(
       res => {
         this.lineas = res.body;
-        this.getAverageforMinute2()
+        if(this.lineas != null){
+          this.getAverageforMinute2();
+        }
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método getLineOfCaliper, component monitoreo-calibrador1');
@@ -225,7 +232,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador1');
-        console.log("el turno no se pudo cargar!!!!");
+ 
       }
     )
   }
@@ -250,7 +257,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
             this.timeOut = setTimeout(() => 
             {
               this.getProduccion();
-              console.log("esperando !!!!!");
+  
             },
               10000);
           }

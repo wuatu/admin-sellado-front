@@ -105,7 +105,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.monitoreoService.getLastTurno().subscribe(
       res => {
         if (res.status == 200) {
-          console.log("ejecuto monitoreo calibrador 2");
+
           if (res.body[0].fecha_cierre == "") {
             this.getAverageforMinute2()
           }
@@ -124,7 +124,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
-        this.constanteDivision = (this.calibradores[1].cajas_por_minuto / 3);
+        if(this.calibradores.length > 1){
+          this.constanteDivision = (this.calibradores[1].cajas_por_minuto / 3);
+          this.getLineOfCaliper();
+        }
         /******************************** GRAFICO ************************************/
         this.barChartOptions = {
           responsive: true,
@@ -168,7 +171,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
             },
           }
         };
-        this.getLineOfCaliper();
+        
 
       },
       err => {
@@ -182,7 +185,9 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.lineaService.getLineasId(this.calibradores[1].id).subscribe(
       res => {
         this.lineas = res.body;
-        this.getAverageforMinute2()
+        if(this.lineas != null){
+          this.getAverageforMinute2();
+        }
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método getLineOfCaliper, component monitoreo-calibrador2');
@@ -233,12 +238,13 @@ export class MonitoreoCalibrador2Component implements OnInit {
       this.monitoreoCalibradorService.getProductionLine2(this.calibradores[1].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, linea.id, linea.nombre).subscribe(
         res => {
           this.productionByLine.push(res.body);
+    
           if (i == this.lineas.length - 1) {
             this.ordenarArray(this.productionByLine);
             this.timeOut = setTimeout(() => 
             {
               this.getProduccion();
-              console.log("esperando !!!!!");
+ 
               console.log(this.productionByLine);
             },
               10000);
@@ -258,6 +264,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[1].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador2Minuto = res;
+  
         this.getProduccionTurno2();
         
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
@@ -282,6 +289,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[1].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador2Hora = res;
+   
         this.getProductionLine2();
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador2Hora[0].total == null) {
@@ -302,10 +310,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
     //consulta para el calibrador 1
     this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[1].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
-        this.getAverageLastHour2();
-        
         this.cajasCalibrador2Turno = res;
         this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
+ 
+        this.getAverageLastHour2();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
