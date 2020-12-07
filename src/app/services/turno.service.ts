@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class TurnoService {
-  API_URL = "http://localhost:3000/api"
+  API_URL = "http://monitoreo.dan:3000/api"
   constructor(private httpClient: HttpClient) { }
 
   getTurnos(selectedfromDate: string, selectedToDate: string) {

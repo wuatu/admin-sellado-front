@@ -11,6 +11,7 @@ import { CalibradorService } from '../../services/calibrador.service';
 import { MonitoreoService } from '../../services/monitoreo.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
 import { timer, interval, Subscription, Observable } from 'rxjs';
+import { GetDateService } from 'src/app/services/get-date.service';
 
 
 @Component({
@@ -67,6 +68,7 @@ export class MonitoreoComponent implements OnInit {
   subscriptionTimerTask2: Subscription;
   subscriptionTimer: Subscription;
   timeOut: any;
+  offsetTime:any;
 
   constructor(
     private modalService: NgbModal,
@@ -79,7 +81,8 @@ export class MonitoreoComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     private calibradorService: CalibradorService,
     private monitoreoService: MonitoreoService,
-    private registroDevService: RegistroDevService
+    private registroDevService: RegistroDevService,
+    private getDateService: GetDateService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
@@ -87,16 +90,19 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ngOnInit() {
-
-
     //Lista los calibradores que estan registrados en la base de datos.
     this.listarCalibradores();
 
-
-    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
-      this.time = new Date();
+    //Trae el tiempo desde el servidor
+    this.getDateService.dateGetTime().forEach((res:any)=>{      
+      console.log(res.date);   
+      this.offsetTime=new Date().getTime()-res.date;
+      console.log(this.offsetTime);
     });
-
+    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
+      console.log(this.offsetTime);
+        this.time = new Date(new Date().getTime()-this.offsetTime);            
+    });
   }
 
   ngOnDestroy() {
@@ -126,10 +132,10 @@ export class MonitoreoComponent implements OnInit {
           this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
         }
       )
-    } else{
+    } else {
       this.toastr.success('Debe agregar un calibrador', 'Oops');
     }
-    
+
   }
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
@@ -168,7 +174,7 @@ export class MonitoreoComponent implements OnInit {
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Minuto[0].total == null) {
           this.totalMinuto1 = 0;
-          
+
         }
         else {
           this.totalMinuto1 = this.cajasCalibrador1Minuto[0].total;
@@ -206,11 +212,10 @@ export class MonitoreoComponent implements OnInit {
     this.monitoreoService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Hora = res;
-        this.timeOut = setTimeout(() => 
-          {
-            this.getProduccion();
-           
-          },
+        this.timeOut = setTimeout(() => {
+          this.getProduccion();
+
+        },
           10000);
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador1Hora[0].total == null) {
@@ -258,7 +263,7 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador1Turno = res;
           this.totalTurno1 = this.cajasCalibrador1Turno[0].total;
           this.getAverageforMinute();
-            
+
         },
         err => {
           this.registroDevService.creaRegistroDev('No se pudo obtener la cantidad de cajas del turno del calibrador 1, método getProduccionTurno, component monitoreo');

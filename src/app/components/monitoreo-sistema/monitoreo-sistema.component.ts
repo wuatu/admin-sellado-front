@@ -30,7 +30,7 @@ export class MonitoreoSistemaComponent implements OnInit {
   lectorInLineAux: any = [];
   rfidInLineAux: any = [];
   currentCollaboratorSelected: any;
-  selectedCalibradorText: string = "Seleccionar calibrador";
+  selectedCalibradorText: string = "Seleccionar línea";
   selectedCalibradorObject: any;
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;

@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root'  // <- ADD THIS
 })
 export class AuthService {
-  AUTH_SERVER: string = 'http://localhost:3000';
+  AUTH_SERVER: string = 'http://monitoreo.dan:3000';
   authSubject = new BehaviorSubject(false);
   private token: string;
 

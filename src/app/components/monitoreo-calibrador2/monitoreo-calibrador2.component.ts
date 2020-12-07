@@ -20,6 +20,7 @@ import { LineaService } from 'src/app/services/linea.service';
 
 //*****/
 import { timer, interval, Subscription, Observable } from 'rxjs';
+import { GetDateService } from 'src/app/services/get-date.service';
 
 
 @Component({
@@ -60,6 +61,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
   constanteDivision = 0;  
   barChartOptions: ChartOptions;
   timeOut: any;
+  offsetTime:any;
   
   constructor(
     private toastr: ToastrService,
@@ -73,7 +75,8 @@ export class MonitoreoCalibrador2Component implements OnInit {
     private monitoreoService: MonitoreoService,
     private lineaService: LineaService,
     private monitoreoCalibradorService: MonitoreoCalibradoresService,
-    private registroDevService: RegistroDevService
+    private registroDevService: RegistroDevService,
+    private getDateService:GetDateService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -84,9 +87,16 @@ export class MonitoreoCalibrador2Component implements OnInit {
     //Lista los calibradores que estan registrados en la base de datos.
     this.getTurnoActual();
 
-    this.subscriptionTimer = timer(0, 1000).subscribe(() => {
-      this.time = new Date();
-    });
+        //Trae el tiempo desde el servidor
+        this.getDateService.dateGetTime().forEach((res:any)=>{      
+          console.log(res.date);   
+          this.offsetTime=new Date().getTime()-res.date;
+          console.log(this.offsetTime);
+        });
+        this.subscriptionTimer = timer(0, 1000).subscribe(() => {
+          console.log(this.offsetTime);
+            this.time = new Date(new Date().getTime()-this.offsetTime);            
+        });
   }
 
   ngOnDestroy() {

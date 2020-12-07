@@ -6,8 +6,8 @@
                 <h3><b>{{ time | date: 'HH:mm:ss a'}}</b></h3>
             </div>
             <div class="col-1"></div>
-            <div class="col-12 text-center" style="margin-top: 30px;">
-                <h1><b>Monitoreo Calibrador 2</b></h1>
+            <div class="col-12 text-center" style="margin-top: 0px;">
+                <h3><b>Monitoreo Línea 2</b></h3>
             </div>
         </div>
     </div>
@@ -17,8 +17,7 @@
             <div class="col-1"></div>
             <div class="col-10">
                 <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"> <b>Calibrador 2</b></h5>
+                    <div class="card-body" style="padding: 6px;">       
                         <div class="row">
                             <div class="col-lg-4 col-md-4 my-1">
                                 <div class="card">
@@ -55,6 +54,7 @@
         </div>
     </div>
 
+    <!--
     <div class="col-12">
         <div class="row justify-content-center">
             <div class="col-12 text-center" style="margin-top: 15px;">
@@ -62,13 +62,14 @@
             </div>
         </div>
     </div>
+    -->
 
     <div class="col-12">
         <div class="row justify-content-center">
             <div class="col-1"></div>
             <div class="col-lg-10" *ngIf="barChartOptions">
                 <div style="display: block; ">
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType">
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType" style="max-height: 420px;">
                     </canvas>
                 </div>
             </div>
