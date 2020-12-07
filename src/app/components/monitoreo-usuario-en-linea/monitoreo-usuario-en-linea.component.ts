@@ -39,8 +39,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.getTurnoActual();
+    this.listarCalibradores();
+    
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
 
@@ -59,11 +59,14 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
 
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual() {
-    this.monitoreoService.getLastTurno().subscribe(
+    this.monitoreoService.getLastTurno(this.selectedCalibradorObject.id).subscribe(
       res => {
-        this.turnoActual = res.body;
-        this.listarCalibradores();
-
+        if(res.status == 200){
+          this.turnoActual = res.body;
+          this.getLineOfCaliper(this.selectedCalibradorObject.id);
+        }else if(res.status == 204){
+          this.toastr.info("Por favor iniciar turno");
+        }
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador2')
@@ -77,6 +80,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
+        
       },
       err => {
         console.log(err);
@@ -89,7 +93,8 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
-    this.getLineOfCaliper(this.selectedCalibradorObject.id);
+    this.getTurnoActual();
+    
 
   }
 

@@ -115,7 +115,7 @@ export class UsuarioEnLineaComponent implements OnInit {
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
     console.log(this.desde);
     this.listarCalibradores();
-    this.getTurnoActual();
+    
 
   }
 
@@ -148,6 +148,7 @@ export class UsuarioEnLineaComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
+        this.getTurnoActual();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component usuario-en-linea');
@@ -167,13 +168,13 @@ export class UsuarioEnLineaComponent implements OnInit {
       res => {
         console.log(res.body);
         if (res.status == 200) {
+          this.usuariosEnLinea = res.body;
+          this.bandera = true;
         } else if (res.status == 204) {
           this.toastr.success('no hay usuarios en linea actualmente para mostrar', 'Operación satisfactoria');
+          this.bandera = true;
           return;
         }
-        this.usuariosEnLinea = res.body;
-        this.bandera = true;
-
         //Se crea un objeto de la clase export-usuario-en-linea con la información devuelta de la base de datos 
         for (let element of this.usuariosEnLinea) {
           let exportUsuarioEnLinea = new ExportUsuarioEnLinea(element.usuario_rut, element.nombre_usuario, element.apellido_usuario, element.nombre_linea, element.nombre_calibrador, element.hora_inicio, element.fecha_inicio, element.hora_termino, element.fecha_termino);
@@ -254,21 +255,28 @@ export class UsuarioEnLineaComponent implements OnInit {
 
   //Método que obtiene el turno actual, en el cual se obtiene la fecha y la hora de inicio de turno 
   getTurnoActual() {
-    this.monitoreoService.getLastTurno().subscribe(
-      res => {
-        this.turnoActual = res.body;
-        if(res.status == 200){
-          this.turno = true;
+    if(this.selectedCalibradorObject){
+      this.monitoreoService.getLastTurno(this.selectedCalibradorObject.id).subscribe(
+        res => {
+          this.turnoActual = res.body;
+          if(res.status == 200){
+            this.turno = true;
+            console.log("TURNO ENCONTRADO ")
+            this.buscarUsuarioPorRut();
+            
+          }
+          else if(res.status == 204){
+            console.log("TURNO NO ENCONTRADO");
+            this.toastr.info("Por favor iniciar turno");
+            this.turno = false;
+          }
+          console.log(this.turnoActual);
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component usuario-en-linea');
         }
-        else if(res.status == 204){
-          this.turno = false;
-        }
-        console.log(this.turnoActual);
-      },
-      err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component usuario-en-linea');
-      }
-    )
+      )
+    }
   }
 
   agregarUsuarioEnLinea() {
@@ -300,6 +308,7 @@ export class UsuarioEnLineaComponent implements OnInit {
       this.rutBusqueda = null;
     }
     this.listarUsuariosEnLinea();
+    
   }
 
   changeSelectedLinea(newSelected: any) {

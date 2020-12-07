@@ -18,8 +18,8 @@ export class TurnoService {
     return this.httpClient.get(`${this.API_URL}/turno/${id}`);
   }
 
-  getTurnoSinId() {
-    return this.httpClient.get(`${this.API_URL}/turno`);
+  getTurnoSinId(fk_calibrador: number) {
+    return this.httpClient.get(`${this.API_URL}/turno_id/${fk_calibrador}`,{observe: 'response'});
   }
 
   deleteTurno(id: string) {
@@ -34,8 +34,8 @@ export class TurnoService {
     return this.httpClient.put(`${this.API_URL}/turno/${fecha_apertura}`, turno);
   }
 
-  closeTurnCollaborators(fecha_termino:string, hora_termino:string):Observable<any>{
+  closeTurnCollaborators(fecha_termino:string, hora_termino:string, fk_calibrador: number):Observable<any>{
     console.log("closeTurnCollaborators");
-    return this.httpClient.put(`${this.API_URL}/turno/${fecha_termino}/${hora_termino}`,"",{observe: 'response'});
+    return this.httpClient.put(`${this.API_URL}/turno/${fecha_termino}/${hora_termino}/${fk_calibrador}`,"",{observe: 'response'});
   }
 }
