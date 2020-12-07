@@ -64,14 +64,15 @@ export class MonitoreoSistemaComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getTurnoActual();
+    //this.getTurnoActual();
+    this.listarCalibradores();
 
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
 
-    this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
+    this.subscriptionTimerTask = timer(0, 7000).subscribe(() => {
       if(this.lineas != null && this.selectedCalibradorObject != null){
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
-        this.getRfidOutByCaliper()
+        this.getRfidOutByCaliper();
       }
     });
     
@@ -85,10 +86,15 @@ export class MonitoreoSistemaComponent implements OnInit {
   
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual(){
-    this.monitoreoService.getLastTurno().subscribe(
+    this.monitoreoService.getLastTurno(this.selectedCalibradorObject.id).subscribe(
       res => {
-        this.turnoActual = res.body;
-        this.listarCalibradores();
+        if(res.status == 200){
+          this.turnoActual = res.body;
+          
+        }else if(res.status == 204){
+          this.toastr.info("Por favor iniciar turno ");
+        }
+        
         
       },
       err => {
@@ -102,6 +108,7 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         this.calibradores=res.body;
+        
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-sistema');
@@ -113,7 +120,9 @@ export class MonitoreoSistemaComponent implements OnInit {
   changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
+    //this.getTurnoActual();
     this.getLineOfCaliper(this.selectedCalibradorObject.id);
+    
     
   }
 
@@ -123,8 +132,9 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.lineaService.getLineasId(id).subscribe(
       res =>{
         this.lineas = res.body;
-        this.getCollaboratorsByLine(this.lineas,id);
+        this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
         this.getRfidOutByCaliper();
+        
       },
       err =>{
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método getLineOfCaliper, component monitoreo-sistema');
