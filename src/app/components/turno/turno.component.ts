@@ -119,7 +119,8 @@ export class TurnoComponent implements OnInit {
             element.hora_cierre,
             element.id_administrador_cierre,
             element.nombre_administrador_cierre,
-            element.apellido_administrador_cierre);
+            element.apellido_administrador_cierre,
+            element.nombre_calibrador);
 
           this.exportTurnoArray.push(exportTurno);
         }

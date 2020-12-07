@@ -12,6 +12,7 @@ export class ExportTurno {
     ID_ADMINSTRADOR_CIERRE: string;
     NOMBRE_ADMINISTRADOR_CIERRE: string;
     APELLIDO_ADMINISTRADOR_CIERRE: string;
+    NOMBRE_CALIBRADOR:string;
 
     constructor(ID: number,
         FECHA_APERTURA: string,
@@ -23,7 +24,8 @@ export class ExportTurno {
         HORA_CIERRE: string,
         ID_ADMINSTRADOR_CIERRE: string,
         NOMBRE_ADMINISTRADOR_CIERRE: string,
-        APELLIDO_ADMINISTRADOR_CIERRE: string){
+        APELLIDO_ADMINISTRADOR_CIERRE: string,
+        NOMBRE_CALIBRADOR:string){
             this.ID = ID;
             this.FECHA_APERTURA = FECHA_APERTURA;
             this.HORA_APERTURA = HORA_APERTURA;
@@ -35,5 +37,6 @@ export class ExportTurno {
             this.ID_ADMINSTRADOR_CIERRE = ID_ADMINSTRADOR_CIERRE;
             this.NOMBRE_ADMINISTRADOR_CIERRE = NOMBRE_ADMINISTRADOR_CIERRE;
             this.APELLIDO_ADMINISTRADOR_CIERRE = APELLIDO_ADMINISTRADOR_CIERRE;
+            this.NOMBRE_CALIBRADOR = NOMBRE_CALIBRADOR;
     }
 } 

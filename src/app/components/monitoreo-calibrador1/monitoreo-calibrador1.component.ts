@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -29,6 +29,7 @@ import { GetDateService } from 'src/app/services/get-date.service';
   styleUrls: ['./monitoreo-calibrador1.component.css']
 })
 export class MonitoreoCalibrador1Component implements OnInit {
+  @ViewChild("mymodaliniciarturno") modalIniciarTurno: ElementRef;
   time = new Date();
 
   //max = 1;
@@ -65,7 +66,23 @@ export class MonitoreoCalibrador1Component implements OnInit {
   timeOut: any;
   offsetTime:any;
 
+
+  /*****************************/
+  iniciarCerrar = "iniciar";
+  IniciarCerrar = "Iniciar";
+  passAdmin = "";
+  rutAdmin = "";
+  closeResult = "";
+  turnoIniciado = false;
+  botonIniciarTurnoClass = "btn-primary";
+  botonIniciarTurnoText = "Iniciar turno";
+  turno;
+  fechaInicioTurno: string = null;
+  horaInicioTurno: string = null;
+  /*****************************/
+
   constructor(
+    private modalService: NgbModal,
     private toastr: ToastrService,
     private administradorService: AdministradorService,
     private turnoService: TurnoService,
@@ -87,8 +104,9 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   ngOnInit() {
 
-    //Lista los calibradores que estan registrados en la base de datos.
-    this.getTurnoActual();
+    this.listarCalibradores();
+    
+    //this.getTurnoActual();
 
         //Trae el tiempo desde el servidor
         this.getDateService.dateGetTime().forEach((res:any)=>{      
@@ -114,10 +132,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
   }
 
   getProduccion(){
-    this.monitoreoService.getLastTurno().subscribe(
+    this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
       res => {
         if (res.status == 200) {
-          console.log("ejecuto monitoreo calibrador 1");
+
           if (res.body[0].fecha_cierre == "") {
             this.getAverageforMinute2()
           }
@@ -138,7 +156,13 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
-        this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
+        
+        if(this.calibradores.length > 0){
+          this.getRegistro();
+          
+          this.constanteDivision = (this.calibradores[0].cajas_por_minuto / 3);
+        }
+        
         /******************************** GRAFICO ************************************/
         this.barChartOptions = {
           responsive: true,
@@ -181,7 +205,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
             },
           }
         };
-        this.getLineOfCaliper();
+        
+        
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método listarCalibradores, component monitoreo-calibrador1');
@@ -194,7 +219,9 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.lineaService.getLineasId(this.calibradores[0].id).subscribe(
       res => {
         this.lineas = res.body;
-        this.getAverageforMinute2()
+        if(this.lineas != null){
+          this.getAverageforMinute2();
+        }
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas del calibrador, método getLineOfCaliper, component monitoreo-calibrador1');
@@ -228,14 +255,14 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   //Método que obtiene desde la base de datos el turno que se encuentra iniciado
   getTurnoActual() {
-    this.monitoreoService.getLastTurno().subscribe(
+    this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
       res => {
         this.turnoActual = res.body;
-        this.listarCalibradores();
+        //this.listarCalibradores();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo-calibrador1');
-        console.log("el turno no se pudo cargar!!!!");
+ 
       }
     )
   }
@@ -250,7 +277,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.fechaActual = this.fecha().substring(0, 10);
     let i = 0;
     for (let linea of this.lineas) {
-      this.monitoreoCalibradorService.getProductionLine2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura, linea.id, linea.nombre).subscribe(
+      this.monitoreoCalibradorService.getProductionLine2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, linea.id, linea.nombre).subscribe(
         res => {
           this.productionByLine.push(res.body);
 
@@ -260,7 +287,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
             this.timeOut = setTimeout(() => 
             {
               this.getProduccion();
-              console.log("esperando !!!!!");
+  
             },
               10000);
           }
@@ -274,7 +301,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     }
   }
   getAverageforMinute2() {
-    this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
+    this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
         this.getProduccionTurno2();
@@ -296,7 +323,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   getAverageLastHour2() {
     //get todas las cajas que tengan el mismo id del turno
-    this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
+    this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Hora = res;
         this.getProductionLine2();
@@ -317,7 +344,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
   getProduccionTurno2() {
     //consulta para el calibrador 1
-    this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[0].id, this.turnoActual[0].id, this.turnoActual[0].fecha_apertura, this.turnoActual[0].hora_apertura).subscribe(
+    this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
         this.getAverageLastHour2();
             
@@ -428,6 +455,202 @@ export class MonitoreoCalibrador1Component implements OnInit {
     console.log(event, active);
   }
   /********************************/
+  
+
+  /****************************************************************************************************************/
+  getRegistro() {
+    console.log("id calibrador: "+this.calibradores[0].id);
+    this.turnoService.getTurnoSinId(this.calibradores[0].id).subscribe(
+      res => {
+        if (res.status == 200) {
+          
+          this.turno = res.body;
+          this.turnoActual = res.body;
+          //console.log("este es el turno que trae !!!!");
+          //console.log(this.turno);
+          this.sesionIniciada();
+          //this.getTurnoActual();
+          this.toastr.info("Turno se encuentra iniciado", "Información", {
+            positionClass: 'toast-bottom-right'
+          });
+        } else {
+          this.toastr.info("No se ha iniciado turno", "Información", {
+            positionClass: 'toast-bottom-right'
+          });
+          this.open(this.modalIniciarTurno);
+        }
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el registro del turno, método getRegistro, component monitoreo');
+        this.toastr.info('No se ha iniciado turno', 'Información', {
+          positionClass: 'toast-bottom-right'
+        });
+        this.open(this.modalIniciarTurno);
+      }
+    )
+  }
+
+  //metodo que abre un modal
+  open(modal) {
+    this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  //metodo que sirve para saber la razon por la cual un modal fue cerrado
+  private getDismissReason(reason: any): string {
+    console.log(reason);
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      console.log("sera");
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  //metodo que sirve para saber la razon por la cual un modal fue cerrado
+  private getDismissReasonForm(reason: any) {
+    console.log(reason);
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      console.log("sera");
+      return 'by clicking on a backdrop';
+    } else {
+      if (reason == 'ok') {
+        if (this.turnoIniciado === false) {
+          return this.iniciarTurno();
+        } {
+          return this.cerrarTurno();
+        }
+      }
+    }
+  }
+
+  autenticarTurno(modal) {
+    console.log(this.rutAdmin, this.passAdmin);
+    this.openModal(modal);
+  }
+
+  private iniciarTurno() {
+    this.administradorService.getLoginAdministrador(this.rutAdmin, this.passAdmin).subscribe(
+      res => {
+        console.log(JSON.parse(localStorage.getItem('USER')));
+        let administrador = JSON.parse(localStorage.getItem('USER'));
+        console.log(administrador.id);
+        let turno = new Turno();
+        let fecha = this.fecha();
+        turno.fechaApertura(null, fecha.substring(0, 10), fecha.substring(11, 19), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "",this.calibradores[0].id, this.calibradores[0].nombre);
+        this.turnoService.saveTurno(turno).subscribe(
+          res => {
+            this.sesionIniciada();
+            this.toastr.success("Turno iniciado correctamente");
+            this.registroService.creaRegistro("Turno iniciado");
+            //*************** carga el turno guardado ****************
+            this.getTurnoActual();
+            //guardo los datos del turno iniciado
+            this.fechaInicioTurno = fecha.substring(0, 10);
+            this.horaInicioTurno = fecha.substring(11, 19);
+          },
+          err => {
+            this.registroDevService.creaRegistroDev('No se crear el registro de iniciar turno, método iniciarTurno, component monitoreo');
+            this.toastr.error('Error al iniciar turno', 'Error');
+          }
+        );
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('Credenciales inválidas para crear el registro de inicio de turno, método iniciarTurno, component monitoreo');
+        this.toastr.error('Credenciales inválidas', 'Error');
+      }
+    )
+    this.rutAdmin = "";
+    this.passAdmin = "";
+  }
+
+  sesionIniciada() {
+    this.getLineOfCaliper();
+    this.botonIniciarTurnoClass = "btn-outline-danger"
+    this.botonIniciarTurnoText = "Cerrar Turno";
+    this.turnoIniciado = true;
+    this.IniciarCerrar = "Cerrar";
+    this.iniciarCerrar = "cerrar";
+  }
+
+  sesionCerrada() {
+    this.botonIniciarTurnoClass = "btn-primary"
+    this.botonIniciarTurnoText = "Iniciar Turno";
+    this.turnoIniciado = false;
+    this.IniciarCerrar = "Iniciar";
+    this.iniciarCerrar = "iniciar";
+  }
+
+  private cerrarTurno() {
+    this.administradorService.getLoginAdministrador(this.rutAdmin, this.passAdmin).subscribe(
+      res => {
+        let administrador = JSON.parse(localStorage.getItem('USER'));
+        let turno: Turno = new Turno();
+        turno.id = this.turno.id;
+        turno.fecha_apertura = this.turno.fecha_apertura;
+        turno.nombre_administrador_apertura = this.turno.nombre_administrador_apertura;
+        turno.apellido_administrador_apertura = this.turno.apellido_administrador_apertura;
+        let fecha = this.fecha();
+        turno.fechaCierre(fecha.substring(0, 10), fecha.substring(11, 19), administrador.id, administrador.nombre, administrador.apellido);
+        this.turnoService.updateTurno(this.turno.id, turno).subscribe(
+          res => {
+            this.sesionCerrada();
+            this.cerrarTurnoColaboradores();
+            this.registroService.creaRegistro("Turno cerrado");
+            //se borran los datos del turno que estaba abierto
+            this.fechaInicioTurno = null;
+            this.horaInicioTurno = null;
+          },
+          err => {
+            this.registroDevService.creaRegistroDev('No se pudo crear el registro de cerrar turno, método cerrarTurno, component monitoreo');
+            this.toastr.error('Error al cerrar turno', 'Error');
+          }
+        );
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('Credenciales inválidas para crear el registro cerrar turno, método cerrarTurno, component monitoreo');
+        this.toastr.error('Credenciales inválidas', 'Error');
+      }
+    )
+    this.rutAdmin = "";
+    this.passAdmin = "";
+  }
+
+  cerrarTurnoColaboradores() {
+    let fecha = this.fecha();
+    this.turnoService.closeTurnCollaborators(fecha.substring(0, 10), fecha.substring(11, 19),this.calibradores[0].id).subscribe(
+      res => {
+        this.sesionCerrada();
+        if (res.status == 200) {
+        } else if (res.status == 204) {
+          this.toastr.success('No hay colaboradores agregados a linea para cerrar el turno', 'Operación satisfactoria');
+          return;
+        }
+
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo cerrar turno a los colaboradores, método cerrarTurnoColaboradores, component monitoreo');
+        this.toastr.error('Error al cerrar turno para los colaboradores', 'Error');
+      }
+    );
+  }
+
+  openModal(modal) {
+    this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    }, (reason) => {
+      console.log(this.rutAdmin, this.passAdmin);
+      this.closeResult = `Dismissed ${this.getDismissReasonForm(reason)}`;
+    });
+  }
+
+
 
 
 }

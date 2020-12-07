@@ -35,9 +35,10 @@ export class MonitoreoService {
   }
 /***********************************************************************************************************************************************************/
 
-  getLastTurno(){
+
+  getLastTurno(fk_calibrador:number){
     console.log("getLastTurno");
-    return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/`,{observe: 'response'});
+    return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/${fk_calibrador}`,{observe: 'response'});
   }
   
 

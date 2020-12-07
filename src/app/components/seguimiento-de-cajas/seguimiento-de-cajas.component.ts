@@ -87,7 +87,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
     this.fromDate = this.calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
     this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
-    //this.agregarRegistroDeCajas();
+    this.agregarRegistroDeCajas();
     this.listarCalibradores();
   }
 
@@ -271,11 +271,11 @@ export class SeguimientoDeCajasComponent implements OnInit {
   segundo: string;
 
   agregarRegistroDeCajas() {
-    let count = 100;
+    let count = 3000;
     let x = 1;
-    for(let b = 11; b<=20 ; b++){
-      for (let h = 18; h <= 18; h++) {
-        for (let m = 20; m < 35; m++) {
+    for(let b = 22; b<=31 ; b++){ // b = numero linea
+      for (let h = 1; h <= 1; h++) {
+        for (let m = 30; m < 40; m++) {
           x =  Math.random() * (21 - 10) + 10;
           for (let s = 0; s < 60; s = s + x) {
             count++;
@@ -292,8 +292,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
               this.segundo = "0" + s;
             }
             let date = new Date();
-            let datew  = new Date("2020-12-03" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
-            let registroCaja = new SeguimientoDeCajas(null, 2, "Calibrador 2", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-03", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-03", "12:00:00",datew.getTime().toString(), 1, 1, 3);
+            let datew  = new Date("2020-12-07" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
+            let registroCaja = new SeguimientoDeCajas(null, 5, "Calibrador 2", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-07", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-07", "00:50:00",datew.getTime().toString(), 1, 1, 21);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");
