@@ -22,7 +22,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
   collaboratorsInLine: any = [];
   collaboratorsInLineAux: any = [];
   currentCollaboratorSelected: any;
-  selectedCalibradorText: string = "Seleccionar línea";
+  selectedCalibradorText: string = "Seleccionar calibrador";
   selectedCalibradorObject: any;
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;

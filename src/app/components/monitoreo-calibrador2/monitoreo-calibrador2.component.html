@@ -6,55 +6,46 @@
                 <h3><b>{{ time | date: 'HH:mm:ss a'}} </b></h3>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-12 my-1 text-right">
-                <button class="btn {{botonIniciarTurnoClass}} form-control" (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
+                <button class="btn {{botonIniciarTurnoClass}} form-control"
+                    (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
                 </button>
             </div>
             <div class="col-1"></div>
             <div class="col-12 text-center" style="margin-top: 0px;">
-                <h3><b>Monitoreo Línea 2</b></h3>
+                <h3><b>Monitoreo Calibrador 1</b></h3>
             </div>
         </div>
     </div>
 
     <div class="col-12">
-        <div class="row justify-content-center">
-            <div class="col-1"></div>
-            <div class="col-10">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 my-1">
                 <div class="card">
-                    <div class="card-body" style="padding: 6px;">       
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 my-1">
-                                <div class="card">
-                                    <div class="card-body" style="padding: 6px;">
-                                        <h1 class="card-title text-center"><b>{{totalHora2}}</b></h1>
-                                        <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora
-                                                por
-                                                minuto</b></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 my-1">
-                                <div class="card">
-                                    <div class="card-body" style="padding: 6px;">
-                                        <h1 class="card-title text-center"><b>{{totalMinuto2}}</b></h1>
-                                        <p class="card-text text-center"><b>Promedio de cajas selladas del turno por
-                                                minuto</b></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 my-1">
-                                <div class="card">
-                                    <div class="card-body" style="padding: 6px;">
-                                        <h1 class="card-title text-center"><b>{{totalTurno2}}</b></h1>
-                                        <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body" style="padding: 2px;">
+                        <h2 class="card-title text-center"><b>{{totalHora2}}</b></h2>
+                        <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora
+                                por
+                                minuto</b></p>
                     </div>
                 </div>
             </div>
-            <div class="col-1"></div>
+            <div class="col-lg-4 col-md-4 my-1">
+                <div class="card">
+                    <div class="card-body" style="padding: 2px;">
+                        <h2 class="card-title text-center"><b>{{totalMinuto2}}</b></h2>
+                        <p class="card-text text-center"><b>Promedio de cajas selladas del turno por
+                                minuto</b></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 my-1">
+                <div class="card">
+                    <div class="card-body" style="padding: 2px;">
+                        <h2 class="card-title text-center"><b>{{totalTurno2}}</b></h2>
+                        <p class="card-text text-center"><b>Total de cajas selladas del turno</b></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -73,7 +64,9 @@
             <div class="col-1"></div>
             <div class="col-lg-10" *ngIf="barChartOptions">
                 <div style="display: block; ">
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType" style="max-height: 420px;">
+                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                        [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend"
+                        [chartType]="barChartType" style="max-height: 420px;">
                     </canvas>
                 </div>
             </div>
@@ -94,7 +87,8 @@
         <p>¿Seguro que quieres {{iniciarCerrar}} turno?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modal.dismiss('cancel click')">Cancelar</button>
         <button type="button" class="btn btn-primary" (click)="modal.dismiss('ok')">Aceptar</button>
     </div>
 </ng-template>
@@ -113,7 +107,8 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rut:</b></label>
                 <div class="input-group">
-                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control" placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
+                    <input type="text" #rut='ngModel' [(ngModel)]="rutAdmin" name="rut" id="rut" class="form-control"
+                        placeholder="Ej: 9605009-7" required maxlength="10" rutValidation>
                 </div>
 
                 <!--Valida formulario nombre-->
@@ -128,7 +123,8 @@
 
                 <label for="lineaLabel"><b>Contraseña:</b></label>
                 <div class="input-group">
-                    <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password" class="form-control" placeholder="Contraseña">
+                    <input type="password" #password='ngModel' [(ngModel)]="passAdmin" name="password" id="password"
+                        class="form-control" placeholder="Contraseña">
                 </div>
 
                 <!--Valida formulario contraseña-->
@@ -140,8 +136,10 @@
             </div>
         </form>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-            <button type="submit" class="btn btn-primary" (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
+            <button type="button" class="btn btn-outline-secondary"
+                (click)="modal.dismiss('cancel click')">Cancelar</button>
+            <button type="submit" class="btn btn-primary"
+                (click)="autenticarTurno(mymodalconfirmar);modal.close('Save click')">Autenticar</button>
         </div>
     </div>
 </ng-template>
@@ -160,8 +158,10 @@
         <h5 class="mt-3">¿Quieres iniciar turno?</h5>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="open(myModalAutenticar);modal.dismiss('aceptar click')">Aceptar</button>
+        <button type="button" class="btn btn-outline-secondary"
+            (click)="modal.dismiss('cancel click')">Cancelar</button>
+        <button type="button" class="btn btn-primary"
+            (click)="open(myModalAutenticar);modal.dismiss('aceptar click')">Aceptar</button>
     </div>
 </ng-template>
 <!--fin modal autenticacion-->
