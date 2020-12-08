@@ -292,8 +292,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
               this.segundo = "0" + s;
             }
             let date = new Date();
-            let datew  = new Date("2020-12-07" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
-            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-07", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-07", "00:50:00",datew.getTime().toString(), 1, 1, 3);
+            let datew  = new Date("2020-12-08" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
+            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-07", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-08", "00:50:00",datew.getTime().toString(), 1, 1, 9);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");
