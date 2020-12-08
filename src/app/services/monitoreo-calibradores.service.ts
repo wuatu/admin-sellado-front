@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class MonitoreoCalibradoresService {
-  API_URL = "http://monitoreo.dan:3000/api"
+  API_URL = "http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
   getProductionLine2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, id_line: number, name_line: string) {

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SeguimientoDeCajasService {
-  API_URL = "http://monitoreo.dan:3000/api"
+  API_URL = "http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
   //Lista todos los registros de cajas que existen en la tabla de la base de datos}

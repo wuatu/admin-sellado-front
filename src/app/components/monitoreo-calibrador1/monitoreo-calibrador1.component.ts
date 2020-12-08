@@ -545,6 +545,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
         let turno = new Turno();
         let fecha = this.fecha();
         turno.fechaApertura(null, fecha.substring(0, 10), fecha.substring(11, 19), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "",this.calibradores[0].id, this.calibradores[0].nombre);
+        console.log(this.calibradores[0].nombre);
+        console.log(turno);
         this.turnoService.saveTurno(turno).subscribe(
           res => {
             this.sesionIniciada();
