@@ -302,7 +302,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.getProduccionTurno2();
 
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-        if (this.cajasCalibrador2Minuto[0].total == null) {
+        if (this.cajasCalibrador2Minuto[0].total == null || this.cajasCalibrador2Minuto[0].total == "NaN") {
           this.totalMinuto2 = 0;
         }
         else {
@@ -327,7 +327,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
         this.getProductionLine2();
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-        if (this.cajasCalibrador2Hora[0].total == null) {
+        if (this.cajasCalibrador2Hora[0].total == null || this.cajasCalibrador2Hora[0].total == "NaN") {
           this.totalHora2 = 0;
         }
         else {

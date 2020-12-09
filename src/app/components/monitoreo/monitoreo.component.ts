@@ -168,7 +168,7 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador1Minuto = res;
 
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador1Minuto[0].total == null) {
+          if (this.cajasCalibrador1Minuto[0].total == null || this.cajasCalibrador1Minuto[0].total == "NaN") {
             this.totalMinuto1 = 0;
           }
           else {
@@ -201,7 +201,8 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador1Hora = res;
 
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador1Hora[0].total == null) {
+          console.log("ESTE ES EL VALOR QUE TRAE !! : "+ this.cajasCalibrador1Hora[0].total)
+          if (this.cajasCalibrador1Hora[0].total == null || this.cajasCalibrador1Hora[0].total == "NaN") {
             this.totalHora1 = 0;
 
           }
@@ -257,7 +258,7 @@ export class MonitoreoComponent implements OnInit {
         res => {
           this.cajasCalibrador2Minuto = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador2Minuto[0].total == null) {
+          if (this.cajasCalibrador2Minuto[0].total == null || this.cajasCalibrador2Minuto[0].total == "NaN") {
             this.totalMinuto2 = 0;
           }
           else {
@@ -288,7 +289,7 @@ export class MonitoreoComponent implements OnInit {
         res => {
           this.cajasCalibrador2Hora = res;
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          if (this.cajasCalibrador2Hora[0].total == null) {
+          if (this.cajasCalibrador2Hora[0].total == null || this.cajasCalibrador2Hora[0].total == "NaN") {
             this.totalHora2 = 0;
           }
           else {
