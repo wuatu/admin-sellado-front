@@ -106,13 +106,13 @@ export class MonitoreoComponent implements OnInit {
 
     //Trae el tiempo desde el servidor
     this.getDateService.dateGetTime().forEach((res: any) => {
-      console.log(res.date);
+      //console.log(res.date);
       this.offsetTime = new Date().getTime() - res.date;
-      console.log(this.offsetTime);
+      //console.log(this.offsetTime);
     });
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       if (this.offsetTime != null) {
-        console.log(this.offsetTime);
+        //console.log(this.offsetTime);
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
@@ -201,7 +201,7 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador1Hora = res;
 
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          console.log("ESTE ES EL VALOR QUE TRAE !! : "+ this.cajasCalibrador1Hora[0].total)
+          
           if (this.cajasCalibrador1Hora[0].total == null || this.cajasCalibrador1Hora[0].total == "NaN") {
             this.totalHora1 = 0;
 
@@ -278,8 +278,6 @@ export class MonitoreoComponent implements OnInit {
   getAverageLastHourCalibrador2() {
     this.timeOut2 = setTimeout(() => {
       this.getProduccionCalibrador2();
-      console.log("getProduccionCalibrador2 !!!");
-
     },
       10000);
 
@@ -371,7 +369,6 @@ export class MonitoreoComponent implements OnInit {
   getTurnoActual(id_calibrador: number, calibrador: number) {
     this.monitoreoService.getLastTurno(id_calibrador).subscribe(
       res => {
-        console.log(res);
         if (res.status == 200) {
 
           if (calibrador == 1) {

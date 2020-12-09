@@ -18,7 +18,6 @@ export class MonitoreoService {
 /***********************************************************************************************************************************************************/
 
   getAverageforMinute2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, lineas_length: number){
-    console.log("eeeeeeeeeeee"+ lineas_length);
     return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}/${lineas_length}`);
   }
 /***********************************************************************************************************************************************************/
@@ -32,7 +31,6 @@ export class MonitoreoService {
 
 
   getLastTurno(fk_calibrador:number){
-    console.log("getLastTurno");
     return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/${fk_calibrador}`,{observe: 'response'});
   }
   

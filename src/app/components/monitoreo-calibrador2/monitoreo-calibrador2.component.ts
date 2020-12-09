@@ -106,13 +106,13 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.listarCalibradores();
     //Trae el tiempo desde el servidor
     this.getDateService.dateGetTime().forEach((res: any) => {
-      console.log(res.date);
+      //console.log(res.date);
       this.offsetTime = new Date().getTime() - res.date;
-      console.log(this.offsetTime);
+      //console.log(this.offsetTime);
     });
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       if (this.offsetTime != null) {
-        console.log(this.offsetTime);
+        //console.log(this.offsetTime);
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
@@ -131,7 +131,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
 
   getProduccion() {
-    console.log("GETPRODUCCION");
     this.monitoreoService.getLastTurno(this.calibradores[1].id).subscribe(
       res => {
         if (res.status == 200) {
@@ -214,7 +213,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
   //Este método obtiene desde la base de datos todas las lineas que tiene el calibrador y ejecuta los métodos paras obtener la producción 
   getLineOfCaliper() {
-    console.log("GETLINEOFCALIPER!!!!!!!!!!!!!");
     this.lineaService.getLineasId(this.calibradores[1].id).subscribe(
       res => {
         this.lineas = res.body;
@@ -263,7 +261,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
   /******************************************************************************************************/
   //Método que obtiene la cantidad de cajas selladas por minuto de las lineas del calibrador 
   getProductionLine2() {
-    console.log("GETPRODUCTIONLINE2");
     this.productionByLine = [];
     //fecha atual, se utiliza para saber si el turno se mantiene en el dia de inicio o paso a otro.
     this.fechaActual = this.fecha().substring(0, 10);
@@ -277,8 +274,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
             this.ordenarArray(this.productionByLine);
             this.timeOut = setTimeout(() => {
               this.getProduccion();
-
-              console.log(this.productionByLine);
             },
               10000);
           }
@@ -294,7 +289,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
 
   getAverageforMinute2() {
-    console.log("GETAVERAGEFORMINUTE2")
+  
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador2Minuto = res;
@@ -309,7 +304,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
           this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
         }
 
-        console.log("La produccion del turno es : " + this.totalMinuto2);
+    
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');
@@ -319,7 +314,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
 
   getAverageLastHour2() {
-    console.log("GETAVERAGELASTHOUR2");
     //get todas las cajas que tengan el mismo id del turno
     this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
@@ -342,7 +336,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
   getProduccionTurno2() {
-    console.log("GETPRODUCCIONTURNO2");
     //consulta para el calibrador 1
     this.monitoreoCalibradorService.getProduccionSearch2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
@@ -467,7 +460,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   /****************************************************************************************************************/
   getRegistro() {
-    console.log("id calibrador: " + this.calibradores[1].id);
     this.turnoService.getTurnoSinId(this.calibradores[1].id).subscribe(
       res => {
         if (res.status == 200) {
@@ -522,7 +514,6 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   //metodo que sirve para saber la razon por la cual un modal fue cerrado
   private getDismissReasonForm(reason: any) {
-    console.log(reason);
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
