@@ -14,6 +14,10 @@ export class SeguimientoDeCajasService {
     return this.httpClient.get(`${this.API_URL}/cajas_selladas/${id_linea}/${id_calibrador}`);
   }*/
 
+  getSearchByCode(criterionSearch: string, toSearch: string, validadas:boolean) {
+    return this.httpClient.get(`${this.API_URL}/caja_sellada_search_by_code/${criterionSearch}/${toSearch}/${validadas}`, { observe: 'response' });
+  }
+
   getSearch(criterionSearch: string, toSearch: string, fromDateSearch: string, toDateSearch: string) {
     return this.httpClient.get(`${this.API_URL}/caja_sellada_search/${criterionSearch}/${toSearch}/${fromDateSearch}/${toDateSearch}`, { observe: 'response' });
   }

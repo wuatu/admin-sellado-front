@@ -64,7 +64,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   dateFinishSearch: string;
 
   // Array para el dropdown del selector de atributos de busqueda de la caja
-  dropDownSearch: any[] = [{ nombre: 'Envase' }, { nombre: 'Embalaje' }, { nombre: 'Categoria' }, { nombre: 'Calibre' }];
+  dropDownSearch: any[] = [{ nombre: 'Envase' }, { nombre: 'Embalaje' }, { nombre: 'Categoria' }, { nombre: 'Calibre' }, { nombre: 'Codigo' }];
   SearchText: string = "Seleccionar criterio";
   selectedSearch: any;
 
@@ -94,7 +94,7 @@ export class SeguimientoDeCajasComponent implements OnInit {
   toggleVisibility(e) {
     this.marked = e.target.checked;
     console.log("marked: ", this.marked);
-    this.buscarPorCriterio();
+    //this.buscarPorCriterio();
     //this.setBusquedaCheckBox(this.marked);
   }
 
@@ -142,8 +142,44 @@ export class SeguimientoDeCajasComponent implements OnInit {
       }
     );
   }
+  
+  buscarPorCodigo(){
+    this.seguimientoDeCajas = [];
+    this.seguimientoDeCajasService.getSearchByCode(this.selectedSearch, this.toSearch, this.marked).subscribe(
+      res => {
+        
+        this.seguimientoDeCajasAux = res.body;
+        this.seguimientoDeCajas= res.body;
+        console.log(this.seguimientoDeCajas);
+        if (res.status == 200) {            
+          this.numBox = this.seguimientoDeCajas.length;
+          //this.toastr.success('Cajas selladas obtenidas', 'Operación satisfactoria');
+        } else if (res.status == 204) {
+          this.numBox = 0; //si no existen cajas que mostrar
+          this.toastr.success('no se encontro una caja sellada con ese código ', 'Operación satisfactoria');
+          return;
+        }          
+        if (this.bandera == 0) {
+          this.nombreColaborador = this.seguimientoDeCajasAux[0].nombre_usuario;
+          this.bandera++;
+        }
+        //this.toastr.success('Operación satisfactoria', 'Registros obtenidos');
+        console.log(this.marked);
+        //this.setBusquedaCheckBox(this.marked);
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener la caja con el código entregado, método buscarPorCodigo, component seguimiento-de-cajas');
+        this.toastr.error('No se pudo obtener la busqueda del código ingresado', 'Oops');
+      }
+    );
+
+  }
 
   buscarPorCriterio() {
+    if(this.selectedSearch == "Codigo" && this.toSearch){
+      this.buscarPorCodigo();
+      return;
+    }
     console.log(this.selectedSearch + " " + this.toSearch + " " + this.desde + " " + this.hasta);
     this.seguimientoDeCajas = [];
     this.seguimientoDeCajasAux = [];
@@ -271,13 +307,13 @@ export class SeguimientoDeCajasComponent implements OnInit {
   segundo: string;
 
   agregarRegistroDeCajas() {
-    let count = 1000;
+    let count = 10;
     let x = 1;
-    for(let b = 1; b<=6 ; b++){ // b = numero linea
-      for (let h = 12; h <= 12; h++) {
-        for (let m = 10; m < 30; m++) {
-          x =  Math.random() * (21 - 10) + 10;
-          for (let s = 0; s < 60; s = s + x) {
+    for(let b = 1; b<=10 ; b++){ // b = numero linea
+      for (let h = 11; h <= 11; h++) {
+        for (let m = 0; m < 8; m++) {
+          x = 20 //Math.random() * (21 - 10) + 10;
+          for (let s = 0; s <= 60; s = s + x) {
             count++;
             this.hora = h.toString();
             if (h < 10) {
@@ -292,8 +328,8 @@ export class SeguimientoDeCajasComponent implements OnInit {
               this.segundo = "0" + s;
             }
             let date = new Date();
-            let datew  = new Date("2020-12-09" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
-            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-08", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-09", "11:50:00",datew.getTime().toString(), 1, 1, 4);
+            let datew  = new Date("2020-12-10" + "T" + this.hora+":"+this.minuto+":"+this.segundo);
+            let registroCaja = new SeguimientoDeCajas(null, 1, "Calibrador 1", b, "Línea "+b, 21458458, "Rfid 1", "192.168.0.2", 1, "Lector 1", "192.168.10.10", 1, "17505454-5", "Ignacio", "Correa", "5468254875" + count, "", "", "", "", "", "", "", "", "", "", "", "","" ,"2020-12-08", this.hora + ":" + this.minuto + ":" + this.segundo, "" ,"2020-12-10", "11:50:00",datew.getTime().toString(), 1, 1, 6);
             this.seguimientoDeCajasService.saveSeguimientoDeCajas(registroCaja).subscribe(
               res => {
                 console.log("agrege!!!!!!!!");
