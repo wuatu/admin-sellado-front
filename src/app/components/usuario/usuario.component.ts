@@ -31,7 +31,7 @@ export class UsuarioComponent implements OnInit {
   selectedUsuarioText:string="Nombre";
   aux:any;
   rol: number;
-  registerRfid:any = ({id:'undifine', codigo:'RFID'});
+  registerRfid:any = ({id:'undefine', codigo:'RFID'});
   subscriptionTimerTask: Subscription;
   constructor(
     private modalService: NgbModal,
@@ -118,6 +118,7 @@ export class UsuarioComponent implements OnInit {
       res=>{
         this.selectedUsuarioObject=res.body;
         this.selectedUsuarioText=this.selectedUsuarioObject.nombre;
+        this.currentUsuarioSelected = this.selectedUsuarioObject;
       },
       err=>{
         this.registroDevService.creaRegistroDev('No se pudo obtener al usuario, método onEditar, component usuario');
@@ -145,6 +146,10 @@ export class UsuarioComponent implements OnInit {
         this.RegistroService.creaRegistro("Se ha editado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
         this.listarUsuarios();
         this.currentUsuarioSelected = null;
+        if (this.subscriptionTimerTask != null) {
+          this.subscriptionTimerTask.unsubscribe();
+        }
+        this.eliminarRegistroRfid();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo editar al usuario, método editarUsuario, component usuario');
@@ -189,11 +194,11 @@ export class UsuarioComponent implements OnInit {
   getRegistroRfid(){
     this.usuarioService.getRegisterRfid().subscribe(
       res=>{
-        console.log(res.body);
         if(res.status == 200){
           this.aux = res.body;
           if(this.registerRfid.codigo != this.aux.codigo){
             this.registerRfid = this.aux;
+            this.currentUsuarioSelected.rfid = this.aux.codigo;
           }
         }
       },
@@ -208,7 +213,7 @@ export class UsuarioComponent implements OnInit {
   open(modal,is_add:string) { 
     if(is_add == '1'){
       this.subscriptionTimerTask = timer(0, 2000).subscribe(() => {
-        console.log("me ejecuto");
+        //console.log("me ejecuto");
         this.getRegistroRfid();
       });
       

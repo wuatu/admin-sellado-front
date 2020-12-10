@@ -87,9 +87,7 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('USER'));
     const token = (localStorage.getItem('ACCESS_TOKEN'));
     const expiresIn = (localStorage.getItem('EXPIRES_IN'));
-    console.log(user);
-    console.log(expiresIn);
-    console.log(token);
+    
     if ((user !== null && token !== null && expiresIn !== null)) {
       this.isLoggedIn = true;
       this._isLoggedIn.next(this.isLoggedIn);

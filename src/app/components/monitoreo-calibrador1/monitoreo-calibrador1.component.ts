@@ -110,13 +110,13 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
     //Trae el tiempo desde el servidor
     this.getDateService.dateGetTime().forEach((res: any) => {
-      console.log(res.date);
+      //console.log(res.date);
       this.offsetTime = new Date().getTime() - res.date;
-      console.log(this.offsetTime);
+      //console.log(this.offsetTime);
     });
     this.subscriptionTimer = timer(0, 1000).subscribe(() => {
       if (this.offsetTime != null) {
-        console.log(this.offsetTime);
+        //console.log(this.offsetTime);
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
@@ -303,7 +303,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     }
   }
   getAverageforMinute2() {
-    console.log(this.lineas.length);
+ 
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
@@ -462,7 +462,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   /****************************************************************************************************************/
   getRegistro() {
-    console.log("id calibrador: " + this.calibradores[0].id);
     this.turnoService.getTurnoSinId(this.calibradores[0].id).subscribe(
       res => {
         if (res.status == 200) {
