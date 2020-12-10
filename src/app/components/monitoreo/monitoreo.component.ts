@@ -72,6 +72,9 @@ export class MonitoreoComponent implements OnInit {
   subscriptionTimerTask1: Subscription;
   subscriptionTimerTask2: Subscription;
   subscriptionTimer: Subscription;
+
+  subscriptionTimerReload: Subscription;
+
   timeOut1: any;
   timeOut2: any;
 
@@ -101,6 +104,8 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.calibrador1 = false;
+    this.calibrador2 = false;
     //Lista los calibradores que estan registrados en la base de datos.
     this.listarCalibradores();
 
@@ -129,29 +134,76 @@ export class MonitoreoComponent implements OnInit {
       this.subscriptionTimer.unsubscribe();
     }
 
+    if (this.subscriptionTimerReload != null) {
+      this.subscriptionTimerReload.unsubscribe();
+      console.log("mate al subscriptionTimerReload");
+    }
+
 
   }
 
   getProduccionCalibrador1() {
-    if (this.calibradores != null) {
 
-      this.getProduccionTurnoCalibrador1();
-    } else {
-      this.toastr.success('Debe agregar un calibrador', 'Oops');
-    }
+    this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
+      res => {
+        if (res.status == 200) {
+          console.log("get produccion calibrador 1");
+          if (this.calibradores != null) {
+            this.getProduccionTurnoCalibrador1();
+          } else {
+            this.toastr.success('Debe agregar un calibrador', 'Oops');
+          }
+        }else if(res.status == 204){
+          this.finishStart();
+        }
 
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getProduccionCalibrador1, component monitoreo');
+        this.finishStart();
+      }
+    ) 
   }
 
   getProduccionCalibrador2() {
-    if (this.calibradores != null) {
-
-      this.getProduccionTurnoCalibrador2();
-    } else {
-      this.toastr.success('Debe agregar un calibrador', 'Oops');
-    }
+    
+    this.monitoreoService.getLastTurno(this.calibradores[1].id).subscribe(
+      res => {
+        if (res.status == 200) {
+          console.log("get produccion calibrador 2");
+          if (this.calibradores != null) {
+            this.getProduccionTurnoCalibrador2();
+          } else {
+            this.toastr.success('Debe agregar un calibrador', 'Oops');
+          }
+        }else if(res.status == 204){
+          this.finishStart();
+        }
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getProduccionCalibrador1, component monitoreo');
+        this.finishStart();
+      }
+    ) 
 
   }
 
+
+  finishStart() {
+    if (this.timeOut1 != null) {
+      clearTimeout(this.timeOut1);
+    }
+    if (this.timeOut2 != null) {
+      clearTimeout(this.timeOut2);
+    } 
+    if (this.subscriptionTimerReload != null) {
+      this.subscriptionTimerReload.unsubscribe();
+      console.log("mate al subscriptionTimerReload");
+    }
+    this.calibrador1 = false;
+    this.calibrador2 = false;
+    this.listarCalibradores();
+  }
 
   /*************************************************************************************************/
   /****************************************    PRODUCCION     **************************************/
@@ -350,12 +402,19 @@ export class MonitoreoComponent implements OnInit {
         this.lineas = res.body;
         if (this.lineas != null) {
 
-          if (this.calibradores.length > 0) {
-            this.getTurnoActual(this.calibradores[0].id, 1);
-          }
-          if (this.calibradores.length > 1) {
-            this.getTurnoActual(this.calibradores[1].id, 2);
-          }
+          this.subscriptionTimerReload = timer(0, 10000).subscribe(() => {
+            console.log("ejecutando el suscripcion !!!!")
+            if (this.calibradores.length > 0 && this.calibrador1 == false) {
+              console.log("ejecuto el suscripcion con calibrador 1");
+              this.getTurnoActual(this.calibradores[0].id, 1);
+            }
+            if (this.calibradores.length > 1 && this.calibrador2 == false) {
+              console.log("ejecuto el suscripcion con calibrador 2");
+              this.getTurnoActual(this.calibradores[1].id, 2);
+            }
+          });
+
+          
 
         }
       },
@@ -373,23 +432,41 @@ export class MonitoreoComponent implements OnInit {
 
           if (calibrador == 1) {
             this.calibrador1 = true;
-
             this.turnoActualCalibrador1 = res.body;
             this.getProduccionCalibrador1();
+            console.log("turno calibrador 1 "+ this.turnoActualCalibrador1);
           } else if (calibrador == 2) {
             this.calibrador2 = true;
-
             this.turnoActualCalibrador2 = res.body;
             this.getProduccionCalibrador2();
+            console.log("turno calibrador 2 "+ this.turnoActualCalibrador2);
           }
 
+          if(this.calibrador2 == true  && this.calibrador1 == true){
+            if (this.subscriptionTimerReload != null) {
+              this.subscriptionTimerReload.unsubscribe();
+              console.log("mate al subscriptionTimerReload ambos en true");
+            }
+          }
+
+        }else if(res.status == 204){
+          console.log("RES ESTATUS EN 204");
+          if (calibrador == 1) {
+            this.calibrador1 = false;
+          } else if (calibrador == 2) {
+            this.calibrador2 = false;
+          }
         }
 
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
         this.toastr.error('error al cargar el turno.');
-
+        if (calibrador == 1) {
+          this.calibrador1 = false;
+        } else if (calibrador == 2) {
+          this.calibrador2 = false;
+        }
       }
     )
   }
