@@ -50,7 +50,7 @@ export class AppComponent {
 
   ngOnInit() {
     if (this.authService.isLogin()) {
-      this.router.navigate(['/monitoreo']);
+      //this.router.navigate([''])
     }
   }
 

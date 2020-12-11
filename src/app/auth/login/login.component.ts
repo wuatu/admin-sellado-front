@@ -28,9 +28,8 @@ export class LoginComponent implements OnInit {
 
   onLogin(form):void{
     this.authService.login(form.value).subscribe(
-      res=>{
-      
-        this.router.navigateByUrl('/monitoreo')
+      res=>{      
+        this.router.navigate(['/monitoreo'])
       err=>{
        
       }

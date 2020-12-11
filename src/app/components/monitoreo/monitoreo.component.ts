@@ -13,6 +13,7 @@ import { RegistroDevService } from '../../services/registro-dev.service';
 import { timer, interval, Subscription, Observable } from 'rxjs';
 import { GetDateService } from 'src/app/services/get-date.service';
 import { LineaService } from 'src/app/services/linea.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 
 @Component({
@@ -96,7 +97,8 @@ export class MonitoreoComponent implements OnInit {
     private monitoreoService: MonitoreoService,
     private registroDevService: RegistroDevService,
     private getDateService: GetDateService,
-    private lineaService: LineaService
+    private lineaService: LineaService,
+    private router: Router
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');
@@ -153,7 +155,7 @@ export class MonitoreoComponent implements OnInit {
           } else {
             this.toastr.success('Debe agregar un calibrador', 'Oops');
           }
-        }else if(res.status == 204){
+        } else if (res.status == 204) {
           this.finishStart();
         }
 
@@ -162,11 +164,11 @@ export class MonitoreoComponent implements OnInit {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getProduccionCalibrador1, component monitoreo');
         this.finishStart();
       }
-    ) 
+    )
   }
 
   getProduccionCalibrador2() {
-    
+
     this.monitoreoService.getLastTurno(this.calibradores[1].id).subscribe(
       res => {
         if (res.status == 200) {
@@ -176,7 +178,7 @@ export class MonitoreoComponent implements OnInit {
           } else {
             this.toastr.success('Debe agregar un calibrador', 'Oops');
           }
-        }else if(res.status == 204){
+        } else if (res.status == 204) {
           this.finishStart();
         }
       },
@@ -184,7 +186,7 @@ export class MonitoreoComponent implements OnInit {
         this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getProduccionCalibrador1, component monitoreo');
         this.finishStart();
       }
-    ) 
+    )
 
   }
 
@@ -195,7 +197,7 @@ export class MonitoreoComponent implements OnInit {
     }
     if (this.timeOut2 != null) {
       clearTimeout(this.timeOut2);
-    } 
+    }
     if (this.subscriptionTimerReload != null) {
       this.subscriptionTimerReload.unsubscribe();
       console.log("mate al subscriptionTimerReload");
@@ -253,7 +255,7 @@ export class MonitoreoComponent implements OnInit {
           this.cajasCalibrador1Hora = res;
 
           //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-          
+
           if (this.cajasCalibrador1Hora[0].total == null || this.cajasCalibrador1Hora[0].total == "NaN") {
             this.totalHora1 = 0;
 
@@ -414,7 +416,7 @@ export class MonitoreoComponent implements OnInit {
             }
           });
 
-          
+
 
         }
       },
@@ -434,22 +436,22 @@ export class MonitoreoComponent implements OnInit {
             this.calibrador1 = true;
             this.turnoActualCalibrador1 = res.body;
             this.getProduccionCalibrador1();
-            console.log("turno calibrador 1 "+ this.turnoActualCalibrador1);
+            console.log("turno calibrador 1 " + this.turnoActualCalibrador1);
           } else if (calibrador == 2) {
             this.calibrador2 = true;
             this.turnoActualCalibrador2 = res.body;
             this.getProduccionCalibrador2();
-            console.log("turno calibrador 2 "+ this.turnoActualCalibrador2);
+            console.log("turno calibrador 2 " + this.turnoActualCalibrador2);
           }
 
-          if(this.calibrador2 == true  && this.calibrador1 == true){
+          if (this.calibrador2 == true && this.calibrador1 == true) {
             if (this.subscriptionTimerReload != null) {
               this.subscriptionTimerReload.unsubscribe();
               console.log("mate al subscriptionTimerReload ambos en true");
             }
           }
 
-        }else if(res.status == 204){
+        } else if (res.status == 204) {
           console.log("RES ESTATUS EN 204");
           if (calibrador == 1) {
             this.calibrador1 = false;
