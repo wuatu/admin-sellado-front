@@ -23,7 +23,13 @@ export class LoginComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.isLoggedIn();
+  }
 
+  isLoggedIn(): void {
+    if (this.authService.isLogin()) {
+      this.router.navigate(['/monitoreo'])
+    }
   }
 
   onLogin(form):void{

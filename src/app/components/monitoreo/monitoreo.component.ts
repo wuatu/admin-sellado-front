@@ -23,6 +23,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class MonitoreoComponent implements OnInit {
   @ViewChild("mymodaliniciarturno") modalIniciarTurno: ElementRef;
+  @ViewChild("showmenu") showmenu: ElementRef;
 
   lineas: any = [];
 
@@ -105,7 +106,8 @@ export class MonitoreoComponent implements OnInit {
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 1);
   }
 
-  ngOnInit() {
+  ngOnInit() {    
+    this.isLoggedIn();      
     this.calibrador1 = false;
     this.calibrador2 = false;
     //Lista los calibradores que estan registrados en la base de datos.
@@ -144,6 +146,22 @@ export class MonitoreoComponent implements OnInit {
 
   }
 
+  isLoggedIn(): void {
+    if (!this.authService.isLogin()) {
+      this.router.navigate(['/auth/login'])
+    } else{
+      const user = JSON.parse(localStorage.getItem('USER'));
+      console.log(user.rut);
+      if(user.rut=="22222222-2"){
+        this.router.navigate(['/monitoreocalibrador2']);
+
+      } else if(user.rut=="11111111-1"){
+        this.router.navigate(['/monitoreocalibrador1'])
+      }
+    }
+  }
+
+  
   getProduccionCalibrador1() {
 
     this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(

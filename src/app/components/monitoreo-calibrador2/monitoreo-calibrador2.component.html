@@ -2,19 +2,20 @@
     <div class="col-12 ">
         <div class="row justify-content-center">
             <div class="col-1"></div>
-            <div class="col-6 text-right">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 text-right">
                 <h3><b>{{ time | date: 'HH:mm:ss a'}} </b></h3>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-12 my-1 text-right">
+            <div class="col-lg-3 col-md-3 col-sm-12 my-1 text-right">
                 <button class="btn {{botonIniciarTurnoClass}} form-control"
                     (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
                 </button>
             </div>
             <div class="col-1"></div>
-            <div class="col-12 text-center" style="margin-top: 0px;">
-                <h3><b>Monitoreo Calibrador 2</b></h3>
-            </div>
         </div>
+    </div>
+
+    <div class="col-12 text-center" style="margin-top: 0px;">
+        <h3><b>Monitoreo Calibrador 2</b></h3>
     </div>
 
     <div class="col-12">
@@ -23,9 +24,8 @@
                 <div class="card">
                     <div class="card-body" style="padding: 2px;">
                         <h2 class="card-title text-center"><b>{{totalHora2}}</b></h2>
-                        <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora
-                                por
-                                minuto</b></p>
+                        <p class="card-text text-center"><b>Promedio de cajas selladas de la última
+                                hora por minuto</b></p>
                     </div>
                 </div>
             </div>
@@ -62,18 +62,17 @@
     <div class="col-12">
         <div class="row justify-content-center">
             <div class="col-1"></div>
-            <div class="col-lg-10" *ngIf="barChartOptions">
-                <div style="display: block; ">
-                    <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-                        [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend"
-                        [chartType]="barChartType" style="max-height: 420px;">
-                    </canvas>
-                </div>
+            <div class="col-10 my-1" *ngIf="barChartOptions">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [plugins]="barChartPlugins" [colors]="barChartColors" [legend]="barChartLegend"
+                    [chartType]="barChartType" style="max-height: 420px;">
+                </canvas>
             </div>
             <div class="col-1"></div>
         </div>
     </div>
 </div>
+<div #scrollMe2 id="scrollMe2"></div>
 
 <!--Modal confirmación-->
 <ng-template #mymodalconfirmar let-modal>

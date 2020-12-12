@@ -21,6 +21,7 @@ import { LineaService } from 'src/app/services/linea.service';
 //*****/
 import { timer, interval, Subscription, Observable } from 'rxjs';
 import { GetDateService } from 'src/app/services/get-date.service';
+import { MenubarService } from 'src/app/services/menubar.service';
 
 
 @Component({
@@ -93,14 +94,15 @@ export class MonitoreoCalibrador2Component implements OnInit {
     private lineaService: LineaService,
     private monitoreoCalibradorService: MonitoreoCalibradoresService,
     private registroDevService: RegistroDevService,
-    private getDateService: GetDateService
+    private getDateService: GetDateService,
+    private menuBar:MenubarService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     //Lista los calibradores que estan registrados en la base de datos.
     //this.getTurnoActual();
     this.listarCalibradores();
@@ -116,6 +118,24 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
+    
+  }
+
+  ngAfterViewInit(): void{
+    this.isLoggedIn();
+  }
+
+  isLoggedIn(): void {
+    if (this.authService.isLogin()) {
+      const user = JSON.parse(localStorage.getItem('USER'));
+      console.log(user.rut);
+      if (user.rut == "22222222-2") {
+        let showmenu: HTMLElement = document.getElementById('showmenu') as HTMLElement;
+        showmenu.click();  
+        let botom: HTMLElement = document.getElementById('scrollMe2') as HTMLElement;
+        botom.scrollIntoView();
+      }
+    }
   }
 
   ngOnDestroy() {
@@ -289,7 +309,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
 
   getAverageforMinute2() {
-  
+
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador2Minuto = res;
@@ -304,7 +324,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
           this.totalMinuto2 = this.cajasCalibrador2Minuto[0].total;
         }
 
-    
+
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getAverageforMinute, component monitoreo-calibrador1');

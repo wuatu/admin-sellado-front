@@ -31,7 +31,8 @@ import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monito
 import { RfidRegistroColaboradorComponent } from './components/rfid-registro-colaborador/rfid-registro-colaborador.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+  //{ path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/monitoreo', pathMatch: 'full' },
   { path: 'auth', loadChildren: './auth/auth.module#AuthModule' },
   { path: 'monitoreo', component: MonitoreoComponent, canActivate: [AuthGuard] },
   { path: 'produccioncalibrador', component: DashboardComponent, canActivate: [AuthGuard] },

@@ -8,6 +8,7 @@ import { Administrador } from '../models/administrador';
 import { AdministradorService } from './administrador.service';
 import { LoginComponent } from '../auth/login/login.component';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -23,7 +24,12 @@ export class AuthService {
   
   admin: any;
   
-  constructor(private httpClient: HttpClient, private administradorService:AdministradorService,private toastr:ToastrService) { }
+  constructor(
+    private httpClient: HttpClient, 
+    private administradorService:AdministradorService,
+    private toastr:ToastrService,
+    private router:Router
+    ) { }
 
   
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbCalendar, NgbDateParserFormatter, NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { formatDate } from '@angular/common';
+import { formatDate, ViewportScroller } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 import { AdministradorService } from 'src/app/services/administrador.service';
@@ -30,6 +30,8 @@ import { GetDateService } from 'src/app/services/get-date.service';
 })
 export class MonitoreoCalibrador1Component implements OnInit {
   @ViewChild("mymodaliniciarturno") modalIniciarTurno: ElementRef;
+  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+
   time = new Date();
 
   //max = 1;
@@ -95,7 +97,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
     private lineaService: LineaService,
     private monitoreoCalibradorService: MonitoreoCalibradoresService,
     private registroDevService: RegistroDevService,
-    private getDateService: GetDateService
+    private getDateService: GetDateService,
+    private vps: ViewportScroller
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
@@ -103,7 +106,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
   }
 
   ngOnInit() {
-
     this.listarCalibradores();
 
     //this.getTurnoActual();
@@ -120,6 +122,40 @@ export class MonitoreoCalibrador1Component implements OnInit {
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.isLoggedIn();
+  }
+
+  isLoggedIn(): void {
+    if (this.authService.isLogin()) {
+      const user = JSON.parse(localStorage.getItem('USER'));
+      console.log(user.rut);
+      if (user.rut == "11111111-1") {
+        
+        let showmenu: HTMLElement = document.getElementById('showmenu') as HTMLElement;
+        showmenu.click();
+        
+
+        let botom: HTMLElement = document.getElementById('scrollMe') as HTMLElement;
+        botom.scrollIntoView();
+        
+        //this.vps.scrollToAnchor("scrollMe");
+
+          //document.querySelector('scrollMe').scrollTop = document.querySelector('scrollMe').scrollHeight;
+        
+
+      }
+    }
+  }
+
+  scrollToBottom(): void {
+    try {
+      //      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+
+    } catch (err) { }
   }
 
   ngOnDestroy() {
@@ -303,14 +339,14 @@ export class MonitoreoCalibrador1Component implements OnInit {
     }
   }
   getAverageforMinute2() {
- 
+
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
         this.getProduccionTurno2();
 
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
-        if (this.cajasCalibrador1Minuto[0].total == null  || this.cajasCalibrador1Minuto[0].total == "NaN") {
+        if (this.cajasCalibrador1Minuto[0].total == null || this.cajasCalibrador1Minuto[0].total == "NaN") {
           this.totalMinuto1 = 0;
         }
         else {
@@ -472,9 +508,9 @@ export class MonitoreoCalibrador1Component implements OnInit {
           //console.log(this.turno);
           this.sesionIniciada();
           //this.getTurnoActual();
-          this.toastr.info("Turno se encuentra iniciado", "Información", {
-            positionClass: 'toast-bottom-right'
-          });
+          //this.toastr.info("Turno se encuentra iniciado", "Información", {
+            //positionClass: 'toast-bottom-right'
+          //});
         } else {
           this.toastr.info("No se ha iniciado turno", "Información", {
             positionClass: 'toast-bottom-right'
