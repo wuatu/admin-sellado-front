@@ -73,6 +73,7 @@ export class LineasComponent implements OnInit {
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen registros de líneas actualmente para mostrar','Operación satisfactoria');
+          this.lineas = [];
           return;
         }
       },

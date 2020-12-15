@@ -80,6 +80,7 @@ export class LectorValidadorComponent implements OnInit {
           this.bandera = true;
         }else if(res.status == 204){
           this.toastr.success('No existen lectores validadores actualmente para mostrar','Operación satisfactoria');
+          this.lectoresValidador=[];
           return;
         }
       },

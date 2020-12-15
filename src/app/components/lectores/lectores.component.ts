@@ -142,6 +142,7 @@ export class LectoresComponent implements OnInit {
           this.bandera=true;
         }else if(res.status == 204){
           this.toastr.success('No existen registros de lectores actualmente para mostrar','Operación satisfactoria');
+          this.lectores=[];
           return;
         }
         

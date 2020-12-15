@@ -29,21 +29,19 @@
             <thead>
                 <tr>
                     <th scope="col">N°</th>
-                    <th scope="col">Cod_Caja</th>
-                    <th scope="col">Codigo_Confection </th>
-                    <th scope="col">Confection</th>
-                    <th scope="col">Codigo_Embalaje</th>
+                    <th scope="col">Codigo confectión </th>
+                    <th scope="col">Confección</th>
+                    <th scope="col">Codigo embalaje</th>
                     <th scope="col">Embalaje</th>
-                    <th scope="col">Codigo_Envase</th>
+                    <th scope="col">Código envase</th>
                     <th scope="col">Envase</th>
                     <th scope="col">Categoria</th>
-                    <th scope="col">Categoria_Timbrada</th>
+                    <th scope="col">Categoria timbrada</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let codigo of codigosUnitec | paginate: {itemsPerPage: 20, currentPage:p}; let i = index">
                     <th scope="row">{{i+1}}</th>
-                    <td>{{codigo.cod_caja}}</td>
                     <td>{{codigo.codigo_confection}}</td>
                     <td>{{codigo.confection}}</td>
                     <td>{{codigo.codigo_embalaje}}</td>

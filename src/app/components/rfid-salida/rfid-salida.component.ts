@@ -119,6 +119,7 @@ export class RfidSalidaComponent implements OnInit {
         if(res.status == 200){
         }else if(res.status == 204){
           this.toastr.success('no existen rfid salida actualmente para mostrar','Operación satisfactoria');
+          this.rfidsSalida=[];
           return;
         }
       },
