@@ -29,6 +29,7 @@ import { MonitoreoUsuarioEnLineaComponent } from './components/monitoreo-usuario
 import { RfidSalidaComponent } from './components/rfid-salida/rfid-salida.component';
 import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monitoreo-sistema.component';
 import { RfidRegistroColaboradorComponent } from './components/rfid-registro-colaborador/rfid-registro-colaborador.component';
+import { InformeCalibradorComponent } from './components/informe-calibrador/informe-calibrador.component';
 
 const routes: Routes = [
   //{ path: '', redirectTo: '/auth/login', pathMatch: 'full' },
@@ -66,6 +67,7 @@ const routes: Routes = [
   { path: 'rfidSalida', component:RfidSalidaComponent, canActivate: [AuthGuard] },
   { path: 'monitoreoSistema', component:MonitoreoSistemaComponent, canActivate: [AuthGuard] },
   { path: 'rfidRegistroColaborador', component:RfidRegistroColaboradorComponent, canActivate: [AuthGuard] },
+  { path: 'informeCalibrador', component:InformeCalibradorComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

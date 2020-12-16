@@ -42,6 +42,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
   cajasCalibrador1Hora: any = [];
   cajasCalibrador1Minuto: any = [];
 
+  cajasPorLinea:any = [];
+
   totalTurno1: number = 0;
   totalHora1: number = 0;
   totalMinuto1: number = 0;
@@ -279,7 +281,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
         if (this.max < arr[0].total) {
           this.max = arr[0].total;
         }*/
-        if (linea.nombre == arr[0].nombre_linea) {
+        if (linea.nombre == arr.nombre_linea) {
           this.arrayAux.push(arr);
           break;
         }
@@ -380,6 +382,24 @@ export class MonitoreoCalibrador1Component implements OnInit {
       });
   }
 
+  getCajasPorLinea(){
+    console.log("getCajasPorLinea");
+    this.cajasPorLinea = [];
+    this.monitoreoCalibradorService.getCajasPorLinea(this.calibradores[0].id, this.turnoActual.id).subscribe(
+      res => {
+        if(res.status == 200){
+          this.cajasPorLinea = res;
+
+          console.log("cajas por linea !!");
+          console.log(this.cajasPorLinea);
+        }
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en la última hora en el turno del calibrador 1, método getAverageLastHour, component monitoreo-calibrador1');
+        this.toastr.error('Promedio de la ultima hora por minuto NO obtenido', 'NO obtenido');
+      });
+  }
+
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
   getProduccionTurno2() {
     //consulta para el calibrador 1
@@ -426,17 +446,17 @@ export class MonitoreoCalibrador1Component implements OnInit {
     let i = 0;
     for (let data of dataNumberBox) {
       //console.log(data);
-      if (data[0].total <= this.constanteDivision) {
-        this.barChartData[0].data.push(data[0].total);
+      if (data.total <= this.constanteDivision) {
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("red");
-      } else if (data[0].total > this.constanteDivision && data[0].total <= this.constanteDivision * 2) {
-        this.barChartData[0].data.push(data[0].total);
+      } else if (data.total > this.constanteDivision && data.total <= this.constanteDivision * 2) {
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("yellow");
       } else {
-        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("green");
       }
-      this.barChartLabels.push(`${data[0].nombre_linea}`);
+      this.barChartLabels.push(`${data.nombre_linea}`+ " ["+data.total_turno+" cajas]");
       i++;
       //this.barChartOptions.scales.yAxes[0].ticks.max = this.calibradores[0].cajas_por_minuto + 1;
     }

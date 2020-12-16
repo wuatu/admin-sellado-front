@@ -250,7 +250,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.arrayAux = [];
     for (let linea of this.lineas) {
       for (let arr of array) {
-        if (linea.nombre == arr[0].nombre_linea) {
+        if (linea.nombre == arr.nombre_linea) {
           this.arrayAux.push(arr);
           break;
         }
@@ -400,17 +400,17 @@ export class MonitoreoCalibrador2Component implements OnInit {
     let i = 0;
     for (let data of dataNumberBox) {
       //console.log(data);
-      if (data[0].total <= this.constanteDivision) {
-        this.barChartData[0].data.push(data[0].total);
+      if (data.total <= this.constanteDivision) {
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("red");
-      } else if (data[0].total > this.constanteDivision && data[0].total <= this.constanteDivision * 2) {
-        this.barChartData[0].data.push(data[0].total);
+      } else if (data.total > this.constanteDivision && data.total <= this.constanteDivision * 2) {
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("yellow");
       } else {
-        this.barChartData[0].data.push(data[0].total);
+        this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("green");
       }
-      this.barChartLabels.push(`${data[0].nombre_linea}`);
+      this.barChartLabels.push(`${data.nombre_linea}`+ " ["+data.total_turno+" cajas]");
       i++;
     }
 
