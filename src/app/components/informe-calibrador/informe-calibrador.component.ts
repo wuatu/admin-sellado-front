@@ -20,13 +20,12 @@ import * as XLSX from 'xlsx';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
 
-
 @Component({
-  selector: 'app-produccion-por-calibrador',
-  templateUrl: './produccion-por-calibrador.component.html',
-  styleUrls: ['./produccion-por-calibrador.component.css']
+  selector: 'app-informe-calibrador',
+  templateUrl: './informe-calibrador.component.html',
+  styleUrls: ['./informe-calibrador.component.css']
 })
-export class ProduccionPorCalibradorComponent implements OnInit {
+export class InformeCalibradorComponent implements OnInit {
   closeResult = '';
   currentSeguimientoSelected: SeguimientoDeCajas;
   pageOfItems: Array<any>;
@@ -35,7 +34,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   verificado: number;
   a_tiempo: number;
 
-  nombreExcel = 'Produccion';
+  nombreExcel = 'Produccion Colibrador';
   nombre: any;
   apellido: any;
 
@@ -58,6 +57,17 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   selectedCalibradorText: string = "Seleccionar calibrador";
   selectedCalibradorObject: any;
 
+    //Atributos para el dropdown de turnos
+    turnos: any = [];
+    //cajasCalibrador: any = [];
+    //produccionCalibrador: any = [];
+    //produccionCalibradorExportarExcel: any = [];
+    selectedTurnoText: string = "Seleccionar turno";
+    selectedTurnoObject: any;
+    turnosShow: any = [];
+
+    produccionColaboradores: any = [];
+
   //******************************************/
   //calendar
   hoveredDate: NgbDate | null = null;
@@ -76,6 +86,11 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   dateStartSearch: string;
   dateFinishSearch: string;
   mostrarGrafico: any;
+  produccionColaboradorExcel:any = [];
+
+  produccionLineaCalibrador:any = [];
+
+  produccionPorMinutoTurno: any = [];
 
   rol: number;
 
@@ -91,7 +106,7 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "yyyy-MM-dd", 'en-US');    
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 1);
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 0);
     this.hasta = formatDate(new Date(this.toDate.year, this.toDate.month - 1, this.toDate.day), "yyyy-MM-dd", 'en-US');
   }
 
@@ -100,11 +115,120 @@ export class ProduccionPorCalibradorComponent implements OnInit {
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
   }
 
+
+  //Método que ejecuta los metodos para obtener los distindos array de producción al presionar el botón buscar
+  buscar(){
+    if(this.selectedCalibradorObject && this.selectedTurnoObject){
+      this.buscarRegistroCalibrador();
+      this.contarCajasCalibradorPorFecha();
+      this.getProduccionColaborador();
+      this.getProduccionLineasCalibrador();
+      this.promedioCajasPorMinutoTurno();
+    }else{
+      this.toastr.info("Por favor seleccione fecha, calibrador y turno");
+    }
+  }
+  //Método para obtener el listado de turno filtrado por calibrador y fecha...
+
+  listarTurnos(){
+    this.turnosShow = [];
+    this.produccionPorCalibradorService.getTurnos(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
+      res => {
+        if(res.status == 200 ){
+          this.turnos = res.body;
+          console.log("  ");
+          console.log("TURNOS !!!");
+          console.log(this.turnos);
+          console.log(this.turnos.length);
+          console.log("  ");
+          for(let i = 0; i < this.turnos.length ; i ++){
+            this.turnosShow.push({turno:this.turnos[i].id_turno+ "  inicio turno: "+ this.turnos[i].fApertura+" "+this.turnos[i].hApertura+" "+"termino turno: "+ this.turnos[i].fCierre+" "+this.turnos[i].hCierre, id_turno: this.turnos[i].id_turno, seleccionar: "  Inicio: "+ this.turnos[i].fApertura+" "+this.turnos[i].hApertura.substring(0,5),
+          fApertura: this.turnos[i].fApertura, hApertura: this.turnos[i].hApertura, fCierre: this.turnos[i].fCierre, hCierre: this.turnos[i].hCierre});
+          }
+        }else{
+          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
+        }
+      },
+      err => {
+        console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+        this.toastr.error('No se pudo obtener los turnos', 'Oops');
+      }
+    );
+  }
+
+  promedioCajasPorMinutoTurno(){
+    console.log("método promedioCajasPorMinuto()");
+    this.produccionPorMinutoTurno = [];
+    this.produccionPorCalibradorService.getPromedioCajasPorMinutoTurno(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno, this.selectedTurnoObject.fApertura, this.selectedTurnoObject.hApertura, this.selectedTurnoObject.fCierre, this.selectedTurnoObject.hCierre).subscribe(
+      res => {
+        if(res.status == 200 ){
+          this.produccionPorMinutoTurno = res.body;
+          console.log("  ");
+          console.log("produccion por minuto!!!");
+          console.log(this.produccionPorMinutoTurno);
+          console.log("  ");
+        }else{
+          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
+        }
+      },
+      err => {
+        console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+        
+        this.toastr.info("El turno seleccionado aún no finaliza");
+      }
+    );
+  }
+
+  getProduccionLineasCalibrador(){
+    this.produccionLineaCalibrador = [];
+    this.produccionPorCalibradorService.getProduccionLineaCalibrador(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno).subscribe(
+      res => {
+        if(res.status == 200 ){
+          this.produccionLineaCalibrador = res.body;
+          console.log("  ");
+          console.log("produccion por linea!!!");
+          console.log(this.produccionLineaCalibrador);
+          console.log(this.produccionLineaCalibrador.length);
+          console.log("  ");
+        }else{
+          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
+        }
+      },
+      err => {
+        console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+        this.toastr.error('No se pudo obtener los turnos', 'Oops');
+      }
+    );
+  }
+
+  getProduccionColaborador(){
+    this.produccionColaboradores = [];
+    this.produccionPorCalibradorService.getProduccionColaborador(this.selectedTurnoObject.id_turno).subscribe(
+      res => {
+        if(res.status == 200 ){
+          this.produccionColaboradores = res.body;
+          
+        }else{
+          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
+        }
+      },
+      err => {
+        console.log(err);
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+        this.toastr.error('No se pudo obtener los turnos', 'Oops');
+      }
+    );
+  }
+
   //metodo que lista las calibradores
   listarCalibradores() {
     this.calibradorService.getCalibradores().subscribe(
       res => {
         this.calibradores = res.body;
+        console.log(this.calibradores);
       },
       err => {
         console.log(err);
@@ -119,12 +243,13 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   }
 
   contarCajasCalibradorPorFecha() {
+    this.cajasCalibrador = [];
     //this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
     console.log(this.selectedCalibradorObject.id + " por fecha " + this.desde + " " + this.hasta);
     this.cajasCalibrador = [];
-    this.produccionPorCalibradorService.getboxInCaliper2(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
+    this.produccionPorCalibradorService.getboxInCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
       res => {
-        this.cajasCalibrador = res;
+        this.cajasCalibrador = res;4
         this.mostrarGrafico = "true";
         console.log(this.cajasCalibrador);
         this.cajasTotales(this.cajasCalibrador);
@@ -143,15 +268,10 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   }
 
   buscarRegistroCalibrador() {
-    if (this.selectedCalibradorText == "Selecciona una calibrador" || this.desde == " " || this.hasta == " ") {
-      this.toastr.error('se debe seleccionar calibrador y fecha.', 'Oops');
-      return;
-    }
-
     console.log(this.selectedCalibradorObject.id + this.desde + this.hasta);
     this.produccionCalibrador = [];
     this.produccionCalibradorExportarExcel = [];
-    this.produccionPorCalibradorService.getProduccionSearch2(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
+    this.produccionPorCalibradorService.getProduccionSearch(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
       res => {
         //console.log(res);
         this.produccionCalibrador = res.body;
@@ -292,8 +412,24 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   }
 
   changeSelectedCalibrador(newSelected: any) {
-    this.selectedCalibradorText = newSelected.nombre;
-    this.selectedCalibradorObject = newSelected;
+    
+    if(!this.desde || !this.hasta){
+      this.toastr.info("Por favor seleccione un rango de fechas");
+      return;
+    }else{
+      this.selectedCalibradorText = newSelected.nombre;
+      this.selectedCalibradorObject = newSelected;
+      this.selectedTurnoText = "Seleccionar turno";
+      this.turnosShow = [];
+      this.listarTurnos();
+    }
+  }
+
+  changeSelectedTurno(newSelected: any) {
+    this.selectedTurnoText = newSelected.seleccionar;
+    this.selectedTurnoObject = newSelected;
+    console.log("turno seleccionado");
+    console.log(this.selectedTurnoObject);
   }
 
   changeSelectedVerified(newSelected: any) {
@@ -310,19 +446,37 @@ export class ProduccionPorCalibradorComponent implements OnInit {
   exportarArchivoExcel() {
     try {
       if (this.produccionCalibradorExportarExcel.length > 50000) {
+
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        // Se convierte el arreglo con los usuarios en linea 
+        var jsonArray = JSON.parse(JSON.stringify(this.produccionPorMinutoTurno))
+        //se convierte el Json a xlsx en formato workSheet
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+        /* genera el workbook y agrega el worksheet */
+        XLSX.utils.book_append_sheet(wb, ws, 'Producción por minuto');
+
+        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionLineaCalibrador));
+        const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray2);
+        XLSX.utils.book_append_sheet(wb, ws2, 'Producción Líneas');
+
+        var jsonArray3 = JSON.parse(JSON.stringify(this.produccionColaboradores));
+        const ws3: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray3);
+        XLSX.utils.book_append_sheet(wb, ws3, 'Producción colaboradores');
+
+
         let array: any[];
         let i = 0;
         let j = 50000;
         let cont = 1;
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        
         while (i < this.produccionCalibradorExportarExcel.length) {
           array = this.produccionCalibradorExportarExcel.slice(i, j);
           // Se convierte el arreglo con los usuarios en linea 
-          var jsonArray = JSON.parse(JSON.stringify(array));
+          var jsonArray4 = JSON.parse(JSON.stringify(array));
           //se convierte el Json a xlsx en formato workSheet
-          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
+          const ws4: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray4);
           /* genera el workbook y agrega el worksheet */
-          XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador ' + cont);
+          XLSX.utils.book_append_sheet(wb, ws4, 'Producción de calibrador ' + cont);
           i = j;
           if (j + 50000 < this.produccionCalibradorExportarExcel.length) {
             j = j + 50000;
@@ -334,28 +488,40 @@ export class ProduccionPorCalibradorComponent implements OnInit {
         }
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
-        XLSX.writeFile(wb, this.nombreExcel + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
-      } else {
-        console.log("tamaño del array : " + this.produccionCalibradorExportarExcel.size);
-        // Se convierte el arreglo con los usuarios en linea 
-        var jsonArray = JSON.parse(JSON.stringify(this.produccionCalibradorExportarExcel))
+        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
 
-        console.log(jsonArray);
+        
+      } else {
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        // Se convierte el arreglo con los usuarios en linea 
+        var jsonArray = JSON.parse(JSON.stringify(this.produccionPorMinutoTurno))
+        console.log("json");
+        console.log(jsonArray)
         //se convierte el Json a xlsx en formato workSheet
         const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray);
-
         /* genera el workbook y agrega el worksheet */
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+        XLSX.utils.book_append_sheet(wb, ws, 'Producción por minuto');
 
+        var jsonArray2 = JSON.parse(JSON.stringify(this.produccionLineaCalibrador));
+        const ws2: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray2);
+        XLSX.utils.book_append_sheet(wb, ws2, 'Producción Líneas');
+
+        var jsonArray3 = JSON.parse(JSON.stringify(this.produccionColaboradores));
+        const ws3: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray3);
+        XLSX.utils.book_append_sheet(wb, ws3, 'Producción colaboradores');
+
+        var jsonArray4 = JSON.parse(JSON.stringify(this.produccionCalibradorExportarExcel))
+        const ws4: XLSX.WorkSheet = XLSX.utils.json_to_sheet(jsonArray4);
+        XLSX.utils.book_append_sheet(wb, ws4, 'Producción de calibrador');
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
-        XLSX.writeFile(wb, this.nombreExcel + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
+        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
       }
 
 
     } catch (error) {
       this.registroDevService.creaRegistroDev('No se pudo exportar la producción al archivo excel, método exportarArchivoExcel, component monitoreo-por-calibrador');
+      console.log("error!!!");
     }
   }
 
@@ -515,3 +681,5 @@ export class ProduccionPorCalibradorComponent implements OnInit {
 
 
 }
+
+

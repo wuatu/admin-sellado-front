@@ -373,7 +373,7 @@ export class ProduccionPorLineaComponent implements OnInit {
 
         /* genera el workbook y agrega el worksheet */
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Producción de calibrador');
+        XLSX.utils.book_append_sheet(wb, ws, 'Producción de línea');
 
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
