@@ -64,10 +64,10 @@ export class MonitoreoCalibrador1Component implements OnInit {
   isDataAvailable: boolean = false;
   constanteDivision = 0;
 
-  subscriptionTimerTask: Subscription;
+
   subscriptionTimer: Subscription;
   barChartOptions: ChartOptions;
-  timeOut: any;
+  timeOutCaliper1: any;
   offsetTime: any;
 
 
@@ -161,12 +161,14 @@ export class MonitoreoCalibrador1Component implements OnInit {
   }
 
   ngOnDestroy() {
-
-    if (this.timeOut != null) {
-      clearTimeout(this.timeOut);
+    //console.log("ngOnDestroy !!...");
+    if (this.timeOutCaliper1 != null) {
+      //console.log("muerte a timeOutCaliper1.....");
+      clearTimeout(this.timeOutCaliper1);
     }
 
     if (this.subscriptionTimer != null) {
+      //console.log("muerte a subscriptionTimer.....");
       this.subscriptionTimer.unsubscribe();
     }
   }
@@ -325,7 +327,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
           if (i == this.lineas.length - 1) {
             this.ordenarArray(this.productionByLine);
 
-            this.timeOut = setTimeout(() => {
+            this.timeOutCaliper1 = setTimeout(() => {
               this.getProduccion();
 
             },
@@ -341,7 +343,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     }
   }
   getAverageforMinute2() {
-
+    //console.log("getAverageForMinute calibrador 1");
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
@@ -382,23 +384,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
       });
   }
 
-  getCajasPorLinea(){
-    console.log("getCajasPorLinea");
-    this.cajasPorLinea = [];
-    this.monitoreoCalibradorService.getCajasPorLinea(this.calibradores[0].id, this.turnoActual.id).subscribe(
-      res => {
-        if(res.status == 200){
-          this.cajasPorLinea = res;
-
-          console.log("cajas por linea !!");
-          console.log(this.cajasPorLinea);
-        }
-      },
-      err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en la última hora en el turno del calibrador 1, método getAverageLastHour, component monitoreo-calibrador1');
-        this.toastr.error('Promedio de la ultima hora por minuto NO obtenido', 'NO obtenido');
-      });
-  }
+  
 
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
   getProduccionTurno2() {
@@ -607,11 +593,12 @@ export class MonitoreoCalibrador1Component implements OnInit {
         console.log(turno);
         this.turnoService.saveTurno(turno).subscribe(
           res => {
-            this.sesionIniciada();
+            this.getRegistro();
+            //this.sesionIniciada();
             this.toastr.success("Turno iniciado correctamente");
             this.registroService.creaRegistro("Turno iniciado");
             //*************** carga el turno guardado ****************
-            this.getTurnoActual();
+            //this.getTurnoActual();
             //guardo los datos del turno iniciado
             this.fechaInicioTurno = fecha.substring(0, 10);
             this.horaInicioTurno = fecha.substring(11, 19);

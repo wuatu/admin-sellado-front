@@ -51,7 +51,7 @@ export class InformeCalibradorComponent implements OnInit {
   numBox: number;
   //Atributos para el dropdown de calibrador
   calibradores: any = [];
-  cajasCalibrador: any = [];
+  cajasCalibrador: any;
   produccionCalibrador: any = [];
   produccionCalibradorExportarExcel: any = [];
   selectedCalibradorText: string = "Seleccionar calibrador";
@@ -132,6 +132,7 @@ export class InformeCalibradorComponent implements OnInit {
 
   listarTurnos(){
     this.turnosShow = [];
+    console.log("listar turnos, fechas: "+this.desde+"  "+this.hasta);
     this.produccionPorCalibradorService.getTurnos(this.selectedCalibradorObject.id, this.desde, this.hasta).subscribe(
       res => {
         if(res.status == 200 ){
@@ -160,7 +161,17 @@ export class InformeCalibradorComponent implements OnInit {
   promedioCajasPorMinutoTurno(){
     console.log("método promedioCajasPorMinuto()");
     this.produccionPorMinutoTurno = [];
-    this.produccionPorCalibradorService.getPromedioCajasPorMinutoTurno(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno, this.selectedTurnoObject.fApertura, this.selectedTurnoObject.hApertura, this.selectedTurnoObject.fCierre, this.selectedTurnoObject.hCierre).subscribe(
+    console.log(this.selectedTurnoObject);
+    let fCierre;
+    let hCierre;
+    if(this.selectedTurnoObject.fCierre == "" && this.selectedTurnoObject.hCierre == "" ){
+      fCierre = "undefine";
+      hCierre = "undefine";
+    }else{
+      fCierre = this.selectedTurnoObject.fCierre;
+      hCierre = this.selectedTurnoObject.hCierre;
+    }
+    this.produccionPorCalibradorService.getPromedioCajasPorMinutoTurno(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno, this.selectedTurnoObject.fApertura, this.selectedTurnoObject.hApertura, fCierre, hCierre).subscribe(
       res => {
         if(res.status == 200 ){
           this.produccionPorMinutoTurno = res.body;
@@ -168,8 +179,6 @@ export class InformeCalibradorComponent implements OnInit {
           console.log("produccion por minuto!!!");
           console.log(this.produccionPorMinutoTurno);
           console.log("  ");
-        }else{
-          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
         }
       },
       err => {
@@ -192,8 +201,6 @@ export class InformeCalibradorComponent implements OnInit {
           console.log(this.produccionLineaCalibrador);
           console.log(this.produccionLineaCalibrador.length);
           console.log("  ");
-        }else{
-          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
         }
       },
       err => {
@@ -211,8 +218,6 @@ export class InformeCalibradorComponent implements OnInit {
         if(res.status == 200 ){
           this.produccionColaboradores = res.body;
           
-        }else{
-          this.toastr.success("No existen turnos para este calibrador en la fecha indicada","Operación Satisfactoria");
         }
       },
       err => {
@@ -243,17 +248,22 @@ export class InformeCalibradorComponent implements OnInit {
   }
 
   contarCajasCalibradorPorFecha() {
-    this.cajasCalibrador = [];
+    this.cajasCalibrador = null;
     //this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
     console.log(this.selectedCalibradorObject.id + " por fecha " + this.desde + " " + this.hasta);
     this.cajasCalibrador = [];
     this.produccionPorCalibradorService.getboxInCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
       res => {
-        this.cajasCalibrador = res;4
-        this.mostrarGrafico = "true";
+        this.numBox =0;
+        this.cajasCalibrador = res;
+        console.log("NUMERO : ");
         console.log(this.cajasCalibrador);
-        this.cajasTotales(this.cajasCalibrador);
-        this.pushData(this.cajasCalibrador);
+        this.numBox = this.cajasCalibrador.numero;
+        console.log("numBox: "+this.numBox );
+        //this.mostrarGrafico = "true";
+        //console.log(this.cajasCalibrador);
+        //this.cajasTotales(this.cajasCalibrador);
+        //this.pushData(this.cajasCalibrador);
 
       },
       err => {
@@ -488,7 +498,7 @@ export class InformeCalibradorComponent implements OnInit {
         }
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
-        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
+        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + "idTurno-" + this.selectedTurnoObject.id_turno+"_"+this.selectedTurnoObject.fApertura+"_"+this.selectedTurnoObject.hApertura.substring(0,2)+"-"+this.selectedTurnoObject.hApertura.substring(3,5) +"-"+this.selectedTurnoObject.hApertura.substring(6,8)+".xls");
 
         
       } else {
@@ -515,7 +525,7 @@ export class InformeCalibradorComponent implements OnInit {
         XLSX.utils.book_append_sheet(wb, ws4, 'Producción de calibrador');
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
-        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + dateDownload.substring(0, 10) + ".xls");
+        XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + "idTurno-" + this.selectedTurnoObject.id_turno+"_"+this.selectedTurnoObject.fApertura+"_"+this.selectedTurnoObject.hApertura.substring(0,2)+"-"+this.selectedTurnoObject.hApertura.substring(3,5) +"-"+this.selectedTurnoObject.hApertura.substring(6,8)+".xls");
       }
 
 
@@ -572,114 +582,7 @@ export class InformeCalibradorComponent implements OnInit {
  
   /***************************************************************************************************************************************************/
 
-  /************************** GRAFICO ******************************************************************************************************************/
-  public lineChartData: ChartDataSets[] = [
-    { data: [], label: "Producción Calibrador" }];
-  public lineChartLabels: Label[] = [];
-
-  pushData(dataNumberBox: any[]) {
-    this.lineChartData[0].data = [];
-    this.lineChartLabels = [];
-    for (let data of dataNumberBox) {
-      this.lineChartData[0].data.push(data.numero);
-      this.lineChartLabels.push(`${data.fecha_sellado}`);
-    }
-  }
-
-
-
-  public lineChartOptions: (ChartOptions & { annotation: any }) = {
-    responsive: true,
-    scales: {
-      // We use this empty structure as a placeholder for dynamic theming.
-      xAxes: [{}],
-      yAxes: [
-        {
-          id: 'y-axis-0',
-          position: 'left',
-        },
-        {
-          id: 'y-axis-1',
-          position: 'right',
-          gridLines: {
-            color: 'rgba(255,0,0,0.3)',
-          },
-          ticks: {
-            fontColor: 'red',
-          }
-        }
-      ]
-    },
-    annotation: {
-      annotations: [
-        {
-          type: 'line',
-          mode: 'vertical',
-          scaleID: 'x-axis-0',
-          value: 'March',
-          borderColor: 'orange',
-          borderWidth: 2,
-          label: {
-            enabled: true,
-            fontColor: 'orange',
-            content: 'LineAnno'
-          }
-        },
-      ],
-    },
-  };
-
-  public lineChartColors: Color[] = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    },
-    { // dark grey
-      backgroundColor: 'rgba(77,83,96,0.2)',
-      borderColor: 'rgba(77,83,96,1)',
-      pointBackgroundColor: 'rgba(77,83,96,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(77,83,96,1)'
-    },
-    { // red
-      backgroundColor: 'rgba(255,0,0,0.3)',
-      borderColor: 'red',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ];
-
-  public lineChartLegend = true;
-  public lineChartType: ChartType = 'line';
-
-  // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  }
-
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  }
-
-  public changeColor() {
-    this.lineChartColors[2].borderColor = 'green';
-    this.lineChartColors[2].backgroundColor = `rgba(0, 255, 0, 0.3)`;
-  }
-
-  public changeLabel() {
-    this.lineChartLabels[2] = ['1st Line', '2nd Line'];
-    // this.chart.update();
-  }
-  /***************************************************************************************************************************************************/
-
-
+  
 }
 
 

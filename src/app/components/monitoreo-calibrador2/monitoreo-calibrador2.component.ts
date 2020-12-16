@@ -62,7 +62,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
   subscriptionTimer: Subscription;
   constanteDivision = 0;
   barChartOptions: ChartOptions;
-  timeOut: any;
+  timeOutCaliper2: any;
 
   /*****************************/
   iniciarCerrar = "iniciar";
@@ -139,11 +139,14 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.timeOut != null) {
-      clearTimeout(this.timeOut);
+    //console.log("ngOnDestroy 2");
+    if (this.timeOutCaliper2 != null) {
+      //console.log("muerte a timeOutCaliper2.....");
+      clearTimeout(this.timeOutCaliper2);
     }
 
     if (this.subscriptionTimer != null) {
+      //console.log("muerte a subscriptionTimer.....");
       this.subscriptionTimer.unsubscribe();
     }
 
@@ -292,7 +295,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
           if (i == this.lineas.length - 1) {
             this.ordenarArray(this.productionByLine);
-            this.timeOut = setTimeout(() => {
+            this.timeOutCaliper2 = setTimeout(() => {
               this.getProduccion();
             },
               10000);
@@ -309,7 +312,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
 
   getAverageforMinute2() {
-
+    //console.log("getAverageForMinute2  calibrador 2");
     this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
       res => {
         this.cajasCalibrador2Minuto = res;
@@ -566,11 +569,12 @@ export class MonitoreoCalibrador2Component implements OnInit {
         turno.fechaApertura(null, fecha.substring(0, 10), fecha.substring(11, 19), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "", this.calibradores[1].id, this.calibradores[1].nombre);
         this.turnoService.saveTurno(turno).subscribe(
           res => {
-            this.sesionIniciada();
+            this.getRegistro();
+            //this.sesionIniciada();
             this.toastr.success("Turno iniciado correctamente");
             this.registroService.creaRegistro("Turno iniciado");
             //*************** carga el turno guardado ****************
-            this.getTurnoActual();
+            //this.getTurnoActual();
             //guardo los datos del turno iniciado
             this.fechaInicioTurno = fecha.substring(0, 10);
             this.horaInicioTurno = fecha.substring(11, 19);
