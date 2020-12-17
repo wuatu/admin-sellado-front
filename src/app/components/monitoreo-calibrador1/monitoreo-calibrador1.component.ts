@@ -566,6 +566,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
             positionClass: 'toast-bottom-right'
           });
           this.open(this.modalIniciarTurno);
+          this.isDisabled = false;
         }
       },
       err => {

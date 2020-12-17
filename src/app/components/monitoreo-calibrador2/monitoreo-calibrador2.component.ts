@@ -544,6 +544,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
           this.toastr.info("No se ha iniciado turno", "Información", {
             positionClass: 'toast-bottom-right'
           });
+          this.isDisabled = false;
           this.open(this.modalIniciarTurno);
         }
       },
