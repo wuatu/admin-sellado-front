@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
-import { timer,interval, Subscription, Observable } from 'rxjs';
+import { timer, interval, Subscription, Observable } from 'rxjs';
 
 
 @Component({
@@ -17,21 +17,22 @@ import { timer,interval, Subscription, Observable } from 'rxjs';
 export class UsuarioComponent implements OnInit {
   closeResult = '';
 
-  rutUsuario:string;
-  nombreUsuario:string;
-  apellidoUsuario:string;
-  rfidUsuario:string;
+  rutUsuario: string;
+  nombreUsuario: string;
+  apellidoUsuario: string;
+  rfidUsuario: string;
 
-  currentUsuarioSelected: Usuario;  
+  currentUsuarioSelected: Usuario;
+  rfidReader: any;
 
-  usuarios:any = [];
- 
-  selectedUsuarioObject:any;
-  selectedUsuarioObjectModificar:any;
-  selectedUsuarioText:string="Nombre";
-  aux:any;
+  usuarios: any = [];
+
+  selectedUsuarioObject: any;
+  selectedUsuarioObjectModificar: any;
+  selectedUsuarioText: string = "Nombre";
+  aux: any;
   rol: number;
-  registerRfid:any = ({id:'undefine', codigo:'RFID'});
+  registerRfid: any = ({ id: 'undefine', codigo: '' });
   subscriptionTimerTask: Subscription;
   constructor(
     private modalService: NgbModal,
@@ -45,29 +46,29 @@ export class UsuarioComponent implements OnInit {
     this.listarUsuarios();
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
   }
-  
+
   //metodo que lista los usuarios registrados en el sistema.
-  listarUsuarios(){
+  listarUsuarios() {
     this.usuarioService.getUsuarios().subscribe(
-      res=>{
+      res => {
         console.log(res);
-        this.usuarios=res.body;
-        if(res.status == 200){
-        }else if(res.status == 204){
-          this.toastr.success('no hay colaboradores actualmente para mostrar','Operación satisfactoria');
+        this.usuarios = res.body;
+        if (res.status == 200) {
+        } else if (res.status == 204) {
+          this.toastr.success('no hay colaboradores actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario');
         this.toastr.error('No se pudo obtener a los colaboradores', 'Oops');
       }
     );
   }
-  
+
   //metodo que crea un nuevo lector
-  agregarUsuario(form: NgForm) {  
-    if (!form.value.nombre ) {
+  agregarUsuario(form: NgForm) {
+    if (!form.value.nombre) {
       this.toastr.error('No se pudo agregar el colaborador', 'Oops');
       this.rutUsuario = null;
       this.nombreUsuario = null;
@@ -75,13 +76,13 @@ export class UsuarioComponent implements OnInit {
       this.registerRfid.codigo = null;
       return;
     }
-    
-    let usuario = new Usuario(null, this.rutUsuario, this. nombreUsuario, this.apellidoUsuario, this.registerRfid.codigo);
+
+    let usuario = new Usuario(null, this.rutUsuario, this.nombreUsuario, this.apellidoUsuario, this.registerRfid.codigo);
     console.log(usuario);
     this.usuarioService.saveUsuario(usuario).subscribe(
       res => {
         this.toastr.success('Operación satisfactoria', 'Colaborador agregado');
-        this.RegistroService.creaRegistro("Se ha creado un colaborador, rut:"+usuario.rut+" y nombre: "+usuario.nombre+" "+usuario.apellido);
+        this.RegistroService.creaRegistro("Se ha creado un colaborador, rut:" + usuario.rut + " y nombre: " + usuario.nombre + " " + usuario.apellido);
         this.rutUsuario = null;
         this.nombreUsuario = null;
         this.apellidoUsuario = null;
@@ -91,8 +92,8 @@ export class UsuarioComponent implements OnInit {
           this.subscriptionTimerTask.unsubscribe();
         }
         this.eliminarRegistroRfid();
-    
-        
+
+
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo agregar al usuario, método agregarUsuario, component usuario');
@@ -115,12 +116,13 @@ export class UsuarioComponent implements OnInit {
     this.currentUsuarioSelected = usuario;
     console.log(this.currentUsuarioSelected);
     this.usuarioService.getUsuario(this.currentUsuarioSelected.id).subscribe(
-      res=>{
-        this.selectedUsuarioObject=res.body;
-        this.selectedUsuarioText=this.selectedUsuarioObject.nombre;
+      res => {
+        this.selectedUsuarioObject = res.body;
+        this.selectedUsuarioText = this.selectedUsuarioObject.nombre;
         this.currentUsuarioSelected = this.selectedUsuarioObject;
+        this.rfidReader = this.selectedUsuarioObject.rfid;
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener al usuario, método onEditar, component usuario');
         this.toastr.error('No se pudo obtener el colaborador id', 'Oops',);
       }
@@ -137,13 +139,13 @@ export class UsuarioComponent implements OnInit {
       return;
     }
     let usuario: Usuario;
-    if(this.selectedUsuarioObject){
-      usuario = new Usuario(this.currentUsuarioSelected.id, this.currentUsuarioSelected.rut, this.currentUsuarioSelected.nombre, this.currentUsuarioSelected.apellido, this.currentUsuarioSelected.rfid);
-      
-    }    
+    if (this.selectedUsuarioObject) {
+      usuario = new Usuario(this.currentUsuarioSelected.id, this.currentUsuarioSelected.rut, this.currentUsuarioSelected.nombre, this.currentUsuarioSelected.apellido, this.rfidReader);
+
+    }
     this.usuarioService.updateUsuario(usuario.id, usuario).subscribe(
       res => {
-        this.RegistroService.creaRegistro("Se ha editado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
+        this.RegistroService.creaRegistro("Se ha editado un colaborador, id de registro: " + usuario.id + ", rut:" + usuario.rut);
         this.listarUsuarios();
         this.currentUsuarioSelected = null;
         if (this.subscriptionTimerTask != null) {
@@ -164,12 +166,12 @@ export class UsuarioComponent implements OnInit {
     this.currentUsuarioSelected = usuario;
   }
   //Metodo que sirve para eliminar el registro de un usuario en la base de datos.
-  eliminarUsuario(usuario: Usuario){
+  eliminarUsuario(usuario: Usuario) {
     this.usuarioService.deleteUsuario(usuario.id).subscribe(
       res => {
-        this.RegistroService.creaRegistro("Se ha eliminado un colaborador, id de registro: "+usuario.id+", rut:"+usuario.rut);
+        this.RegistroService.creaRegistro("Se ha eliminado un colaborador, id de registro: " + usuario.id + ", rut:" + usuario.rut);
         this.listarUsuarios();
-        this.usuarios=[];
+        this.usuarios = [];
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar al usuario, método eliminarUsuario, component usuario');
@@ -178,10 +180,10 @@ export class UsuarioComponent implements OnInit {
     );
   }
   //método que elimina los registros de rfid
-  eliminarRegistroRfid(){
+  eliminarRegistroRfid() {
     this.usuarioService.deleteRegisterRfid().subscribe(
       res => {
-        this.registerRfid = ({id:'undifine', codigo:'Rfid'});
+        this.registerRfid = ({ id: 'undifine', codigo: '' });
         this.RegistroService.creaRegistro("Se ha eliminado el registro rfid");
       },
       err => {
@@ -191,32 +193,34 @@ export class UsuarioComponent implements OnInit {
   }
 
   //metodo que obtiene el codigo del rfid a vincular con el colaborador.
-  getRegistroRfid(){
+  getRegistroRfid() {
     this.usuarioService.getRegisterRfid().subscribe(
-      res=>{
-        if(res.status == 200){
+      res => {
+        if (res.status == 200) {
           this.aux = res.body;
-          if(this.registerRfid.codigo != this.aux.codigo){
+          if (this.registerRfid.codigo != this.aux.codigo) {
             this.registerRfid = this.aux;
-            this.currentUsuarioSelected.rfid = this.aux.codigo;
+            console.log(this.aux.codigo);
+            //this.currentUsuarioSelected.rfid = this.aux.codigo;
+            this.rfidReader = this.aux.codigo;
           }
         }
       },
-      err=>{
+      err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el refistro del rfid a vincular con el colaborador, método getRegisterRfid, component usuario');
-       
+
       }
     );
   }
 
   //metodo que abre un modal
-  open(modal,is_add:string) { 
-    if(is_add == '1'){
+  open(modal, is_add: string) {
+    if (is_add == '1') {
       this.subscriptionTimerTask = timer(0, 2000).subscribe(() => {
         //console.log("me ejecuto");
         this.getRegistroRfid();
       });
-      
+
     }
     this.modalService.open(modal, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -231,6 +235,7 @@ export class UsuarioComponent implements OnInit {
 
   //metodo que sirve para saber la razon por la cual un modal fue cerrado
   private getDismissReason(reason: any): string {
+    this.rfidReader = null;
     console.log(reason);
     if (reason === ModalDismissReasons.ESC) {
       if (this.subscriptionTimerTask != null) {

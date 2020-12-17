@@ -118,7 +118,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rfid:</b></label>
                 <div class="input-group">
-                    <input type="text" #rfid='ngModel' [(ngModel)]="registerRfid.codigo" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rfid='ngModel' [(ngModel)]="registerRfid.codigo" name="rfid" id="rfid" class="form-control" placeholder="RFID" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rfid.invalid && (rfid.dirty || rfid.touched)" class="alert alert-danger">
@@ -193,7 +193,7 @@
             <div class="form-group">
                 <label for="lineaLabel"><b>Rfid:</b></label>
                 <div class="input-group">
-                    <input type="text" #rfid='ngModel' [(ngModel)]="currentUsuarioSelected.rfid" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
+                    <input type="text" #rfid='ngModel' [(ngModel)]="rfidReader" name="rfid" id="rfid" class="form-control" placeholder="Rfid" class="form-control" required [ngClass]="{ 'is-invalid': submitted && rut.errors }">
                 </div>
 
                 <div *ngIf="rfid.invalid && (rfid.dirty || rfid.touched)" class="alert alert-danger">
