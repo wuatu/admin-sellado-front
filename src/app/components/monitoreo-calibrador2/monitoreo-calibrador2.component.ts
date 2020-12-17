@@ -82,6 +82,8 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   offsetTime: any;
 
+  isDisabled = true;
+
   constructor(
     private modalService: NgbModal,
     private toastr: ToastrService,
@@ -97,14 +99,14 @@ export class MonitoreoCalibrador2Component implements OnInit {
     private monitoreoCalibradorService: MonitoreoCalibradoresService,
     private registroDevService: RegistroDevService,
     private getDateService: GetDateService,
-    private menuBar:MenubarService
+    private menuBar: MenubarService
   ) {
     this.fromDate = calendar.getToday();
     this.desde = formatDate(new Date(this.fromDate.year, this.fromDate.month - 1, this.fromDate.day), "dd-mm-yyyy", 'en-US');
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     //Lista los calibradores que estan registrados en la base de datos.
     //this.getTurnoActual();
     this.listarCalibradores();
@@ -120,10 +122,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.time = new Date(new Date().getTime() - this.offsetTime);
       }
     });
-    
+
   }
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.isLoggedIn();
   }
 
@@ -133,7 +135,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
       console.log(user.rut);
       if (user.rut == "22222222-2") {
         let showmenu: HTMLElement = document.getElementById('showmenu') as HTMLElement;
-        showmenu.click();  
+        showmenu.click();
         let botom: HTMLElement = document.getElementById('scrollMe2') as HTMLElement;
         botom.scrollIntoView();
       }
@@ -164,7 +166,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
   getDeleteRegister() {
     this.monitoreoCalibradorService.deleteRegister(this.turno.id).subscribe(
       res => {
-        this.registroService.creaRegistro("Se han eliminado todos los registros del idturno:" + this.turno.id+ " de la tabla registro_diario_caja_sellada_aux");
+        this.registroService.creaRegistro("Se han eliminado todos los registros del idturno:" + this.turno.id + " de la tabla registro_diario_caja_sellada_aux");
 
       },
       err => {
@@ -265,7 +267,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
             this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
               res => {
                 if (res.status == 200) {
-        
+
                   if (res.body[0].fecha_cierre == "") {
                     console.log("ejecutando produccion 2..!!!!!");
                     this.getAverageforMinute2();
@@ -273,7 +275,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
                     this.getAverageLastHour2();
                     this.getProductionLine2();
                   }
-        
+
                 }
               },
               err => {
@@ -455,7 +457,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("green");
       }
-      this.barChartLabels.push(`${data.nombre_linea}`+ " ["+data.total_turno+" cajas]");
+      this.barChartLabels.push(`${data.nombre_linea}` + " [" + data.total_turno + " cajas]");
       i++;
     }
 
@@ -643,6 +645,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.turnoIniciado = true;
     this.IniciarCerrar = "Cerrar";
     this.iniciarCerrar = "cerrar";
+    this.isDisabled = false;
   }
 
   sesionCerrada() {
@@ -651,6 +654,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
     this.turnoIniciado = false;
     this.IniciarCerrar = "Iniciar";
     this.iniciarCerrar = "iniciar";
+    this.isDisabled = false;
   }
 
   private cerrarTurno() {

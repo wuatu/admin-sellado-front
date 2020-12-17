@@ -6,7 +6,7 @@
                 <h3><b>{{ time | date: 'HH:mm:ss a'}} </b></h3>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12 my-1 text-right">
-                <button class="btn {{botonIniciarTurnoClass}} form-control"
+                <button class="btn {{botonIniciarTurnoClass}} form-control" [disabled]="isDisabled"
                     (click)=open(myModalAutenticar)>{{botonIniciarTurnoText}}
                 </button>
             </div>

@@ -42,7 +42,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   cajasCalibrador1Hora: any = [];
   cajasCalibrador1Minuto: any = [];
 
-  cajasPorLinea:any = [];
+  cajasPorLinea: any = [];
 
   totalTurno1: number = 0;
   totalHora1: number = 0;
@@ -85,6 +85,8 @@ export class MonitoreoCalibrador1Component implements OnInit {
   fechaInicioTurno: string = null;
   horaInicioTurno: string = null;
   /*****************************/
+
+  isDisabled = true;
 
   constructor(
     private modalService: NgbModal,
@@ -136,18 +138,18 @@ export class MonitoreoCalibrador1Component implements OnInit {
       const user = JSON.parse(localStorage.getItem('USER'));
       console.log(user.rut);
       if (user.rut == "11111111-1") {
-        
+
         let showmenu: HTMLElement = document.getElementById('showmenu') as HTMLElement;
         showmenu.click();
-        
+
 
         let botom: HTMLElement = document.getElementById('scrollMe') as HTMLElement;
         botom.scrollIntoView();
-        
+
         //this.vps.scrollToAnchor("scrollMe");
 
-          //document.querySelector('scrollMe').scrollTop = document.querySelector('scrollMe').scrollHeight;
-        
+        //document.querySelector('scrollMe').scrollTop = document.querySelector('scrollMe').scrollHeight;
+
 
       }
     }
@@ -183,7 +185,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   getDeleteRegister() {
     this.monitoreoCalibradorService.deleteRegister(this.turno.id).subscribe(
       res => {
-        this.registroService.creaRegistro("Se han eliminado todos los registros del idturno:" + this.turno.id+ " de la tabla registro_diario_caja_sellada_aux");
+        this.registroService.creaRegistro("Se han eliminado todos los registros del idturno:" + this.turno.id + " de la tabla registro_diario_caja_sellada_aux");
 
       },
       err => {
@@ -287,7 +289,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
             this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
               res => {
                 if (res.status == 200) {
-        
+
                   if (res.body[0].fecha_cierre == "") {
                     console.log("ejecutando produccion 1 ..!!!!!");
                     this.getAverageforMinute2();
@@ -295,7 +297,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
                     this.getAverageLastHour2();
                     this.getProductionLine2();
                   }
-        
+
                 }
               },
               err => {
@@ -426,7 +428,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
       });
   }
 
-  
+
 
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
   getProduccionTurno2() {
@@ -484,7 +486,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
         this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("green");
       }
-      this.barChartLabels.push(`${data.nombre_linea}`+ " ["+data.total_turno+" cajas]");
+      this.barChartLabels.push(`${data.nombre_linea}` + " [" + data.total_turno + " cajas]");
       i++;
       //this.barChartOptions.scales.yAxes[0].ticks.max = this.calibradores[0].cajas_por_minuto + 1;
     }
@@ -557,7 +559,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
           this.sesionIniciada();
           //this.getTurnoActual();
           //this.toastr.info("Turno se encuentra iniciado", "Información", {
-            //positionClass: 'toast-bottom-right'
+          //positionClass: 'toast-bottom-right'
           //});
         } else {
           this.toastr.info("No se ha iniciado turno", "Información", {
@@ -667,6 +669,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.turnoIniciado = true;
     this.IniciarCerrar = "Cerrar";
     this.iniciarCerrar = "cerrar";
+    this.isDisabled = false;
   }
 
   sesionCerrada() {
@@ -675,6 +678,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
     this.turnoIniciado = false;
     this.IniciarCerrar = "Iniciar";
     this.iniciarCerrar = "iniciar";
+    this.isDisabled = false;
   }
 
   private cerrarTurno() {
