@@ -60,6 +60,8 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   subscriptionTimerTask: Subscription;
   subscriptionTimer: Subscription;
+  subscriptionTimerProduccion: Subscription;
+
   constanteDivision = 0;
   barChartOptions: ChartOptions;
   timeOutCaliper2: any;
@@ -150,7 +152,26 @@ export class MonitoreoCalibrador2Component implements OnInit {
       this.subscriptionTimer.unsubscribe();
     }
 
+    if (this.subscriptionTimerProduccion != null) {
+      console.log("muerte a subscriptionTimeProduccion 2.....");
+      this.subscriptionTimerProduccion.unsubscribe();
+    }
 
+
+  }
+
+  //Método que elimina los registros de la tabla registro_diario_caja_sellada_aux correspondiente al turno actual
+  getDeleteRegister() {
+    this.monitoreoCalibradorService.deleteRegister(this.turno.id).subscribe(
+      res => {
+        this.registroService.creaRegistro("Se han eliminado todos los registros del idturno:" + this.turno.id+ " de la tabla registro_diario_caja_sellada_aux");
+
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo eliminar los registros de la tabla registro_diario_caja_sellada_aux, método getDeleteRegister, monitoreo-calibrador.componenet');
+
+      }
+    )
   }
 
   getProduccion() {
@@ -240,6 +261,27 @@ export class MonitoreoCalibrador2Component implements OnInit {
       res => {
         this.lineas = res.body;
         if (this.lineas != null) {
+          this.subscriptionTimerProduccion = timer(0, 10000).subscribe(() => {
+            this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
+              res => {
+                if (res.status == 200) {
+        
+                  if (res.body[0].fecha_cierre == "") {
+                    console.log("ejecutando produccion 2..!!!!!");
+                    this.getAverageforMinute2();
+                    this.getProduccionTurno2();
+                    this.getAverageLastHour2();
+                    this.getProductionLine2();
+                  }
+        
+                }
+              },
+              err => {
+                console.log(err.status);
+                this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+              }
+            )
+          });
           this.getAverageforMinute2();
         }
       },
@@ -295,10 +337,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
           if (i == this.lineas.length - 1) {
             this.ordenarArray(this.productionByLine);
-            this.timeOutCaliper2 = setTimeout(() => {
+            /*this.timeOutCaliper2 = setTimeout(() => {
               this.getProduccion();
             },
-              10000);
+              10000);*/
           }
           i++;
         },
@@ -317,7 +359,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
       res => {
         this.cajasCalibrador2Minuto = res;
 
-        this.getProduccionTurno2();
+        //this.getProduccionTurno2();
 
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador2Minuto[0].total == null || this.cajasCalibrador2Minuto[0].total == "NaN") {
@@ -342,7 +384,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
       res => {
         this.cajasCalibrador2Hora = res;
 
-        this.getProductionLine2();
+        //this.getProductionLine2();
         //if para dejar en el contador de minutos en el caso de que se inicie el turno y aun no transcurra el primer minuto
         if (this.cajasCalibrador2Hora[0].total == null || this.cajasCalibrador2Hora[0].total == "NaN") {
           this.totalHora2 = 0;
@@ -365,7 +407,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.cajasCalibrador2Turno = res;
         this.totalTurno2 = this.cajasCalibrador2Turno[0].total;
 
-        this.getAverageLastHour2();
+        //this.getAverageLastHour2();
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
@@ -625,6 +667,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.turnoService.updateTurno(this.turno.id, turno).subscribe(
           res => {
             this.sesionCerrada();
+            this.getDeleteRegister();
             this.cerrarTurnoColaboradores();
             this.registroService.creaRegistro("Turno cerrado al calibrador 2");
             //se borran los datos del turno que estaba abierto

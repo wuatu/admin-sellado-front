@@ -9,6 +9,10 @@ export class MonitoreoCalibradoresService {
   API_URL = "http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
 
+  deleteRegister(id:number){
+    return this.httpClient.delete(`${this.API_URL}/monitoreo_calibrador_delete/${id}`);
+  }
+
   getCajasPorLinea(id_calibrador: number, id_turno: number) {
     return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_cajas_por_linea/${id_calibrador}/${id_turno}`, { observe: 'response' });
   }
