@@ -69,12 +69,12 @@ export class MonitoreoSistemaComponent implements OnInit {
 
     this.rol = JSON.parse(localStorage.getItem('USER')).rol;
 
-    this.subscriptionTimerTask = timer(0, 7000).subscribe(() => {
+    /*this.subscriptionTimerTask = timer(0, 7000).subscribe(() => {
       if(this.lineas != null && this.selectedCalibradorObject != null){
         this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
         this.getRfidOutByCaliper();
       }
-    });
+    });*/
     
   }
 
@@ -121,6 +121,7 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
     //this.getTurnoActual();
+    this.ngOnDestroy();
     this.getLineOfCaliper(this.selectedCalibradorObject.id);
     
     
@@ -132,8 +133,14 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.lineaService.getLineasId(id).subscribe(
       res =>{
         this.lineas = res.body;
-        this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
-        this.getRfidOutByCaliper();
+        this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
+          if(this.lineas != null && this.selectedCalibradorObject != null){
+            this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
+            this.getRfidOutByCaliper();
+          }
+        });
+        //this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
+        //this.getRfidOutByCaliper();
         
       },
       err =>{

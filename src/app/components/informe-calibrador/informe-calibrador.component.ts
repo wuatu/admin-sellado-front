@@ -19,6 +19,7 @@ import { ProduccionColaboradorExcel } from '../../models/produccion-colaborador-
 import * as XLSX from 'xlsx';
 import { RegistroService } from '../../services/registro.service';
 import { RegistroDevService } from '../../services/registro-dev.service';
+import { resolve } from 'url';
 
 @Component({
   selector: 'app-informe-calibrador',
@@ -52,7 +53,9 @@ export class InformeCalibradorComponent implements OnInit {
   //Atributos para el dropdown de calibrador
   calibradores: any = [];
   cajasCalibrador: any;
+  _cajasCalibrador: any;
   produccionCalibrador: any = [];
+  _produccionCalibrador: any = [];
   produccionCalibradorExportarExcel: any = [];
   selectedCalibradorText: string = "Seleccionar calibrador";
   selectedCalibradorObject: any;
@@ -67,6 +70,7 @@ export class InformeCalibradorComponent implements OnInit {
     turnosShow: any = [];
 
     produccionColaboradores: any = [];
+    _produccionColaboradores: any = [];
 
   //******************************************/
   //calendar
@@ -89,11 +93,18 @@ export class InformeCalibradorComponent implements OnInit {
   produccionColaboradorExcel:any = [];
 
   produccionLineaCalibrador:any = [];
+  _produccionLineaCalibrador:any = [];
 
   produccionPorMinutoTurno: any = [];
-
+  _produccionPorMinutoTurno: any = [];
+  
   rol: number;
+  
+  isDisabled: boolean = false;
 
+  descarga:boolean = false;
+  
+  showSpinner = false;
   constructor(
     private toastr: ToastrService,
     public calendar: NgbCalendar,
@@ -117,13 +128,33 @@ export class InformeCalibradorComponent implements OnInit {
 
 
   //Método que ejecuta los metodos para obtener los distindos array de producción al presionar el botón buscar
-  buscar(){
+  async buscar(){
     if(this.selectedCalibradorObject && this.selectedTurnoObject){
-      this.buscarRegistroCalibrador();
-      this.contarCajasCalibradorPorFecha();
-      this.getProduccionColaborador();
-      this.getProduccionLineasCalibrador();
-      this.promedioCajasPorMinutoTurno();
+      this.showSpinner = true;
+      console.log("INICIO... ");
+      this.produccionCalibrador = await this.buscarRegistroCalibrador();
+      console.log("1 produccionCalibrador");
+      //console.log(this.produccionCalibrador);
+
+      this.cajasCalibrador = await this.contarCajasCalibradorPorFecha();
+      console.log("2 cajasCalibrador");
+      //console.log(this.cajasCalibrador);
+
+      this.produccionColaboradores = await this.getProduccionColaborador();
+      console.log("3 produccionColaboradores");
+      //console.log(this.produccionColaboradores);
+
+      this.produccionLineaCalibrador = await this.getProduccionLineasCalibrador();
+      console.log(" 4 produccionLineaCalibrador");
+      //console.log(this.produccionLineaCalibrador);
+
+      this.produccionPorMinutoTurno = await this.promedioCajasPorMinutoTurno();
+      console.log("5 produccionPorMinutoTurno");
+      //console.log(this.produccionPorMinutoTurno);
+      
+      console.log("TERMINO ... ");
+      this.showSpinner = false ;
+      this.isDisabled = true;
     }else{
       this.toastr.info("Por favor seleccione fecha, calibrador y turno");
     }
@@ -158,74 +189,82 @@ export class InformeCalibradorComponent implements OnInit {
     );
   }
 
-  promedioCajasPorMinutoTurno(){
-    console.log("método promedioCajasPorMinuto()");
-    this.produccionPorMinutoTurno = [];
-    console.log(this.selectedTurnoObject);
-    let fCierre;
-    let hCierre;
-    if(this.selectedTurnoObject.fCierre == "" && this.selectedTurnoObject.hCierre == "" ){
-      fCierre = "undefine";
-      hCierre = "undefine";
-    }else{
-      fCierre = this.selectedTurnoObject.fCierre;
-      hCierre = this.selectedTurnoObject.hCierre;
-    }
-    this.produccionPorCalibradorService.getPromedioCajasPorMinutoTurno(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno, this.selectedTurnoObject.fApertura, this.selectedTurnoObject.hApertura, fCierre, hCierre).subscribe(
-      res => {
-        if(res.status == 200 ){
-          this.produccionPorMinutoTurno = res.body;
-          console.log("  ");
-          console.log("produccion por minuto!!!");
-          console.log(this.produccionPorMinutoTurno);
-          console.log("  ");
-        }
-      },
-      err => {
-        console.log(err);
-        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
-        
-        this.toastr.info("El turno seleccionado aún no finaliza");
+  promedioCajasPorMinutoTurno(): Promise<any>{
+    return new Promise((resolve, reject) => {  
+      //console.log("método promedioCajasPorMinuto()");
+      this._produccionPorMinutoTurno = [];
+      //console.log(this.selectedTurnoObject);
+      let fCierre;
+      let hCierre;
+      if(this.selectedTurnoObject.fCierre == "" && this.selectedTurnoObject.hCierre == "" ){
+        fCierre = "undefine";
+        hCierre = "undefine";
+      }else{
+        fCierre = this.selectedTurnoObject.fCierre;
+        hCierre = this.selectedTurnoObject.hCierre;
       }
-    );
-  }
-
-  getProduccionLineasCalibrador(){
-    this.produccionLineaCalibrador = [];
-    this.produccionPorCalibradorService.getProduccionLineaCalibrador(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno).subscribe(
-      res => {
-        if(res.status == 200 ){
-          this.produccionLineaCalibrador = res.body;
-          console.log("  ");
-          console.log("produccion por linea!!!");
-          console.log(this.produccionLineaCalibrador);
-          console.log(this.produccionLineaCalibrador.length);
-          console.log("  ");
-        }
-      },
-      err => {
-        console.log(err);
-        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
-        this.toastr.error('No se pudo obtener los turnos', 'Oops');
-      }
-    );
-  }
-
-  getProduccionColaborador(){
-    this.produccionColaboradores = [];
-    this.produccionPorCalibradorService.getProduccionColaborador(this.selectedTurnoObject.id_turno).subscribe(
-      res => {
-        if(res.status == 200 ){
-          this.produccionColaboradores = res.body;
+      this.produccionPorCalibradorService.getPromedioCajasPorMinutoTurno(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno, this.selectedTurnoObject.fApertura, this.selectedTurnoObject.hApertura, fCierre, hCierre).subscribe(
+        res => {
+          if(res.status == 200 ){
+            this._produccionPorMinutoTurno = res.body;
+            //console.log("  ");
+            //console.log("produccion por minuto!!!");
+            //console.log(this._produccionPorMinutoTurno);
+            //console.log("  ");
+            resolve(this._produccionPorMinutoTurno);
+          }
+        },
+        err => {
+          //console.log(err);
+          this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
           
+          this.toastr.info("El turno seleccionado aún no finaliza");
         }
-      },
-      err => {
-        console.log(err);
-        this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
-        this.toastr.error('No se pudo obtener los turnos', 'Oops');
-      }
-    );
+      );
+    })
+  }
+
+  getProduccionLineasCalibrador(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      this._produccionLineaCalibrador = [];
+      this.produccionPorCalibradorService.getProduccionLineaCalibrador(this.selectedCalibradorObject.id, this.selectedTurnoObject.id_turno).subscribe(
+        res => {
+          if(res.status == 200 ){
+            this._produccionLineaCalibrador = res.body;
+            //console.log("  ");
+            //console.log("produccion por linea!!!");
+            //console.log(this._produccionLineaCalibrador);
+            //console.log(this._produccionLineaCalibrador.length);
+            //console.log("  ");
+            resolve(this._produccionLineaCalibrador);
+          }
+        },
+        err => {
+          console.log(err);
+          this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+          this.toastr.error('No se pudo obtener los turnos', 'Oops');
+        }
+      );
+    })
+  }
+
+  getProduccionColaborador(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      this._produccionColaboradores = [];
+      this.produccionPorCalibradorService.getProduccionColaborador(this.selectedTurnoObject.id_turno).subscribe(
+        res => {
+          if(res.status == 200 ){
+            this._produccionColaboradores = res.body;
+            resolve(this._produccionColaboradores);
+          }
+        },
+        err => {
+          //console.log(err);
+          this.registroDevService.creaRegistroDev('No se pudieron obtener los turnos del calibrador por la fecha indicada, método listarTurnos, component monitoreo-por-calibrador');
+          this.toastr.error('No se pudo obtener los turnos', 'Oops');
+        }
+      );
+    })
   }
 
   //metodo que lista las calibradores
@@ -247,84 +286,90 @@ export class InformeCalibradorComponent implements OnInit {
     window.print();
   }
 
-  contarCajasCalibradorPorFecha() {
-    this.cajasCalibrador = null;
-    //this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
-    console.log(this.selectedCalibradorObject.id + " por fecha " + this.desde + " " + this.hasta);
-    this.cajasCalibrador = [];
-    this.produccionPorCalibradorService.getboxInCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
-      res => {
-        this.numBox =0;
-        this.cajasCalibrador = res;
-        console.log("NUMERO : ");
-        console.log(this.cajasCalibrador);
-        this.numBox = this.cajasCalibrador.numero;
-        console.log("numBox: "+this.numBox );
-        //this.mostrarGrafico = "true";
-        //console.log(this.cajasCalibrador);
-        //this.cajasTotales(this.cajasCalibrador);
-        //this.pushData(this.cajasCalibrador);
-
-      },
-      err => {
-        //this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
-        if (this.selectedCalibradorText != "Seleccionar calibrador" && this.desde != " " && this.hasta != " ") {
-          //this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
+  contarCajasCalibradorPorFecha():Promise<any> {
+    return new Promise((resolve, reject) => {
+      this._cajasCalibrador = null;
+      //this.produccionSearchNumberBox(this.rutBusqueda, this.desde, this.hasta);
+      //console.log(this.selectedCalibradorObject.id + " por fecha " + this.desde + " " + this.hasta);
+      this._cajasCalibrador = [];
+      this.produccionPorCalibradorService.getboxInCaliper(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
+        res => {
+          this.numBox =0;
+          this._cajasCalibrador = res;
+          //console.log("NUMERO : ");
+          //console.log(this._cajasCalibrador);
+          this.numBox = this._cajasCalibrador.numero;
+          //console.log("numBox: "+this.numBox );
+          resolve(this._cajasCalibrador);
+          //this.mostrarGrafico = "true";
+          //console.log(this.cajasCalibrador);
+          //this.cajasTotales(this.cajasCalibrador);
+          //this.pushData(this.cajasCalibrador);
+  
+        },
+        err => {
+          //this.registroDevService.creaRegistroDev('No se pudo obtener la produccion del calibrador, método contarCajarCalibradorPorFecha, component monitoreo-por-calibrador');
+          if (this.selectedCalibradorText != "Seleccionar calibrador" && this.desde != " " && this.hasta != " ") {
+            //this.toastr.error('No se pudo obtener las cajas del calibrador', 'Oops');
+          }
+  
         }
-
-      }
-    );
-
+      );
+    })
   }
 
-  buscarRegistroCalibrador() {
-    console.log(this.selectedCalibradorObject.id + this.desde + this.hasta);
-    this.produccionCalibrador = [];
-    this.produccionCalibradorExportarExcel = [];
-    this.produccionPorCalibradorService.getProduccionSearch(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
-      res => {
-        //console.log(res);
-        this.produccionCalibrador = res.body;
-        //console.log(this.produccionColaborador);
-        if (res.status == 200) {
-        } else if (res.status == 204) {
-          this.toastr.success('No hay producción para este calibrador actualmente para mostrar', 'Operación satisfactoria');
-          return;
-        }
-        var bandera = 0;
-        var newVerificado;
-        var newIsTime;
-        for (let element of this.produccionCalibrador) {
-          if (element.is_verificado) {
-            newVerificado = "si";
-          } else {
-            newVerificado = "no";
+  async buscarRegistroCalibrador(): Promise <any> {
+    return new Promise((resolve, reject) => {
+      //console.log(this.selectedCalibradorObject.id + this.desde + this.hasta);
+      this._produccionCalibrador = [];
+      this.produccionCalibradorExportarExcel = [];
+    
+      this.produccionPorCalibradorService.getProduccionSearch(this.selectedCalibradorObject.id, this.desde, this.hasta, this.selectedTurnoObject.id_turno).subscribe(
+        res => {
+          //console.log(res);
+          this._produccionCalibrador = res.body;
+          //console.log(this.produccionColaborador);
+          if (res.status == 200) {
+          } else if (res.status == 204) {
+            this.toastr.success('No hay producción para este calibrador actualmente para mostrar', 'Operación satisfactoria');
+            return;
           }
-          if (element.is_before_time) {
-            newIsTime = "si";
-          } else {
-            newIsTime = "no";
+          var bandera = 0;
+          var newVerificado;
+          var newIsTime;
+          for (let element of this._produccionCalibrador) {
+            if (element.is_verificado) {
+              newVerificado = "si";
+            } else {
+              newVerificado = "no";
+            }
+            if (element.is_before_time) {
+              newIsTime = "si";
+            } else {
+              newIsTime = "no";
+            }
+            let exportExcelProduccion = new ProduccionColaboradorExcel(element.codigo_de_barra, element.envase_caja, element.nombre_linea, element.nombre_lector, element.ip_lector, element.nombre_usuario, element.apellido_usuario, element.rut_usuario, element.fecha_sellado, element.hora_sellado, newVerificado, newIsTime);
+            this.produccionCalibradorExportarExcel.push(exportExcelProduccion);
+            if (bandera == 0) {
+              this.nombre = element.nombre_usuario;
+              this.apellido = element.apellido_usuario;
+              bandera = 1;
+            }
+  
           }
-          let exportExcelProduccion = new ProduccionColaboradorExcel(element.codigo_de_barra, element.envase_caja, element.nombre_linea, element.nombre_lector, element.ip_lector, element.nombre_usuario, element.apellido_usuario, element.rut_usuario, element.fecha_sellado, element.hora_sellado, newVerificado, newIsTime);
-          this.produccionCalibradorExportarExcel.push(exportExcelProduccion);
-          if (bandera == 0) {
-            this.nombre = element.nombre_usuario;
-            this.apellido = element.apellido_usuario;
-            bandera = 1;
+  
+  
+          if (this._produccionCalibrador.length == 0) {
+            this.produccionCalibradorExportarExcel = null;
           }
-
+          resolve(this._produccionCalibrador);
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener la producción del calibrador, método buscarRegistroCalibrador, component monitoreo-por-calibrador2');
+          this.toastr.error('No se pudo obtener la busqueda de produccion del calibrador', 'Oops');
         }
-
-
-        if (this.produccionCalibrador.length == 0) {
-          this.produccionCalibradorExportarExcel = null;
-        }
-      },
-      err => {
-        this.registroDevService.creaRegistroDev('No se pudo obtener la producción del calibrador, método buscarRegistroCalibrador, component monitoreo-por-calibrador2');
-        this.toastr.error('No se pudo obtener la busqueda de produccion del calibrador', 'Oops');
-      }
-    );
+      );
+    })
   }
   //metodo que sirve para editar una linea
   editarRegistroProduccion(form: NgForm) {
@@ -455,6 +500,7 @@ export class InformeCalibradorComponent implements OnInit {
 
   exportarArchivoExcel() {
     try {
+      this.descarga = true;
       if (this.produccionCalibradorExportarExcel.length > 50000) {
 
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -499,9 +545,10 @@ export class InformeCalibradorComponent implements OnInit {
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + "idTurno-" + this.selectedTurnoObject.id_turno+"_"+this.selectedTurnoObject.fApertura+"_"+this.selectedTurnoObject.hApertura.substring(0,2)+"-"+this.selectedTurnoObject.hApertura.substring(3,5) +"-"+this.selectedTurnoObject.hApertura.substring(6,8)+".xls");
-
+        this.descarga = false;
         
       } else {
+        this.descarga = true;
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         // Se convierte el arreglo con los usuarios en linea 
         var jsonArray = JSON.parse(JSON.stringify(this.produccionPorMinutoTurno))
@@ -526,6 +573,7 @@ export class InformeCalibradorComponent implements OnInit {
         /* Guarda el archivo */
         let dateDownload: string = new Date().toISOString();
         XLSX.writeFile(wb, "informe" + "_" + this.selectedCalibradorObject.nombre + "_" + "idTurno-" + this.selectedTurnoObject.id_turno+"_"+this.selectedTurnoObject.fApertura+"_"+this.selectedTurnoObject.hApertura.substring(0,2)+"-"+this.selectedTurnoObject.hApertura.substring(3,5) +"-"+this.selectedTurnoObject.hApertura.substring(6,8)+".xls");
+        //this.descarga = false;
       }
 
 

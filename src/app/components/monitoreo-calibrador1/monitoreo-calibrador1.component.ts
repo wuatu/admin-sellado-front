@@ -190,7 +190,6 @@ export class MonitoreoCalibrador1Component implements OnInit {
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo eliminar los registros de la tabla registro_diario_caja_sellada_aux, método getDeleteRegister, monitoreo-calibrador.componenet');
-
       }
     )
   }
