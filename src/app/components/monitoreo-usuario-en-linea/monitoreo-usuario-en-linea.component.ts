@@ -45,7 +45,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     this.subscriptionTimerTask = timer(0, 5000).subscribe(() => {
 
       if (this.lineas != null && this.selectedCalibradorObject != null) {
-        this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
+        this.getCollaboratorsByLine(this.lineas);
       }
     });
 
@@ -100,10 +100,15 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
 
   //Este método obtiene desde la base de datos todas las lineas que tiene el calibrador y ejecuta los métodos paras obtener la producción 
   getLineOfCaliper(id: string) {
-    this.lineaService.getLineasId(id).subscribe(
+    this.lineaService.getLineasId(this.selectedCalibradorObject.id).subscribe(
       res => {
         this.lineas = res.body;
-        this.getCollaboratorsByLine(this.lineas, id);
+        console.log("lineas !!");
+        console.log(this.lineas);
+        console.log("calibrador !!");
+        console.log(this.selectedCalibradorObject.id);
+
+        this.getCollaboratorsByLine(this.lineas);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener las líneas, método getLineOfCaliper, component monitoreo-calibrador2');
@@ -115,17 +120,21 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
 
 
 
-  getCollaboratorsByLine(lineas: any = [], id: string) {
+  getCollaboratorsByLine(lineas: any = []) {
     this.collaboratorsInLine = [];
     let i = 0;
     if (this.turnoActual != null) {
       for (let linea of lineas) {
-        this.monitoreoUsuarioEnLineaService.getUsuariosEnLinea(linea.id, id, this.turnoActual[0].id, linea.nombre).subscribe(
+        this.monitoreoUsuarioEnLineaService.getUsuariosEnLinea(linea.id, this.selectedCalibradorObject.id, this.turnoActual[0].id, linea.nombre).subscribe(
           res => {
             if (res.status == 200) {
               this.collaboratorsInLine.push(res.body);
+              console.log("Colaboradores en linea");
+              console.log(this.collaboratorsInLine);
             } else if (res.status == 204) {
               this.collaboratorsInLine.push(res.body);
+              console.log("Colaboradores en linea else");
+              console.log(this.collaboratorsInLine);
             }
             if (i == lineas.length - 1) {
               this.ordenarArray()
@@ -167,7 +176,7 @@ export class MonitoreoUsuarioEnLineaComponent implements OnInit {
     let fecha = this.fecha();
     this.monitoreoUsuarioEnLineaService.closeTurnCollaborator(this.turnoActual[0].id, collaborator.id_usuario, collaborator.id_linea, fecha.substring(0, 10), fecha.substring(11, 19)).subscribe(
       res => {
-        this.getCollaboratorsByLine(this.lineas, this.selectedCalibradorObject.id);
+        this.getCollaboratorsByLine(this.lineas);
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo cerrar el turno del colaborador en la línea que se encontraba, método closeTurnCollaboratorChangeLine, component usuario-en-linea');

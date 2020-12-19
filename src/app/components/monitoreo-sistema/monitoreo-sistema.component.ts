@@ -162,6 +162,7 @@ export class MonitoreoSistemaComponent implements OnInit {
             }
             if(i == lineas.length-1){
               this.collaboratorsInLine = this.ordenarArrayCollabordators(this.collaboratorsInLine);
+              //console.log(this.collaboratorsInLine);
               this.getRfidByLine(this.lineas);
             }
             i++;

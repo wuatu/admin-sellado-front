@@ -62,6 +62,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
   subscriptionTimer: Subscription;
   subscriptionTimerProduccion: Subscription;
 
+  subscriptionTimerVerificarSiSeInicioTurno: Subscription;
+  
+
+
   constanteDivision = 0;
   barChartOptions: ChartOptions;
   timeOutCaliper2: any;
@@ -83,6 +87,8 @@ export class MonitoreoCalibrador2Component implements OnInit {
   offsetTime: any;
 
   isDisabled = true;
+
+  rol: number;
 
   constructor(
     private modalService: NgbModal,
@@ -107,6 +113,8 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
 
   ngOnInit() {
+    this.rol = JSON.parse(localStorage.getItem('USER')).rol;
+    
     //Lista los calibradores que estan registrados en la base de datos.
     //this.getTurnoActual();
     this.listarCalibradores();
@@ -160,6 +168,31 @@ export class MonitoreoCalibrador2Component implements OnInit {
     }
 
 
+  }
+
+  verificarSiSeInicioTurno(){
+    console.log("verificando!!!!!");
+    this.subscriptionTimerVerificarSiSeInicioTurno = timer(0, 5000).subscribe(() => {
+      this.monitoreoService.getLastTurno(this.calibradores[1].id).subscribe(
+        res => {
+          if (res.status == 200) {
+  
+            if (res.body[0].fecha_cierre == "") {
+              this.listarCalibradores();
+              if (this.subscriptionTimerVerificarSiSeInicioTurno != null) {
+                console.log("muerte a subscriptionTimeVerificarSiSeInicioTurno 2.....");
+                this.subscriptionTimerVerificarSiSeInicioTurno.unsubscribe();
+              }
+            }
+  
+          }
+        },
+        err => {
+          console.log(err.status);
+          this.registroDevService.creaRegistroDev('No se pudo obtener el turno actual, método getTurnoActual, component monitoreo');
+        }
+      )
+    });
   }
 
   //Método que elimina los registros de la tabla registro_diario_caja_sellada_aux correspondiente al turno actual
@@ -264,18 +297,31 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.lineas = res.body;
         if (this.lineas != null) {
           this.subscriptionTimerProduccion = timer(0, 10000).subscribe(() => {
-            this.monitoreoService.getLastTurno(this.calibradores[0].id).subscribe(
+            this.monitoreoService.getLastTurno(this.calibradores[1].id).subscribe(
               res => {
                 if (res.status == 200) {
 
                   if (res.body[0].fecha_cierre == "") {
+                    if(this.botonIniciarTurnoText == "Iniciar Turno"){
+                      if (this.subscriptionTimerProduccion != null) {
+                        console.log("muerte a subscriptionTimeProduccion 2.....");
+                        this.subscriptionTimerProduccion.unsubscribe();
+                      }
+                      this.listarCalibradores();
+                    }
                     console.log("ejecutando produccion 2..!!!!!");
+                    console.log(res.body[0]);
                     this.getAverageforMinute2();
                     this.getProduccionTurno2();
                     this.getAverageLastHour2();
                     this.getProductionLine2();
+                  }else if(res.body[0].fecha_cierre != ""){
+                    this.noExisteTurno();
                   }
 
+                }else if(res.status == 204){
+                  console.log("res.status == 204");
+                  this.noExisteTurno();
                 }
               },
               err => {
@@ -293,6 +339,20 @@ export class MonitoreoCalibrador2Component implements OnInit {
       }
     )
   }
+
+  noExisteTurno(){
+    this.cajasCalibrador2Minuto = [];
+    this.cajasCalibrador2Turno = [];
+    this.cajasCalibrador2Hora = [];
+    this.productionByLine = [];
+    this.barChartData[0].data = [];
+    this.barChartLabels = [];
+    this.totalHora2 = 0;
+    this.totalMinuto2 = 0;
+    this.totalTurno2 = 0;
+    this.sesionCerrada();
+  }
+
   ordenarArray(array = new Array()) {
     this.arrayAux = [];
     for (let linea of this.lineas) {
@@ -545,7 +605,9 @@ export class MonitoreoCalibrador2Component implements OnInit {
             positionClass: 'toast-bottom-right'
           });
           this.isDisabled = false;
-          this.open(this.modalIniciarTurno);
+          if(this.rol!=2){
+            this.open(this.modalIniciarTurno);
+          }
         }
       },
       err => {
@@ -553,7 +615,9 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.toastr.info('No se ha iniciado turno', 'Información', {
           positionClass: 'toast-bottom-right'
         });
-        this.open(this.modalIniciarTurno);
+        if(this.rol!=2){
+          this.open(this.modalIniciarTurno);
+        }
       }
     )
   }
@@ -614,6 +678,10 @@ export class MonitoreoCalibrador2Component implements OnInit {
         turno.fechaApertura(null, fecha.substring(0, 10), fecha.substring(11, 19), administrador.id, administrador.nombre, administrador.apellido, "", "", "", "", "", this.calibradores[1].id, this.calibradores[1].nombre);
         this.turnoService.saveTurno(turno).subscribe(
           res => {
+            if (this.subscriptionTimerProduccion != null) {
+              console.log("muerte a subscriptionTimeProduccion 2.....");
+              this.subscriptionTimerProduccion.unsubscribe();
+            }
             this.getRegistro();
             //this.sesionIniciada();
             this.toastr.success("Turno iniciado correctamente");
@@ -650,12 +718,15 @@ export class MonitoreoCalibrador2Component implements OnInit {
   }
 
   sesionCerrada() {
+    console.log("entre a sesionCerrada!!... ");
     this.botonIniciarTurnoClass = "btn-primary"
     this.botonIniciarTurnoText = "Iniciar Turno";
     this.turnoIniciado = false;
     this.IniciarCerrar = "Iniciar";
     this.iniciarCerrar = "iniciar";
     this.isDisabled = false;
+    this.fechaInicioTurno = null;
+    this.horaInicioTurno = null;
   }
 
   private cerrarTurno() {
@@ -675,9 +746,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
             this.getDeleteRegister();
             this.cerrarTurnoColaboradores();
             this.registroService.creaRegistro("Turno cerrado al calibrador 2");
-            //se borran los datos del turno que estaba abierto
-            this.fechaInicioTurno = null;
-            this.horaInicioTurno = null;
+            
           },
           err => {
             this.registroDevService.creaRegistroDev('No se pudo crear el registro de cerrar turno en el calibrador 2, método cerrarTurno, component monitoreo-calibrador2');
