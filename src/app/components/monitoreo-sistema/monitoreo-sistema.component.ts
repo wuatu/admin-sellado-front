@@ -90,6 +90,9 @@ export class MonitoreoSistemaComponent implements OnInit {
       res => {
         if(res.status == 200){
           this.turnoActual = res.body;
+          console.log("turno actual!!!");
+          console.log(this.turnoActual);
+          this.getLineOfCaliper(this.selectedCalibradorObject.id);
           
         }else if(res.status == 204){
           this.toastr.info("Por favor iniciar turno ");
@@ -108,6 +111,7 @@ export class MonitoreoSistemaComponent implements OnInit {
     this.calibradorService.getCalibradores().subscribe(
       res=>{
         this.calibradores=res.body;
+
         
       },
       err=>{
@@ -120,9 +124,9 @@ export class MonitoreoSistemaComponent implements OnInit {
   changeSelectedCalibrador(newSelected: any) {
     this.selectedCalibradorText = newSelected.nombre;
     this.selectedCalibradorObject = newSelected;
-    //this.getTurnoActual();
+    this.getTurnoActual();
     this.ngOnDestroy();
-    this.getLineOfCaliper(this.selectedCalibradorObject.id);
+    
     
     
   }
@@ -155,7 +159,7 @@ export class MonitoreoSistemaComponent implements OnInit {
     let i = 0;
     
     for(let linea of lineas ){
-       this.monitoreoSistemaService.getCollaboratorsInLine(linea.id, id, linea.nombre).subscribe(
+       this.monitoreoSistemaService.getCollaboratorsInLine(linea.id, id, linea.nombre, this.turnoActual[0].id).subscribe(
          res =>{
             if(res.status == 200){
               this.collaboratorsInLine.push(res.body);

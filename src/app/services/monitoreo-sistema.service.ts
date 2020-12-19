@@ -13,8 +13,8 @@ export class MonitoreoSistemaService {
     console.log("getUsuariosEnLinea");
     return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_list/${idLinea}/${idCalibrador}/${nombre_linea}`,{observe: 'response'});    
   }
-  getCollaboratorsInLine(idLinea:string, idCalibrador:string, nombre_linea: string){
-    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_collaborators/${idLinea}/${idCalibrador}/${nombre_linea}`,{observe: 'response'});    
+  getCollaboratorsInLine(idLinea:string, idCalibrador:string, nombre_linea: string, id_turno:string){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_collaborators/${idLinea}/${idCalibrador}/${nombre_linea}/${id_turno}`,{observe: 'response'});    
   }
   getRfidInLine(idLinea:string){
     return this.httpClient.get(`${this.API_URL}/monitoreo_sistema_rfid/${idLinea}`,{observe: 'response'});    
