@@ -30,6 +30,7 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="row justify-content-end">
             <div class="col-lg-3 col-md-3 col-sm-12 my-1 align-self-end">
                 <div class="text-right">
@@ -38,6 +39,7 @@
                 </div>
             </div>
         </div>
+        -->
         <div class="row" *ngIf="bandera == true">
             <div class="col-12">
                 <h4 class="text-left">Lista de cajas</h4>
@@ -49,8 +51,8 @@
                 <thead>
                     <tr>
                         <th scope="col">N°</th>
-                        <th scope="col">Código de envase</th>
-                        <th scope="col">Envase</th>
+                        <th scope="col">Código de confección</th>
+                        <th scope="col">Confección</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Ponderación</th>
                         <th *ngIf="rol != 2" scope="col">Editar</th>
