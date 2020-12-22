@@ -49,7 +49,7 @@ export class UsuarioComponent implements OnInit {
 
   //metodo que lista los usuarios registrados en el sistema.
   listarUsuarios() {
-    this.usuarioService.getUsuarios().subscribe(
+    this.usuarioService.getUsuarios().forEach(
       res => {
         console.log(res);
         this.usuarios = res.body;
@@ -58,11 +58,12 @@ export class UsuarioComponent implements OnInit {
           this.toastr.success('no hay colaboradores actualmente para mostrar', 'Operación satisfactoria');
           return;
         }
-      },
+      }
+      /*,
       err => {
         this.registroDevService.creaRegistroDev('No se pudieron obtener los usuarios, método listarUsuarios, component usuario');
         this.toastr.error('No se pudo obtener a los colaboradores', 'Oops');
-      }
+      }*/
     );
   }
 

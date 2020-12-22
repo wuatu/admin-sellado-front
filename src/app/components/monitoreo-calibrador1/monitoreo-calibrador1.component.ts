@@ -512,7 +512,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
         this.barChartData[0].data.push(data.total);
         this.barChartData[0].backgroundColor.push("green");
       }
-      this.barChartLabels.push(`${data.nombre_linea}` + " [" + data.total_turno + " cajas]");
+      this.barChartLabels.push(`${data.nombre_linea}` + " [" + data.total_turno + "]");
       i++;
       //this.barChartOptions.scales.yAxes[0].ticks.max = this.calibradores[0].cajas_por_minuto + 1;
     }

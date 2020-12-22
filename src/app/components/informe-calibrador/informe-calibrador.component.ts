@@ -332,6 +332,7 @@ export class InformeCalibradorComponent implements OnInit {
           if (res.status == 200) {
           } else if (res.status == 204) {
             this.toastr.success('No hay producción para este calibrador actualmente para mostrar', 'Operación satisfactoria');
+            this.showSpinner = false;
             return;
           }
           var bandera = 0;
