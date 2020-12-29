@@ -35,11 +35,14 @@ export class MonitoreoCalibrador2Component implements OnInit {
 
   calibradores: any = [];
   lineas: any = [];
+  
+  cajasTotalCalibrador2Turno: any = [];
 
   cajasCalibrador2Turno: any = [];
   cajasCalibrador2Hora: any = [];
   cajasCalibrador2Minuto: any = [];
 
+  totalBoxCaliper2: number = 0;
   totalTurno2: number = 0;
   totalHora2: number = 0;
   totalMinuto2: number = 0;
@@ -315,6 +318,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
                     this.getProduccionTurno2();
                     this.getAverageLastHour2();
                     this.getProductionLine2();
+                    this.getProduccionTotalTurno2();
                   }else if(res.body[0].fecha_cierre != ""){
                     this.noExisteTurno();
                   }
@@ -474,6 +478,23 @@ export class MonitoreoCalibrador2Component implements OnInit {
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
         this.toastr.error('NO obtenidoaaa', 'NO obtenido');
+      }
+    )
+
+  }
+
+  getProduccionTotalTurno2() {
+    //consulta para el calibrador 1
+    this.monitoreoCalibradorService.getProduccionTotalSearch2(this.calibradores[1].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
+      res => {
+        this.cajasTotalCalibrador2Turno = res;
+        this.totalBoxCaliper2 = this.cajasTotalCalibrador2Turno[0].total;
+
+        //this.getAverageLastHour2();
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el total de cajas en el turno del calibrador 1, método getProduccionTotalTurno, component monitoreo-calibrador1');
+        this.toastr.error('NO obtenido', 'NO obtenido');
       }
     )
 

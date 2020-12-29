@@ -39,11 +39,13 @@ export class MonitoreoCalibrador1Component implements OnInit {
   lineas: any = [];
 
   cajasCalibrador1Turno: any = [];
+  cajasTotalCalibrador1Turno: any = [];
   cajasCalibrador1Hora: any = [];
   cajasCalibrador1Minuto: any = [];
 
   cajasPorLinea: any = [];
-
+  
+  totalBoxCaliper1: number = 0;
   totalTurno1: number = 0;
   totalHora1: number = 0;
   totalMinuto1: number = 0;
@@ -293,17 +295,18 @@ export class MonitoreoCalibrador1Component implements OnInit {
                   if (res.body[0].fecha_cierre == "") {
                     if(this.botonIniciarTurnoText == "Iniciar Turno"){
                       if (this.subscriptionTimerProduccion != null) {
-                        console.log("muerte a subscriptionTimeProduccion 2.....");
+                    
                         this.subscriptionTimerProduccion.unsubscribe();
                       }
                       this.listarCalibradores();
                     }
-                    console.log("ejecutando produccion 1 ..!!!!!");
-                    console.log(res.body[0]);
+                    
+                   
                     this.getAverageforMinute2();
                     this.getProduccionTurno2();
                     this.getAverageLastHour2();
                     this.getProductionLine2();
+                    this.getProduccionTotalTurno2();
                   }else if(res.body[0].fecha_cierre != ""){
                     this.noExisteTurno();
                   }
@@ -469,6 +472,23 @@ export class MonitoreoCalibrador1Component implements OnInit {
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el promedio de cajas por minuto en el turno del calibrador 1, método getProduccionTurno, component monitoreo-calibrador1');
         this.toastr.error('NO obtenido getProduccionTurno2', 'NO obtenido');
+      }
+    )
+
+  }
+  //Método que ejecuta los servicios para consultar el promedio de cajas selladas del turno.
+  getProduccionTotalTurno2() {
+    //consulta para el calibrador 1
+    this.monitoreoCalibradorService.getProduccionTotalSearch2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
+      res => {
+        //this.getAverageLastHour2();
+
+        this.cajasTotalCalibrador1Turno = res;
+        this.totalBoxCaliper1 = this.cajasTotalCalibrador1Turno[0].total;
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudo obtener el total de cajas en el turno del calibrador 1, método getProduccionTotalTurno, component monitoreo-calibrador1');
+        this.toastr.error('NO obtenido getProduccionTotalTurno2', 'NO obtenido');
       }
     )
 

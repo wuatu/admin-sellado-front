@@ -49,6 +49,8 @@ export class MonitoreoComponent implements OnInit {
   isVisiblegoogleMaps = true;
 
   calibradores: any = [];
+  cajasTotalCalibrador1Turno: any = [];
+  cajasTotalCalibrador2Turno: any = [];
   cajasCalibrador1Turno: any = [];
   cajasCalibrador2Turno: any = [];
   cajasCalibrador1Hora: any = [];
@@ -63,6 +65,9 @@ export class MonitoreoComponent implements OnInit {
   totalTurno2: number = 0;
   totalHora2: number = 0;
   totalMinuto2: number = 0;
+
+  totalBoxCaliper1: number = 0;
+  totalBoxCaliper2: number = 0;
 
   fechaActual: string;
   fechaInicioTurno: string = null;
@@ -262,10 +267,8 @@ export class MonitoreoComponent implements OnInit {
   }
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas en la útima hora del turno.
   getAverageLastHourCalibrador1() {
-    this.timeOut1 = setTimeout(() => {
-      this.getProduccionCalibrador1();
-    },
-      10000);
+    this.getProduccionTotalTurnoCalibrador1();
+    
     if (this.calibradores.length > 0 && this.calibrador1 == true) {
       //consulta para el calibrador 1
       this.monitoreoService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActualCalibrador1[0].id, this.turnoActualCalibrador1[0].fecha_apertura, this.turnoActualCalibrador1[0].hora_apertura, this.lineas.length).subscribe(
@@ -317,6 +320,48 @@ export class MonitoreoComponent implements OnInit {
 
   }
 
+  getProduccionTotalTurnoCalibrador1() {
+    //consulta calibrador 1
+    this.timeOut1 = setTimeout(() => {
+      this.getProduccionCalibrador1();
+    },
+      10000);
+    if (this.calibradores.length > 0 && this.calibrador1 == true) {
+      this.monitoreoService.getProduccionTotalSearch2(this.calibradores[0].id, this.turnoActualCalibrador1[0].id, this.turnoActualCalibrador1[0].fecha_apertura, this.turnoActualCalibrador1[0].hora_apertura).subscribe(
+        (res) => {
+          this.cajasTotalCalibrador1Turno = res;
+          this.totalBoxCaliper1 = this.cajasTotalCalibrador1Turno[0].total;
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener la cantidad de cajas totales del turno del calibrador 1, método getProduccionTotalTurnoCalibrador1, component monitoreo');
+          this.toastr.error('Error calibrador 1', 'NO obtenido');
+        }
+      )
+    }
+  }
+
+  getProduccionTotalTurnoCalibrador2() {
+    //consulta calibrador 1
+    this.timeOut2 = setTimeout(() => {
+      this.getProduccionCalibrador2();
+    },
+      10000);
+    if (this.calibradores.length > 0 && this.calibrador2 == true) {
+      this.monitoreoService.getProduccionTotalSearch2(this.calibradores[1].id, this.turnoActualCalibrador2[0].id, this.turnoActualCalibrador2[0].fecha_apertura, this.turnoActualCalibrador2[0].hora_apertura).subscribe(
+        (res) => {
+          this.cajasTotalCalibrador2Turno = res;
+
+          this.totalBoxCaliper2 = this.cajasTotalCalibrador2Turno[0].total;
+
+        },
+        err => {
+          this.registroDevService.creaRegistroDev('No se pudo obtener la cantidad de cajas totales del turno del calibrador 2, método getProduccionTotalTurnoCalibrador2, component monitoreo');
+          this.toastr.error('Error calibrador 2', 'NO obtenido');
+        }
+      )
+    }
+  }
+
 
 
   // Método que realiza la ejecución para saber el promedio de cajas selladas por minuto  durante el turno
@@ -348,10 +393,8 @@ export class MonitoreoComponent implements OnInit {
   }
   //Método que ejecuta los servicios para consultar el promedio de cajas selladas en la útima hora del turno.
   getAverageLastHourCalibrador2() {
-    this.timeOut2 = setTimeout(() => {
-      this.getProduccionCalibrador2();
-    },
-      10000);
+    this.getProduccionTotalTurnoCalibrador2();
+    
 
     if (this.calibradores.length > 1 && this.calibrador2 == true) {
       //consulta para el calibrador 2

@@ -8,6 +8,10 @@ import { HttpClient } from '@angular/common/http';
 export class MonitoreoService {
   API_URL="http://localhost:3000/api"
   constructor(private httpClient: HttpClient) { }
+
+  getProduccionTotalSearch2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_total_turno2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
+  }
 /***********************************************************************************************************************************************************/ 
 
   getProduccionSearch2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string){

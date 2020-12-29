@@ -24,6 +24,9 @@ export class MonitoreoCalibradoresService {
   getProduccionSearch2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string) {
     return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_turno2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
   }
+  getProduccionTotalSearch2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string) {
+    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_total_turno2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
+  }
   /***********************************************************************************************************************************************************/
 
 
