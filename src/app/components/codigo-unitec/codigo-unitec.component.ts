@@ -58,6 +58,15 @@ export class CodigoUnitecComponent implements OnInit {
           this.codigosUnitec = null;
           this.codigosUnitec = res.body;
           this.bandera = true;
+          this.codigosUnitecExportarExcel = [];
+          for (let element of this.codigosUnitec) {
+            
+            let codigoUnitecExcel = new CodigoUnitecExcel(element.cod_caja, element.codigo_confection, element.confection, element.codigo_embalaje, element.embalaje, element.codigo_envase, element.envase, element.categoria, element.categoria_timbrada);
+            this.codigosUnitecExportarExcel.push(codigoUnitecExcel);
+          }
+          if (this.codigosUnitec.length == 0) {
+            this.codigosUnitecExportarExcel = null;
+          }
         }else if(res.status == 204){
           this.toastr.success('No existen registros para mostrar en la búsqueda','Búsqueda satisfactoria');
           return;  
@@ -78,6 +87,7 @@ export class CodigoUnitecComponent implements OnInit {
         this.codigosUnitec = res.body;
         if(res.status == 200){
           this.bandera = true;
+          this.codigosUnitecExportarExcel = [];
           for (let element of this.codigosUnitec) {
             
             let codigoUnitecExcel = new CodigoUnitecExcel(element.cod_caja, element.codigo_confection, element.confection, element.codigo_embalaje, element.embalaje, element.codigo_envase, element.envase, element.categoria, element.categoria_timbrada);
