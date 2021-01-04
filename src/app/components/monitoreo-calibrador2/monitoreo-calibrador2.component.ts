@@ -490,7 +490,7 @@ export class MonitoreoCalibrador2Component implements OnInit {
         this.cajasTotalCalibrador2Turno = res;
         this.totalBoxCaliper2 = this.cajasTotalCalibrador2Turno[0].total;
 
-        //this.getAverageLastHour2();
+  
       },
       err => {
         this.registroDevService.creaRegistroDev('No se pudo obtener el total de cajas en el turno del calibrador 1, método getProduccionTotalTurno, component monitoreo-calibrador1');

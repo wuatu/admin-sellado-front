@@ -21,21 +21,25 @@ export class MonitoreoService {
 
 /***********************************************************************************************************************************************************/
 
-  getAverageforMinute2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, lineas_length: number){
-    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}/${lineas_length}`);
+  getAverageforMinute2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
   }
 /***********************************************************************************************************************************************************/
 
 /***********************************************************************************************************************************************************/
 
-  getAverageforMinuteLastHour2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, lineas_length:number){
-    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto_ultima_hora2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}/${lineas_length}`);
+  getAverageforMinuteLastHour2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_produccion_minuto_ultima_hora2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
   }
 /***********************************************************************************************************************************************************/
-
+  
 
   getLastTurno(fk_calibrador:number){
     return this.httpClient.get(`${this.API_URL}/monitoreo_last_turno/${fk_calibrador}`,{observe: 'response'});
+  }
+
+  getActualTurnoCalibradores(){
+    return this.httpClient.get(`${this.API_URL}/monitoreo_Actual_turno_calibradores/`,{observe: 'response'});
   }
   
 

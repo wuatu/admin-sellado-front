@@ -51,43 +51,45 @@
     </div>
 </div>
 
-<div class="row justify-content-center">
-    <div class="col-12 my-1">
-        <div class="card w-100">
-            <div class="card-body">
-                <h5 class="card-title"> <b>Calibrador L1</b></h5>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 my-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalHora1}}</b></h1>
-                                <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por
-                                        minuto</b></p>
+<div *ngFor="let calibrador of calibradores; let i = index">
+    <div class="row justify-content-center">
+        <div class="col-12 my-1">
+            <div class="card w-100">
+                <div class="card-body" *ngIf="show == true">
+                    <h5 class="card-title"> <b>{{calibrador.nombre}}</b></h5>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 my-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h1 class="card-title text-center" *ngIf="show == true"><b>{{totalHoraAux2[i].total}}</b></h1>
+                                    <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por
+                                            minuto</b></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 my-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalMinuto1}}</b></h1>
-                                <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b>
-                                </p>
+                        <div class="col-lg-3 col-md-3 my-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h1 class="card-title text-center" *ngIf="show == true"><b>{{totalMinutoAux2[i].total}}</b></h1>
+                                    <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 my-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalTurno1}}</b></h1>
-                                <p class="card-text text-center"><b>Total de cajas selladas validadas del turno</b></p>
+                        <div class="col-lg-3 col-md-3 my-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h1 class="card-title text-center" *ngIf="show == true"><b>{{totalTurnoAux2[i].total}}</b></h1>
+                                    <p class="card-text text-center"><b>Total de cajas selladas validadas del turno</b></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 my-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalBoxCaliper1}}</b></h1>
-                                <p class="card-text text-center"><b>Total de cajas del turno</b></p>
+                        <div class="col-lg-3 col-md-3 my-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h1 class="card-title text-center" *ngIf="show == true"><b>{{totalBoxCaliperAux2[i].total}}</b></h1>
+                                    <p class="card-text text-center"><b>Total de cajas del turno</b></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -97,7 +99,7 @@
     </div>
 </div>
 
-<div class="row justify-content-center mt-3 mb-3">
+<!--<div class="row justify-content-center mt-3 mb-3">
     <div class="col-12 my-1">
         <div class="card w-100">
             <div class="card-body">
@@ -106,7 +108,7 @@
                     <div class="col-lg-3 col-md-3 my-1">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalHora2}}</b></h1>
+                                <h1 class="card-title text-center"><b>{{totalHora}}</b></h1>
                                 <p class="card-text text-center"><b>Promedio de cajas selladas de la última hora por
                                         minuto</b></p>
                             </div>
@@ -115,7 +117,7 @@
                     <div class="col-lg-3 col-md-3 my-1">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalMinuto2}}</b></h1>
+                                <h1 class="card-title text-center"><b>{{totalMinuto}}</b></h1>
                                 <p class="card-text text-center"><b>Promedio de cajas selladas del turno por minuto</b>
                                 </p>
                             </div>
@@ -124,7 +126,7 @@
                     <div class="col-lg-3 col-md-3 my-1">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalTurno2}}</b></h1>
+                                <h1 class="card-title text-center"><b>{{totalTurno}}</b></h1>
                                 <p class="card-text text-center"><b>Total de cajas selladas validadas del turno</b></p>
                             </div>
                         </div>
@@ -132,7 +134,7 @@
                     <div class="col-lg-3 col-md-3 my-1">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-title text-center"><b>{{totalBoxCaliper2}}</b></h1>
+                                <h1 class="card-title text-center"><b>{{totalBoxCaliper}}</b></h1>
                                 <p class="card-text text-center"><b>Total de cajas del turno</b></p>
                             </div>
                         </div>
@@ -141,7 +143,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 
 <!--Modal confirmación-->
