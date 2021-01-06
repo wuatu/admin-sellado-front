@@ -1,10 +1,20 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef , ComponentFactoryResolver, ViewContainerRef, ComponentRef,  ReflectiveInjector} from '@angular/core';
 import { MenubarService } from 'src/app/services/menubar.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AuthModule } from 'src/app/auth/auth.module';
 import { Router } from '@angular/router';
 import { AdministradorService } from 'src/app/services/administrador.service';
 import { Administrador } from 'src/app/models/administrador';
+import { CalibradorService } from '../../services/calibrador.service';
+
+import { RegistroDevService } from '../../services/registro-dev.service';
+import { resolve } from 'url';
+
+
+import { MonitoreoCalibradorComponent } from '../monitoreo-calibrador/monitoreo-calibrador.component';
+import { MonitoreoCalibradoresService } from '../../services/monitoreo-calibradores.service';
+import { Subscription, timer } from 'rxjs';
+
 declare var name: any;
 @Component({
   selector: 'app-menubar',
@@ -12,14 +22,24 @@ declare var name: any;
   styleUrls: ['./menubar.component.css']
 })
 export class MenubarComponent implements OnInit {
+  @ViewChild('placeHolder', {read: ViewContainerRef}) private _placeHolder: MonitoreoCalibradorComponent;
+  
+  subscriptionTimer: Subscription;
   rol = 0;
   admin: Administrador ;
   expandItem=0;
   expandItemAnterior=0;
+  calibradores: any = [];
+  calibradoresAux: any = [];
+  calibrador: any;
+  sizeCaliper: number = 0;
+  sizeCaliperAux:number = 0;
   constructor(
     public menubar: MenubarService,
     private authService: AuthService,
     private router: Router,
+    private calibradorService: CalibradorService,
+    private registroDevService: RegistroDevService,
   ){
   }
 
@@ -31,6 +51,30 @@ export class MenubarComponent implements OnInit {
     }else if(this.admin.rol == 2){
       this.rol = 2;
     }
+
+    this.subscriptionTimer = timer(0,5000).subscribe(() => {
+      this.getCalibradores();
+    });
+  }
+
+  ngOnDestroy(){
+    if (this.subscriptionTimer != null) {
+      console.log("muerte a subscriptionTimer.....");
+      this.subscriptionTimer.unsubscribe();
+    }
+  }
+
+  getCalibradores() {
+    this.calibradorService.getCalibradores().subscribe(
+      res => {
+        this.calibradores = res.body;
+        
+        //this.calibrador = this.calibradores[0];
+      },
+      err => {
+        this.registroDevService.creaRegistroDev('No se pudieron obtener los calibradores, método getCalibradores, component menuBar');
+      }
+    );
   }
 
   showMenu() {
@@ -89,4 +133,6 @@ export class MenubarComponent implements OnInit {
       this.expandItemAnterior=5;
     }
   }
+
+  
 }

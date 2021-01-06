@@ -63,7 +63,7 @@ export class RfidRegistroColaboradorComponent implements OnInit {
   }
 
   completeDropDownPort(){
-    for(let i = 1; i<100; i++){
+    for(let i = 1; i<=500; i++){
       var p = {nombre: 'COM'+i};
       this.dropDownPort.push(p);
     }

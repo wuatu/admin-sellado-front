@@ -182,6 +182,11 @@ export class MonitoreoComponent implements OnInit {
       this.subscriptionTimer.unsubscribe();
     }
 
+    if (this.subscriptionTimerProduccion != null) {
+      this.subscriptionTimerProduccion.unsubscribe();
+      console.log("mate al subscriptionTimerProducction");
+    }
+
     if (this.subscriptionTimerReload != null) {
       this.subscriptionTimerReload.unsubscribe();
       console.log("mate al subscriptionTimerReload");

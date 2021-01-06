@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Subject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -7,7 +8,26 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MonitoreoCalibradoresService {
   API_URL = "http://localhost:3000/api"
+  
+  private _visible = new Subject<number>();
+  visible = 0;
+
   constructor(private httpClient: HttpClient) { }
+  
+ 
+    
+  public visibleToggleAction(id_calibrador: number){
+ 
+      this.visible = id_calibrador;
+      this._visible.next(this.visible);
+    
+    return this.visible;
+  }
+
+  public getVisible$():Observable<number>{
+    return this._visible.asObservable();
+  }
+
 
   deleteRegister(id:number){
     return this.httpClient.delete(`${this.API_URL}/monitoreo_calibrador_delete/${id}`, { observe: 'response' });
@@ -31,14 +51,14 @@ export class MonitoreoCalibradoresService {
 
 
   /***********************************************************************************************************************************************************/
-  getAverageforMinute2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, lineas_length: number) {
-    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_minuto2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}/${lineas_length}`);
+  getAverageforMinute2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string) {
+    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_minuto2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
   }
   /***********************************************************************************************************************************************************/
 
   /***********************************************************************************************************************************************************/
-  getAverageforMinuteLastHour2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string, lineas_length:number) {
-    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_minuto_ultima_hora2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}/${lineas_length}`);
+  getAverageforMinuteLastHour2(id_caliper: number, id_turno: number, fecha_apertura: string, hora_apertura: string) {
+    return this.httpClient.get(`${this.API_URL}/monitoreo_calibrador_produccion_minuto_ultima_hora2/${id_caliper}/${id_turno}/${fecha_apertura}/${hora_apertura}`);
   }
   /***********************************************************************************************************************************************************/
 

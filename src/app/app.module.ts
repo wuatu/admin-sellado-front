@@ -50,6 +50,8 @@ import { MonitoreoSistemaComponent } from './components/monitoreo-sistema/monito
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RfidRegistroColaboradorComponent } from './components/rfid-registro-colaborador/rfid-registro-colaborador.component';
 import { InformeCalibradorComponent } from './components/informe-calibrador/informe-calibrador.component';
+import { MonitoreoCalibradorComponent } from './components/monitoreo-calibrador/monitoreo-calibrador.component';
+
 
 
 
@@ -92,6 +94,8 @@ import { InformeCalibradorComponent } from './components/informe-calibrador/info
     MonitoreoSistemaComponent,
     RfidRegistroColaboradorComponent,
     InformeCalibradorComponent,
+    MonitoreoCalibradorComponent,
+   
  
   ],
   imports: [

@@ -35,7 +35,7 @@ export class RutValidationDirective implements Validator {
           
           // Para cada dígito del Cuerpo
           for (let i = 1; i <=cuerpo.length; i++) {
-            console.log("Entre al for !!!!");
+            
             // Obtener su Producto con el Múltiplo Correspondiente
             let index = multiplo * parseInt(valor.charAt(cuerpo.length - i));
         
@@ -63,7 +63,7 @@ export class RutValidationDirective implements Validator {
           if (dvEsperado != parseInt(dv) ) {
             return { 'rutValidation': { 'message': 'El RUN ingresado es incorrecto' } };
           }else{
-            console.log("EL rut ingresado es correcto");
+            //console.log("EL rut ingresado es correcto");
           }
           
 

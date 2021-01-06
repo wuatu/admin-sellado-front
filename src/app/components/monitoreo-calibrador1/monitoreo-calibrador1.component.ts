@@ -417,7 +417,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
   }
   getAverageforMinute2() {
     //console.log("getAverageForMinute calibrador 1");
-    this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
+    this.monitoreoCalibradorService.getAverageforMinute2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Minuto = res;
         //this.getProduccionTurno2();
@@ -439,7 +439,7 @@ export class MonitoreoCalibrador1Component implements OnInit {
 
   getAverageLastHour2() {
     //get todas las cajas que tengan el mismo id del turno
-    this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura, this.lineas.length).subscribe(
+    this.monitoreoCalibradorService.getAverageforMinuteLastHour2(this.calibradores[0].id, this.turnoActual.id, this.turnoActual.fecha_apertura, this.turnoActual.hora_apertura).subscribe(
       res => {
         this.cajasCalibrador1Hora = res;
         //this.getProductionLine2();
